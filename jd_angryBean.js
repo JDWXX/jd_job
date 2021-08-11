@@ -5,6 +5,7 @@
 TG学习交流群：https://t.me/cdles
 0 0 * * * https://raw.githubusercontent.com/cdle/jd_study/main/jd_angryBean.js
 */
+
 const $ = new Env("真·抢京豆")
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
 var pins = $.isNode() ? (process.env.angryBeanPins ? process.env.angryBeanPins : "") : "";
