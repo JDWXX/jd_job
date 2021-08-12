@@ -1,32 +1,42 @@
 /*
-活动入口： 京东极速版-我的-发财大赢家
-https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js
+活动入口： 京东极速版-我的-发财大赢家  来源Wenmoux
+更新地址：https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js
 已支持IOS双京东账号, Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, 小火箭，JSBox, Node.js
 ============Quantumultx===============
 [task_local]
 #发财大赢家
-1 0 * 6 * https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js, tag=新潮品牌狂欢, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
-
+1 0 * * * https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_fcdyj.js, tag=新潮品牌狂欢, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 ================Loon==============
 [Script]
-cron "1 0 * * *" script-path=https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js tag=翻翻乐
-
+cron "1 0 * * *" script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_fcdyj.js tag=翻翻乐
 ===============Surge=================
-发财大赢家 = type=cron,cronexp="1 0 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js
-
+发财大赢家 = type=cron,cronexp="1 0 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_fcdyj.js
 ============小火箭=========
-发财大赢家 = type=cron,script-path=https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js, cronexpr="1 0 * * *", timeout=3600, enable=true
-
+发财大赢家 = type=cron,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_fcdyj.js, cronexpr="1 0 * * *", timeout=3600, enable=true
  */
 const $ = new Env('发财大赢家');
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const openred = $.isNode() ? (process.env.openred ? process.env.openred : 1) : 1 //选择哪个号开包
 const dyjCode = $.isNode() ? (process.env.dyjCode ? process.env.dyjCode : null) : null //选择哪个号开包
-const randomCount = $.isNode() ? 20 : 5;
-const notify = $.isNode() ? require('./sendNotify') : '';
-let merge = {}
+let helpAuthorFlag = true;//是否助力作者SH  true 助力，false 不助力
+let redEnvelopeId = '44d9c2d018594459a49e755b87d5968398021627920087114';
+let inviter = 'dEfElq0h2aqf9HkPhnIaiw';
+
+if (process.env.redEnvelopeId) {
+    redEnvelopeId = process.env.redEnvelopeId;
+}
+
+if (process.env.inviter) {
+    inviter = process.env.inviter;
+}
+
+let helpAuthorInfo = [{"rid":redEnvelopeId,"inviter":inviter}]
+console.log("-----------助力号----------")
+console.log(helpAuthorInfo)
+redEnvelopeId = '44d9c2d018594459a49e755b87d5968398021627920087114';
+inviter = 'dEfElq0h2aqf9HkPhnIaiw';
 //let code =
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [],
@@ -35,7 +45,8 @@ if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
-    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
+    };
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
@@ -57,25 +68,35 @@ const JD_API_HOST = `https://api.m.jd.com`;
     $.canDraw = false
     $.canHelp = true;
     $.linkid = "yMVR-_QKRd2Mq27xguJG-w"
-    //开包 查询   
-    for (let i = openred-1; i < openred; i++) {
+
+    if (helpAuthorFlag) {
+        try {
+            helpAuthorInfo = await getAuthorShareCode('https://jdwxx.github.io/JD/assets/js/dyj.json');
+        } catch (e) {
+        }
+        if (!helpAuthorInfo) {
+            helpAuthorInfo = [];
+        }
+    }
+
+    //开包 查询
+    let dyjStr;
+    for (let i = openred - 1; i < openred; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
             $.index = i + 1;
             console.log(`\n******查询【京东账号${$.index}】红包情况\n`);
-            await getauthorid()
             if (!dyjCode) {
                 console.log(`环境变量中没有检测到助力码,开始获取 账号${openred} 助力码`)
                 await open()
                 await getid()
             } else {
                 dyjStr = dyjCode.split("@")
-                if (dyjStr[0]) {
-                    $.rid = dyjDtr[0]
+                if (dyjStr[0] && dyjStr[1]) {
+                    $.rid = dyjStr[0]
                     $.inviter = dyjStr[1]
                 }
             }
-            await help($.authorid, $.authorinviter, 1, true) //用你开包的号给我助力一次
         }
     }
 
@@ -88,13 +109,22 @@ const JD_API_HOST = `https://api.m.jd.com`;
             $.message = `【京东账号${$.index}】${$.UserName}\n`
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
         }
+        //抽取一名幸运娃儿助力
+        if (helpAuthorFlag && helpAuthorInfo.length > 0) {
+            let authorList = getRandomArrayElements(helpAuthorInfo, 1);
+            let author = authorList[0];
+            console.log(`${$.UserName}给作者助力一次`)
+            await help(author.rid, author.inviter, $.helptype)
+            helpAuthorFlag = false;
+            await $.wait(1000)
+        }
         if ($.rid && $.inviter && $.needhelp) {
             await help($.rid, $.inviter, $.helptype)
         } else {
             console.log("没获取到助力码,停止运行")
         }
     }
-    for (let i = openred-1; i < openred; i++) {
+    for (let i = openred - 1; i < openred; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
             $.index = i + 1;
@@ -107,19 +137,9 @@ const JD_API_HOST = `https://api.m.jd.com`;
             }
         }
     }
-        //if($.type == 2){
-        //for (let i = 0 ; i <cookiesArr.length ; i++) {
-          //  cookie = cookiesArr[i];
-            //if (cookie) {
-              //  $.index = i + 1;
-              //  console.log(`\n******查询【京东账号${$.index}】红包情况\n`);
-                //await help($.rid, $.inviter,$.helptype)
-            //}
-        //}
-        //}
 
 })()
-.catch((e) => {
+    .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
     })
     .finally(() => {
@@ -127,10 +147,9 @@ const JD_API_HOST = `https://api.m.jd.com`;
     })
 
 
-
 function Draw() {
     return new Promise(async (resolve) => {
-        let options = taskUrl("exchange", `{"linkId":"${$.linkid }","rewardType":1}`)
+        let options = taskUrl("exchange", `{"linkId":"${$.linkid}","rewardType":1}`)
         //  console.log(options)
         $.post(options, async (err, resp, data) => {
             try {
@@ -152,7 +171,6 @@ function Draw() {
         });
     });
 }
-
 
 
 function getid() {
@@ -194,7 +212,6 @@ function getid() {
 }
 
 
-
 function help(rid, inviter, type, helpother) {
     return new Promise(async (resolve) => {
         let options = taskUrl("openRedEnvelopeInteract", `{"linkId":"${$.linkid}","redEnvelopeId":"${rid}","inviter":"${inviter}","helpType":"${type}"}`)
@@ -206,14 +223,14 @@ function help(rid, inviter, type, helpother) {
                 } else {
                     data = JSON.parse(data);
                     if (data.data && data.data.helpResult) {
-                        console.log(JSON.stringify(data.data.helpResult))
-                        if (!helpother) {
-                            if (data.data.helpResult.code === 16005 || data.data.helpResult.code === 16007) {
-                                $.needhelp = false
-                                $.canDraw = true
-                            } else if (data.data.helpResult.code === 16011) {
-                                $.needhelp = false
-                            }
+                        console.log(data.data.helpResult.errMsg)
+                        if (data.data.helpResult.code === 16005 || data.data.helpResult.code === 16007) {
+                            $.needhelp = false
+                            $.canDraw = true
+                        } else if (data.data.helpResult.code === 16011) {
+                            $.needhelp = false
+                        }else if (data.data.helpResult.code === 0){
+                            console.log("助力成功! ")
                         }
                     } else {
                         console.log(JSON.stringify(data))
@@ -228,8 +245,6 @@ function help(rid, inviter, type, helpother) {
         });
     });
 }
-
-
 
 
 function open() {
@@ -254,39 +269,60 @@ function open() {
 }
 
 
-
-function getauthorid() {
-    return new Promise(async (resolve) => {
-        let options = {
-            url: "https://cdn.jsdelivr.net/gh/Wenmoux/scripts@wen/code/dyj.json",
-            headers: {}
+function getAuthorShareCode(url) {
+    return new Promise(async resolve => {
+        const options = {
+            "url": `${url}`,
+            "timeout": 10000,
+            "headers": {
+                "User-Agent": ""
+            }
+        };
+        if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
+            const tunnel = require("tunnel");
+            const agent = {
+                https: tunnel.httpsOverHttp({
+                    proxy: {
+                        host: process.env.TG_PROXY_HOST,
+                        port: process.env.TG_PROXY_PORT * 1
+                    }
+                })
+            }
+            Object.assign(options, {agent})
         }
         $.get(options, async (err, resp, data) => {
             try {
                 if (err) {
-                    console.log(`${JSON.stringify(err)}`);
-                    console.log(`${$.name} API请求失败，请检查网路重试`);
                 } else {
-                    data = JSON.parse(data);
-                    if (data) {
-                        console.log(`获取作者🐎成功 ${data.rid}`)
-                        // $.authorid = data.rid
-                        // $.authorinviter = data.inviter
-                        $.authorid = "ee822f5cb7b649a69b8ac6ae10750c5a49811628438496078"
-                        $.authorinviter = "dEfElq0h2aqf9HkPhnIaiw"
-                    }
+                    if (data) data = JSON.parse(data)
                 }
-
             } catch (e) {
-                $.logErr(e, resp);
+                // $.logErr(e, resp)
             } finally {
-                resolve();
+                resolve(data || []);
             }
-        });
-    });
+        })
+        await $.wait(10000)
+        resolve();
+    })
 }
 
-
+/**
+ * 随机从一数组里面取
+ * @param arr
+ * @param count
+ * @returns {Buffer}
+ */
+function getRandomArrayElements(arr, count) {
+    var shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
+    while (i-- > min) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(min);
+}
 
 function taskUrl(function_id, body) {
     return {
@@ -304,6 +340,7 @@ function taskUrl(function_id, body) {
         }
     }
 }
+
 function jsonParse(str) {
     if (typeof str == "string") {
         try {
