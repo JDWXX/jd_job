@@ -15,7 +15,7 @@
 如需执行脚本请设置环境变量
 guaopencard13="true"
 ————————————————
-入口：[8.18-8.26 全民发一发 大牌狂欢趴 (https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/3542672?activityId=375dbaa9e32c4c70bb8357836956ed2e&shareUuid=54c3a59369004e8ba7b4161c85ed721f)]
+入口：[8.18-8.26 全民发一发 大牌狂欢趴 (https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/3542672?activityId=56aecc5828d141eea16ca95fe27f71d2&shareUuid=54c3a59369004e8ba7b4161c85ed721f)]
 ============Quantumultx===============
 [task_local]
 #8.18-8.26 全民发一发 大牌狂欢趴
@@ -62,7 +62,7 @@ message = ""
     //         return
     //     }
     // }
-    $.shareUuid = '54c3a59369004e8ba7b4161c85ed721f'
+    $.shareUuid = '56aecc5828d141eea16ca95fe27f71d2'
     $.activityId = '375dbaa9e32c4c70bb8357836956ed2e'
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/3542672?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
     for (let i = 0; i < cookiesArr.length; i++) {
