@@ -56,6 +56,7 @@ message = ""
         });
         return;
     }
+
     // if ($.isNode()) {
     //     if (!process.env.guaopencard14 || process.env.guaopencard14 == "false") {
     //         console.log('如需执行脚本请设置环境变量[guaopencard14]为"true"')
