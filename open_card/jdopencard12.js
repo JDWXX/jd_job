@@ -46,7 +46,7 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-let guaopencard_addSku = false
+let guaopencard_addSku = true
 guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku12 ? process.env.guaopencard_addSku12 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku12') ? $.getdata('guaopencard_addSku12') : `${guaopencard_addSku}`);
 message = ""
 !(async () => {

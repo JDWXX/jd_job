@@ -46,7 +46,7 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-let guaopencard_addSku = false
+let guaopencard_addSku = true
 guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku14 ? process.env.guaopencard_addSku14 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku14') ? $.getdata('guaopencard_addSku14') : `${guaopencard_addSku}`);
 message = ""
 !(async () => {
@@ -56,12 +56,12 @@ message = ""
         });
         return;
     }
-    if ($.isNode()) {
-        if (!process.env.guaopencard14 || process.env.guaopencard14 == "false") {
-            console.log('如需执行脚本请设置环境变量[guaopencard14]为"true"')
-            return
-        }
-    }
+    // if ($.isNode()) {
+    //     if (!process.env.guaopencard14 || process.env.guaopencard14 == "false") {
+    //         console.log('如需执行脚本请设置环境变量[guaopencard14]为"true"')
+    //         return
+    //     }
+    // }
     $.shareUuid = 'caa1b295f4d5441a9695a9a5cf268a61'
     $.activityId = '8461aaca3fd24c66a3674da99c5342eb'
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/lzclient/dz/2021jan/eliminateGame/0816eliminate/?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)

@@ -46,7 +46,7 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-let guaopencard_addSku = false
+let guaopencard_addSku = true
 guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku13 ? process.env.guaopencard_addSku13 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku13') ? $.getdata('guaopencard_addSku13') : `${guaopencard_addSku}`);
 message = ""
 !(async () => {
@@ -56,12 +56,12 @@ message = ""
         });
         return;
     }
-    if ($.isNode()) {
-        if (!process.env.guaopencard13 || process.env.guaopencard13 == "false") {
-            console.log('如需执行脚本请设置环境变量[guaopencard13]为"true"')
-            return
-        }
-    }
+    // if ($.isNode()) {
+    //     if (!process.env.guaopencard13 || process.env.guaopencard13 == "false") {
+    //         console.log('如需执行脚本请设置环境变量[guaopencard13]为"true"')
+    //         return
+    //     }
+    // }
     $.shareUuid = '54c3a59369004e8ba7b4161c85ed721f'
     $.activityId = '375dbaa9e32c4c70bb8357836956ed2e'
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/3542672?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
