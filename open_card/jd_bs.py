@@ -6,7 +6,6 @@
 #*/
 
 import requests
-
 import random
 
 number2 = random.randint(50001,65000)
