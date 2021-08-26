@@ -31,7 +31,6 @@ cron "31 8,22 13-31 8 *" script-path=https://raw.githubusercontent.com/smiek2221
 ============小火箭=========
 8.13-8.31 小米-星空大冒险 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_xmGame.js, cronexpr="31 8,22 13-31 8 *", timeout=3600, enable=true
 */
-
 const $ = new Env('8.13-8.31 小米-星空大冒险');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';

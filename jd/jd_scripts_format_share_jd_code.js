@@ -1,4 +1,25 @@
+/*
+一键获取我仓库所有需要互助类脚本的互助码(邀请码)(其中京东赚赚jd_jdzz.js如果今天达到5人助力则不能提取互助码)
+没必要设置(cron)定时执行，需要的时候，自己手动执行一次即可
+注：临时活动的互助码不添加到此处，如有需要请手动运行对应临时活动脚本
+更新地址：jd_get_share_code.js
+已支持IOS双京东账号, Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, 小火箭，JSBox, Node.js
+============Quantumultx===============
+[task_local]
+#获取互助码
+20 13 * * 6 jd_get_share_code.js, tag=获取互助码, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 
+================Loon==============
+[Script]
+cron "20 13 * * 6" script-path=jd_get_share_code.js, tag=获取互助码
+
+===============Surge=================
+获取互助码 = type=cron,cronexp="20 13 * * 6",wake-system=1,timeout=3600,script-path=jd_get_share_code.js
+
+============小火箭=========
+获取互助码 = type=cron,script-path=jd_get_share_code.js, cronexpr="20 13 * * 6", timeout=3600, enable=true
+ */
 const $ = new Env("从日志中获取互助码并格式化");
 const notifyMsg = ``;
 const notify = $.isNode() ? require("./sendNotify") : "";
