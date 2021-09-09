@@ -1,6 +1,7 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*
 '''
-cron: 0 20 0 * * jd_lxj.py
+cron: 30 15 * * * jd_lxj.py
 new Env('领现金');
 '''
 

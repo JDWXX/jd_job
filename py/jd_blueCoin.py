@@ -1,7 +1,8 @@
 #!/bin/env python3
 # -*- coding: utf-8 -*
 '''
-cron: 59 23 * * * jd_blueCoin.py
+cron: 59 20 * * * jd_blueCoin.py
+new Env('东东超市商品兑换');
 '''
 ################【参数】######################
 # ck 优先读取【JDCookies.txt】 文件内的ck  再到 ENV的 变量 JD_COOKIE='ck1&ck2' 最后才到脚本内 cookies=ck

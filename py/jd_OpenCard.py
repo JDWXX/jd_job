@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*
 '''
 cron: 0 0 10 * * jd_lxj.py

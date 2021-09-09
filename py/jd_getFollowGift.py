@@ -1,7 +1,8 @@
-#!/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*
 '''
-cron: 59 10 * * * jd_getFollowGift.py
+cron: 30 15 * * * jd_getFollowGift.py
+new Env('关注有礼');
 '''
 ##################################
 #cookie填写，注意：#ck 优先读取【JDCookies.txt】 文件内的ck  再到 ENV的 变量 JD_COOKIE='ck1&ck2' 最后才到脚本内 cookies=ck
