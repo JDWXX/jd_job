@@ -40,8 +40,51 @@
 #### [http://url.cn/5Z0ZWGI](http://url.cn/5Z0ZWGI)
 #### [备用购买地址](https://cloud.tencent.com/act/pro/starlake?fromSource=gwzcw.3788702.3788702.3788702&utm_medium=cpc&utm_id=gwzcw.3788702.3788702.3788702&cps_key=13c854d3ec192824956cc079f600753f)
 
+# 拉取仓库
+##### 名称
+
+```
+【JDWXX】
+```
+##### 命令
+```
+ql repo https://ghproxy.com/https://github.com/JDWXX/jd_job.git "jd_|jx_|getJDCookie" "activity|backUp" "^jd[^_]|USER"
+
+```
+##### 备用命令
+```
+ql repo https://hub.fastgit.org/JDWXX/jd_job.git "jd_|jx_|getJDCookie" "activity|backUp" "^jd[^_]|USER"
+
+```
+##### 定时规则
+
+```
+0 10 0 * * *
+```
+
+
+# 使用文档
+
+[配置助力](https://jdwxx.github.io/JD/ZLPZ)
+
+[安装青龙面板2.2扫描](https://jdwxx.github.io/JD/JD2.2)
+
+
 ## 搭建教程 方式一
 #### [https://blog.csdn.net/tangcv/article/details/118691149](https://blog.csdn.net/tangcv/article/details/118691149)
 
 ## 搭建教程 方式二
 #### [https://blog.csdn.net/weixin_42565036/category_11188503.html](https://blog.csdn.net/weixin_42565036/category_11188503.html)
+
+## 抓取 wskey
+### 所需软件 抓包工具 （Fiddler） 模拟器 （MM模拟器） （京东无线宝） 
+### 软件都在 wskey目录下（main.exe 为 wskey转换ck工具）
+
+### 视频教程： 利用Fiddler抓取京东云app的wskey
+#### [https://www.bilibili.com/video/av841105364/](https://www.bilibili.com/video/av841105364/)
+
+#### Fiddler配置
+![img_2.png](docs/assets/img/img_2.png)
+![img_3.png](docs/assets/img/img_3.png)
+![img_4.png](docs/assets/img/img_4.png)
+![img_5.png](docs/assets/img/img_5.png)

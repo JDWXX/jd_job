@@ -1,16 +1,12 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*
 '''
-项目名称: JD-Script / jd_cash
-Author: Curtin
-功能：签到领现金-助力, 仅助力拿cash
-Date: 2021/7/4 上午09:35
-TG交流 https://t.me/topstyle996
-TG频道 https://t.me/TopStyle2021
+cron: 0 20 0 * * jd_lxj.py
+new Env('领现金');
 '''
+
+import os, re, sys
 #ck 优先读取【JDCookies.txt】 文件内的ck  再到 ENV的 变量 JD_COOKIE='ck1&ck2' 最后才到脚本内 cookies=ck
 cookies = ''
-import os, re, sys
 # 设置被助力的账号可填用户名 或 pin的值不要;
 cash_zlzh = ['账号昵称1', '账号昵称2', '账号昵称3','账号昵称4']
 if os.path.exists("/ql/config/pin.text"):

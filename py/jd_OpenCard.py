@@ -1,12 +1,9 @@
-#!/bin/env python3
 # -*- coding: utf-8 -*
 '''
-项目名称: JD_OpenCard
-Author: Curtin
-功能：JD入会开卡领取京豆
-CreateDate: 2021/5/4 下午1:47
-UpdateTime: 2021/6/19
+cron: 0 0 10 * * jd_lxj.py
+new Env('JD入会开卡领取京豆');
 '''
+
 version = 'v1.2.2'
 readmes = """
 # JD入会领豆小程序
