@@ -376,9 +376,9 @@ class WeCom:
             "agentid": self.AGENTID,
             "text": {
                 "content": message
-                },
+            },
             "safe": "0"
-            }
+        }
         send_msges=(bytes(json.dumps(send_values), 'utf-8'))
         respone = requests.post(send_url, send_msges)
         respone = respone.json()
@@ -390,16 +390,16 @@ class WeCom:
             "msgtype": "mpnews",
             "agentid": self.AGENTID,
             "mpnews": {
-               "articles":[
-                   {
-                       "title": title,
-                       "thumb_media_id": media_id,
-                       "author": "Author",
-                       "content_source_url": "",
-                       "content": message.replace('\n','<br/>'),
-                       "digest": message
+                "articles":[
+                    {
+                        "title": title,
+                        "thumb_media_id": media_id,
+                        "author": "Author",
+                        "content_source_url": "",
+                        "content": message.replace('\n','<br/>'),
+                        "digest": message
                     }
-               ]
+                ]
             }
         }
         send_msges=(bytes(json.dumps(send_values), 'utf-8'))
@@ -635,13 +635,13 @@ def start():
         print(f"关注店铺【{i['shopid']}】")
         uNum = 1
         for ck, nickname, pinName in zip(cookiesList, userNameList, pinNameList):
-           result = drawShopGift(ck, body)
-           if result != 9:
-               getGiftresult(result, nickname, pinName, uNum)
-           else:
-               uNum += 1
-               break
-           uNum += 1
+            result = drawShopGift(ck, body)
+            if result != 9:
+                getGiftresult(result, nickname, pinName, uNum)
+            else:
+                uNum += 1
+                break
+            uNum += 1
     endtime = time.perf_counter()  # 记录时间结束
     message("\n###【本次统计 {}】###\n".format(nowtime()))
     all_get_bean = 0
