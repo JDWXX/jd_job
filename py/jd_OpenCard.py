@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*
 '''
-cron: 0 0 10 * * jd_lxj.py
+cron: 0 0 10 * * jd_OpenCard.py
 new Env('JD入会开卡领取京豆');
 '''
 
