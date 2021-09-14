@@ -50,10 +50,9 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-let guaopencard_addSku = "false"
+let guaopencard_addSku = "true"
 guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku20 ? process.env.guaopencard_addSku20 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku20') ? $.getdata('guaopencard_addSku20') : `${guaopencard_addSku}`);
-let guaopencard = "false"
-guaopencard = $.isNode() ? (process.env.guaopencard20 ? process.env.guaopencard20 : `${guaopencard}`) : ($.getdata('guaopencard20') ? $.getdata('guaopencard20') : `${guaopencard}`);
+let guaopencard = "true"
 message = ""
 !(async () => {
   if (!cookiesArr[0]) {
@@ -61,14 +60,6 @@ message = ""
       "open-url": "https://bean.m.jd.com/"
     });
     return;
-  }
-  if ($.isNode()) {
-    if(guaopencard+"" != "true"){
-      console.log('如需执行脚本请设置环境变量[guaopencard20]为"true"')
-    }
-    if(guaopencard+"" != "true"){
-      return
-    }
   }
   $.shareUuidArr = [];
   $.shareUuid = '1644bc91f825400a856e4d2a15f311af'

@@ -11,6 +11,7 @@ $.authorCodeList = [];
 let cookiesArr = [];
 $.linkID = '';
 let uniqueIdList = [
+    {'id':'RU59FC','name':'尹正','linkID':'o4Z4uGy8EYe_-RY7p-Uw_Q','taskId':244},
     {'id':'L74LC5','name':'肖战','linkID':'P8Iw2eXANcZA4r_ofEDaAQ','taskId':false},
     {'id':'7D2GUG','name':'张艺兴','linkID':'MRyP3a30dDZl5kSccE6B2w','taskId':215},
     {'id':'3SU8SN','name':'陈小春','linkID':'m2okfVwwfUNLJy8RGsIMTw','taskId':230},

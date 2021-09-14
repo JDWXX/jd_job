@@ -51,15 +51,9 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-let guaopencard_addSku = "false"
-guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku24 ? process.env.guaopencard_addSku24 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku24') ? $.getdata('guaopencard_addSku24') : `${guaopencard_addSku}`);
-guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku_All ? process.env.guaopencard_addSku_All : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku_All') ? $.getdata('guaopencard_addSku_All') : `${guaopencard_addSku}`);
-let guaopencard = "false"
-guaopencard = $.isNode() ? (process.env.guaopencard24 ? process.env.guaopencard24 : `${guaopencard}`) : ($.getdata('guaopencard24') ? $.getdata('guaopencard24') : `${guaopencard}`);
-guaopencard = $.isNode() ? (process.env.guaopencard_All ? process.env.guaopencard_All : `${guaopencard}`) : ($.getdata('guaopencard_All') ? $.getdata('guaopencard_All') : `${guaopencard}`);
-let guaopencardRun = "false"
-guaopencardRun = $.isNode() ? (process.env.guaopencardRun24 ? process.env.guaopencardRun24 : `${guaopencardRun}`) : ($.getdata('guaopencardRun24') ? $.getdata('guaopencardRun24') : `${guaopencardRun}`);
-guaopencardRun = $.isNode() ? (process.env.guaopencardRun_All ? process.env.guaopencardRun_All : `${guaopencardRun}`) : ($.getdata('guaopencardRun_All') ? $.getdata('guaopencardRun_All') : `${guaopencardRun}`);
+let guaopencard_addSku = "true"
+let guaopencard = "true"
+let guaopencardRun = "true"
 allMessage = ""
 message = ""
 !(async () => {
@@ -68,15 +62,6 @@ message = ""
             "open-url": "https://bean.m.jd.com/"
         });
         return;
-    }
-    if(guaopencard+"" != "true"){
-        console.log('如需开卡请设置环境变量[guaopencard24]为"true"')
-    }
-    if(guaopencardRun+"" != "true"){
-        console.log('如需做任务请设置环境变量[guaopencardRun24]为"true"')
-    }
-    if(guaopencard+"" != "true" && guaopencardRun+"" != "true"){
-        return
     }
     $.activeID = '3Y9i9BXZZwdsJFkxvrYvkmSih6MZ'
     console.log(`入口:\nhttps://prodev.m.jd.com/mall/active/${$.activeID}/index.html`)
