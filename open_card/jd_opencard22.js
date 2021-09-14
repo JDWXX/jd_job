@@ -52,12 +52,9 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-let guaopencard_addSku = "false"
-guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku22 ? process.env.guaopencard_addSku22 : guaopencard_addSku) : ($.getdata('guaopencard_addSku22') ? $.getdata('guaopencard_addSku22') : guaopencard_addSku);
+let guaopencard_addSku = "true"
 let guaopencard_draw = "0"
-guaopencard_draw = $.isNode() ? (process.env.guaopencard_draw22 ? process.env.guaopencard_draw22 : guaopencard_draw) : ($.getdata('guaopencard_draw22') ? $.getdata('guaopencard_draw22') : guaopencard_draw);
-let guaopencard = "false"
-guaopencard = $.isNode() ? (process.env.guaopencard22 ? process.env.guaopencard22 : guaopencard) : ($.getdata('guaopencard22') ? $.getdata('guaopencard22') : guaopencard);
+let guaopencard = "true"
 message = ""
 !(async () => {
   if (!cookiesArr[0]) {
@@ -65,14 +62,6 @@ message = ""
       "open-url": "https://bean.m.jd.com/"
     });
     return;
-  }
-  if ($.isNode()) {
-    if(guaopencard+"" != "true"){
-      console.log('如需执行脚本请设置环境变量[guaopencard22]为"true"')
-    }
-    if(guaopencard+"" != "true"){
-      return
-    }
   }
   $.shareUuid = 'a7b772e80ce64826b78da56f75be9700'
   $.activityId = '902090301'
