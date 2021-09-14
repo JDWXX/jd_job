@@ -62,7 +62,7 @@ message = ""
     return;
   }
   $.shareUuidArr = [];
-  $.shareUuid = '1644bc91f825400a856e4d2a15f311af'
+  $.shareUuid = 'd23e45b0c1584bcc8152e3defc45c2c3'
   $.activityId = 'dz2108100001566301'
   console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/jddrinks/grandceremony/activity/1988328?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
   for (let i = 0; i < cookiesArr.length; i++) {

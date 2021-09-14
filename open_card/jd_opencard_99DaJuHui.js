@@ -121,7 +121,7 @@ if ($.isNode()) {
 
 function followShop() {
     return new Promise(resolve => {
-        let body = `activityId=f7e4d75f22c84cdeba92bf594b02b910&pin=${encodeURIComponent($.myPingData.secretPin)}&actorUuid=${$.actorUuid}&taskType=23&taskValue=1000009621&shareUuid=${$.shareUuid ? $.shareUuid : '63f49716ec334e44966bb26e79e34103'}`
+        let body = `activityId=4d272cd98b704d1dbb7d0b19882fa4b6&pin=${encodeURIComponent($.myPingData.secretPin)}&actorUuid=${$.actorUuid}&taskType=23&taskValue=1000009621&shareUuid=${$.shareUuid ? $.shareUuid : '63f49716ec334e44966bb26e79e34103'}`
         $.post(taskPostUrl('/dingzhi/dz/openCard/followShop', body, 'https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/followShop'), async (err, resp, data) => {
             try {
                 if (err) {
