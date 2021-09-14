@@ -50,3 +50,16 @@
 
 ## 搭建教程 方式二
 #### [https://blog.csdn.net/weixin_42565036/category_11188503.html](https://blog.csdn.net/weixin_42565036/category_11188503.html)
+
+## 抓取 wskey
+### 所需软件 抓包工具 （Fiddler） 模拟器 （MM模拟器） （京东无线宝）
+### 软件都在 wskey目录下（main.exe 为 wskey转换ck工具）
+
+### 视频教程： 利用Fiddler抓取京东云app的wskey
+#### [https://www.bilibili.com/video/av841105364/](https://www.bilibili.com/video/av841105364/)
+
+#### Fiddler配置
+![img_2.png](./assets/img/img_2.png)
+![img_3.png](./assets/img/img_3.png)
+![img_4.png](./assets/img/img_4.png)
+![img_5.png](./assets/img/img_5.png)
