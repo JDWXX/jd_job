@@ -1,10 +1,10 @@
 /**
-粉丝互动，没啥水
-修改温某的脚本，由于温某不干活，只能自己动手修改了
-注意：脚本会加购，脚本会加购，脚本会加购
-若发现脚本里没有的粉丝互动活动。欢迎反馈给我
-cron 34 6,18 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_fan.js
-* */
+ 粉丝互动，尽量自己设置定时，在0点和1点抽奖，白天基本没水
+ 修改温某的脚本，由于温某不干活，只能自己动手修改了
+ 注意：脚本会加购，脚本会加购，脚本会加购
+ 若发现脚本里没有的粉丝互动活动。欢迎反馈给我
+ cron 34 5,18 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_fan.js
+ * */
 const $ = new Env('粉丝互动');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -28,7 +28,7 @@ const activityList = [
     {"actid": "179e156d768240db84393751fc9c427b", "endTime": 1633017599000},
     {"actid": "bed695cfc40941c0a641eba935f9601e", "endTime": 1633017599000},
     {"actid": "eff9c47393be446f9dd576e26d13dd9d", "endTime": 1631635200000}
-];
+]
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
