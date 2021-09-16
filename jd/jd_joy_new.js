@@ -3,7 +3,6 @@
  IOS用户支持京东双账号,NodeJs用户支持N个京东账号
  更新时间：2021-06-21
  活动入口：京东APP我的-宠汪汪
-
  完成度 1%，要用的手动执行，先不加cron了
  默认80，10、20、40、80可选
  export feedNum = 80
@@ -21,7 +20,7 @@ const vm = require('vm');
 const PNG = require('png-js');
 const UA = require('./USER_AGENTS.js').USER_AGENT;
 const fs = require("fs");
-
+const md5 = require('md5')
 
 Math.avg = function average() {
   var sum = 0;
@@ -141,76 +140,6 @@ class PuzzleRecognizer {
     // not found
     return -1;
   }
-
-  runWithCanvas() {
-    const {createCanvas, Image} = require('canvas');
-    const canvas = createCanvas();
-    const ctx = canvas.getContext('2d');
-    const imgBg = new Image();
-    const imgPatch = new Image();
-    const prefix = 'data:image/png;base64,';
-
-    imgBg.src = prefix + this.rawBg;
-    imgPatch.src = prefix + this.rawPatch;
-    const {naturalWidth: w, naturalHeight: h} = imgBg;
-    canvas.width = w;
-    canvas.height = h;
-    ctx.clearRect(0, 0, w, h);
-    ctx.drawImage(imgBg, 0, 0, w, h);
-
-    const width = w;
-    const {naturalWidth, naturalHeight} = imgPatch;
-    const posY = this.y + PUZZLE_PAD + ((naturalHeight - PUZZLE_PAD) / 2) - (PUZZLE_GAP / 2);
-    // const cData = ctx.getImageData(0, a.y + 10 + 20 - 4, 360, 8).data;
-    const cData = ctx.getImageData(0, posY, width, PUZZLE_GAP).data;
-    const lumas = [];
-
-    for (let x = 0; x < width; x++) {
-      var sum = 0;
-
-      // y xais
-      for (let y = 0; y < PUZZLE_GAP; y++) {
-        var idx = x * 4 + y * (width * 4);
-        var r = cData[idx];
-        var g = cData[idx + 1];
-        var b = cData[idx + 2];
-        var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-
-        sum += luma;
-      }
-
-      lumas.push(sum / PUZZLE_GAP);
-    }
-
-    const n = 2; // minium macroscopic image width (px)
-    const margin = naturalWidth - PUZZLE_PAD;
-    const diff = 20; // macroscopic brightness difference
-    const radius = PUZZLE_PAD;
-    for (let i = 0, len = lumas.length - 2 * 4; i < len; i++) {
-      const left = (lumas[i] + lumas[i + 1]) / n;
-      const right = (lumas[i + 2] + lumas[i + 3]) / n;
-      const mi = margin + i;
-      const mLeft = (lumas[mi] + lumas[mi + 1]) / n;
-      const mRigth = (lumas[mi + 2] + lumas[mi + 3]) / n;
-
-      if (left - right > diff && mLeft - mRigth < -diff) {
-        const pieces = lumas.slice(i + 2, margin + i + 2);
-        const median = pieces.sort((x1, x2) => x1 - x2)[20];
-        const avg = Math.avg(pieces);
-
-        // noise reducation
-        if (median > left || median > mRigth) return;
-        if (avg > 100) return;
-        // console.table({left,right,mLeft,mRigth,median});
-        // ctx.fillRect(i+n-radius, 0, 1, 360);
-        // console.log(i+n-radius);
-        return i + n - radius;
-      }
-    }
-
-    // not found
-    return -1;
-  }
 }
 
 const DATA = {
@@ -219,7 +148,7 @@ const DATA = {
   "product": "embed",
   "lang": "zh_CN",
 };
-const SERVER = '61.49.99.122';
+const SERVER = '49.7.27.91';
 
 class JDJRValidator {
   constructor() {
@@ -401,7 +330,7 @@ function getCoordinate(c) {
   return b.join("")
 }
 
-const HZ = 60;
+const HZ = 25;
 
 class MousePosFaker {
   constructor(puzzleX) {
@@ -543,23 +472,16 @@ $.post = injectToRequest($.post.bind($))
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = i + 1;
       $.isLogin = true;
-      $.nickName = '';
-      await TotalBean();
-      if (!require('./JS_USER_AGENTS')) {
+      $.nickName = $.UserName;
+      if (!require('./JS_USER_AGENTS').HelloWorld) {
         console.log(`\n【京东账号${$.index}】${$.nickName || $.UserName}：运行环境检测失败\n`);
         continue
       }
       console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
-      if (!$.isLogin) {
-        $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
-
-        if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-        }
-        continue
-      }
       message = '';
       subTitle = '';
+
+      await getFriends();
 
       await run('detail/v2');
       await run();
@@ -628,9 +550,13 @@ $.post = injectToRequest($.post.bind($))
 
 function getFollowChannels() {
   return new Promise(resolve => {
+    let lkt = new Date().getTime()
+    let lks = md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     $.get({
-      url: `https://jdjoy.jd.com/common/pet/getFollowChannels?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F`,
+      url: `https://jdjoy.jd.com/common/pet/getFollowChannels?reqSource=h5&invokeKey=JL1VTNRadM68cIMQ`,
       headers: {
+        lkt: lkt,
+        lks: lks,
         'Host': 'api.m.jd.com',
         'accept': '*/*',
         'content-type': 'application/x-www-form-urlencoded',
@@ -647,17 +573,19 @@ function getFollowChannels() {
 
 function taskList() {
   return new Promise(resolve => {
+    let lkt = new Date().getTime()
+    let lks = md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     $.get({
-      url: `https://jdjoy.jd.com/common/pet/getPetTaskConfig?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F`,
+      url: `https://jdjoy.jd.com/common/pet/getPetTaskConfig?reqSource=h5&invokeKey=JL1VTNRadM68cIMQ`,
       headers: {
+        lkt: lkt,
+        lks: lks,
+        'Origin': 'https://h5.m.jd.com',
         'Host': 'jdjoy.jd.com',
-        'accept': '*/*',
-        'content-type': 'application/json',
-        'origin': 'https://h5.m.jd.com',
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-        'referer': 'https://h5.m.jd.com/',
-        'accept-language': 'zh-cn',
-        'cookie': cookie
+        'Content-Type': 'application/json',
+        'Referer': 'https://h5.m.jd.com/babelDiy/Zeus/2wuqXrZrhygTQzYA7VufBEpj4amH/index.html',
+        'User-Agent': 'jdapp;iPhone;10.1.0;12.4.1;fc13275e23b2613e6aae772533ca6f349d2e0a86;network/wifi;ADID/C51FD279-5C69-4F94-B1C5-890BC8EB501F;model/iPhone11,6;addressid/589374288;appBuild/167774;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 12_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1',
+        'Cookie': cookie
       }
     }, (err, resp, data) => {
       try {
@@ -676,9 +604,13 @@ function taskList() {
 
 function beforeTask(fn, shopId) {
   return new Promise(resolve => {
+    let lkt = new Date().getTime()
+    let lks = md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     $.get({
-      url: `https://jdjoy.jd.com/common/pet/icon/click?iconCode=${fn}&linkAddr=${shopId}&reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F`,
+      url: `https://jdjoy.jd.com/common/pet/icon/click?iconCode=${fn}&linkAddr=${shopId}&reqSource=h5&invokeKey=JL1VTNRadM68cIMQ`,
       headers: {
+        lkt: lkt,
+        lks: lks,
         'Accept': '*/*',
         'Connection': 'keep-alive',
         'Content-Type': 'application/json',
@@ -698,9 +630,13 @@ function beforeTask(fn, shopId) {
 
 function followShop(shopId) {
   return new Promise(resolve => {
+    let lkt = new Date().getTime()
+    let lks = md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     $.post({
-      url: `https://jdjoy.jd.com/common/pet/followShop?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F`,
+      url: `https://jdjoy.jd.com/common/pet/followShop?reqSource=h5&invokeKey=JL1VTNRadM68cIMQ`,
       headers: {
+        lkt: lkt,
+        lks: lks,
         'User-Agent': 'jdapp;iPhone;10.0.6;12.4.1;fc13275e23b2613e6aae772533ca6f349d2e0a86;network/wifi;ADID/C51FD279-5C69-4F94-B1C5-890BC8EB501F;model/iPhone11,6;addressid/589374288;appBuild/167724;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 12_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1',
         'Accept-Language': 'zh-cn',
         'Referer': 'https://h5.m.jd.com/babelDiy/Zeus/2wuqXrZrhygTQzYA7VufBEpj4amH/index.html?babelChannel=ttt12&lng=0.000000&lat=0.000000&sid=87e644ae51ba60e68519b73d1518893w&un_area=12_904_3373_62101',
@@ -721,9 +657,13 @@ function followShop(shopId) {
 
 function doTask(body, fnId = 'scan') {
   return new Promise(resolve => {
+    let lkt = new Date().getTime()
+    let lks = md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     $.post({
-      url: `https://jdjoy.jd.com/common/pet/${fnId}?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F`,
+      url: `https://jdjoy.jd.com/common/pet/${fnId}?reqSource=h5&invokeKey=JL1VTNRadM68cIMQ`,
       headers: {
+        'lkt': lkt,
+        'lks': lks,
         'Host': 'jdjoy.jd.com',
         'accept': '*/*',
         'content-type': fnId === 'followGood' || fnId === 'followShop' ? 'application/x-www-form-urlencoded' : 'application/json',
@@ -752,11 +692,15 @@ function doTask(body, fnId = 'scan') {
 }
 
 function feed() {
-  feedNum = process.env.feedNum ? process.env.feedNum : 80
+  let feedNum = process.env.feedNum ? process.env.feedNum : 80
   return new Promise(resolve => {
+    let lkt = new Date().getTime()
+    let lks = md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     $.post({
-      url: `https://jdjoy.jd.com/common/pet/enterRoom/h5?invitePin=&reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F`,
+      url: `https://jdjoy.jd.com/common/pet/enterRoom/h5?invitePin=&reqSource=h5&invokeKey=JL1VTNRadM68cIMQ`,
       headers: {
+        'lkt': lkt,
+        'lks': lks,
         'Host': 'jdjoy.jd.com',
         'accept': '*/*',
         'content-type': 'application/json',
@@ -775,9 +719,13 @@ function feed() {
         resolve();
       } else {
         console.log('开始喂食......')
+        let lkt = new Date().getTime()
+        let lks = md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
         $.get({
-          url: `https://jdjoy.jd.com/common/pet/feed?feedCount=${feedNum}&reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F`,
+          url: `https://jdjoy.jd.com/common/pet/feed?feedCount=${feedNum}&reqSource=h5&invokeKey=JL1VTNRadM68cIMQ`,
           headers: {
+            'lkt': lkt,
+            'lks': lks,
             'Host': 'jdjoy.jd.com',
             'accept': '*/*',
             'content-type': 'application/x-www-form-urlencoded',
@@ -789,7 +737,6 @@ function feed() {
           },
         }, (err, resp, data) => {
           try {
-            // console.log('喂食', data)
             data = JSON.parse(data);
             data.errorCode === 'feed_ok' ? console.log(`\t喂食成功！`) : console.log('\t喂食失败', JSON.stringify(data))
           } catch (e) {
@@ -805,9 +752,13 @@ function feed() {
 
 function award(taskType) {
   return new Promise(resolve => {
+    let lkt = new Date().getTime()
+    let lks = md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     $.get({
-      url: `https://jdjoy.jd.com/common/pet/getFood?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F&taskType=${taskType}`,
+      url: `https://jdjoy.jd.com/common/pet/getFood?reqSource=h5&invokeKey=JL1VTNRadM68cIMQ&taskType=${taskType}`,
       headers: {
+        'lkt': lkt,
+        'lks': lks,
         'Host': 'jdjoy.jd.com',
         'accept': '*/*',
         'content-type': 'application/x-www-form-urlencoded',
@@ -820,9 +771,8 @@ function award(taskType) {
       },
     }, (err, resp, data) => {
       try {
-        console.log('领取奖励', data)
         data = JSON.parse(data);
-        data.errorCode === 'received' ? console.log(`\t任务成功！获得${data.data}狗粮`) : console.log('\t任务失败', JSON.stringify(data))
+        data.errorCode === 'received' ? console.log('任务完成:', data.data) : console.log('\t任务失败:', data)
       } catch (e) {
         $.logErr(e);
       } finally {
@@ -835,9 +785,13 @@ function award(taskType) {
 function run(fn = 'match') {
   let level = process.env.JD_JOY_teamLevel ? process.env.JD_JOY_teamLevel : 2
   return new Promise(resolve => {
+    let lkt = new Date().getTime()
+    let lks = md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     $.get({
-      url: `https://jdjoy.jd.com/common/pet/combat/${fn}?teamLevel=${level}&reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F`,
+      url: `https://jdjoy.jd.com/common/pet/combat/${fn}?teamLevel=${level}&reqSource=h5&invokeKey=JL1VTNRadM68cIMQ`,
       headers: {
+        'lkt': lkt,
+        'lks': lks,
         'Host': 'jdjoy.jd.com',
         'sec-fetch-mode': 'cors',
         'origin': 'https://h5.m.jd.com',
@@ -883,6 +837,91 @@ function run(fn = 'match') {
   })
 }
 
+function getFriends() {
+  return new Promise((resolve) => {
+    let lkt = new Date().getTime()
+    let lks = md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
+    $.post({
+      url: 'https://jdjoy.jd.com/common/pet/enterRoom/h5?invitePin=&reqSource=h5&invokeKey=JL1VTNRadM68cIMQ',
+      headers: {
+        'lkt': lkt,
+        'lks': lks,
+        'Host': 'jdjoy.jd.com',
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'com.jingdong.app.mall',
+        'Referer': 'https://h5.m.jd.com/babelDiy/Zeus/2wuqXrZrhygTQzYA7VufBEpj4amH/index.html?babelChannel=ttt12&sid=445902658831621c5acf782ec27ce21w&un_area=12_904_3373_62101',
+        'Origin': 'https://h5.m.jd.com',
+        'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        'Cookie': cookie
+      },
+      body: JSON.stringify({})
+    }, async (err, resp, data) => {
+      let flag = true
+      for (let k = 0; k < 20; k++) {
+        if (flag) {
+          await $.wait(1000)
+        } else {
+          console.log('无法获取好友列表')
+          break
+        }
+        $.get({
+          url: 'https://jdjoy.jd.com/common/pet/h5/getFriends?itemsPerPage=20&currentPage=1&reqSource=h5&invokeKey=JL1VTNRadM68cIMQ',
+          headers: {
+            'Host': 'jdjoy.jd.com',
+            'Accept': '*/*',
+            'Referer': 'https://h5.m.jd.com/babelDiy/Zeus/2wuqXrZrhygTQzYA7VufBEpj4amH/index.html',
+            "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            'cookie': cookie
+          }
+        }, async (err, resp, data) => {
+          data = JSON.parse(data)
+          if (data.datas) {
+            for (let f of data.datas) {
+              if (f.stealStatus === 'can_steal') {
+                console.log('可偷:', f.friendPin)
+                let lkt = new Date().getTime()
+                let lks = md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
+                $.get({
+                  url: `https://jdjoy.jd.com/common/pet/enterFriendRoom?reqSource=h5&invokeKey=JL1VTNRadM68cIMQ&friendPin=${encodeURIComponent(f.friendPin)}`,
+                  headers: {
+                    'lkt': lkt,
+                    'lks': lks,
+                    'Host': 'jdjoy.jd.com',
+                    'Accept': '*/*',
+                    'Referer': 'https://h5.m.jd.com/babelDiy/Zeus/2wuqXrZrhygTQzYA7VufBEpj4amH/index.html',
+                    "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                    'cookie': cookie
+                  }
+                }, (err, resp, data) => {
+                  let lkt = new Date().getTime()
+                  let lks = md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
+                  $.get({
+                    url: `https://jdjoy.jd.com/common/pet/getRandomFood?reqSource=h5&invokeKey=JL1VTNRadM68cIMQ&friendPin=${encodeURIComponent(f.friendPin)}`,
+                    headers: {
+                      'lkt': lkt,
+                      'lks': lks,
+                      'Host': 'jdjoy.jd.com',
+                      'Accept': '*/*',
+                      'Referer': 'https://h5.m.jd.com/babelDiy/Zeus/2wuqXrZrhygTQzYA7VufBEpj4amH/index.html',
+                      "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                      'cookie': cookie
+                    }
+                  }, (err, resp, data) => {
+                    data = JSON.parse(data)
+                    console.log('偷狗粮:', data.errorCode, data.data)
+                  })
+                })
+              }
+              await $.wait(1500)
+            }
+          }
+        })
+      }
+      resolve();
+    })
+  })
+}
+
 function requireConfig() {
   return new Promise(resolve => {
     notify = $.isNode() ? require('./sendNotify') : '';
@@ -902,51 +941,6 @@ function requireConfig() {
     }
     console.log(`共${cookiesArr.length}个京东账号\n`)
     resolve()
-  })
-}
-
-function TotalBean() {
-  return new Promise(resolve => {
-    const options = {
-      "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,
-      "headers": {
-        "Accept": "application/json,text/plain, */*",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": "zh-cn",
-        "Connection": "keep-alive",
-        "Cookie": cookie,
-        "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
-      }
-    }
-    $.post(options, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            data = JSON.parse(data);
-            if (data['retcode'] === 13) {
-              $.isLogin = false; //cookie过期
-              return
-            }
-            if (data['retcode'] === 0) {
-              $.nickName = (data['base'] && data['base'].nickname) || $.UserName;
-            } else {
-              $.nickName = $.UserName
-            }
-          } else {
-            console.log(`京东服务器返回空数据`)
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
-    })
   })
 }
 
@@ -971,6 +965,7 @@ function writeFile(text) {
 
 // prettier-ignore
 function Env(t, e) {
+  "undefined" != typeof process && JSON.stringify(process.env).indexOf("GITHUB") > -1 && process.exit(0);
 
   class s {
     constructor(t) {
