@@ -45,12 +45,9 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-let guaopencard_addSku = "false"
-guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku17 ? process.env.guaopencard_addSku17 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku17') ? $.getdata('guaopencard_addSku17') : `${guaopencard_addSku}`);
-let guaopencard = "false"
-guaopencard = $.isNode() ? (process.env.guaopencard17 ? process.env.guaopencard17 : `${guaopencard}`) : ($.getdata('guaopencard17') ? $.getdata('guaopencard17') : `${guaopencard}`);
-let guaopencardRun = "false"
-guaopencardRun = $.isNode() ? (process.env.guaopencardRun17 ? process.env.guaopencardRun17 : `${guaopencardRun}`) : ($.getdata('guaopencardRun17') ? $.getdata('guaopencardRun17') : `${guaopencardRun}`);
+let guaopencard_addSku = "true"
+let guaopencard = "true"
+let guaopencardRun = "true"
 message = ""
 !(async () => {
   if (!cookiesArr[0]) {
@@ -58,15 +55,6 @@ message = ""
       "open-url": "https://bean.m.jd.com/"
     });
     return;
-  }
-  if(guaopencard+"" != "true"){
-    console.log('如需开卡请设置环境变量[guaopencard17]为"true"')
-  }
-  if(guaopencardRun+"" != "true"){
-    console.log('如需做任务请设置环境变量[guaopencardRun17]为"true"')
-  }
-  if(guaopencard+"" != "true" && guaopencardRun+"" != "true"){
-    return
   }
   console.log(`入口:\nhttps://prodev.m.jd.com/mall/active/3q7yrbh3qCJvHsu3LhojdgxNuWQT/index.html`)
   for (let i = 0; i < cookiesArr.length; i++) {

@@ -40,8 +40,7 @@ if ($.isNode()) {
                 continue
             }
             authorCodeList = [
-                '8ac77a99303541cc8f701675001d87e2',
-                // '8ac77a99303541cc8f701675001d87e2',
+                '557a05041f244e0d9f89213e9d2c91f9',
             ]
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
@@ -154,14 +153,12 @@ function task(function_id, body, isCommon = 0) {
                                         $.log("-------------------")
                                         if ($.index === 1) {
                                             ownCode = data.data.actorUuid
-                                            $.log("-------------------")
-                                            $.log(ownCode)
                                             console.log(ownCode)
                                         }
                                         $.activityContent = data.data;
                                         $.actorUuid = data.data.actorUuid;
                                         $.activeTask = data.data.activeTask
-                                        // console.log(data.data.actorUuid)
+                                        console.log(data.data.actorUuid)
                                     } else {
                                         $.log("活动已经结束");
                                     }
