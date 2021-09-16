@@ -30,7 +30,7 @@ guaopencard17="true"
 
 */
 const $ = new Env('秋新资联合开卡');
-const Faker=require('./sign_graphics_validate.js')
+const Faker=require('./sign_graphics_validate.js') 
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -203,7 +203,7 @@ async function run() {
       }
       await $.wait(parseInt(Math.random() * 1000 + 1000, 10))
     }
-
+    
   } catch (e) {
     console.log(e)
   }
@@ -297,7 +297,7 @@ function doTask(body) {
               console.log(data)
             }
           }
-
+          
         }
       } catch (e) {
         $.logErr(e, resp)
@@ -366,7 +366,7 @@ function statistic(body) {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           // console.log(data)
-
+          
         }
       } catch (e) {
         $.logErr(e, resp)
