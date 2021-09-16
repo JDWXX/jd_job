@@ -40,8 +40,8 @@ if ($.isNode()) {
                 continue
             }
             authorCodeList = [
-                '4bddf76992fb4792b12efe4c455f5315',
-                // '894a9fcd022847ddb041f7e67001b826',
+                '8ac77a99303541cc8f701675001d87e2',
+                // '8ac77a99303541cc8f701675001d87e2',
             ]
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
@@ -154,6 +154,8 @@ function task(function_id, body, isCommon = 0) {
                                         $.log("-------------------")
                                         if ($.index === 1) {
                                             ownCode = data.data.actorUuid
+                                            $.log("-------------------")
+                                            $.log(ownCode)
                                             console.log(ownCode)
                                         }
                                         $.activityContent = data.data;
