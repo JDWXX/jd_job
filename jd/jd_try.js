@@ -48,7 +48,7 @@ let args_xh = {
      * C商品原价99元，试用价1元，如果下面设置为50，那么C商品将会被加入到待提交的试用组
      * 默认为0
      * */
-	jdPrice: process.env.JD_TRY_PRICE * 1 || 200,
+	jdPrice: process.env.JD_TRY_PRICE * 1 || 150,
 	/*
      * 获取试用商品类型，默认为1，原来不是数组形式，我以为就只有几个tab，结果后面还有我服了
      * 1 - 精选
@@ -90,7 +90,7 @@ let args_xh = {
      * 过滤大于设定值的已申请人数，例如下面设置的1000，A商品已经有1001人申请了，则A商品不会进行申请，会被跳过
      * 可设置环境变量：JD_TRY_APPLYNUMFILTER
      * */
-	applyNumFilter: process.env.JD_TRY_APPLYNUMFILTER * 1 || 10000,
+	applyNumFilter: process.env.JD_TRY_APPLYNUMFILTER * 1 || 1000000,
 	/*
      * 商品试用之间和获取商品之间的间隔, 单位：毫秒(1秒=1000毫秒)
      * 可设置环境变量：JD_TRY_APPLYINTERVAL
