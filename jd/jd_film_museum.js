@@ -57,6 +57,7 @@ if ($.isNode()) {
             }
             continue
         }
+        $.shareUuid = '';
         await main();
     }
 })().catch((e) => {
@@ -124,7 +125,7 @@ async function takePost(type,body) {
             "Accept": "*/*",
             "Content-Type":"application/x-www-form-urlencoded",
             "Origin":"https://jmkj2-isv.isvjcloud.com",
-            "Referer": " https://jmkj2-isv.isvjcloud.com/",
+            "Referer": "https://jmkj2-isv.isvjcloud.com/",
             "apptoken":$.apptoken,
             "User-Agent": $.UA,
             "Accept-Language": "zh-cn",
@@ -162,7 +163,7 @@ async function takeGet(type) {
             "Accept": "*/*",
             "Content-Type":"application/x-www-form-urlencoded",
             "Origin":"https://jmkj2-isv.isvjcloud.com",
-            "Referer": " https://jmkj2-isv.isvjcloud.com/",
+            "Referer": "https://jmkj2-isv.isvjcloud.com/",
             "apptoken":$.apptoken,
             "User-Agent": $.UA,
             "Accept-Language": "zh-cn",
