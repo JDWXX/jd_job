@@ -1,7 +1,7 @@
 /*
 “礼”遇中秋 家团圆
 
-https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/6531736?activityId=df26302886fe4e8ba3ced075aa2e6246
+https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/6531736?activityId=dsfsgffg78dgfd8gfdfe9re8rt8r9ew9
 */
 const $ = new Env("“礼”遇中秋 家团圆");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -55,7 +55,7 @@ if ($.isNode()) {
             $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`
             $.randomCode = random(1000000, 9999999)
-            $.activityId = 'df26302886fe4e8ba3ced075aa2e6246'
+            $.activityId = 'dsfsgffg78dgfd8gfdfe9re8rt8r9ew9'
             $.activityShopId = '1000004065'
             $.activityUrl = `https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
             await marry();
