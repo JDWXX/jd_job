@@ -37,8 +37,8 @@ cron "47 1 18-28 9 *" script-path=https://raw.githubusercontent.com/smiek2221/sc
 ============小火箭=========
 9.18~9.28 “礼”遇中秋 家团圆 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard35.js, cronexpr="47 1 18-28 9 *", timeout=3600, enable=true
 */
-let guaopencard_addSku = "false"
-let guaopencard = "false"
+let guaopencard_addSku = "true"
+let guaopencard = "true"
 
 const $ = new Env('9.18~9.28 “礼”遇中秋 家团圆');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
