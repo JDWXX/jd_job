@@ -48,7 +48,7 @@ let args_xh = {
      * C商品原价99元，试用价1元，如果下面设置为50，那么C商品将会被加入到待提交的试用组
      * 默认为0
      * */
-	jdPrice: process.env.JD_TRY_PRICE * 1 || 0,
+	jdPrice: process.env.JD_TRY_PRICE * 1 || 200,
 	/*
      * 获取试用商品类型，默认为1，原来不是数组形式，我以为就只有几个tab，结果后面还有我服了
      * 1 - 精选
@@ -96,7 +96,7 @@ let args_xh = {
      * 可设置环境变量：JD_TRY_APPLYINTERVAL
      * 默认为3000，也就是3秒
      * */
-	applyInterval: process.env.JD_TRY_APPLYINTERVAL * 1 || 5000,
+	applyInterval: process.env.JD_TRY_APPLYINTERVAL * 1 || 2000,
 	/*
      * 商品数组的最大长度，通俗来说就是即将申请的商品队列长度
      * 例如设置为20，当第一次获取后获得12件，过滤后剩下5件，将会进行第二次获取，过滤后加上第一次剩余件数
@@ -121,7 +121,7 @@ let args_xh = {
      * 不打印的缺点：无法清晰知道每个商品为什么会被过滤，哪个商品被添加到了待提交试用组
      * 可设置环境变量：JD_TRY_PLOG，默认为true
      * */
-	printLog: process.env.JD_TRY_PLOG || true,
+	printLog: process.env.JD_TRY_PLOG || false,
 	/*
      * 白名单，是否打开，如果下面为true，那么黑名单会自动失效
      * 白名单和黑名单无法共存，白名单永远优先于黑名单

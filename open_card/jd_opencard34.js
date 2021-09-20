@@ -1,7 +1,7 @@
 /*
 月满金秋 佳节聚“惠”
 
-https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/6531736?activityId=21h3i1h3h2u1h3g43gy4g3yu2u23u423
+https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/6531736?activityId=367d40e61cf94a63b138f7cb131c0636
 0 14 * * * jd_mid.js
 */
 const $ = new Env("月满金秋 佳节聚“惠”");
@@ -47,7 +47,7 @@ if ($.isNode()) {
                 continue
             }
             authorCodeList = [
-                '4122d9ea64864a6baaae8ef2cddc5e9f'
+                '367d40e61cf94a63b138f7cb131c0636','e1fee147682e4f53a049a143aca140af'
             ]
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
@@ -55,7 +55,7 @@ if ($.isNode()) {
             $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`
             $.randomCode = random(1000000, 9999999)
-            $.activityId = '21h3i1h3h2u1h3g43gy4g3yu2u23u423'
+            $.activityId = '367d40e61cf94a63b138f7cb131c0636'
             $.activityShopId = '1000089686'
             $.activityUrl = `https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
             await marry();
@@ -115,7 +115,7 @@ async function marry() {
             if ($.openCardStatus) {
                 for (let i = 0; i < ($.openCardStatus.cardList1.length + $.openCardStatus.cardList2.length); i++) {
                     $.log("模拟上报访问记录")
-                    await task('crm/pageVisit/insertCrmPageVisit', `venderId=1000089686&pageId=21h3i1h3h2u1h3g43gy4g3yu2u23u423&elementId=${encodeURIComponent(`去开卡${i}`)}&pin=${encodeURIComponent($.secretPin)}`, 1)
+                    await task('crm/pageVisit/insertCrmPageVisit', `venderId=1000089686&pageId=367d40e61cf94a63b138f7cb131c0636&elementId=${encodeURIComponent(`去开卡${i}`)}&pin=${encodeURIComponent($.secretPin)}`, 1)
                     await $.wait(2000)
                 }
                 t1TaskList = []
