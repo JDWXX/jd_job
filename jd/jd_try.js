@@ -193,13 +193,13 @@ let args_xh = {
 						await try_feedsList(args_xh.tabId[$.nowTabIdIndex], $.nowPage)  //获取对应tabId的试用页面
 					}
 					if(trialActivityIdList.length < args_xh.maxLength){
-						console.log(`间隔等待中，请等待 2 秒\n`)
-						await $.wait(2000);
+						console.log(`间隔等待中，请等待 4 秒\n`)
+						await $.wait(4000);
 					}
 				}
 				if($.isForbidden === false && $.isLimit === false){
-					console.log(`稍后将执行试用申请，请等待 2 秒\n`)
-					await $.wait(2000);
+					console.log(`稍后将执行试用申请，请等待 4 秒\n`)
+					await $.wait(4000);
 					for(let i = 0; i < trialActivityIdList.length && $.isLimit === false; i++){
 						if($.isLimit){
 							console.log("试用上限")
