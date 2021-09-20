@@ -148,7 +148,6 @@ let args_xh = {
 	console.log('X1a0He留：遇到问题请把脚本内的注释看一遍再来问，谢谢')
 	await $.wait(500)
 	// 如果你要运行京东试用这个脚本，麻烦你把环境变量 JD_TRY 设置为 true
-	if(process.env.JD_TRY && process.env.JD_TRY === 'true'){
 		await requireConfig()
 		if(!$.cookiesArr[0]){
 			$.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
@@ -237,9 +236,6 @@ let args_xh = {
 				notifyMsg = "";
 			}
 		}
-	} else {
-		console.log(`\n您未设置运行【京东试用】脚本，结束运行！\n`)
-	}
 })().catch((e) => {
 	console.error(`❗️ ${$.name} 运行错误！\n${e}`)
 }).finally(() => $.done())
