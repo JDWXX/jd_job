@@ -1,7 +1,6 @@
-/**
- 明星小店
- 蚊子腿，欧皇可以中实物
- cron 10 9,18 9-25 8 * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_star_shop.js
+/*
+    9.18-10.9 明星小店
+    cron 12 19 19-30 9 * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_star_shop.js
  */
 const $ = new Env('明星小店');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -11,15 +10,11 @@ $.authorCodeList = [];
 let cookiesArr = [];
 $.linkID = '';
 let uniqueIdList = [
-    {'id':'RU59FC','name':'尹正','linkID':'o4Z4uGy8EYe_-RY7p-Uw_Q','taskId':244},
-    {'id':'L74LC5','name':'肖战','linkID':'P8Iw2eXANcZA4r_ofEDaAQ','taskId':false},
-    {'id':'7D2GUG','name':'张艺兴','linkID':'MRyP3a30dDZl5kSccE6B2w','taskId':215},
-    {'id':'3SU8SN','name':'陈小春','linkID':'m2okfVwwfUNLJy8RGsIMTw','taskId':230},
-    {'id':'4T2M7Z','name':'黄征','linkID':'m2okfVwwfUNLJy8RGsIMTw','taskId':230},
-    {'id':'Y5DXN4','name':'张智霖','linkID':'m2okfVwwfUNLJy8RGsIMTw','taskId':230},
-    {'id':'MK9U5L','name':'李承铉','linkID':'m2okfVwwfUNLJy8RGsIMTw','taskId':230},
+    {'id':'RU59FC','name':'尹正','linkID':'Q7qMuOyySR-qdWRz4YYR0w','taskId':259},
 ];
-const rewardList = ['P8Iw2eXANcZA4r_ofEDaAQ', 'MRyP3a30dDZl5kSccE6B2w', 'm2okfVwwfUNLJy8RGsIMTw']
+const rewardList = [
+    'Q7qMuOyySR-qdWRz4YYR0w',
+]
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -55,23 +50,16 @@ if ($.isNode()) {
         }
         await main();
     }
-    try{res = await getAuthorShareCode('https://raw.githubusercontent.com/star261/jd/main/code/starShop.json');}catch (e) {}
-    if(!res){
-        try{res = await getAuthorShareCode('https://gitee.com/star267/share-code/raw/master/starShop.json');}catch (e) {}
-        if(!res){res = [];}
+    if($.authorCodeList.length > 0){
+        $.inviteCodeList.push(...getRandomArrayElements($.authorCodeList, 1));
     }
-    if(res && res.length > 0){
-        $.authorCodeList = getRandomArrayElements(res,1)[0];
-    }
-    $.inviteCodeList.push(...getRandomArrayElements($.authorCodeList, 1));
     cookiesArr = getRandomArrayElements(cookiesArr,cookiesArr.length);
     for (let i = 0; i < cookiesArr.length; i++) {
         $.cookie = cookiesArr[i];
         $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
         $.taskId = false;
-        let sar = 0
-        while (!$.taskId){
-            sar = Math.floor((Math.random() * uniqueIdList.length));
+        while (!$.taskId ){
+            let sar = Math.floor((Math.random() * uniqueIdList.length));
             $.uniqueId = uniqueIdList[sar].id;
             $.linkID = uniqueIdList[sar].linkID;
             $.taskId = uniqueIdList[sar].taskId;
@@ -79,6 +67,7 @@ if ($.isNode()) {
         for (let k = 0; k < $.inviteCodeList.length; k++) {
             $.oneCode = $.inviteCodeList[k];
             console.log(`${$.UserName}去助力：${$.uniqueId} 活动，助力码：${$.oneCode}`);
+            //await takePostRequest('help');
             await help()
             await $.wait(2000);
         }
@@ -90,6 +79,38 @@ if ($.isNode()) {
     .finally(() => {
         $.done();
     })
+
+async function help(){
+    const url = `https://api.m.jd.com/?functionId=activityStarBackGetProgressInfo&body={%22starId%22:%22${$.uniqueId}%22,%22sharePin%22:%22${$.oneCode}%22,%22taskId%22:%22${$.taskId}%22,%22linkId%22:%22${$.linkID}%22}&_t=${Date.now()}&appid=activities_platform`;
+    const headers = {
+        'Origin' : `https://prodev.m.jd.com`,
+        'Cookie': $.cookie,
+        'Connection' : `keep-alive`,
+        'Accept' : `application/json, text/plain, */*`,
+        'Referer' : `https://prodev.m.jd.com/mall/active/34LcYfTMVLu6QPowsoLtk383Hcfv/index.html`,
+        'Host' : `api.m.jd.com`,
+        'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        'Accept-Encoding' : `gzip, deflate, br`,
+        'Accept-Language' : `zh-cn`
+    };
+    let myRequest =  {url: url, headers: headers};
+    return new Promise(async resolve => {
+        $.get(myRequest, (err, resp, data) => {
+            try {
+                try {
+                    console.log(data);
+                } catch (e) {
+                    console.log(`返回异常：${data}`);
+                    return;
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+    })
+}
 
 async function main() {
     let sendMessage = '';
@@ -114,8 +135,6 @@ async function main() {
     }
     console.log(`=============${$.UserName }：明星小店奖励汇总================`);
     await $.wait(1000);
-    $.rewards = [];
-    await getReward();
     for (let i = 0; i < rewardList.length; i++) {
         $.linkID = rewardList[i];
         $.rewards = [];
@@ -138,45 +157,13 @@ async function main() {
                 console.log(`获得其他：${$.rewards[i].prizeDesc || ''}`);
             }
         }
-        await $.wait(2000);
     }
     if(sendMessage){
-        sendMessage += `填写收货地址路径：\n京东首页，搜索明星（肖战,张艺兴或者陈小春），进入明星小店，我的礼物，填写收货地址`;
+        sendMessage += `填写收货地址路径：\n京东首页，搜索明星（尹正），进入明星小店，我的礼物，填写收货地址`;
         await notify.sendNotify(`星店长`, sendMessage);
     }
 }
 
-async function help(){
-    const url = `https://api.m.jd.com/?functionId=activityStarBackGetProgressInfo&body={%22starId%22:%22${$.uniqueId}%22,%22sharePin%22:%22${$.oneCode}%22,%22taskId%22:%22${$.taskId}%22,%22linkId%22:%22${$.linkID}%22}&_t=${Date.now()}&appid=activities_platform`;
-    const headers = {
-        'Origin' : `https://prodev.m.jd.com`,
-        'Cookie': $.cookie,
-        'Connection' : `keep-alive`,
-        'Accept' : `application/json, text/plain, */*`,
-        'Referer' : `https://prodev.m.jd.com/mall/active/34LcYfTMVLu6QPowsoLtk383Hcfv/index.html`,
-        'Host' : `api.m.jd.com`,
-        'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-        'Accept-Encoding' : `gzip, deflate, br`,
-        'Accept-Language' : `zh-cn`
-    };
-    let myRequest =  {url: url, headers: headers};
-    return new Promise(async resolve => {
-        $.get(myRequest, (err, resp, data) => {
-            try {
-                try {
-                    //console.log(data+'\n');
-                } catch (e) {
-                    console.log(`返回异常：${data}`);
-                    return;
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve();
-            }
-        })
-    })
-}
 
 Date.prototype.Format = function (fmt) { //author: meizz
     var o = {
@@ -252,6 +239,7 @@ async function starShop() {
     $.taskList = [];
     await takePostRequest('apTaskList');
     await $.wait(2000);
+    $.runFlag = false;
     for (let i = 0; i < $.taskList.length; i++) {
         $.oneTask = $.taskList[i];
         if ($.oneTask.taskFinished) {
@@ -261,6 +249,7 @@ async function starShop() {
         if ($.oneTask.taskType === 'SHARE_INVITE') {
             continue;
         }
+        $.runFlag = true;
         console.log(`去做任务：${$.oneTask.taskTitle}`);
         if ($.oneTask.taskType === 'SIGN') {
             await takePostRequest('SIGN');
@@ -277,6 +266,18 @@ async function starShop() {
                 await $.wait(2000);
             }
 
+        }
+    }
+    if($.runFlag){
+        await  getInfo();
+        prize = $.info.prize;
+        for (let i = 1; i < 5; i++) {
+            $.onePrize = prize[i];
+            if ($.onePrize.state === 1) {
+                console.log(`去抽奖，奖品为：${$.onePrize.name}`);
+                await takePostRequest('activityStarBackDrawPrize');
+                await $.wait(2000);
+            }
         }
     }
 }
@@ -304,6 +305,10 @@ async function takePostRequest(type) {
             break;
         case 'apDoTask':
             body = `functionId=apDoTask&body={"taskType":"${$.oneTask.taskType}","taskId":${$.oneTask.id},"uniqueId":"${$.uniqueId}","channel":4,"linkId":"${$.linkID}","itemId":"${encodeURIComponent($.oneItemInfo.itemId)}"}&_t=${Date.now()}&appid=activities_platform`;
+            myRequest = getPostRequest(body);
+            break;
+        case 'help':
+            body = `functionId=activityStarBackGetProgressBarInfo&body={"starId":"${$.uniqueId}","sharePin":"${$.oneCode}","taskId":"129","linkId":"${$.linkID}"}&_t=${Date.now()}&appid=activities_platform`;
             myRequest = getPostRequest(body);
             break;
         case 'activityStarBackDrawPrize':
@@ -475,43 +480,6 @@ function TotalBean() {
                 resolve();
             }
         })
-    })
-}
-function getAuthorShareCode(url) {
-    return new Promise(async resolve => {
-        const options = {
-            "url": `${url}`,
-            "timeout": 10000,
-            "headers": {
-                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-            }
-        };
-        if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
-            const tunnel = require("tunnel");
-            const agent = {
-                https: tunnel.httpsOverHttp({
-                    proxy: {
-                        host: process.env.TG_PROXY_HOST,
-                        port: process.env.TG_PROXY_PORT * 1
-                    }
-                })
-            }
-            Object.assign(options, { agent })
-        }
-        $.get(options, async (err, resp, data) => {
-            try {
-                if (err) {
-                } else {
-                    if (data) data = JSON.parse(data)
-                }
-            } catch (e) {
-                // $.logErr(e, resp)
-            } finally {
-                resolve(data || []);
-            }
-        })
-        await $.wait(10000)
-        resolve();
     })
 }
 /**
