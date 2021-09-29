@@ -1,6 +1,6 @@
 /*
 礼惠国庆 大牌欢乐购
-https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/3444910?activityId=8d98g98f8dg8d7s6df7svysd9g7fd88d
+https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/3444910?activityId=2ba6911c3c1f492ab930c6194183abec
 */
 const $ = new Env("礼惠国庆 大牌欢乐购");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -45,8 +45,8 @@ if ($.isNode()) {
                 continue
             }
             authorCodeList = [
-                'f86cf586db314690b020975e5e94d470',
-                '76430b6ed06e4794a146bf8cc76c6a01',
+                '2ba6911c3c1f492ab930c6194183abec',
+                '2ba6911c3c1f492ab930c6194183abec',
             ]
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
@@ -55,7 +55,7 @@ if ($.isNode()) {
             $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`
             $.randomCode = random(1000000, 9999999)
-            $.activityId = '8d98g98f8dg8d7s6df7svysd9g7fd88d'
+            $.activityId = '2ba6911c3c1f492ab930c6194183abec'
             $.activityShopId = '1000015445'
             $.activityUrl = `https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
             await marry();
@@ -115,7 +115,7 @@ async function marry() {
             if ($.openCardStatus) {
                 for (let i = 0; i < $.openCardStatus.cardList1.length; i++) {
                     $.log("模拟上报访问记录")
-                    await task('crm/pageVisit/insertCrmPageVisit', `venderId=1000015445&pageId=8d98g98f8dg8d7s6df7svysd9g7fd88d&elementId=${encodeURIComponent(`去开卡${i}`)}&pin=${encodeURIComponent($.secretPin)}`, 1)
+                    await task('crm/pageVisit/insertCrmPageVisit', `venderId=1000015445&pageId=2ba6911c3c1f492ab930c6194183abec&elementId=${encodeURIComponent(`去开卡${i}`)}&pin=${encodeURIComponent($.secretPin)}`, 1)
                     await $.wait(6000)
                 }
                 t1TaskList = []
