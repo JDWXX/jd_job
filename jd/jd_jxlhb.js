@@ -318,10 +318,10 @@ function taskurl(function_path, body = '', stk) {
   const deviceId = UA.split(';') && UA.split(';')[4] || ''
   url += `&phoneid=${deviceId}`
   url += `&stepreward_jstoken=${
-    Math.random().toString(36).slice(2, 10) +
-    Math.random().toString(36).slice(2, 10) +
-    Math.random().toString(36).slice(2, 10) +
-    Math.random().toString(36).slice(2, 10)
+      Math.random().toString(36).slice(2, 10) +
+      Math.random().toString(36).slice(2, 10) +
+      Math.random().toString(36).slice(2, 10) +
+      Math.random().toString(36).slice(2, 10)
   }`
   if (stk) {
     url += '&_stk=' + encodeURIComponent(stk)
