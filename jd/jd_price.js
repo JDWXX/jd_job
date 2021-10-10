@@ -1,30 +1,30 @@
 /*
-东东世界
+京东保价
 
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
 [task_local]
-#东东世界
-15 3,9 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_ddworld.js, tag=东东世界, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+#京东保价
+41 0,12,23 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_price.js, tag=京东保价, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "15 3,9 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_ddworld.js,tag=东东世界
+cron "41 0,12,23 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_price.js,tag=京东保价
 
 ===============Surge=================
-东东世界 = type=cron,cronexp="15 3,9 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_ddworld.js
+京东保价 = type=cron,cronexp="41 0,12,23 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_price.js
 
 ============小火箭=========
-东东世界 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_ddworld.js, cronexpr="15 3,9 * * *", timeout=3600, enable=true
-*/
-const $ = new Env('东东世界');
+京东保价 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_price.js, cronexpr="41 0,12,23 * * *", timeout=3600, enable=true
+ */
+const $ = new Env('京东保价');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
+const jsdom = $.isNode() ? require('jsdom') : '';
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], cookie = '', message;
+let cookiesArr = [], cookie = '', message, allMessage = '';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -33,10 +33,7 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-const JD_API_HOST = 'https://ddsj-dz.isvjcloud.com/dd-api';
-let allMessage = '';
-$.shareCodes = []
-let tokenInfo = {}, hotInfo = {}
+const JD_API_HOST = 'https://api.m.jd.com/';
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -49,6 +46,7 @@ let tokenInfo = {}, hotInfo = {}
       $.index = i + 1;
       $.isLogin = true;
       $.nickName = '';
+      $.token = ''
       message = '';
       await TotalBean();
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
@@ -60,343 +58,153 @@ let tokenInfo = {}, hotInfo = {}
         }
         continue
       }
-      $.hot = false
-      await jdWorld()
+      await price()
       await $.wait(2000)
-      tokenInfo[$.UserName] = $.access_token
-      hotInfo[$.UserName] = $.hot
     }
   }
-  let res = await getAuthorShareCode('https://raw.githubusercontent.com/Aaron-lv/updateTeam/master/shareCodes/ddworld.json')
-  if (!res) {
-    $.http.get({url: 'https://purge.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/ddworld.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
-    await $.wait(1000)
-    res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/ddworld.json')
-  }
-  $.shareCodes = [...$.shareCodes, ...(res || [])]
-  for (let i = 0; i < cookiesArr.length; i++) {
-    cookie = cookiesArr[i];
-    $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-    $.access_token = tokenInfo[$.UserName]
-    $.canHelp = true
-    if (hotInfo[$.UserName]) continue
-    if ($.shareCodes && $.shareCodes.length) {
-      console.log(`\n自己账号内部循环互助\n`);
-      for (let j = 0; j < $.shareCodes.length && $.canHelp; j++) {
-        console.log(`账号${$.UserName} 去助力 ${$.shareCodes[j].use} 的助力码 ${$.shareCodes[j].code}`)
-        if ($.shareCodes[j].num === $.domax) {
-          console.log(`助力失败：您的好友助力已满`)
-          $.shareCodes.splice(j, 1)
-          j--
-          continue
-        }
-        if ($.UserName === $.shareCodes[j].use) {
-          console.log(`助力失败：不能助力自己`)
-          continue
-        }
-        $.success = false
-        await do_assist_task($.shareCodes[j].taskToken, $.shareCodes[j].code)
-        await $.wait(2000)
-        if ($.success) $.shareCodes[j].num++
-      }
-    }
+  if (allMessage) {
+    if ($.isNode()) await notify.sendNotify(`${$.name}`, `${allMessage}`);
   }
 })()
-    .catch((e) => {
-      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-    })
-    .finally(() => {
-      $.done();
-    })
+  .catch((e) => {
+    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+  })
+  .finally(() => {
+    $.done();
+  })
 
-async function jdWorld() {
-  await getIsvToken()
-  await getIsvToken2()
-  await getUserInfo()
-  await get_user_info()
-  if ($.hot) return
-  await get_task()
+async function price() {
+  let num = 0
+  do {
+    await jstoken();
+    if ($.token) {
+      await siteppM_skuOnceApply();
+    }
+    num++
+  } while (num < 3 && !$.token)
+  await showMsg()
 }
 
-// 获得IsvToken
-async function getIsvToken() {
-  let body = `body=%7B%22to%22%3A%22https%3A%2F%2Fddsj-dz.isvjcloud.com%2Fdd-world%2Fload_app%2Fload_app.html%22%2C%22action%22%3A%22to%22%7D&client=apple&clientVersion=10.1.0&uuid=yzv1eikjigs4sg8v&st=1631949498731&sign=8733ea1f0244a2346af129512294fa09&sv=111`
+async function siteppM_skuOnceApply() {
+  let body = {
+    sid: "",
+    type: "3",
+    forcebot: "",
+    token: $.token
+  }
   return new Promise(async resolve => {
-    $.post(jdUrl('genToken', body), async (err, resp, data) => {
+    $.post(taskUrl("siteppM_skuOnceApply", body), async (err, resp, data) => {
       try {
         if (err) {
-          console.log(`${$.name} genToken API请求失败，请检查网路重试`)
+          console.log(JSON.stringify(err))
+          console.log(`${$.name} siteppM_skuOnceApply API请求失败，请检查网路重试`);
         } else {
           if (safeGet(data)) {
-            data = JSON.parse(data);
-            $.isvToken = data['tokenKey']
+            data = JSON.parse(data)
+            if (data.flag) {
+              await siteppM_appliedSuccAmount()
+            } else {
+              console.log(`保价失败：${data.responseMessage}`)
+              message += `保价失败：${data.responseMessage}\n`
+            }
           }
         }
       } catch (e) {
-        $.logErr(e, resp)
+        $.logErr(e, resp);
       } finally {
         resolve(data);
       }
     })
   })
 }
-// 获得对应游戏的访问Token
-async function getIsvToken2() {
-  let body = `body=%7B%22id%22%3A%22%22%2C%22url%22%3A%22https%3A%2F%2Fddsj-dz.isvjcloud.com%22%7D&client=apple&clientVersion=10.1.0&uuid=b56r0is60bfo0x9n&st=1631949499685&sign=950339fc057b93ca9b9976d052f733a2&sv=111`
-  return new Promise(async resolve => {
-    $.post(jdUrl('isvObfuscator', body), async (err, resp, data) => {
+function siteppM_appliedSuccAmount() {
+  let body = {
+    sid: "",
+    type: "3",
+    forcebot: "",
+    num: 15
+  }
+  return new Promise(resolve => {
+    $.post(taskUrl("siteppM_appliedSuccAmount", body), (err, resp, data) => {
       try {
         if (err) {
-          console.log(`${$.name} isvObfuscator API请求失败，请检查网路重试`)
+          console.log(JSON.stringify(err))
+          console.log(`${$.name} siteppM_appliedSuccAmount API请求失败，请检查网路重试`)
         } else {
           if (safeGet(data)) {
-            data = JSON.parse(data);
-            $.token2 = data['token']
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-  })
-}
-async function getUserInfo() {
-  return new Promise(async resolve => {
-    $.post(taskPostUrl(`jd-user-info`, `token=${$.token2}&source=01`, `IsvToken=${$.isvToken}`), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} getUserInfo API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
             data = JSON.parse(data)
-            $.access_token = data.access_token
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
-    })
-  })
-}
-
-function get_task() {
-  return new Promise(async resolve => {
-    $.get(taskUrl(`get_task`), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} get_task API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            data = JSON.parse(data)
-            for (let key of Object.keys(data.result.taskVos)) {
-              let vo = data.result.taskVos[key]
-              if (vo.status === 1) {
-                if (!vo.assistTaskDetailVo) console.log(`去做【${vo.taskName}】`)
-                if (vo.simpleRecordInfoVo) {
-                  await do_task(vo.simpleRecordInfoVo.taskToken, vo.taskId, vo.taskType)
-                  await $.wait(2000)
-                } else if (vo.assistTaskDetailVo) {
-                  $.domax = vo.maxTimes
-                  $.shareCodes.push({
-                    'use': $.UserName,
-                    'taskToken': vo.assistTaskDetailVo.taskToken,
-                    'code': $.openid,
-                    'num': vo.times
-                  })
-                } else {
-                  let Vos = vo.browseShopVo || vo.shoppingActivityVos || vo.productInfoVos || []
-                  for (let key of Object.keys(Vos)) {
-                    let taskVo = Vos[key]
-                    taskName = taskVo.shopName || taskVo.title || taskVo.skuName
-                    if (taskVo.status === 1) {
-                      await do_task(taskVo.taskToken, vo.taskId, vo.taskType, taskName)
-                      await $.wait(2000)
-                    } else {
-                      console.log(`【${taskName}】已完成`)
-                    }
-                  }
-                }
-              } else {
-                console.log(`【${vo.taskName}】已完成`)
-              }
+            if (data.flag) {
+              console.log(`保价成功：返还${data.succAmount}元`)
+              message += `保价成功：返还${data.succAmount}元\n`
+            } else {
+              console.log(`保价失败：没有可保价的订单`)
             }
           }
         }
       } catch (e) {
         $.logErr(e, resp)
       } finally {
-        resolve();
+        resolve(data)
       }
     })
   })
 }
-function do_task(taskToken, task_id, task_type, task_name = '') {
-  let body = `taskToken=${taskToken}&task_id=${task_id}&task_type=${task_type}`
-  if (task_name) body = `${body}&task_name=${escape(task_name)}`
-  return new Promise(resolve => {
-    $.post(taskPostUrl(`do_task`, body), (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} do_task API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            data = JSON.parse(data)
-            console.log(`完成成功：获得${data.score}金币`)
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
+
+async function jstoken() {
+  const { JSDOM } = jsdom;
+  let resourceLoader = new jsdom.ResourceLoader({
+      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0',
+      referrer: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
+  });
+  let virtualConsole = new jsdom.VirtualConsole();
+  var options = {
+      referrer: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
+      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0',
+      runScripts: "dangerously",
+      resources: resourceLoader,
+      includeNodeLocations: true,
+      storageQuota: 10000000,
+      pretendToBeVisual: true,
+      virtualConsole
+  };
+  let dom = new JSDOM(`<body><script src="https://js-nocaptcha.jd.com/statics/js/main.min.js"></script></body>`, options);
+  await $.wait(1000)
+  try {
+    feSt = 's'
+    jab = new dom.window.JAB({
+      bizId: 'jdjiabao',
+      initCaptcha: false
     })
-  })
-}
-function get_user_info() {
-  return new Promise(resolve => {
-    $.get(taskUrl(`get_user_info`), (err, resp, data) => {
-      try {
-        if (data) {
-          data = JSON.parse(data)
-          if (!data.status_code) {
-            console.log(`【京东账号${$.index}（${$.UserName}）的东东世界好友互助码】${data.openid}`)
-            $.openid = data.openid
-          } else if (data.status_code === 403) {
-            $.hot = true
-            console.log(`活动太火爆了，还是去买买买吧！`)
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
-    })
-  })
-}
-function do_assist_task(taskToken, code) {
-  let body = `taskToken=${taskToken}&inviter_id=${code}`
-  return new Promise(resolve => {
-    $.post(taskPostUrl(`do_assist_task`, body), (err, resp, data) => {
-      try {
-        if (data) {
-          data = JSON.parse(data)
-          if (!data.status_code) {
-            console.log(`助力成功：获得${data.score}金币`)
-            $.success = true
-          } else if (data.status_code === 422) {
-            console.log(`助力失败：无助力次数`)
-            $.canHelp = false
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
-    })
-  })
+    $.token = jab.getToken() || ''
+  } catch (e) {}
 }
 
 function showMsg() {
   return new Promise(resolve => {
-    if (!jdNotify) {
-      $.msg($.name, '', `${message}`);
-    } else {
-      $.log(`京东账号${$.index}${$.nickName}\n${message}`);
+    if (message) {
+      allMessage += `【京东账号${$.index}】${$.nickName || $.UserName}\n${message}${$.index !== cookiesArr.length ? '\n\n' : '\n\n'}`;
     }
+    $.msg($.name, '', `【京东账号${$.index}】${$.nickName}\n${message}`);
     resolve()
   })
 }
 
-function jdUrl(functionId, body) {
+function taskUrl(functionId, body) {
   return {
-    url: `https://api.m.jd.com/client.action?functionId=${functionId}`,
-    body: body,
+    url: `${JD_API_HOST}api?appid=siteppM&functionId=${functionId}&forcebot=&t=${Date.now()}`,
+    body: `body=${encodeURIComponent(JSON.stringify(body))}`,
     headers: {
-      'Host': 'api.m.jd.com',
-      'accept': '*/*',
-      'user-agent': 'JD4iPhone/167490 (iPhone; iOS 14.2; Scale/3.00)',
-      'accept-language': 'zh-Hans-JP;q=1, en-JP;q=0.9, zh-Hant-TW;q=0.8, ja-JP;q=0.7, en-US;q=0.6',
-      'content-type': 'application/x-www-form-urlencoded',
-      'Cookie': cookie
-    }
-  }
-}
-function taskUrl(functionId) {
-  return {
-    url: `${JD_API_HOST}/${functionId}`,
-    headers: {
-      "Host": "ddsj-dz.isvjcloud.com",
+      "Host": "api.m.jd.com",
+      "Accept": "application/json",
       "Content-Type": "application/x-www-form-urlencoded",
-      "Accept-Encoding": "gzip, deflate, br",
-      "Cookie": $.access_token ? `dd-world=${$.access_token}` : '',
-      "Authorization": $.access_token ? `Bearer ${$.access_token}` : '',
-      "Connection": "keep-alive",
-      "Accept": "application/json, text/plain, */*",
+      "Origin": "https://msitepp-fm.jd.com",
+      "Accept-Language": "zh-CN,zh-Hans;q=0.9",
       "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-      "Referer": "https://ddsj-dz.isvjcloud.com/dd-world/",
-      "Accept-Language": "zh-cn",
+      "Referer": "https://msitepp-fm.jd.com/",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Cookie": cookie
     }
   }
-}
-function taskPostUrl(functionId, body = '', IsvToken = '') {
-  return {
-    url: `${JD_API_HOST}/${functionId}`,
-    body,
-    headers: {
-      "Host": "ddsj-dz.isvjcloud.com",
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Accept-Encoding": "gzip, deflate, br",
-      "Cookie": IsvToken ? IsvToken : $.access_token ? `dd-world=${$.access_token}` : '',
-      "Authorization": $.access_token ? `Bearer ${$.access_token}` : '',
-      "Connection": "keep-alive",
-      "Accept": "application/json, text/plain, */*",
-      "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-      "Referer": "https://ddsj-dz.isvjcloud.com/dd-world/",
-      "Accept-Language": "zh-cn",
-    }
-  }
-}
-
-function getAuthorShareCode(url) {
-  return new Promise(async resolve => {
-    const options = {
-      url: `${url}?${new Date()}`, "timeout": 10000, headers: {
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-      }
-    };
-    if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
-      const tunnel = require("tunnel");
-      const agent = {
-        https: tunnel.httpsOverHttp({
-          proxy: {
-            host: process.env.TG_PROXY_HOST,
-            port: process.env.TG_PROXY_PORT * 1
-          }
-        })
-      }
-      Object.assign(options, { agent })
-    }
-    $.get(options, async (err, resp, data) => {
-      try {
-        resolve(JSON.parse(data))
-      } catch (e) {
-        // $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
-    })
-    await $.wait(10000)
-    resolve();
-  })
 }
 
 function TotalBean() {
