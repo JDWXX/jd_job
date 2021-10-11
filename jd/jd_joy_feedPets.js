@@ -104,8 +104,8 @@ function feedPets(feedNum) {
     if (FEED_NUM === 0) { console.log(`跳出喂食`);resolve();return }
     console.log(`实际的喂食数量::${feedNum}g\n`);
     let opt = {
-      url: `//jdjoy.jd.com/common/pet/feed?feedCount=${feedNum}&reqSource=h5&invokeKey=RtKLB8euDo7KwsO0`,
-      // url: "//draw.jdfcloud.com/common/pet/getPetTaskConfig?reqSource=h5&invokeKey=RtKLB8euDo7KwsO0",
+      url: `//jdjoy.jd.com/common/pet/feed?feedCount=${feedNum}&reqSource=h5&invokeKey=JL1VTNRadM68cIMQ`,
+      // url: "//draw.jdfcloud.com/common/pet/getPetTaskConfig?reqSource=h5&invokeKey=JL1VTNRadM68cIMQ",
       method: "GET",
       data: {},
       credentials: "include",
@@ -113,7 +113,7 @@ function feedPets(feedNum) {
     }
     const url = "https:"+ taroRequest(opt)['url'] + $.validate;
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'RtKLB8euDo7KwsO0' + lkt).toString()
+    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     const options = {
       url,
       headers: {
@@ -177,8 +177,8 @@ function feedPets(feedNum) {
 function ThreeMeals() {
   return new Promise(resolve => {
     let opt = {
-      url: "//jdjoy.jd.com/common/pet/getFood?taskType=ThreeMeals&reqSource=h5&invokeKey=RtKLB8euDo7KwsO0",
-      // url: "//draw.jdfcloud.com/common/pet/getPetTaskConfig?reqSource=h5&invokeKey=RtKLB8euDo7KwsO0",
+      url: "//jdjoy.jd.com/common/pet/getFood?taskType=ThreeMeals&reqSource=h5&invokeKey=JL1VTNRadM68cIMQ",
+      // url: "//draw.jdfcloud.com/common/pet/getPetTaskConfig?reqSource=h5&invokeKey=JL1VTNRadM68cIMQ",
       method: "GET",
       data: {},
       credentials: "include",
@@ -186,7 +186,7 @@ function ThreeMeals() {
     }
     const url = "https:"+ taroRequest(opt)['url'] + $.validate;
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'RtKLB8euDo7KwsO0' + lkt).toString()
+    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     const options = {
       url,
       headers: {
