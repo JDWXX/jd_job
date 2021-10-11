@@ -48,12 +48,12 @@
 ```
 ##### 命令
 ```
-ql repo https://ghproxy.com/https://github.com/JDWXX/jd_job.git "jd_|jx_|getJDCookie" "activity|backUp" "^jd[^_]|USER"
+ql repo https://ghproxy.com/https://github.com/JDWXX/jd_job.git "jd_|jx_|gua_|jddj_|getJDCookie" "activity|backUp" "^jd[^_]|USER|function|utils|ZooFaker_Necklace.js|JDJRValidator_Pure|sign_graphics_validate|ql"
 
 ```
 ##### 备用命令
 ```
-ql repo https://hub.fastgit.org/JDWXX/jd_job.git "jd_|jx_|getJDCookie" "activity|backUp" "^jd[^_]|USER"
+ql repo https://hub.fastgit.org/JDWXX/jd_job.git "jd_|jx_|gua_|jddj_|getJDCookie" "activity|backUp" "^jd[^_]|USER|function|utils|ZooFaker_Necklace.js|JDJRValidator_Pure|sign_graphics_validate|ql"
 
 ```
 ##### 定时规则

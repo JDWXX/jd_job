@@ -292,7 +292,7 @@ var K256 = new Array(
 var ihash, count, buffer;
 var sha256_hex_digits = "0123456789abcdef";
 
-/* Add 32-bit integers with 16-bit operations (bug in some JS-interpreters:
+/* Add 32-bit integers with 16-bit operations (bug in some JS-interpreters: 
 overflow) */
 function safe_add(x, y) {
     var lsw = (x & 0xffff) + (y & 0xffff);
@@ -673,8 +673,8 @@ let utils = {
             i = e.indexOf(t) + t.length,
             o = e.length;
         if ((r = (r = e.slice(i, o).split(".")).map(function (e) {
-            return m.atobPolyfill(e)
-        }))[1] && r[0] && r[2]) {
+                return m.atobPolyfill(e)
+            }))[1] && r[0] && r[2]) {
             var a = r[0].slice(2, 7),
                 s = r[0].slice(7, 9),
                 u = m.xorEncrypt(r[1] || "", a).split("~");
@@ -720,8 +720,8 @@ let utils = {
             var o = m.slice(0);
             for (j = 0; j < 80; j++)
                 w[j] = j < 16 ? s[i + j] : rol(w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16], 1),
-                    t = rol(m[0], 5) + f[j / 20 | 0]() + m[4] + w[j] + k[j / 20 | 0] | 0,
-                    m[1] = rol(m[1], 30), m.pop(), m.unshift(t);
+                t = rol(m[0], 5) + f[j / 20 | 0]() + m[4] + w[j] + k[j / 20 | 0] | 0,
+                m[1] = rol(m[1], 30), m.pop(), m.unshift(t);
             for (j = 0; j < 5; j++) m[j] = m[j] + o[j] | 0;
         };
         t = new DataView(new Uint32Array(m).buffer);
@@ -738,13 +738,13 @@ let utils = {
         for (i = 0; i < s.length; i++)
             if ((c = s.charCodeAt(i)) < 0x80) r.push(c);
             else if (c < 0x800) r.push(0xC0 + (c >> 6 & 0x1F), 0x80 + (c & 0x3F));
-            else {
-                if ((x = c ^ 0xD800) >> 10 == 0) //对四字节UTF-16转换为Unicode
-                    c = (x << 10) + (s.charCodeAt(++i) ^ 0xDC00) + 0x10000,
-                        r.push(0xF0 + (c >> 18 & 0x7), 0x80 + (c >> 12 & 0x3F));
-                else r.push(0xE0 + (c >> 12 & 0xF));
-                r.push(0x80 + (c >> 6 & 0x3F), 0x80 + (c & 0x3F));
-            };
+        else {
+            if ((x = c ^ 0xD800) >> 10 == 0) //对四字节UTF-16转换为Unicode
+                c = (x << 10) + (s.charCodeAt(++i) ^ 0xDC00) + 0x10000,
+                r.push(0xF0 + (c >> 18 & 0x7), 0x80 + (c >> 12 & 0x3F));
+            else r.push(0xE0 + (c >> 12 & 0xF));
+            r.push(0x80 + (c >> 6 & 0x3F), 0x80 + (c & 0x3F));
+        };
         return r;
     },
     get_blog: function (pin) {
@@ -810,20 +810,20 @@ let utils = {
         var TouchSession = this.getTouchSession();
         let riskData;
         switch ($.action) {
-            case 'startTask':
-                riskData = { taskId: $.id };
-                break;
-            case 'chargeScores':
-                riskData = { bubleId: $.id };
-                break;
-            case 'sign':
-                riskData = {};
-                break;
-            case 'exchangeGift':
-                riskData = { scoreNums: $.id, giftConfigId: $.giftConfigId || 198 };
-                break;
-            default:
-                break;
+          case 'startTask':
+            riskData = { taskId: $.id };
+            break;
+          case 'chargeScores':
+            riskData = { bubleId: $.id };
+            break;
+          case 'sign':
+            riskData = {};
+            break;
+          case 'exchangeGift':
+            riskData = { scoreNums: $.id, giftConfigId: $.giftConfigId || 198 };
+            break;
+          default:
+            break;
         }
 
         var random = Math.floor(1e+6 * Math.random()).toString().padEnd(6, '8');
@@ -864,13 +864,13 @@ let utils = {
             nav: '167741',
             scr: [736, 414],
             ro: [
-                'iPhone10,2',
-                'iOS',
-                '14.4.2',
-                '10.0.8',
-                '167741',
-                $.uuid,
-                'a'
+              'iPhone10,2',
+              'iOS',
+              '14.4.2',
+              '10.0.8',
+              '167741',
+              $.uuid,
+              'a'
             ],
             ioa: 'fffffftt',
             aj: 'u',
@@ -899,5 +899,5 @@ let utils = {
     }
 };
 module.exports = {
-    utils
+  utils
 }
