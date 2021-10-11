@@ -31,8 +31,8 @@ cron "47 9 * 9-12 *" script-path=https://raw.githubusercontent.com/smiek2221/scr
 ============小火箭=========
 5.18~12.31 大牌联合 瓜分京豆 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard39.js, cronexpr="47 9 * 9-12 *", timeout=3600, enable=true
 */
-let guaopencard_addSku = "false"
-let guaopencard = "false"
+let guaopencard_addSku = "true"
+let guaopencard = "true"
 let guaopenwait = "0"
 
 const $ = new Env('5.18~12.31 大牌联合 瓜分京豆');
