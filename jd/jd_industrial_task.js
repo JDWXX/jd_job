@@ -84,11 +84,11 @@ function get_tasklist(code) {
                 } else {
                     if (safeGet(data)) {
                         const result = JSON.parse(data);
-                        //console.log(`get_tasklist：${JSON.stringify(result)}`)
+                        console.log(`get_tasklist：${JSON.stringify(result)}`)
                         if (result.success == true) {
                             console.log(`\n获取活动列表成功!`)
                             tasklist = result.data.dailyTask.taskList
-                            // console.debug(tasklist)
+                            console.debug(tasklist)
                             for (let vo of tasklist) {
                                 taskCount = vo.taskCount
                                 finishCount = vo.finishCount
