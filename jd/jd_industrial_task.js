@@ -87,25 +87,27 @@ function get_tasklist(code) {
                         console.log(`get_tasklist：${JSON.stringify(result)}`)
                         if (result.success == true) {
                             console.log(`\n获取活动列表成功!`)
-                            tasklist = result.data.dailyTask.taskList
-                            console.debug(tasklist)
-                            for (let vo of tasklist) {
-                                taskCount = vo.taskCount
-                                finishCount = vo.finishCount
-                                count = taskCount - finishCount;
-                                itemName = vo.item.itemName
-                                itemId = vo.item.itemId
-                                groupType = vo.groupType
-                                if (groupType == 2 && !['card','car'].includes("car")) {
-                                    console.log("默认不加购,请设置通用加购变量FS_LEVEL=car")
-                                    continue
-                                }
-                                console.log(`\n${itemName} 完成状态：${finishCount}/${taskCount}`)
-                                if (count > 0) {
-                                    console.log(`开始做任务 ${itemName} ---`)
-                                    body = `{"groupType":${groupType},"configCode":"${$.configCode}","itemId":"${itemId}","eid":"${$.eid}","fp":"${$.fp}"}`
-                                    await $.wait(10000)
-                                    await do_task(body)
+                            if(result.data.dailyTask != undefined){
+                                tasklist = result.data.dailyTask.taskList
+                                console.debug(tasklist)
+                                for (let vo of tasklist) {
+                                    taskCount = vo.taskCount
+                                    finishCount = vo.finishCount
+                                    count = taskCount - finishCount;
+                                    itemName = vo.item.itemName
+                                    itemId = vo.item.itemId
+                                    groupType = vo.groupType
+                                    if (groupType == 2 && !['card','car'].includes("car")) {
+                                        console.log("默认不加购,请设置通用加购变量FS_LEVEL=car")
+                                        continue
+                                    }
+                                    console.log(`\n${itemName} 完成状态：${finishCount}/${taskCount}`)
+                                    if (count > 0) {
+                                        console.log(`开始做任务 ${itemName} ---`)
+                                        body = `{"groupType":${groupType},"configCode":"${$.configCode}","itemId":"${itemId}","eid":"${$.eid}","fp":"${$.fp}"}`
+                                        await $.wait(10000)
+                                        await do_task(body)
+                                    }
                                 }
                             }
                         } else {
