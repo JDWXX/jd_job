@@ -71,7 +71,7 @@ let allMessage = '';
       await jdConnoisseur()
     }
   }
-  $.shareCodes = [...$.shareCodes, ...(res || [])]
+  $.shareCodes = [...new Set([...$.shareCodes, ...(res || [])])]
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -95,6 +95,8 @@ let allMessage = '';
             continue
           }
         }
+      } else {
+        break
       }
     }
   }
@@ -119,16 +121,16 @@ async function getActiveInfo(url = 'https://prodev.m.jd.com/mall/active/2y1S9xVY
       "Host": "prodev.m.jd.com",
       "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-      "Accept-Language": "zh-cn",
+      "Accept-Language": "zh-CN,zh-Hans;q=0.9",
       "Accept-Encoding": "gzip, deflate, br",
-      "Cookie": cookie,
+      "Cookie": cookie
     }
   }
   return new Promise(async resolve => {
     $.get(options, async (err, resp, data) => {
       try {
         if (err) {
-          console.log(`${JSON.stringify(err)}`)
+          console.log(JSON.stringify(err))
           console.log(`${$.name} getActiveInfo API请求失败，请检查网路重试`)
         } else {
           if (data) {
@@ -150,7 +152,7 @@ async function getActiveInfo(url = 'https://prodev.m.jd.com/mall/active/2y1S9xVY
                 console.log(`去做【${vo.boardParams.titleText}】`)
                 await getTaskInfo("9", vo.boardParams.projectCode, vo.boardParams.taskCode)
                 await $.wait(2000)
-              } else if (vo.boardParams && (vo.boardParams.taskCode === "3dw9N5yB18RaN9T1p5dKHLrWrsX" || vo.boardParams.taskCode === "CtXTxzkh4ExFCrGf8si3ePxGnPy")) {
+              } else if (vo.boardParams && (vo.boardParams.taskCode === "3dw9N5yB18RaN9T1p5dKHLrWrsX" || vo.boardParams.taskCode === "CtXTxzkh4ExFCrGf8si3ePxGnPy" || vo.boardParams.taskCode === "Hys8nCmAaqKmv1G3Y3a5LJEk36Y" || vo.boardParams.taskCode === "26KhtkXmoaj6f37bE43W5kF8a9EL")) {
                 await getTaskInfo("1", vo.boardParams.projectCode, vo.boardParams.taskCode)
                 await $.wait(2000)
               }
@@ -300,7 +302,7 @@ function interactive_done(type, projectId, assignmentId, itemId) {
 async function sign_interactive_done(type, projectId, assignmentId) {
   let functionId = 'interactive_done'
   let body = JSON.stringify({"assignmentId":assignmentId,"type":type,"projectId":projectId})
-  let uuid = randomString(16)
+  let uuid = randomString(40)
   let sign = await getSign(functionId, body, uuid)
   let url = `${JD_API_HOST}client.action?functionId=${functionId}&client=apple&clientVersion=10.1.0&uuid=${uuid}&${sign}`
   return new Promise(resolve => {
@@ -370,7 +372,7 @@ function interactive_accept(type, projectId, assignmentId, itemId) {
 async function qryViewkitCallbackResult(encryptProjectId, encryptAssignmentId, itemId) {
   let functionId = 'qryViewkitCallbackResult'
   let body = JSON.stringify({"dataSource":"babelInteractive","method":"customDoInteractiveAssignmentForBabel","reqParams":`{\"itemId\":\"${itemId}\",\"encryptProjectId\":\"${encryptProjectId}\",\"encryptAssignmentId\":\"${encryptAssignmentId}\"}`})
-  let uuid = randomString(16)
+  let uuid = randomString(40)
   let sign = await getSign(functionId, body, uuid)
   let url = `${JD_API_HOST}client.action?functionId=${functionId}&client=apple&clientVersion=10.1.0&uuid=${uuid}&${sign}`
   return new Promise(resolve => {
@@ -396,18 +398,19 @@ async function qryViewkitCallbackResult(encryptProjectId, encryptAssignmentId, i
   })
 }
 async function getshareCode() {
-  let body = JSON.stringify({"activityId":encodeActivityId,"pageNum":"-1","innerAnchor":"","innerExtId":"","hideTopFoot":"","innerLinkBase64":"","innerIndex":"0","focus":"","forceTop":"","addressId":"","posLng":"","posLat":"","homeLng":"","homeLat":"","headId":"","headArea":"","warehouseId":"","dcId":"","babelChannel":"ttt3","mitemAddrId":"","geo":{"lng":"","lat":""},"flt":"","jda":"168871293.16308322604432132666501.1630832260.1631174347.1631180687.40","topNavStyle":"","url":`https://prodev.m.jd.com/mall/active/${encodeActivityId}/index.html?babelChannel=ttt3&tttparams=eisYm3eyJnTG5nIjoiMTE3LjAxMDA3MSIsImdMYXQiOiI0MC4xODk5My6J9&lng=&lat=&sid=&un_area=1_2953_54044_0`,"fullUrl":`https://prodev.m.jd.com/mall/active/${encodeActivityId}/index.html?babelChannel=ttt3&tttparams=eisYm3eyJnTG5nIjoiMTE3LjAxMDA3MSIsImdMYXQiOiI0MC4xODk5My6J9&lng=&lat=&sid=&un_area=1_2953_54044_0`,"autoSkipEmptyPage":false,"paginationParam":"2","paginationFlrs":paginationFlrs,"transParam":`{\"bsessionId\":\"\",\"babelChannel\":\"ttt3\",\"actId\":\"${activityId}\",\"enActId\":\"${encodeActivityId}\",\"pageId\":\"${pageId}\",\"encryptCouponFlag\":\"1\",\"sc\":\"apple\",\"scv\":\"10.1.2\",\"requestChannel\":\"h5\",\"jdAtHomePage\":\"0\"}`,"siteClient":"apple","siteClientVersion":"10.1.2","matProExt":{"unpl":"V2_ZzNtbUBSS0dzARMEfhxYDGIEGl9LUBBHclgVUyxJWgBuVhAPclRCFnUUR1xnGFUUZAEZXUNcQBFFCEZkexhdBG4KFV9FUXMldglHGXsYXWtlTiJeQmdCJXUPR1NzH1oGYAsaXEFXShJ8CENRcxxbNVcDG15yV0IUdwlGVHkaXAFhBRFtclZzFEUJdhUVGV0EYQMRXUAaQxJ0D05SfRpbDW8CEV1LUEoVcA1OUXwpXTVk"},"userInterest":{"whiteNote":"0_0_0","payment":"0_0_0","plusNew":"0_0_0","plusRenew":"0_0_0"}})
+  let sid = randomString(40)
+  let body = JSON.stringify({"activityId":encodeActivityId,"pageNum":"-1","innerAnchor":"","innerExtId":"","hideTopFoot":"","innerLinkBase64":"","innerIndex":"0","focus":"","forceTop":"","addressId":"4091160336","posLng":"","posLat":"","homeLng":"","homeLat":"","gps_area":"","headId":"","headArea":"","warehouseId":"","dcId":"","babelChannel":"ttt1","mitemAddrId":"","geo":{"lng":"","lat":""},"flt":"","jda":"168871293.1632069151379637759921.1632069151.1634449233.1634455108.187","topNavStyle":"","url":`https://prodev.m.jd.com/mall/active/${encodeActivityId}/index.html?babelChannel=ttt1&tttparams=s1AJNojeyJsbmciOiIxMTcuMDA2NTYzIiwiZ0xhdCI6IjQwLjE4OTkzIiwibGF0IjoiNDAuMTgxOTM0IiwiZ0xuZyI6IjExNy4wMTAwNzEiLCJncHNfYXJlYSI6IjFfMjk1M181NDA0NF8wIiwidW5fYXJlYSI6IjFfMjk1M181NDA0NF8wIn70%3D&lng=&lat=&sid=${sid}&un_area=`,"fullUrl":`https://prodev.m.jd.com/mall/active/${encodeActivityId}/index.html?babelChannel=ttt1&tttparams=s1AJNojeyJsbmciOiIxMTcuMDA2NTYzIiwiZ0xhdCI6IjQwLjE4OTkzIiwibGF0IjoiNDAuMTgxOTM0IiwiZ0xuZyI6IjExNy4wMTAwNzEiLCJncHNfYXJlYSI6IjFfMjk1M181NDA0NF8wIiwidW5fYXJlYSI6IjFfMjk1M181NDA0NF8wIn70%3D&lng=&lat=&sid=${sid}&un_area=`,"autoSkipEmptyPage":false,"paginationParam":"2","paginationFlrs":paginationFlrs,"transParam":`{\"bsessionId\":\"\",\"babelChannel\":\"ttt1\",\"actId\":\"${activityId}\",\"enActId\":\"${encodeActivityId}\",\"pageId\":\"${pageId}\",\"encryptCouponFlag\":\"1\",\"sc\":\"apple\",\"scv\":\"10.1.6\",\"requestChannel\":\"h5\",\"jdAtHomePage\":\"0\"}`,"siteClient":"apple","siteClientVersion":"10.1.6","matProExt":{"unpl":"V2_ZzNtbUEAR0B1CUBWeRkLVWIGF1pKX0IXIVpOUi8eWFJkBxpbclRCFnUURlVnGVgUZwMZWEtcRxBFCEZkexhdBmIKFFxGXnMlfQAoVDYZMgYJAF8QD2dAFUUJdlR8G1wBZwAXXENRRhFxCU9QextZBWQzIl1EZ3MldDhHZHopF2tmThJaQFdHFXYNR1V9HFgBZgoWXUBSQxZFCXZX|V2_ZzNtbRYEREB1X0VTfU5fAGIHEwhLUUZCfVgVAX0aCVJlVhUPclRCFnUURlVnGV0UZwYZXkVcRxdFCEJkexhdBW8KF1xGVnMlfGZFV38dXwFiBREzQlZCe0ULRmR6KVUBYgoSXEUHShJ2X0YDLx8PADQKFwhAB0MSIg4RAy5LCwBhARpcFwNzJXwJdlJ5EV0DYAEiCBwIFVAlUB0MK0YKWD8DIlxyVnMURV4oVHoYXQVmAxRcRBpKEXABRlV8SVUCZFQSChZREBAmAUMBeUlcAjAFRQoXBRQQcwpOVS5NbARXAw%3d%3d"},"userInterest":{"whiteNote":"0_0_0","payment":"0_0_0","plusNew":"0_0_0","plusRenew":"0_0_0"}})
   let options = {
     url: `${JD_API_HOST}?client=wh5&clientVersion=1.0.0&functionId=qryH5BabelFloors`,
-    body: `body=${escape(body)}`,
+    body: `body=${encodeURIComponent(body)}&screen=1242*2208&sid=${sid}&uuid=${randomString(40)}&area=&osVersion=15.0.1&d_model=iphone11,2`,
     headers: {
       "Host": "api.m.jd.com",
       "Accept": "*/*",
       "Content-Type": "application/x-www-form-urlencoded",
       "Origin": "https://prodev.m.jd.com",
-      "Accept-Language": "zh-cn",
+      "Accept-Language": "zh-CN,zh-Hans;q=0.9",
       "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-      "Referer": "https://prodev.m.jd.com/mall/active/2y1S9xVYdTud2VmFqhHbkcoAYhJT/index.html",
+      "Referer": "https://prodev.m.jd.com/",
       "Accept-Encoding": "gzip, deflate, br",
       "Cookie": cookie
     }
@@ -423,7 +426,7 @@ async function getshareCode() {
             data = JSON.parse(data)
             for (let key of Object.keys(data.floorList)) {
               let vo = data.floorList[key]
-              if (vo.boardParams && (vo.boardParams.taskCode === "2gWnJADG8JXMpp1WXiNHgSy4xUSv" || vo.boardParams.taskCode === "26KhtkXmoaj6f37bE43W5kF8a9EL" || vo.boardParams.taskCode === "bWE8RTJm5XnooFr4wwdDM5EYcKP" || vo.boardParams.taskCode === "Hys8nCmAaqKmv1G3Y3a5LJEk36Y")) {
+              if (vo.boardParams && (vo.boardParams.taskCode === "2gWnJADG8JXMpp1WXiNHgSy4xUSv" || vo.boardParams.taskCode === "26KhtkXmoaj6f37bE43W5kF8a9EL" || vo.boardParams.taskCode === "bWE8RTJm5XnooFr4wwdDM5EYcKP")) {
                 await getTaskInfo("1", vo.boardParams.projectCode, vo.boardParams.taskCode)
                 await $.wait(2000)
               } else if (vo.boardParams && vo.boardParams.taskCode === "3PX8SPeYoQMgo1aJBZYVkeC7QzD3") {
@@ -456,9 +459,9 @@ function showMsg() {
 
 function taskUrl(functionId, body) {
   if (functionId === "interactive_info") {
-    body = `[${escape(JSON.stringify(body))}]`
+    body = `[${encodeURIComponent(JSON.stringify(body))}]`
   } else {
-    body = escape(JSON.stringify(body))
+    body = encodeURIComponent(JSON.stringify(body))
   }
   return {
     url: `${JD_API_HOST}${functionId}?functionId=${functionId}&appid=contenth5_common&body=${body}&client=wh5`,
@@ -467,27 +470,29 @@ function taskUrl(functionId, body) {
       "Accept": "application/json, text/plain, */*",
       "Content-Type": "application/x-www-form-urlencoded",
       "Origin": "https://prodev.m.jd.com",
-      "Accept-Language": "zh-cn",
+      "Accept-Language": "zh-CN,zh-Hans;q=0.9",
       "Accept-Encoding": "gzip, deflate, br",
       "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-      "Referer": "https://prodev.m.jd.com/mall/active/2y1S9xVYdTud2VmFqhHbkcoAYhJT/index.html",
-      "Cookie": cookie,
+      "Referer": "https://prodev.m.jd.com/",
+      "Cookie": cookie
     }
   }
 }
 function taskPostUrl(url, body) {
   return {
     url,
-    body: `body=${escape(body)}`,
+    body: `body=${encodeURIComponent(body)}`,
     headers: {
-      'Cookie': cookie,
-      'Host': 'api.m.jd.com',
-      'Connection': 'keep-alive',
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Referer': '',
-      'User-Agent': 'JD4iPhone/167774 (iPhone; iOS 14.7.1; Scale/3.00)',
-      'Accept-Language': 'zh-Hans-CN;q=1',
-      'Accept-Encoding': 'gzip, deflate, br',
+      "Host": "api.m.jd.com",
+      "Content-Type": "application/x-www-form-urlencoded",
+      "j-e-c": "",
+      "Accept": "*/*",
+      "j-e-h": "",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Accept-Language": "zh-Hans-CN;q=1",
+      "User-Agent": "JD4iPhone/167841 (iPhone; iOS; Scale/3.00)",
+      "Referer": "",
+      "Cookie": cookie
     }
   }
 }
@@ -529,7 +534,7 @@ function getSign(functionid, body, uuid) {
 }
 function randomString(e) {
   e = e || 32;
-  let t = "abcdefghijklmnopqrstuvwxyz0123456789", a = t.length, n = "";
+  let t = "abcdef0123456789", a = t.length, n = "";
   for (let i = 0; i < e; i++)
     n += t.charAt(Math.floor(Math.random() * a));
   return n

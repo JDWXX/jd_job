@@ -29,7 +29,7 @@ let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭�
 let cookiesArr = [], cookie = '', message;
 let helpAuthor = true;
 const randomCount = $.isNode() ? 5 : 5;
-let cash_exchange = true;//是否消耗2元红包兑换200京豆，默认否
+let cash_exchange = false;//是否消耗2元红包兑换200京豆，默认否
 const inviteCodes = [
   `9r-XukAXv1id@Zxozbu21Zw@eU9YKbT3N7pyhyuHvyZp`,
   `9r-XukAXv1id@Zxozbu21Zw@eU9YKbT3N7pyhyuHvyZp`,
@@ -50,11 +50,11 @@ let allMessage = '';
     return;
   }
   await requireConfig()
-  $.authorCode = await getAuthorShareCode('')
+  $.authorCode = await getAuthorShareCode('https://raw.githubusercontent.com/Aaron-lv/updateTeam/master/shareCodes/jd_updateCash.json')
   if (!$.authorCode) {
-    $.http.get({url: ''}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
+    $.http.get({url: 'https://purge.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/jd_updateCash.json'}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
     await $.wait(1000)
-    $.authorCode = await getAuthorShareCode('') || []
+    $.authorCode = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/jd_updateCash.json') || []
   }
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
@@ -493,7 +493,7 @@ function showMsg() {
 function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
-    $.get({url: `http://code.chiang.fun/api/v1/jd/jdcash/read/${randomCount}/`, 'timeout': 10000}, (err, resp, data) => {
+    $.get({url: `http://code.chiang.fun/api/v1/jd/jdcash/read/${randomCount}/`, 'timeout': 30000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -510,7 +510,7 @@ function readShareCode() {
         resolve(data);
       }
     })
-    await $.wait(10000);
+    await $.wait(30000);
     resolve()
   })
 }
@@ -620,7 +620,7 @@ function taskUrl(functionId, body = {}) {
 function getAuthorShareCode(url) {
   return new Promise(resolve => {
     const options = {
-      url: `${url}?${new Date()}`, "timeout": 10000, headers: {
+      url: `${url}?${new Date()}`, "timeout": 30000, headers: {
         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
       }
     };
