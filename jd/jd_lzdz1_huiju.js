@@ -1,7 +1,7 @@
 /*
 惠聚京东 好物连连
 
-https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity/5063373?activityId=llk20211015&shareUuid=91245cc15b1847b1961c10c5412f2420
+https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity/5063373?activityId=llk20211015&shareUuid=143c8d04b3ab4a12b3de1f950731dbf9
 */
 const $ = new Env("惠聚京东 好物连连");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -31,7 +31,7 @@ if ($.isNode()) {
     authorCodeList = await getAuthorCodeList('https://gitee.com/fatelight/dongge/raw/master/dongge/lzdz1_huanju.json')
     if(authorCodeList === '404: Not Found'){
         authorCodeList = [
-            '91245cc15b1847b1961c10c5412f2420',
+            '143c8d04b3ab4a12b3de1f950731dbf9',
         ]
     }
     // console.log(authorCodeList)
