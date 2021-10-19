@@ -1,7 +1,7 @@
 /*
 大牌强联合 好物提前购
 
-https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dz2021101420000sjleowq&shareUuid=d259bceb218e40af9490693e8f48a370
+https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dz2021101420000sjleowq&shareUuid=4314896b3cb94d6e8ad596745cd6466e
 */
 const $ = new Env("大牌强联合 好物提前购");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -27,13 +27,10 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    
-    authorCodeList = await getAuthorCodeList('https://gitee.com/fatelight/dongge/raw/master/dongge/lzdz1_dapai.json')
-    if(authorCodeList === '404: Not Found'){
-        authorCodeList = [
-            'd259bceb218e40af9490693e8f48a370',
-        ]
-    }
+
+    authorCodeList = [
+        '4314896b3cb94d6e8ad596745cd6466e',
+    ]
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
