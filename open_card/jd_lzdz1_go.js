@@ -27,7 +27,7 @@ if ($.isNode()) {
         return;
     }
     authorCodeList = [
-        '90dfb2a6ebce44c8940759879ab98cb0',
+        '90dfb2a6ebce44c8940759879ab98cb0','c2decec4116c495495522a91c19ee198',
     ]
 
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -51,8 +51,8 @@ if ($.isNode()) {
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-            // $.authorCode = authorCodeList[random(0, authorCodeList.length)]
-            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            $.authorCode = authorCodeList[random(0, authorCodeList.length)]
+            // $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`
             $.randomCode = random(1000000, 9999999)
             $.activityId = 'dz20211013skcnurdk11jhdue84752hp'
