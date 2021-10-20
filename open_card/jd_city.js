@@ -321,6 +321,12 @@ function requireConfig() {
       })
     }
     console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
+    if($.shareCodesArr.length == 0){
+      console.log(`您未配置助力码\n，接下来将会助力作者`);
+      console.log($.inviteCodes);
+    }else{
+      $.inviteCodes = $.shareCodesArr;
+    }
     resolve()
   })
 }
