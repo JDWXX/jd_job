@@ -275,21 +275,7 @@ function readShareCode() {
 //格式化助力码
 function shareCodesFormat() {
   return new Promise(async resolve => {
-    // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
-    $.newShareCodes = [];
-    console.log(`-----------------------------`)
-    console.log($.shareCodesArr[$.index - 1])
-    if ($.shareCodesArr[$.index - 1]) {
-      $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
-    } else {
-      console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
-      const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
-      $.newShareCodes = inviteCodes[tempIndex].split('@');
-    }
-    const readShareCodeRes = await readShareCode();
-    if (readShareCodeRes && readShareCodeRes.code === 200) {
-      $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
-    }
+    $.newShareCodes = $.inviteCodes;
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })
@@ -324,9 +310,17 @@ function requireConfig() {
     }
     console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
     if($.shareCodesArr.length == 0){
-      console.log(`您未配置助力码\n，接下来将会助力作者`);
+      console.log(`--------您未配置助力码，接下来将会助力作者--------`);
+      $.inviteCodes = [
+        'WIThyu2jQEbvMoPWW5hqiA7fDZj50opDZwK1FA@RtGKtLXCAX_5Jt7wbrVXmiUfYZwAekN6yAfPqBBojU5xGzNH@ySFFHkABmK4YMs_WF5h_mlK7AlYUfCnoUOaJYnJ0@RtGKk4TbG0v5NtzvYohXmmSn4kKXhb2jCOEMqp8s4e-avO4f@ySFFHGQpmaoefoCbFZh_mkPrdrjFrHMoUnEpuUp3WLqsXw@GIHkyeujQQqiY4acF9Uz0PisAnZ0wc3wqLL2vxMNWGez65_6DA@yilVHWQRlqAXpw0zwkCkAocajYj6zHVA4uzxp0g9Rxwv_MHOtaeM@6hEA6nfYCdEoE20fBkZqLWgQ8daxl75jc1VabsRWIPwA@TtS2k6j7QAOqfs_WW9R_mh1GZBOzvEgxLmRXh2NfTA',
+        'WIThyu2jQEbvMoPWW5hqiA7fDZj50opDZwK1FA@RtGKtLXCAX_5Jt7wbrVXmiUfYZwAekN6yAfPqBBojU5xGzNH@ySFFHkABmK4YMs_WF5h_mlK7AlYUfCnoUOaJYnJ0@RtGKk4TbG0v5NtzvYohXmmSn4kKXhb2jCOEMqp8s4e-avO4f@ySFFHGQpmaoefoCbFZh_mkPrdrjFrHMoUnEpuUp3WLqsXw@GIHkyeujQQqiY4acF9Uz0PisAnZ0wc3wqLL2vxMNWGez65_6DA@yilVHWQRlqAXpw0zwkCkAocajYj6zHVA4uzxp0g9Rxwv_MHOtaeM@6hEA6nfYCdEoE20fBkZqLWgQ8daxl75jc1VabsRWIPwA@TtS2k6j7QAOqfs_WW9R_mh1GZBOzvEgxLmRXh2NfTA'
+      ]
       console.log($.inviteCodes);
+      console.log(`-------------------------------------------`);
     }else{
+      console.log(`--------读取到配置文件中助力账号--------`);
+      console.log($.shareCodesArr);
+      console.log(`------------------------------------`);
       $.inviteCodes = $.shareCodesArr;
     }
     resolve()
