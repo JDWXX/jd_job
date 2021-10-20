@@ -306,6 +306,8 @@ function requireConfig() {
           shareCodes = process.env.CITY_SHARECODES.split('\n');
         } else {
           shareCodes = process.env.CITY_SHARECODES.split('&');
+        }else {
+          shareCodes = process.env.CITY_SHARECODES.split('@');
         }
       }
     }
