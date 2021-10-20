@@ -62,19 +62,13 @@ ql repo https://hub.fastgit.org/JDWXX/jd_job.git "jd_|jx_|gua_|jddj_|getJDCookie
 0 10 0 * * *
 ```
 
-
 # 使用文档
 
-[配置助力](https://jdwxx.github.io/JD/ZLPZ)
+[教程](http://cxgc.top/)
 
-[安装青龙面板2.2扫描](https://jdwxx.github.io/JD/JD2.2)
+## 助力教程
 
-
-## 搭建教程 方式一
-#### [https://blog.csdn.net/tangcv/article/details/118691149](https://blog.csdn.net/tangcv/article/details/118691149)
-
-## 搭建教程 方式二
-#### [https://blog.csdn.net/weixin_42565036/category_11188503.html](https://blog.csdn.net/weixin_42565036/category_11188503.html)
+[城城领现金助力教程](http://cxgc.top/archives/jing-dong-xin-huo-dong--cheng-cheng-ling-xian-jin--shui-duo)
 
 ## 抓取 wskey
 ### 所需软件 抓包工具 （Fiddler） 模拟器 （MM模拟器） （京东无线宝） 
