@@ -5,14 +5,14 @@
 =================================Quantumultx=========================
 [task_local]
 #环游记
-20 3,2 * * * https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_hyj.js, tag=环游记, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+20 3,4 * * * https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_hyj.js, tag=环游记, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 =================================Loon===================================
 [Script]
-cron "20 3,2 * * *" script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_hyj.js,tag=环游记
+cron "20 3,4 * * *" script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_hyj.js,tag=环游记
 ===================================Surge================================
-环游记 = type=cron,cronexp="20 3,2 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_hyj.js
+环游记 = type=cron,cronexp="20 3,4 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_hyj.js
 ====================================小火箭=============================
-环游记 = type=cron,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_hyj.js, cronexpr="20 3,2 * * *", timeout=3600, enable=true
+环游记 = type=cron,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_hyj.js, cronexpr="20 3,4 * * *", timeout=3600, enable=true
  */
 const $ = new Env('环游记');//半残品随便跑跑
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
