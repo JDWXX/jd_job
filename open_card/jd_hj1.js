@@ -333,7 +333,7 @@ function getAuthorCodeList(url) {
     return new Promise(resolve => {
         const options = {
             url: `${url}?${new Date()}`, "timeout": 10000, headers: {
-            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
             }
         };
         $.get(options, async (err, resp, data) => {
@@ -341,7 +341,7 @@ function getAuthorCodeList(url) {
                 if (err) {
                     $.log(err)
                 } else {
-                if (data) data = JSON.parse(data)
+                    if (data) data = JSON.parse(data)
                 }
             } catch (e) {
                 $.logErr(e, resp)
