@@ -323,7 +323,7 @@ function requireConfig() {
     console.log(`------------------------------------`);
     if($.shareCodesArr.length == 0){
       console.log(`--------您未配置助力码，接下来将会助力作者--------`);
-      console.log(`--------请在环境变量里添加 CITY_SHARECODES 多个助力码用 @ 拼接--------`);
+      console.log(`--------如需添加助力码，请在环境变量里添加 CITY_SHARECODES 多个助力码用 @ 拼接--------`);
       console.log($.inviteCodes);
       console.log(`-------------------------------------------`);
     }else{
