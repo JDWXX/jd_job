@@ -19,7 +19,7 @@ cron "20,59 2,1,0 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/
 ===============小火箭==========
 京喜领88元红包 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_jxlhb.js, cronexpr="20,59 2,1,0 * * *", timeout=3600, enable=true
  */
-const $ = new Env('京喜领88元红包');
+const $ = new Env('京喜领88元红包新');
 const notify = $.isNode() ? require('./sendNotify') : {};
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : {};
 let cookiesArr = [], cookie = '';
