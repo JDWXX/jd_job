@@ -28,13 +28,9 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    authorCodeList = await getAuthorCodeList('404: Not Found')
-    if(authorCodeList === '404: Not Found'){
-        authorCodeList = [
-            '2fc26814503241a388a748f997f8bd82',
-        ]
-    }
-    // console.log(authorCodeList)
+    authorCodeList = [
+        'ed96afcfe036401ab6fd9f92d251b8b0'
+    ]
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]
@@ -193,7 +189,6 @@ function task(function_id, body, isCommon = 0, own = 0) {
                                         $.log("-------------------")
                                         if ($.index === 1) {
                                             ownCode = data.data.actor['actorUuid']
-                                            console.log(ownCode)
                                         }
                                         $.actorUuid = data.data.actor['actorUuid'];
                                     } else {
@@ -203,34 +198,24 @@ function task(function_id, body, isCommon = 0, own = 0) {
                                 case 'linkgame/checkOpenCard':
                                     $.openCardList = data.data.openCardList;
                                     $.openCardStatus = data.data;
-                                    // console.log(data)
                                     break;
                                 case 'linkgame/follow/shop':
-                                    console.log(data)
                                     break;
                                 case 'linkgame/sign':
-                                    console.log(data)
                                     break;
                                 case 'linkgame/addCart':
-                                    console.log(data)
                                     break;
                                 case 'linkgame/browseGoods':
-                                    console.log(data)
                                     break;
                                 case 'interaction/write/writePersonInfo':
-                                    console.log(data)
                                     break;
                                 case 'linkgame/task/info':
-                                    console.log(data)
                                     break;
                                 case 'linkgame/assist/status':
-                                    console.log(data)
                                     break;
                                 case 'linkgame/assist':
-                                    console.log(data)
                                     break;
                                 case 'linkgame/help/list':
-                                    console.log(data)
                                     break;
                                 default:
                                     // $.log(JSON.stringify(data))
@@ -269,7 +254,6 @@ function getShopOpenCardInfo(body, venderId) {
         $.get(opt, (err, resp, data) => {
             try {
                 if (err) {
-                    console.log(err)
                 } else {
                     res = JSON.parse(data)
                     if (res.success) {
@@ -279,7 +263,6 @@ function getShopOpenCardInfo(body, venderId) {
                     }
                 }
             } catch (error) {
-                console.log(error)
             } finally {
                 resolve();
             }
@@ -305,7 +288,6 @@ function bindWithVender(body, venderId) {
         $.get(opt, (err, resp, data) => {
             try {
                 if (err) {
-                    console.log(err)
                 } else {
                     res = JSON.parse(data)
                     if (res.success) {
@@ -320,36 +302,11 @@ function bindWithVender(body, venderId) {
                     }
                 }
             } catch (error) {
-                console.log(error)
             } finally {
                 resolve();
             }
         })
 
-    })
-}
-
-function getAuthorCodeList(url) {
-    return new Promise(resolve => {
-        const options = {
-            url: `${url}?${new Date()}`, "timeout": 10000, headers: {
-                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-            }
-        };
-        $.get(options, async (err, resp, data) => {
-            try {
-                if (err) {
-                    $.log(err)
-                } else {
-                    if (data) data = JSON.parse(data)
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-                data = null;
-            } finally {
-                resolve(data);
-            }
-        })
     })
 }
 
@@ -450,7 +407,6 @@ function getFirstLZCK() {
         $.get({ url: $.activityUrl }, (err, resp, data) => {
             try {
                 if (err) {
-                    console.log(err)
                 } else {
                     if (resp['headers']['set-cookie']) {
                         cookie = `${originCookie}`
@@ -478,7 +434,6 @@ function getFirstLZCK() {
                     }
                 }
             } catch (error) {
-                console.log(error)
             } finally {
                 resolve();
             }
