@@ -29,7 +29,7 @@ if ($.isNode()) {
         return;
     }
     authorCodeList = [
-        'ed96afcfe036401ab6fd9f92d251b8b0'
+        '8ec520a930ab44a9adcf4b04973d93e0'
     ]
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -52,8 +52,9 @@ if ($.isNode()) {
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-            // $.authorCode = authorCodeList[random(0, authorCodeList.length)]
-            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            $.ownCodes = ownCode
+            var codee = [ownCode,ownCode,authorCodeList[0],"2b9148bac868436fa9b0a53db0339a2e","ed96afcfe036401ab6fd9f92d251b8b0"]
+            $.authorCode = codee[random(0, codee.length)]
             $.authorNum = `${random(1000000, 9999999)}`
             $.randomCode = random(1000000, 9999999)
             $.activityId = 'llk20211020'
@@ -92,7 +93,7 @@ async function member() {
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
-            console.log("去助力 -> "+$.authorCode)
+            console.log("去助力 -> "+$.ownCodes)
             await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
             await task('wxActionCommon/getUserInfo', `pin=${encodeURIComponent($.secretPin)}`, 1)
             if ($.index === 1) {
@@ -128,7 +129,7 @@ async function member() {
             }
             await task('linkgame/checkOpenCard', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}`)
             if ($.openCardStatus) {
-                console.log('去助力 -> ' + $.authorCode)
+                console.log('去助力 -> ' + $.ownCodes)
                 if ($.openCardStatus.allOpenCard) {
                     await task('linkgame/assist/status', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&shareUuid=${$.authorCode}`)
                     await task('linkgame/assist', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&shareUuid=${$.authorCode}`)
