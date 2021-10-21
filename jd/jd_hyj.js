@@ -1,9 +1,21 @@
-//0 * * * * 环游记 自动入会、签到、任务、升级、开宝箱、捡金币
-//半残品随便跑跑
-const $ = new Env('环游记');
-
+/*
+环游记
+更新时间：2021-100-21 22:00
+脚本兼容: QuantumultX, Surge,Loon, JSBox, Node.js
+=================================Quantumultx=========================
+[task_local]
+#环游记
+20 3,2 * * * https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_hyj.js, tag=环游记, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+=================================Loon===================================
+[Script]
+cron "20 3,2 * * *" script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_hyj.js,tag=环游记
+===================================Surge================================
+环游记 = type=cron,cronexp="20 3,2 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_hyj.js
+====================================小火箭=============================
+环游记 = type=cron,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_hyj.js, cronexpr="20 3,2 * * *", timeout=3600, enable=true
+ */
+const $ = new Env('环游记');//半残品随便跑跑
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-
 
 let cookiesArr = [],
     cookie = '',
@@ -30,7 +42,6 @@ $.shareCodesArr = [];
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-
     $.inviteIdCodesArr = {}
     for (let i = 0; i < cookiesArr.length && true; i++) {
         if (cookiesArr[i]) {
@@ -49,11 +60,14 @@ $.shareCodesArr = [];
             $.nickName = '';
             message = '';
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-            //   await shareCodesFormat()
+            await requireConfig()
+            //await shareCodesFormat()
             $.newShareCodes = []
+             console.log("----------跑助力------------")
             for (let i = 0; i < $.newShareCodes.length && true; ++i) {
                 console.log(`\n开始助力 【${$.newShareCodes[i]}】`)
                 let res = await getInfo($.newShareCodes[i])
+                 console.log(`\n执行过助力,不知道有没有成功`)
                 if (res && res['data'] && res['data']['bizCode'] === 0) {
                     if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0] && res['data']['result']['toasts'][0]['status'] === '3') {
                         console.log(`助力次数已耗尽，跳出`)
@@ -70,17 +84,14 @@ $.shareCodesArr = [];
             }
             try {
                 await get_secretp()
-
                 do {
                     var conti = false
                     await travel_collectAtuoScore()
                     res = await travel_getTaskDetail()
-
                     for (var p = 0; p < res.lotteryTaskVos[0].badgeAwardVos.length; p++) {
                         if (res.lotteryTaskVos[0].badgeAwardVos[p].status == 3) {
                             await travel_getBadgeAward(res.lotteryTaskVos[0].badgeAwardVos[p].awardToken)
                         }
-
                     }
                     let task = []
                     let r = []
@@ -180,7 +191,6 @@ $.shareCodesArr = [];
     .finally(() => {
         $.done();
     })
-
 function transform(str) {
     var REQUEST = new Object,
         data = str.slice(str.indexOf("?") + 1, str.length - 1),
@@ -585,7 +595,7 @@ function taskPostUrl2(functionId, body) {
 //格式化助力码
 function shareCodesFormat() {
     return new Promise(async resolve => {
-        // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
+         console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
         $.newShareCodes = [];
         if ($.shareCodesArr[$.index - 1]) {
             $.newShareCodes = [...inviteCodes, ...$.newShareCodes];
@@ -597,35 +607,34 @@ function shareCodesFormat() {
 }
 
 function requireConfig() {
-    return new Promise(resolve => {
-        console.log(`开始获取${$.name}配置文件\n`);
-        //Node.js用户请在jdCookie.js处填写京东ck;
-        let shareCodes = [];
-        if ($.isNode()) {
-            if (process.env.JD_CITY_EXCHANGE) {
-                exchangeFlag = process.env.JD_CITY_EXCHANGE || exchangeFlag;
-            }
-            if (process.env.CITY_SHARECODES) {
-                if (process.env.CITY_SHARECODES.indexOf('\n') > -1) {
-                    shareCodes = process.env.CITY_SHARECODES.split('\n');
-                } else {
-                    shareCodes = process.env.CITY_SHARECODES.split('&');
-                }
-            }
+  return new Promise(resolve => {
+    console.log(`开始获取${$.name}配置文件\n`);
+    console.log("设置环境变量：CITY_HYJ，日志中提取助力码");
+    //Node.js用户请在jdCookie.js处填写京东ck;
+    let shareCodes = [];
+    if ($.isNode()) {
+      if (process.env.JD_CITY_EXCHANGE) {
+        exchangeFlag = process.env.JD_CITY_EXCHANGE || exchangeFlag;
+      }
+       if (process.env.CITY_HYJ) {
+          if (process.env.CITY_HYJ.indexOf('\n') > -1) {
+            shareCodes = process.env.CITY_HYJ.split('\n');
+          } else if (process.env.CITY_HYJ.indexOf('&') > -1) {
+            shareCodes = process.env.CITY_HYJ.split('&');
+          } else {
+            shareCodes = process.env.CITY_HYJ.split('@');
+          }
+          console.log(shareCodes);
         }
-        console.log(`共${cookiesArr.length}个京东账号\n`);
-        $.shareCodesArr = [];
-        if ($.isNode()) {
-            Object.keys(shareCodes).forEach((item) => {
-                if (shareCodes[item]) {
-                    $.shareCodesArr.push(shareCodes[item])
-                }
-            })
-        }
-        console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
-        resolve()
-    })
+    }
+    console.log(`共${cookiesArr.length}个京东账号\n`);
+    $.shareCodesArr = shareCodes;
+    $.newShareCodes = shareCodes;
+    console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
+    resolve()
+  })
 }
+
 
 function getUA() {
     $.UA = `jdapp;android;10.0.6;11;9363537336739353-2636733333439346;network/wifi;model/KB2000;addressid/138121554;aid/9657c795bc73349d;oaid/;osVer/30;appBuild/88852;partner/oppo;eufv/1;jdSupportDarkMode/0;Mozilla/5.0 (Linux; Android 11; KB2000 Build/RP1A.201005.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045537 Mobile Safari/537.36`
