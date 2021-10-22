@@ -36,7 +36,7 @@ let inviteCodes = [
 
 ]
 $.shareCodesArr = [];
-
+var inviteIdcode='';
 !(async() => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
@@ -61,13 +61,12 @@ $.shareCodesArr = [];
             message = '';
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             await requireConfig()
-            //await shareCodesFormat()
-            $.newShareCodes = []
+            $.newShareCodes = $.shareCodesArr;
              console.log("----------跑助力------------")
             for (let i = 0; i < $.newShareCodes.length && true; ++i) {
                 console.log(`\n开始助力 【${$.newShareCodes[i]}】`)
-                let res = await getInfo($.newShareCodes[i])
-                 console.log(`\n执行过助力,不知道有没有成功`)
+                inviteIdcode = $.newShareCodes[i];
+                let res = await getInfo()
                 if (res && res['data'] && res['data']['bizCode'] === 0) {
                     if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0] && res['data']['result']['toasts'][0]['status'] === '3') {
                         console.log(`助力次数已耗尽，跳出`)
@@ -520,6 +519,52 @@ function travel_getFeedDetail2(taskId) {
         })
     })
 }
+//麻烦会写的 看看怎么写 我QQ 246771270
+function getInfo() {//ZXASTT010-vx3Qh8e9AFjRWn6u7zB55awQ
+    console.log("---------进入助力-----------")
+    console.log(inviteIdcode)
+    return new Promise((resolve) => {
+        $.post({
+            url: `https://api.m.jd.com/client.action?functionId=travel_collectScore?functionId=travel_collectScore&body={"ss":"null","inviteId":"ZXASTT010-vx3Qh8e9AFjRWn6u7zB55awQ"}&client=wh5&clientVersion=9.2.0&uuid=88888`,
+            headers: {
+                'Cookie': cookie,
+                'Host': 'api.m.jd.com',
+                'Connection': 'keep-alive',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                "User-Agent": $.UA,
+                'Sec-Fetch-Mode': 'cors',
+                'Content-Length': '1843',
+                'Accept': ' application/json, text/plain, */*',
+                'Origin': 'https://wbbny.m.jd.com',
+                'X-Requested-With': 'com.jingdong.app.mall',
+                'Sec-Fetch-Site': 'same-site',
+                'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+                'Referer': `https://wbbny.m.jd.com/babelDiy/Zeus/2vVU4E7JLH9gKYfLQ5EVW6eN2P7B/index.html?babelChannel=jdappsyfc&shareType=taskHelp&inviteId=ZXASTT010-vx3Qh8e9AFjRWn6u7zB55awQ&mpin=RnExw2BcbDDczdRRroB1XOun&from=sc&lng=120.173651&lat=30.326858&sid=730733ef1a35ebb93e40e648550b1dcw&un_area=15_1213_3408_59946`,
+                'Accept-Encoding': 'gzip, deflate, br'
+            }
+        }, async(err, resp, data) => {
+            try {
+                console.log(data)
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (safeGet(data)) {
+                        if (safeGet(data)) {
+                            console.log("---------助力返回状态-----------")
+                            console.log(data)
+                            console.log("---------助力返回状态-----------")
+                        }
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+    })
+}
 
 function join(venderId, channel, shopId) {
     let shopId_ = shopId != "" ? `,"shopId":"${shopId}"` : ""
@@ -629,7 +674,6 @@ function requireConfig() {
     }
     console.log(`共${cookiesArr.length}个京东账号\n`);
     $.shareCodesArr = shareCodes;
-    $.newShareCodes = shareCodes;
     console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
     resolve()
   })
