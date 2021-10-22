@@ -48,7 +48,7 @@ let args_xh = {
      * C商品原价99元，试用价1元，如果下面设置为50，那么C商品将会被加入到待提交的试用组
      * 默认为0
      * */
-	jdPrice: process.env.JD_TRY_PRICE * 1 || 150,
+	jdPrice: process.env.JD_TRY_PRICE * 1 || 50,
 	/*
      * 获取试用商品类型，默认为1，原来不是数组形式，我以为就只有几个tab，结果后面还有我服了
      * 1 - 精选
@@ -96,7 +96,7 @@ let args_xh = {
      * 可设置环境变量：JD_TRY_APPLYINTERVAL
      * 默认为3000，也就是3秒
      * */
-	applyInterval: process.env.JD_TRY_APPLYINTERVAL * 1 || 3000,
+	applyInterval: process.env.JD_TRY_APPLYINTERVAL * 1 || 4000,
 	/*
      * 商品数组的最大长度，通俗来说就是即将申请的商品队列长度
      * 例如设置为20，当第一次获取后获得12件，过滤后剩下5件，将会进行第二次获取，过滤后加上第一次剩余件数
@@ -155,6 +155,8 @@ let args_xh = {
 			})
 			return
 		}
+		trialActivityIdList = []
+		trialActivityTitleList = []
 		for(let i = 0; i < $.cookiesArr.length; i++){
 			if($.cookiesArr[i]){
 				$.cookie = $.cookiesArr[i];
@@ -176,8 +178,6 @@ let args_xh = {
 				$.nowTabIdIndex = 0;
 				$.nowPage = 1;
 				$.nowItem = 1;
-				trialActivityIdList = []
-				trialActivityTitleList = []
 				$.isLimit = false;
 				// 获取tabList的，不知道有哪些的把这里的注释解开跑一遍就行了
 				// await try_tabList();
@@ -185,16 +185,21 @@ let args_xh = {
 				$.isForbidden = false
 				$.wrong = false
 				size = 1
-				while(trialActivityIdList.length < args_xh.maxLength && $.isForbidden === false){
-					if($.nowTabIdIndex === args_xh.tabId.length){
-						console.log(`tabId组已遍历完毕，不在获取商品\n`);
-						break;
-					} else {
-						await try_feedsList(args_xh.tabId[$.nowTabIdIndex], $.nowPage)  //获取对应tabId的试用页面
-					}
-					if(trialActivityIdList.length < args_xh.maxLength){
-						console.log(`间隔等待中，请等待 4 秒\n`)
-						await $.wait(4000);
+				console.log(`\n商品长度--------------`);
+				console.log(trialActivityIdList.length);
+				if(trialActivityIdList.length < args_xh.maxLength && $.isForbidden === false){
+					console.log(`\n开始申请--------------`);
+					while(trialActivityIdList.length < args_xh.maxLength && $.isForbidden === false){
+						if($.nowTabIdIndex === args_xh.tabId.length){
+							console.log(`tabId组已遍历完毕，不在获取商品\n`);
+							break;
+						} else {
+							await try_feedsList(args_xh.tabId[$.nowTabIdIndex], $.nowPage)  //获取对应tabId的试用页面
+						}
+						if(trialActivityIdList.length < args_xh.maxLength){
+							console.log(`间隔等待中，请等待 4 秒\n`)
+							await $.wait(4000);
+						}
 					}
 				}
 				if($.isForbidden === false && $.isLimit === false){
@@ -219,6 +224,7 @@ let args_xh = {
 					// await try_MyTrials(1, 3)    //申请失败的商品
 					await showMsg()
 				}
+
 			}
 			if($.isNode()){
 				if($.index % args_xh.sendNum === 0){
