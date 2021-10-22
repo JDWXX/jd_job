@@ -256,11 +256,7 @@ function shareCodesFormat() {
       'RtGKtLXCAX_5Jt7wbrVXmiUfYZwAekN6yAfPqBBojU5xGzNH',
       'ySFFHkABmK4YMs_WF5h_mlK7AlYUfCnoUOaJYnJ0',
       'RtGKk4TbG0v5NtzvYohXmmSn4kKXhb2jCOEMqp8s4e-avO4f',
-      'ySFFHGQpmaoefoCbFZh_mkPrdrjFrHMoUnEpuUp3WLqsXw',
-      'GIHkyeujQQqiY4acF9Uz0PisAnZ0wc3wqLL2vxMNWGez65_6DA',
-      'yilVHWQRlqAXpw0zwkCkAocajYj6zHVA4uzxp0g9Rxwv_MHOtaeM',
-      '6hEA6nfYCdEoE20fBkZqLWgQ8daxl75jc1VabsRWIPwA',
-      'TtS2k6j7QAOqfs_WW9R_mh1GZBOzvEgxLmRXh2NfTA'
+      'ySFFHGQpmaoefoCbFZh_mkPrdrjFrHMoUnEpuUp3WLqsXw'
     ]
     if($.newShareCodes.length == 1){
       $.newShareCodes.push($.inviteCodes[0])
@@ -311,11 +307,7 @@ function requireConfig() {
       'RtGKtLXCAX_5Jt7wbrVXmiUfYZwAekN6yAfPqBBojU5xGzNH',
       'ySFFHkABmK4YMs_WF5h_mlK7AlYUfCnoUOaJYnJ0',
       'RtGKk4TbG0v5NtzvYohXmmSn4kKXhb2jCOEMqp8s4e-avO4f',
-      'ySFFHGQpmaoefoCbFZh_mkPrdrjFrHMoUnEpuUp3WLqsXw',
-      'GIHkyeujQQqiY4acF9Uz0PisAnZ0wc3wqLL2vxMNWGez65_6DA',
-      'yilVHWQRlqAXpw0zwkCkAocajYj6zHVA4uzxp0g9Rxwv_MHOtaeM',
-      '6hEA6nfYCdEoE20fBkZqLWgQ8daxl75jc1VabsRWIPwA',
-      'TtS2k6j7QAOqfs_WW9R_mh1GZBOzvEgxLmRXh2NfTA'
+      'ySFFHGQpmaoefoCbFZh_mkPrdrjFrHMoUnEpuUp3WLqsXw'
     ]
     console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
     console.log(`--------读取到配置文件中助力账号--------`);
