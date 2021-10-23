@@ -1,21 +1,32 @@
 /*
-下载地址
-http://a.app.qq.com/o/simple.jsp?pkgname=com.xiangzi.jukandian&ckey=CK1416436838701
-邀请码必填得金币 24503466
-[rewrite_local]
-https://www.xiaodouzhuan.cn/jkd/user/userlive.action url script-request-body http://47.101.146.160/scripts/jkd.js
-
-hostname = *.xiaodouzhuan.cn
-##点任务获取数据##
-===========ql===========
-变量
+聚看点
+1.下载软件 https://a.app.qq.com/o/simple.jsp?ctx=1634726126337&pkgname=com.xiangzi.jukandian&ckey=CK1416436838701
+2.邀请码必填得金币 24515280
+3.主要抓取cookie内带有xz_jkd_appkey=的链接自行搜索，软件 > 我的 > 提现
+4.添加下面环境变量 特别注意 CK 是只有数字或数字加字母，! 后面的全部删了（别再踩坑了）
 export jkdhd='{"openid": "替换的CK"}' 同CK 后面不需要!iOS!5.6.5
-
 export jkdck='{"Cookie":"xz_jkd_appkey=替换的CK"}'
-
 多账号用@隔开
-*/
+export jkdhd='{"openid": "替换的CK"}'@'{"openid": "替换的CK"}'
+export jkdck='{"Cookie":"xz_jkd_appkey=替换的CK"}'@'{"Cookie":"xz_jkd_appkey=替换的CK"}'
+任务执行时间 每三小时执行一次：0 0 0-3 * * ?
+已支持IOS双京东账号,Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
+[task_local]
+#聚看点
+0 0 0-3 * * ? https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js, tag=聚看点, img-url=https://raw.githubusercontent.com/Orz-3/task/master/jd.png, enabled=true
 
+================Loon==============
+[Script]
+cron "0 0 0-3 * * ?" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js,tag=聚看点
+
+===============Surge=================
+京东极速版 = type=cron,cronexp="0 0 0-3 * * ?",wake-system=1,timeout=33600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js
+
+============小火箭=========
+聚看点 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js, cronexpr="0 0 0-3 * * ?", timeout=33600, enable=true
+*/
 const $ = new Env('聚看点');
 let status;
 status = (status = ($.getval("jkdstatus") || "1") ) > 1 ? `${status}` : ""; // 账号扩展字符
