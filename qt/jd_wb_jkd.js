@@ -1,5 +1,5 @@
 /*
-聚看点
+聚看点-非京东活动
 1.下载软件 https://a.app.qq.com/o/simple.jsp?ctx=1634726126337&pkgname=com.xiangzi.jukandian&ckey=CK1416436838701
 2.邀请码必填得金币 24515280
 3.主要抓取cookie内带有xz_jkd_appkey=的链接自行搜索，软件 > 我的 > 提现
@@ -14,20 +14,20 @@ export jkdck='{"Cookie":"xz_jkd_appkey=替换的CK"}'@'{"Cookie":"xz_jkd_appkey=
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
 [task_local]
-#聚看点
-0 0 2,5,8,11,14,17,20 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js, tag=聚看点, img-url=https://raw.githubusercontent.com/Orz-3/task/master/jd.png, enabled=true
+#聚看点-非京东活动
+0 0 2,5,8,11,14,17,20 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js, tag=聚看点-非京东活动, img-url=https://raw.githubusercontent.com/Orz-3/task/master/jd.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "0 0 2,5,8,11,14,17,20 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js,tag=聚看点
+cron "0 0 2,5,8,11,14,17,20 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js,tag=聚看点-非京东活动
 
 ===============Surge=================
-京东极速版 = type=cron,cronexp="0 0 2,5,8,11,14,17,20 * * *",wake-system=1,timeout=33600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js
+聚看点-非京东活动 = type=cron,cronexp="0 0 2,5,8,11,14,17,20 * * *",wake-system=1,timeout=33600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js
 
 ============小火箭=========
-聚看点 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js, cronexpr="0 0 2,5,8,11,14,17,20 * * *", timeout=33600, enable=true
+聚看点-非京东活动 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js, cronexpr="0 0 2,5,8,11,14,17,20 * * *", timeout=33600, enable=true
 */
-const $ = new Env('聚看点');
+const $ = new Env('聚看点-非京东活动');
 let status;
 status = (status = ($.getval("jkdstatus") || "1") ) > 1 ? `${status}` : ""; // 账号扩展字符
 let jkdhdArr = [],jkdckArr = [],jzreadcount = ''
