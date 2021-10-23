@@ -9,23 +9,23 @@ export jkdck='{"Cookie":"xz_jkd_appkey=替换的CK"}'
 多账号用@隔开
 export jkdhd='{"openid": "替换的CK"}'@'{"openid": "替换的CK"}'
 export jkdck='{"Cookie":"xz_jkd_appkey=替换的CK"}'@'{"Cookie":"xz_jkd_appkey=替换的CK"}'
-任务执行时间 每三小时执行一次：0 0 0-3 * * ?
+任务执行时间 每三小时执行一次：0 0 0-3 * *
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
 [task_local]
 #聚看点
-0 0 0-3 * * ? https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js, tag=聚看点, img-url=https://raw.githubusercontent.com/Orz-3/task/master/jd.png, enabled=true
+0 0 0-3 * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js, tag=聚看点, img-url=https://raw.githubusercontent.com/Orz-3/task/master/jd.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "0 0 0-3 * * ?" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js,tag=聚看点
+cron "0 0 0-3 * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js,tag=聚看点
 
 ===============Surge=================
-京东极速版 = type=cron,cronexp="0 0 0-3 * * ?",wake-system=1,timeout=33600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js
+京东极速版 = type=cron,cronexp="0 0 0-3 * *",wake-system=1,timeout=33600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js
 
 ============小火箭=========
-聚看点 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js, cronexpr="0 0 0-3 * * ?", timeout=33600, enable=true
+聚看点 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_master_jkd.js, cronexpr="0 0 0-3 * *", timeout=33600, enable=true
 */
 const $ = new Env('聚看点');
 let status;
