@@ -1,16 +1,23 @@
-
 /*
-
-
-
- #柠檬邀请有礼
- #自定义邀请码环境变量
-export yqm="你的邀请码"
-#柠檬邀请有礼
+柠檬邀请有礼
+已支持IOS双京东账号,Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
 [task_local]
-0 9,10 * * * http://nm66.top/jd_yqyl.js, tag=柠檬邀请有礼, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+#柠檬邀请有礼礼
+0 0,10 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_yqyll.js, tag=柠檬邀请有礼礼, img-url=https://raw.githubusercontent.com/Orz-3/task/master/jd.png, enabled=true
+
+================Loon==============
+[Script]
+cron "21 4 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_yqyll.js,tag=柠檬邀请有礼礼
+
+===============Surge=================
+柠檬邀请有礼礼 = type=cron,cronexp="0 0,10 * * *",wake-system=1,timeout=33600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_yqyll.js
+
+============小火箭=========
+柠檬邀请有礼礼 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_yqyll.js, cronexpr="0 0,10 * * *", timeout=33600, enable=true
 */
-const $ = new Env('柠檬邀请有礼');
+const $ = new Env('柠檬邀请有礼礼');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
