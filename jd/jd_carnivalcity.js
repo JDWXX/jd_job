@@ -579,11 +579,17 @@ function getListIntegral() {
           if (data.code === 200) {
             $.integralCount = data.data.integralNum || 0;//累计活动积分
             message += `累计获得积分：${$.integralCount}\n`;
-            console.log(`开始抽奖，当前积分可抽奖${parseInt($.integralCount / 50)}次\n`);
-            for (let i = 0; i < parseInt($.integralCount / 50); i ++) {
-              await lottery();
-              await $.wait(500);
+            if ($.isNode()) {
+              console.log(`环境变量添加 JD818_CJ 值填写 true 开启抽奖 \n`);
+              if (process.env.JD818_CJ && process.env.JD818_CJ === 'true'){
+                console.log(`开始抽奖，当前积分可抽奖${parseInt($.integralCount / 50)}次\n`);
+                for (let i = 0; i < parseInt($.integralCount / 50); i ++) {
+                  await lottery();
+                  await $.wait(500);
+                }
+              }
             }
+
           } else {
             console.log(`integralRecord失败：${JSON.stringify(data)}`);
           }
@@ -654,12 +660,15 @@ function shareCodesFormat() {
 function requireConfig() {
   return new Promise(resolve => {
     console.log(`开始获取${$.name}配置文件\n`);
+    console.log(`环境变量添加 JD818_SHARECODES 设置助力账号，多个用账号用 @ 符号拼接 \n`);
     let shareCodes = [];
     if ($.isNode()) {
       if (process.env.JD818_SHARECODES) {
         if (process.env.JD818_SHARECODES.indexOf('\n') > -1) {
           shareCodes = process.env.JD818_SHARECODES.split('\n');
-        } else {
+        }else if (process.env.JD818_SHARECODES && process.env.JD818_SHARECODES.indexOf('@') > -1) {
+          shareCodes = process.env.JD818_SHARECODES.split('&');
+        }  else {
           shareCodes = process.env.JD818_SHARECODES.split('&');
         }
       }
