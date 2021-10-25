@@ -43,11 +43,6 @@ let inviteCodes = []
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  // if (exchangeFlag) {
-  //   console.log(`脚本自动抽奖`)
-  // } else {
-  //   console.log(`脚本不会自动抽奖，建议活动快结束开启，默认关闭(在10.29日自动开启抽奖),如需自动抽奖请设置环境变量  JD_CITY_EXCHANGE 为true`);
-  // }
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -78,15 +73,7 @@ let inviteCodes = []
     $.index = i + 1;
     uuid = randomString(40)
     let shareCodes;
-    if (helpPool) {
-      shareCodes = [...new Set([...inviteCodes, ...$.readShareCode])]
-    } else {
-      if (i === 0) {
-        shareCodes = [...new Set([...inviteCodes, ...$.readShareCode])]
-      } else {
-        shareCodes = [...$.newShareCodes]
-      }
-    }
+    shareCodes = $.readShareCode
     for (let j = 0; j < shareCodes.length; j++) {
       console.log(helpPool ? `\n${$.UserName} 开始助力 助力池 【${shareCodes[j]}】` : i === 0 ? `\nCK1 ${$.UserName} 开始助力 助力池 【${shareCodes[j]}】` : `\n${$.UserName} 开始助力 【${shareCodes[j]}】`)
       await $.wait(1000)
@@ -114,7 +101,7 @@ let inviteCodes = []
     await getInviteInfo();//雇佣
     var today_time =  FormatDate();
     console.log(`为防止助力被偷，一点后执行抽奖`);
-    if(today_time >= '01')
+    if(today_time >= '01'){
       console.log(`当前时间为` + today_time + "时，执行抽奖");
       const res = await city_lotteryAward();//抽奖
       if (res && res > 0) {
@@ -388,13 +375,8 @@ function shareCodesFormat() {
   return new Promise(async resolve => {
     // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
     $.newShareCodes = [];
-    const readShareCodeRes = await readShareCode();
-    $.readShareCode = (readShareCodeRes) || []
-    if (readShareCodeRes && readShareCodeRes.code === 200) {
-      $.newShareCodes = [...new Set([...$.shareCodes, ...inviteCodes, ...$.readShareCode])];
-    } else {
-      $.newShareCodes = [...new Set([...$.shareCodes, ...inviteCodes])];
-    }
+    // const readShareCodeRes = await readShareCode();
+    $.readShareCode = await readShareCode();
     console.log(`\n您将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })
