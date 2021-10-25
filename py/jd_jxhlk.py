@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 """
-cron: 55 13 * * *
+cron: 10 1 * * *
 new Env('京喜欢乐砍');
 活动入口:https://st.jingxi.com/sns/202103/20/jxhlk/list.html
 """
