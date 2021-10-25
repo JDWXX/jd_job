@@ -17,7 +17,6 @@ if env("JD_COOKIE"):
 # print ("环境变量:export launchi=\"\"")
 
 print ("活动入口:https://st.jingxi.com/sns/202103/20/jxhlk/list.html")
-print ("脚本会自动查找CK1下面的砍价商品进行砍价，如有剩余助力次数则会助力作者")
 
 headers={
     "Host":"m.jingxi.com",
@@ -34,9 +33,6 @@ headers={
     }
 
 print("如需指定账号，请在环境变量中添加邀请码，参数名：jxkj ")
-if data["data"]["onling"] != []:
-    launchid=data["data"]["onling"][0]["launchid"]
-    print("你当前CK1账号商品邀请码："+launchid)
 if "jxkj" in os.environ and len(os.environ["jxkj"]) > 1:
     launchid = os.environ["jxkj"]
     print("读取的配置文件中的邀请码为："+launchid)
