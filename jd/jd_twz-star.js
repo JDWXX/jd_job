@@ -1,7 +1,8 @@
 /*
-act time 7.16----
-[task_local]
-20 0 * * *
+柠檬特务Z行动-星小店
+ [task_local]
+#柠檬特务Z行动-星小店
+20 2 * * * https://github.com/JDWXX/jd_job/blob/master/jd/jd_twz-star.js, tag=柠檬特务Z行动-星小店, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 */
 const $ = new Env('柠檬特务Z行动-星小店');
 const notify = $.isNode() ? require('./sendNotify') : '';

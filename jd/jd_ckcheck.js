@@ -1,10 +1,9 @@
 /*
-export tswb=""   ##自定义变量 自定义发送的文本内容 如 老弟 你的CK实效了 打开*******5701 扫码更新
- */
-// [task_local]
-// */60 * * * *
-// 自己复制定时
-
+#柠檬CK检测
+[task_local]
+#柠檬CK检测
+ 0 1/60 * * * https://github.com/JDWXX/jd_job/blob/master/jd/jd_sqdyj.js, tag=柠檬CK检测, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+*/
 const $ = new Env('柠檬CK检测');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;

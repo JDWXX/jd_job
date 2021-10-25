@@ -1,15 +1,15 @@
 /*
+入口 京东 我的 0元砍价
+#自定义变量
 第一步 运行脚本一次日志查看商品ID
 获取你要砍价的ID后变量填写
 export skuId="这里填获取的商品ID"
 第二部 再运行一次日志查看商品activityId变量填写
-export activity="这里填获取的商品activityId" 
-入口 京东 我的 0元砍价
+export activity="这里填获取的商品activityId"
+ [task_local]
+#柠檬0元砍价
+0 18 * * * https://github.com/JDWXX/jd_job/blob/master/jd/jd_kanjia3.js, tag=柠檬0元砍价, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 */
-// [task_local]
-// 30 */1 * * *
-
-
 const $ = new Env('柠檬0元砍价');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;

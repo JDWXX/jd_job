@@ -6,6 +6,8 @@ IOS软件用户请使用 https://raw.githubusercontent.com/NobyDa/Script/master/
 更新时间：2021-6-18
 推送通知默认简洁模式(多账号只发送一次)。如需详细通知，设置环境变量 JD_BEAN_SIGN_NOTIFY_SIMPLE 为false即可(N账号推送N次通知)。
 Modified From github https://github.com/ruicky/jd_sign_bot
+#京东多合一签到
+0 5 * * * https://github.com/JDWXX/jd_job/blob/master/jd/jd_bean_sign.js, tag=京东多合一签到, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
  */
 const $ = new Env('京东多合一签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -15,7 +17,7 @@ const exec = require('child_process').execSync
 const fs = require('fs')
 const download = require('download');
 let resultPath = "./result.txt";
-let JD_DailyBonusPath = "./JD_DailyBonus.js";
+let JD_DailyBonusPath = "./utils/JD_DailyBonus.js";
 let outPutUrl = './utils';
 let NodeSet = 'CookieSet.json';
 let cookiesArr = [], cookie = '', allMessage = '', jrBodyArr = [], jrBody = '';

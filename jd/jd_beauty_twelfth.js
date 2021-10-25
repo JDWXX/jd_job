@@ -4,7 +4,10 @@
 * 说明：
 * 1、脚本加密，低概率抽到豆子，纯看脸，愿意跑的跑
 * 2、没有内置助力，没有开卡，有加购
-* * */
+ [task_local]
+#美妆周年庆
+30 14 * * * https://github.com/JDWXX/jd_job/blob/master/jd/jd_tyt.js, tag=美妆周年庆, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+*/
 const $ = new Env('美妆周年庆');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';

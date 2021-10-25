@@ -1,7 +1,7 @@
 /*
 [task_local]
-#翻翻乐
-1 0-23/1 * 6 * 
+#发财翻翻乐
+1 0-23/1 * * * https://github.com/JDWXX/jd_job/blob/master/jd/jd_fcffl.js, tag=发财翻翻乐, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 */
 const $ = new Env('发财翻翻乐');
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -25,67 +25,67 @@ if ($.isNode()) {
 const JD_API_HOST = `https://api.m.jd.com`;
 message = ""
 !(async () => {
-        if (!cookiesArr[0]) {
-            $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
-                "open-url": "https://bean.m.jd.com/"
-            });
-            return;
-        }
-        message = ""
-        for (let i = 0; i < cookiesArr.length; i++) {
-            cookie = cookiesArr[i];
-            if (cookie) {
-                $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-                $.index = i + 1;
-                $.isLogin = true;
-                $.canDraw = true;
-                $.canOpen = true;
-                $.cash = 0
-                $.prize = 0
-                $.Hb = 0
-                $.drawresult = "";
-                $.linkid = "YhCkrVusBVa_O2K-7xE6hA"
-                $.message = `【京东账号${$.index}】${$.UserName}\n`
-                console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-                if (!$.isLogin) {
-                    $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
-                        "open-url": "https://bean.m.jd.com/bean/signIndex.action"
-                    });
+    if (!cookiesArr[0]) {
+        $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
+            "open-url": "https://bean.m.jd.com/"
+        });
+        return;
+    }
+    message = ""
+    for (let i = 0; i < cookiesArr.length; i++) {
+        cookie = cookiesArr[i];
+        if (cookie) {
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+            $.index = i + 1;
+            $.isLogin = true;
+            $.canDraw = true;
+            $.canOpen = true;
+            $.cash = 0
+            $.prize = 0
+            $.Hb = 0
+            $.drawresult = "";
+            $.linkid = "YhCkrVusBVa_O2K-7xE6hA"
+            $.message = `【京东账号${$.index}】${$.UserName}\n`
+            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+            if (!$.isLogin) {
+                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
+                    "open-url": "https://bean.m.jd.com/bean/signIndex.action"
+                });
 
-                    if ($.isNode()) {
-                        await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-                    }
-                    continue
+                if ($.isNode()) {
+                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
                 }
-                let leftTime = await check()
-                if (leftTime != 0) {
-                  console.log( `还没到开红包时间哦~剩余时间${parseInt(leftTime / 60000)}min~`)
-                } else {
-                    console.log("时间已到,开始开红包")
-                    await open("gambleOpenReward")
-                    while ($.canOpen && $.canDraw) {
-                        await open("gambleChangeReward")
-                        await $.wait(500);
-                    }
-                    if ($.canDraw) {
-                        console.log("金额已可提现,开始提现...")
-                        $.message += `当前金额 ${$.reward.rewardValue}\n`
-                        await open("gambleObtainReward", $.reward.rewardType)
-                        await Draw($.reward.id, $.reward.poolBaseId, $.reward.prizeGroupId, $.reward.prizeBaseId, $.reward.prizeType)
-                        await totalPrize()
-                        message += $.message + `${$.drawresult}累计获得：￥${$.prize} 🧧${$.Hb} \n\n`
-                        //    await notify.sendNotify(`京东极速版大赢家翻倍红包提现`, `${$.message}`); 
-                    }
+                continue
+            }
+            let leftTime = await check()
+            if (leftTime != 0) {
+                console.log( `还没到开红包时间哦~剩余时间${parseInt(leftTime / 60000)}min~`)
+            } else {
+                console.log("时间已到,开始开红包")
+                await open("gambleOpenReward")
+                while ($.canOpen && $.canDraw) {
+                    await open("gambleChangeReward")
+                    await $.wait(500);
+                }
+                if ($.canDraw) {
+                    console.log("金额已可提现,开始提现...")
+                    $.message += `当前金额 ${$.reward.rewardValue}\n`
+                    await open("gambleObtainReward", $.reward.rewardType)
+                    await Draw($.reward.id, $.reward.poolBaseId, $.reward.prizeGroupId, $.reward.prizeBaseId, $.reward.prizeType)
+                    await totalPrize()
+                    message += $.message + `${$.drawresult}累计获得：￥${$.prize} 🧧${$.Hb} \n\n`
+                    //    await notify.sendNotify(`京东极速版大赢家翻倍红包提现`, `${$.message}`);
                 }
             }
         }
-        if ($.isNode()) {
-            if (message.length!=0) {
-                await notify.sendNotify("翻翻乐提现", `${message}`);
-            }
+    }
+    if ($.isNode()) {
+        if (message.length!=0) {
+            await notify.sendNotify("翻翻乐提现", `${message}`);
         }
+    }
 
-    })()
+})()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
 //获取活动信息

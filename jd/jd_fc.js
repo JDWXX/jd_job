@@ -4,11 +4,9 @@
 export redEnvelopeId="" ##本期活动ID
 export inviter="" ##邀请码
 [task_local]
-#柠檬发财大赢家
- 0,2 0 * * * http://nm66.top/jd_sqdyj.js, tag=柠檬发财大赢家, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+#柠檬发财大赢家获取邀请码
+ 0,2 0 * * * https://github.com/JDWXX/jd_job/blob/master/jd/jd_sqdyj.js, tag=柠檬发财大赢家获取邀请码, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 */
-
-
 const $ = new Env('柠檬发财大赢家获取邀请码');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -61,54 +59,50 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         continue
       }
       //await zhuli()
-     // await list()
+      // await list()
       await info()
-     
-      
+
+
 
     }
   }
 })()
-  .catch((e) => {
-    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-  })
-  .finally(() => {
-    $.done();
-  })
+    .catch((e) => {
+      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    })
+    .finally(() => {
+      $.done();
+    })
 function info() {
-    return new Promise(async (resolve) => {
+  return new Promise(async (resolve) => {
 
-                let options = {
-    url: `https://api.m.jd.com/?functionId=redEnvelopeInteractHome&body={"linkId":"yMVR-_QKRd2Mq27xguJG-w"}&t=1626358531348&appid=activities_platform&clientVersion=3.5.6`,
+    let options = {
+      url: `https://api.m.jd.com/?functionId=redEnvelopeInteractHome&body={"linkId":"yMVR-_QKRd2Mq27xguJG-w"}&t=1626358531348&appid=activities_platform&clientVersion=3.5.6`,
 
-   
-headers: {
-"Origin": "https://618redpacket.jd.com",
-"Host": "api.m.jd.com",
-      "User-Agent": "User-Agent: Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn; Mi Note 2 Build/OPR1.170623.032) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.128 Mobile Safari/537.36 XiaoMi/MiuiBrowser/10.1.1",
-      "Cookie": cookie,
+
+      headers: {
+        "Origin": "https://618redpacket.jd.com",
+        "Host": "api.m.jd.com",
+        "User-Agent": "User-Agent: Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn; Mi Note 2 Build/OPR1.170623.032) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.128 Mobile Safari/537.36 XiaoMi/MiuiBrowser/10.1.1",
+        "Cookie": cookie,
       }
-                }
-      
-        $.get(options, async (err, resp, data) => {
-            try {
+    }
 
-                    data = JSON.parse(data);
+    $.get(options, async (err, resp, data) => {
+      try {
 
-                   
-                   
-                    if(data.code == 0){
-                      
-                       console.log(`export redEnvelopeId="${data.data.redEnvelopeId}"\nexport inviter="${data.data.markedPin}"`)
-
-                }
-            } catch (e) {
-                $.logErr(e, resp);
-            } finally {
-                resolve();
-            }
-        });
+        data = JSON.parse(data);
+        console.log(data)
+        if(data.code == 0){
+          console.log(`export redEnvelopeId="${data.data.redEnvelopeId}"\nexport inviter="${data.data.markedPin}"`)
+        }
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve();
+      }
     });
+  });
 }
 
 
