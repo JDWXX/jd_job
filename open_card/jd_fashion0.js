@@ -30,7 +30,7 @@ let guaopencard_addSku = "true"
 let guaopencard = "true"
 let guaopenwait = "0"
 
-const $ = new Env('10.8~10.14 超店会员福利社');
+const $ = new Env('超店会员福利社老');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 //IOS等用户直接用NobyDa的jd cookie
