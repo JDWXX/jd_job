@@ -1,9 +1,9 @@
 /*
 时尚宠粉趴
-https://lzdz1-isv.isvjcloud.com/dingzhi/fashion/recruit/activity/13145?activityId=1ad06f0cb93e4928a894e3b984c2fa4b
+https://lzdz1-isv.isvjcloud.com/dingzhi/fashion/recruit/activity/13145?activityId=e90c4fba1ce049cba7cff0935a9ebad5
 **/
 
-const $ = new Env("超店会员福利社");
+const $ = new Env("超店会员福利社1");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
@@ -50,7 +50,7 @@ if ($.isNode()) {
                 continue
             }
             authorCodeList = [
-                '125ecf6c91b94f5d87c9c3ed8866364c',
+                'e90c4fba1ce049cba7cff0935a9ebad5',
             ]
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
