@@ -38,14 +38,15 @@ x = slice(10, -1)
 data=json.loads(res[x])
 
 print("如需指定账号，请在环境变量中添加邀请码，参数名：jxkj，没添加环境变量 将全部助力 ck1 ")
+if (data["data"]["onling"] != []:
+    launchid=data["data"]["onling"][0]["launchid"]
+    print("CK1当前商品邀请码："+launchid)
+    # launchid = os.environ["jxkj"]
 if "jxkj" in os.environ and len(os.environ["jxkj"]) > 1:
     launchid = os.environ["jxkj"]
     print("读取的配置文件中的邀请码为："+launchid)
-if ("jxkj" not in os.environ or len(os.environ["jxkj"]) == 1) and data["data"]["onling"] != []:
-    launchid=data["data"]["onling"][0]["launchid"]
-    print("CK1当前商品邀请码："+launchid)
-    launchid = os.environ["jxkj"]
-
+else:
+    launchid="dd5b4448b7a98f1200911e6c69d04a31"
 for i in cookies:
     headers={
     "Host":"m.jingxi.com",
