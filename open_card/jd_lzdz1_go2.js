@@ -1,7 +1,7 @@
 /*
 大牌联合  狂欢抢先GO
 10-23 ~ 10~29
-https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dz20211023wkcn14cn5cnd0sdbs5sbx&shareUuid=e4af9e2576f742518d31de9d38c34b14
+https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dz20211023wkcn14cn5cnd0sdbs5sbx&shareUuid=8f19c246971a4f86893c1f3a5dbdda39
 
 默认执行脚本。如果需要不执行
 环境变量 NO_RUSH=false
@@ -34,13 +34,9 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    
-    authorCodeList = await getAuthorCodeList('https://gitee.com/fatelight/dongge/raw/master/dongge/lzdz1_go2.json')
-    if(authorCodeList === '404: Not Found'){
-        authorCodeList = [
-            '90dfb2a6ebce44c8940759879ab98cb0','c2decec4116c495495522a91c19ee198',
-        ]
-    }
+    authorCodeList = [
+        '8f19c246971a4f86893c1f3a5dbdda39',
+    ]
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -108,7 +104,7 @@ async function rush() {
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
-            console.log("去助力 -> "+$.authorCode)
+            // console.log("去助力 -> "+$.authorCode)
             await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
             await task('wxActionCommon/getUserInfo', `pin=${encodeURIComponent($.secretPin)}`, 1)
             if ($.index === 1) {
