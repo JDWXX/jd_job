@@ -10,7 +10,7 @@
 
 const notify = require('./sendNotify')
 
-let A: any = require('./utils/jd_jxmcToken')
+let A: any = require('./utils/sendjxmcToken')
 let cookie: string = '', res: any = '', shareCodes: string[] = [], homePageInfo: any, activeid: string = '', jxToken: any, UserName: string, index: number;
 
 
