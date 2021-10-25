@@ -72,7 +72,6 @@ let inviteCodes = []
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
     $.index = i + 1;
     uuid = randomString(40)
-    let shareCodes;
     shareCodes = $.readShareCode
     for (let j = 0; j < shareCodes.length; j++) {
       console.log(helpPool ? `\n${$.UserName} 开始助力 助力池 【${shareCodes[j]}】` : i === 0 ? `\nCK1 ${$.UserName} 开始助力 助力池 【${shareCodes[j]}】` : `\n${$.UserName} 开始助力 【${shareCodes[j]}】`)
@@ -353,31 +352,19 @@ function randomString(e) {
 }
 
 function readShareCode() {
-  return new Promise(async resolve => {
-    $.get({url: `\u0068\u0074\u0074\u0070\u003a\u002f\u002f\u0033\u0039\u002e\u0039\u0036\u002e\u0035\u0035\u002e\u0031\u0037\u0038\u002f\u0065\u0072\u0070\u002f\u0067\u0065\u0074\u006b\u002f\u0067\u0065\u0074\u0043\u006f\u0064\u0065\u0073\u004c\u0069\u0073\u0074\u003f\u0074\u0079\u0070\u0065\u003d\u0036`, 'timeout': 10000}, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-    await $.wait(10000);
-    resolve()
-  })
+  data = ["WIThyu2jQEbvMoPWW5hqiA7fDZj50opDZwK1FA","RtGKtLXCAX_5Jt7wbrVXmiUfYZwAekN6yAfPqBBojU5xGzNH","ySFFHkABmK4YMs_WF5h_mlK7AlYUfCnoUOaJYnJ0","RtGKk4TbG0v5NtzvYohXmmSn4kKXhb2jCOEMqp8s4e-avO4f","ySFFHGQpmaoefoCbFZh_mkPrdrjFrHMoUnEpuUp3WLqsXw","GIHkyeujQQqiY4acF9Uz0PisAnZ0wc3wqLL2vxMNWGez65_6DA"];
+  console.log(`API请求` + data)
+  $.readShareCode = data;
 }
 //格式化助力码
 function shareCodesFormat() {
   return new Promise(async resolve => {
     // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
     $.newShareCodes = [];
-    // const readShareCodeRes = await readShareCode();
-    $.readShareCode = await readShareCode();
-    console.log(`\n您将要助力的好友${JSON.stringify($.newShareCodes)}`)
+    await readShareCode();
+    $.readShareCode = $.readShareCode
+    console.log(`\n您将要助力的好友` + $.readShareCode[0])
+    console.log(`\n您将要助力的好友` + $.readShareCode)
     resolve();
   })
 }
