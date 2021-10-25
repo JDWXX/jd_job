@@ -33,15 +33,10 @@ headers={
     "Cookie":cookies[0]
     }
 
-res=requests.get("https://m.jingxi.com/kjactive/jxhlk/jxhlk_myonline?t=1634969716452&_=1634969716452&sceneval=2&g_login_type=1&callback=jsonpCBKA&g_ty=ls",headers=headers).text
-x = slice(10, -1)
-data=json.loads(res[x])
-
-print("如需指定账号，请在环境变量中添加邀请码，参数名：jxkj，没添加环境变量 将全部助力 ck1 ")
-if (data["data"]["onling"] != []:
+print("如需指定账号，请在环境变量中添加邀请码，参数名：jxkj ")
+if data["data"]["onling"] != []:
     launchid=data["data"]["onling"][0]["launchid"]
-    print("CK1当前商品邀请码："+launchid)
-    # launchid = os.environ["jxkj"]
+    print("你当前CK1账号商品邀请码："+launchid)
 if "jxkj" in os.environ and len(os.environ["jxkj"]) > 1:
     launchid = os.environ["jxkj"]
     print("读取的配置文件中的邀请码为："+launchid)
