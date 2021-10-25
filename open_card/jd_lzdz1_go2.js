@@ -35,7 +35,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
         return;
     }
     authorCodeList = [
-        '8f19c246971a4f86893c1f3a5dbdda39',
+        '8f19c246971a4f86893c1f3a5dbdda39','8660bb99ad404cf0bdc45b0f6b654533'
     ]
 
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -67,10 +67,8 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
             $.activityShopId = '1000387143'
             $.activityUrl = `https://lzdz1-isv.isvjd.com/dingzhi/dz/openCard/activity/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
             if (isRush) {
-                console.log("未检测到不执行环境变量，执行任务")
                 await rush();
             } else {
-                console.log("检测到不执行环境变量，退出任务，环境变量 NO_RUSH")
                 break
             }
             await $.wait(3000)
@@ -104,7 +102,7 @@ async function rush() {
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
-            // console.log("去助力 -> "+$.authorCode)
+            console.log("去助力 -> "+$.authorCode)
             await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
             await task('wxActionCommon/getUserInfo', `pin=${encodeURIComponent($.secretPin)}`, 1)
             if ($.index === 1) {
