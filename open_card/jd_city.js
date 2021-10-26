@@ -301,18 +301,18 @@ function requireConfig() {
         console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
       }
     }else{
-    console.log(process.env.jdwxx_ccfxj);
-    if (process.env.jdwxx_ccfxj && process.env.jdwxx_ccfxj.indexOf('@') > -1) {
-      $.shareCodesArr = process.env.jdwxx_ccfxj.split('@');
-      console.log(`您选择的是用"@"隔开\n`)
-    }else if (process.env.jdwxx_ccfxj && process.env.jdwxx_ccfxj.indexOf('&') > -1) {
-      $.shareCodesArr = process.env.jdwxx_ccfxj.split('&');
-      console.log(`您选择的是用"&"隔开\n`)
-    } else {
-      $.shareCodesArr = [process.env.jdwxx_ccfxj]
-      console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
+      console.log(process.env.jdwxx_ccfxj);
+      if (process.env.jdwxx_ccfxj && process.env.jdwxx_ccfxj.indexOf('@') > -1) {
+        $.shareCodesArr = process.env.jdwxx_ccfxj.split('@');
+        console.log(`您选择的是用"@"隔开\n`)
+      }else if (process.env.jdwxx_ccfxj && process.env.jdwxx_ccfxj.indexOf('&') > -1) {
+        $.shareCodesArr = process.env.jdwxx_ccfxj.split('&');
+        console.log(`您选择的是用"&"隔开\n`)
+      } else {
+        $.shareCodesArr = [process.env.jdwxx_ccfxj]
+        console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
+      }
     }
-  }
     console.log(`--------读取到配置文件中助力账号--------`);
     console.log($.shareCodesArr);
     console.log(`共${shareCodesArr.length}个京东账号\n`);
