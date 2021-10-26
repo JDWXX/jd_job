@@ -24,6 +24,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //自动抽奖 ，环境变量  JD_CITY_EXCHANGE
 let exchangeFlag = $.getdata('jdJxdExchange') || !!0;//是否开启自动抽奖，建议活动快结束开启，默认关闭
+let CITY_SHARECODES= $.isNode() ? ($.getdata('CITY_SHARECODES') ? $.getdata('CITY_SHARECODES') : "") : (process.env.CITY_SHARECODES ? process.env.CITY_SHARECODES : "")
 //IOS等用户直接用NobyDa的jd cookie
 let uuid, UA;
 let cookiesArr = [], cookie = '', message;
@@ -290,21 +291,14 @@ function requireConfig() {
   return new Promise(resolve => {
     console.log(`开始获取${$.name}配置文件\n`);
     //Node.js用户请在jdCookie.js处填写京东ck;
-    let shareCodes = "";
-    if (process.env.JD_CITY_EXCHANGE) {
-      exchangeFlag = process.env.JD_CITY_EXCHANGE || exchangeFlag;
-    }
-    if (process.env.CITY_SHARECODES) {
-      shareCodes = process.env.CITY_SHARECODES;
-    }
-    console.log(`--------读取到配置文件中助力账号--------`);
-    console.log(shareCodes);
+    let shareCodes = CITY_SHARECODES;
     if (shareCodes.indexOf('@') > -1) {
       $.shareCodesArr = shareCodes.split('@');
     } else {
       $.shareCodesArr = shareCodes.split('&');
     }
-
+    console.log(`--------读取到配置文件中助力账号--------`);
+    console.log( $.shareCodesArr);
     console.log(`共${cookiesArr.length}个京东账号\n`);
     // if ($.isNode()) {
     //   Object.keys(shareCodes).forEach((item) => {
