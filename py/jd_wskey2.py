@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*
 '''
-cron: 15 */8 * * * wskey.py
+cron: 15 */8 * * * jd_wskey2.py
 new Env('wskey转换2');
 '''
 
