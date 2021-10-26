@@ -24,7 +24,6 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //自动抽奖 ，环境变量  JD_CITY_EXCHANGE
 let exchangeFlag = $.getdata('jdJxdExchange') || !!0;//是否开启自动抽奖，建议活动快结束开启，默认关闭
-let jdwxx_ccfxj= $.isNode() ? ($.getdata('jdwxx_ccfxj') ? $.getdata('jdwxx_ccfxj') : "") : (process.env.jdwxx_ccfxj ? process.env.jdwxx_ccfxj : "")
 //IOS等用户直接用NobyDa的jd cookie
 let uuid, UA;
 let cookiesArr = [], cookie = '', message;
@@ -290,36 +289,33 @@ function shareCodesFormat() {
 function requireConfig() {
   return new Promise(resolve => {
     console.log(`开始获取${$.name}配置文件\n`);
-    //Node.js用户请在jdCookie.js处填写京东ck;
-    let shareCodes = "";
-    if(!$.isNode()){
-      if($.getdata('jdwxx_ccfxj') != undefined && $.getdata('jdwxx_ccfxj') != ""){
-        if ($.getdata('jdwxx_ccfxj') && $.getdata('jdwxx_ccfxj').indexOf('@') > -1) {
-          $.shareCodesArr = $.getdata('jdwxx_ccfxj').split('@');
-          console.log(`您选择的是用"@"隔开\n`)
-        }else if ($.getdata('jdwxx_ccfxj') && $.getdata('jdwxx_ccfxj').indexOf('&') > -1) {
-          $.shareCodesArr = $.getdata('jdwxx_ccfxj').split('&');
-          console.log(`您选择的是用"&"隔开\n`)
-        } else {
-          $.shareCodesArr = [$.getdata('jdwxx_ccfxj')]
-          console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
-        }
-      }else{
-        if (process.env.jdwxx_ccfxj && process.env.jdwxx_ccfxj.indexOf('@') > -1) {
-          $.shareCodesArr = process.env.jdwxx_ccfxj.split('@');
-          console.log(`您选择的是用"@"隔开\n`)
-        }else if (process.env.jdwxx_ccfxj && process.env.jdwxx_ccfxj.indexOf('&') > -1) {
-          $.shareCodesArr = process.env.jdwxx_ccfxj.split('&');
-          console.log(`您选择的是用"&"隔开\n`)
-        } else {
-          $.shareCodesArr = [process.env.jdwxx_ccfxj]
-          console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
-        }
+    if(!$.isNode()){ //Node.js用户请在jdCookie.js处填写京东ck;
+      if ($.getdata('jdwxx_ccfxj') && $.getdata('jdwxx_ccfxj').indexOf('@') > -1) {
+        $.shareCodesArr = $.getdata('jdwxx_ccfxj').split('@');
+        console.log(`您选择的是用"@"隔开\n`)
+      }else if ($.getdata('jdwxx_ccfxj') && $.getdata('jdwxx_ccfxj').indexOf('&') > -1) {
+        $.shareCodesArr = $.getdata('jdwxx_ccfxj').split('&');
+        console.log(`您选择的是用"&"隔开\n`)
+      } else {
+        $.shareCodesArr = [$.getdata('jdwxx_ccfxj')]
+        console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
       }
+    }else{
+    console.log(process.env.jdwxx_ccfxj);
+    if (process.env.jdwxx_ccfxj && process.env.jdwxx_ccfxj.indexOf('@') > -1) {
+      $.shareCodesArr = process.env.jdwxx_ccfxj.split('@');
+      console.log(`您选择的是用"@"隔开\n`)
+    }else if (process.env.jdwxx_ccfxj && process.env.jdwxx_ccfxj.indexOf('&') > -1) {
+      $.shareCodesArr = process.env.jdwxx_ccfxj.split('&');
+      console.log(`您选择的是用"&"隔开\n`)
+    } else {
+      $.shareCodesArr = [process.env.jdwxx_ccfxj]
+      console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
     }
+  }
     console.log(`--------读取到配置文件中助力账号--------`);
-    console.log( $.shareCodesArr);
-    console.log(`共${cookiesArr.length}个京东账号\n`);
+    console.log($.shareCodesArr);
+    console.log(`共${shareCodesArr.length}个京东账号\n`);
     // if ($.isNode()) {
     //   Object.keys(shareCodes).forEach((item) => {
     //     if (shareCodes[item]) {
