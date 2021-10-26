@@ -253,18 +253,18 @@ function shareCodesFormat() {
   return new Promise(async resolve => {
     $.newShareCodes = $.inviteCodes;
     // readShareCode();
-    if($.newShareCodes.length == 1){
-      $.newShareCodes.push($.inviteCodes[0])
-      $.newShareCodes.push($.inviteCodes[Math.floor((Math.random()*$.inviteCodes.length))])
-    }else if($.newShareCodes.length == 2){
-      $.newShareCodes.push($.inviteCodes[1])
-    }else if($.newShareCodes.length > 2){
-      if($.inviteCodes[0] == $.newShareCodes[0]){
-        $.newShareCodes = [$.newShareCodes[0],$.newShareCodes[Math.floor((Math.random()*$.newShareCodes.length))],$.newShareCodes[Math.floor((Math.random()*$.newShareCodes.length))]];
-      }else{
-        $.newShareCodes = [$.newShareCodes[0],$.newShareCodes[Math.floor((Math.random()*$.newShareCodes.length))],$.inviteCodes[0]];
-      }
-    }
+    // if($.newShareCodes.length == 1){
+    //   $.newShareCodes.push($.inviteCodes[0])
+    //   $.newShareCodes.push($.inviteCodes[Math.floor((Math.random()*$.inviteCodes.length))])
+    // }else if($.newShareCodes.length == 2){
+    //   $.newShareCodes.push($.inviteCodes[1])
+    // }else if($.newShareCodes.length > 2){
+    //   if($.inviteCodes[0] == $.newShareCodes[0]){
+    //     $.newShareCodes = [$.newShareCodes[0],$.newShareCodes[Math.floor((Math.random()*$.newShareCodes.length))],$.newShareCodes[Math.floor((Math.random()*$.newShareCodes.length))]];
+    //   }else{
+    //     $.newShareCodes = [$.newShareCodes[0],$.newShareCodes[Math.floor((Math.random()*$.newShareCodes.length))],$.inviteCodes[0]];
+    //   }
+    // }
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })
