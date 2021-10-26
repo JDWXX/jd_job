@@ -1,5 +1,5 @@
 let common = require("./function/common");
-let $ = new common.env('京东验证码获取');
+const $ = new Env('京东验证码获取');
 let validator = require("./function/jdValidate");
 let fs = require("fs");
 let min = 2,
