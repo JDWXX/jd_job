@@ -291,32 +291,32 @@ function requireConfig() {
     console.log(`开始获取${$.name}配置文件\n`);
     //Node.js用户请在jdCookie.js处填写京东ck;
     let shareCodes = [];
-    if ($.isNode()) {
-      if (process.env.JD_CITY_EXCHANGE) {
-        exchangeFlag = process.env.JD_CITY_EXCHANGE || exchangeFlag;
-      }
-      if (process.env.CITY_SHARECODES) {
-        if (process.env.CITY_SHARECODES.indexOf('\n') > -1) {
-          shareCodes = process.env.CITY_SHARECODES.split('\n');
-        } else if (process.env.CITY_SHARECODES.indexOf('@') > -1) {
-          shareCodes = process.env.CITY_SHARECODES.split('@');
-        } else {
-          shareCodes = process.env.CITY_SHARECODES.split('&');
-        }
+    if (process.env.JD_CITY_EXCHANGE) {
+      exchangeFlag = process.env.JD_CITY_EXCHANGE || exchangeFlag;
+    }
+    if (process.env.CITY_SHARECODES) {
+      if (process.env.CITY_SHARECODES.indexOf('\n') > -1) {
+        shareCodes = process.env.CITY_SHARECODES.split('\n');
+      } else if (process.env.CITY_SHARECODES.indexOf('@') > -1) {
+        shareCodes = process.env.CITY_SHARECODES.split('@');
+      } else {
+        shareCodes = process.env.CITY_SHARECODES.split('&');
       }
     }
+    console.log(`--------读取到配置文件中助力账号--------`);
+    console.log(shareCodes);
     console.log(`共${cookiesArr.length}个京东账号\n`);
-    $.shareCodesArr = [];
-    if ($.isNode()) {
-      Object.keys(shareCodes).forEach((item) => {
-        if (shareCodes[item]) {
-          $.shareCodesArr.push(shareCodes[item])
-        }
-      })
-    }
+    $.shareCodesArr = shareCodes;
+    // if ($.isNode()) {
+    //   Object.keys(shareCodes).forEach((item) => {
+    //     if (shareCodes[item]) {
+    //       $.shareCodesArr.push(shareCodes[item])
+    //     }
+    //   })
+    // }
     // readShareCode()
     console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
-    console.log(`--------读取到配置文件中助力账号--------`);
+    console.log(`--------助力码转换数组--------`);
     console.log($.shareCodesArr);
     if($.shareCodesArr.length == 0){
       console.log(`如需添加助力码，请在环境变量里添加 CITY_SHARECODES 多个助力码用 @ 拼接`);
