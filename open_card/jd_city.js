@@ -297,13 +297,14 @@ function requireConfig() {
     if (process.env.CITY_SHARECODES) {
       shareCodes = process.env.CITY_SHARECODES;
     }
+    console.log(`--------读取到配置文件中助力账号--------`);
+    console.log(shareCodes);
     if (shareCodes.indexOf('@') > -1) {
       $.shareCodesArr = shareCodes.split('@');
     } else {
       $.shareCodesArr = shareCodes.split('&');
     }
-    console.log(`--------读取到配置文件中助力账号--------`);
-    console.log( $.shareCodesArr);
+
     console.log(`共${cookiesArr.length}个京东账号\n`);
     // if ($.isNode()) {
     //   Object.keys(shareCodes).forEach((item) => {
