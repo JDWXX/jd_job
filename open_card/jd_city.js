@@ -290,21 +290,21 @@ function requireConfig() {
   return new Promise(resolve => {
     console.log(`开始获取${$.name}配置文件\n`);
     //Node.js用户请在jdCookie.js处填写京东ck;
-    let shareCodes = [];
+    let shareCodes = "";
     if (process.env.JD_CITY_EXCHANGE) {
       exchangeFlag = process.env.JD_CITY_EXCHANGE || exchangeFlag;
     }
     if (process.env.CITY_SHARECODES) {
-      if (process.env.CITY_SHARECODES.indexOf('@') > -1) {
-        $.shareCodesArr = process.env.CITY_SHARECODES.split('@');
-      } else {
-        $.shareCodesArr = process.env.CITY_SHARECODES.split('&');
-      }
+      shareCodes = process.env.CITY_SHARECODES;
+    }
+    if (shareCodes.indexOf('@') > -1) {
+      $.shareCodesArr = shareCodes.split('@');
+    } else {
+      $.shareCodesArr = shareCodes.split('&');
     }
     console.log(`--------读取到配置文件中助力账号--------`);
     console.log( $.shareCodesArr);
     console.log(`共${cookiesArr.length}个京东账号\n`);
-    $.shareCodesArr = shareCodes;
     // if ($.isNode()) {
     //   Object.keys(shareCodes).forEach((item) => {
     //     if (shareCodes[item]) {
