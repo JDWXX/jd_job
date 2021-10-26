@@ -23,7 +23,6 @@ message = ""
 let dsj_header= $.isNode() ? (process.env.dsj_header ? process.env.dsj_header : "") : ($.getdata('dsj_header') ? $.getdata('dsj_header') : "")
 let dsj_headerArr = []
 let dsj_headers = ""
-
 const dianshijia_API = 'http://api.gaoqingdianshi.com/api'
 const walkstep = '20000';
 const gametimes = "1999";
@@ -67,7 +66,18 @@ if (!dsj_header) {
         console.log(`共${dsj_headerArr.length}个cookie`)
 	        for (let k = 0; k < dsj_headerArr.length; k++) {
                 $.message = ""
-                dsj_header1 = dsj_headerArr[k]
+                let dsjjson = dsj_headerArr[k]
+                if(dsjjson.indexOf('":"') == -1){
+                    console.log(dsjjson)
+                    dsjjson = dsjjson.replace(/{/g,'{"')
+                    dsjjson = dsjjson.replace(/}/g,'"}')
+                    dsjjson = dsjjson.replace(/:/g,'":"')
+
+                    dsjjson = dsjjson.replace(/{/g,'{"')
+                    dsjjson = dsjjson.replace(/}/g,'"}')
+                    dsjjson = dsjjson.replace(/:/g,'":"')
+                }
+                dsj_header1 = dsjjson
                 console.log(`--------第 ${k + 1} 个账号任务中--------\n`)
 
                     await dsj_rwzt();
