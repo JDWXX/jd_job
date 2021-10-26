@@ -295,9 +295,7 @@ function requireConfig() {
       exchangeFlag = process.env.JD_CITY_EXCHANGE || exchangeFlag;
     }
     if (process.env.CITY_SHARECODES) {
-      if (process.env.CITY_SHARECODES.indexOf('\n') > -1) {
-        shareCodes = process.env.CITY_SHARECODES.split('\n');
-      } else if (process.env.CITY_SHARECODES.indexOf('@') > -1) {
+      if (process.env.CITY_SHARECODES.indexOf('@') > -1) {
         shareCodes = process.env.CITY_SHARECODES.split('@');
       } else {
         shareCodes = process.env.CITY_SHARECODES.split('&');
