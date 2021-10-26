@@ -291,11 +291,18 @@ function requireConfig() {
   return new Promise(resolve => {
     console.log(`开始获取${$.name}配置文件\n`);
     //Node.js用户请在jdCookie.js处填写京东ck;
-    let shareCodes = CITY_SHARECODES;
-    if (shareCodes.indexOf('@') > -1) {
-      $.shareCodesArr = shareCodes.split('@');
-    } else {
-      $.shareCodesArr = shareCodes.split('&');
+    let shareCodes = "";
+    if(!$.isNode()){
+      if (process.env.CITY_SHARECODES && process.env.CITY_SHARECODES.indexOf('@') > -1) {
+        $.shareCodesArr = process.env.CITY_SHARECODES.split('@');
+        console.log(`您选择的是用"@"隔开\n`)
+      }else if (process.env.CITY_SHARECODES && process.env.CITY_SHARECODES.indexOf('&') > -1) {
+        $.shareCodesArr = process.env.CITY_SHARECODES.split('&');
+        console.log(`您选择的是用"&"隔开\n`)
+      } else {
+        $.shareCodesArr = [process.env.CITY_SHARECODES]
+        console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
+      }
     }
     console.log(`--------读取到配置文件中助力账号--------`);
     console.log( $.shareCodesArr);
