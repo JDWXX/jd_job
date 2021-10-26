@@ -24,7 +24,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //自动抽奖 ，环境变量  JD_CITY_EXCHANGE
 let exchangeFlag = $.getdata('jdJxdExchange') || !!0;//是否开启自动抽奖，建议活动快结束开启，默认关闭
-let CITY_SHARECODES= $.isNode() ? ($.getdata('CITY_SHARECODES') ? $.getdata('CITY_SHARECODES') : "") : (process.env.CITY_SHARECODES ? process.env.CITY_SHARECODES : "")
+let jdwxx_ccfxj= $.isNode() ? ($.getdata('jdwxx_ccfxj') ? $.getdata('jdwxx_ccfxj') : "") : (process.env.jdwxx_ccfxj ? process.env.jdwxx_ccfxj : "")
 //IOS等用户直接用NobyDa的jd cookie
 let uuid, UA;
 let cookiesArr = [], cookie = '', message;
@@ -293,26 +293,26 @@ function requireConfig() {
     //Node.js用户请在jdCookie.js处填写京东ck;
     let shareCodes = "";
     if(!$.isNode()){
-      if($.getdata('CITY_SHARECODES')){
-        if ($.getdata('CITY_SHARECODES') && $.getdata('CITY_SHARECODES').indexOf('@') > -1) {
-          $.shareCodesArr = $.getdata('CITY_SHARECODES').split('@');
+      if($.getdata('jdwxx_ccfxj') != undefined && $.getdata('jdwxx_ccfxj') != ""){
+        if ($.getdata('jdwxx_ccfxj') && $.getdata('jdwxx_ccfxj').indexOf('@') > -1) {
+          $.shareCodesArr = $.getdata('jdwxx_ccfxj').split('@');
           console.log(`您选择的是用"@"隔开\n`)
-        }else if ($.getdata('CITY_SHARECODES') && $.getdata('CITY_SHARECODES').indexOf('&') > -1) {
-          $.shareCodesArr = $.getdata('CITY_SHARECODES').split('&');
+        }else if ($.getdata('jdwxx_ccfxj') && $.getdata('jdwxx_ccfxj').indexOf('&') > -1) {
+          $.shareCodesArr = $.getdata('jdwxx_ccfxj').split('&');
           console.log(`您选择的是用"&"隔开\n`)
         } else {
-          $.shareCodesArr = [$.getdata('CITY_SHARECODES')]
+          $.shareCodesArr = [$.getdata('jdwxx_ccfxj')]
           console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
         }
       }else{
-        if (process.env.CITY_SHARECODES && process.env.CITY_SHARECODES.indexOf('@') > -1) {
-          $.shareCodesArr = process.env.CITY_SHARECODES.split('@');
+        if (process.env.jdwxx_ccfxj && process.env.jdwxx_ccfxj.indexOf('@') > -1) {
+          $.shareCodesArr = process.env.jdwxx_ccfxj.split('@');
           console.log(`您选择的是用"@"隔开\n`)
-        }else if (process.env.CITY_SHARECODES && process.env.CITY_SHARECODES.indexOf('&') > -1) {
-          $.shareCodesArr = process.env.CITY_SHARECODES.split('&');
+        }else if (process.env.jdwxx_ccfxj && process.env.jdwxx_ccfxj.indexOf('&') > -1) {
+          $.shareCodesArr = process.env.jdwxx_ccfxj.split('&');
           console.log(`您选择的是用"&"隔开\n`)
         } else {
-          $.shareCodesArr = [process.env.CITY_SHARECODES]
+          $.shareCodesArr = [process.env.jdwxx_ccfxj]
           console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
         }
       }
@@ -332,7 +332,7 @@ function requireConfig() {
     console.log(`--------助力码转换数组--------`);
     console.log($.shareCodesArr);
     if($.shareCodesArr.length == 0){
-      console.log(`如需添加助力码，请在环境变量里添加 CITY_SHARECODES 多个助力码用 @ 拼接`);
+      console.log(`如需添加助力码，请在环境变量里添加 jdwxx_ccfxj 多个助力码用 @ 拼接`);
       if(true){
         throw new Error("您未配置助力码，为防止助力被偷，代码故意写错，终止本次执行");
       }
