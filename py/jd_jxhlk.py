@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 """
 cron: 10 1,10,14,20 * * *
-new Env('京喜欢乐砍');
+new Env('jxhlk');
 活动入口:https://st.jingxi.com/sns/202103/20/jxhlk/list.html
 """
 import requests,os,json
