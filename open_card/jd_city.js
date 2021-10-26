@@ -41,7 +41,7 @@ let inviteCodes = []
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  await readShareCode();
+  // await readShareCode();
   await requireConfig();
   if (exchangeFlag) {
     console.log(`脚本自动抽奖`)
@@ -252,7 +252,7 @@ function city_lotteryAward() {
 function shareCodesFormat() {
   return new Promise(async resolve => {
     $.newShareCodes = $.inviteCodes;
-    readShareCode();
+    // readShareCode();
     if($.newShareCodes.length == 1){
       $.newShareCodes.push($.inviteCodes[0])
       $.newShareCodes.push($.inviteCodes[Math.floor((Math.random()*$.inviteCodes.length))])
@@ -297,16 +297,15 @@ function requireConfig() {
         }
       })
     }
-    readShareCode()
+    // readShareCode()
     console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
     console.log(`--------读取到配置文件中助力账号--------`);
     console.log($.shareCodesArr);
-    console.log(`------------------------------------`);
     if($.shareCodesArr.length == 0){
-      console.log(`--------您未配置助力码，接下来将会助力作者--------`);
-      console.log(`--------如需添加助力码，请在环境变量里添加 CITY_SHARECODES 多个助力码用 @ 拼接--------`);
-      console.log($.inviteCodes);
-      console.log(`-------------------------------------------`);
+      console.log(`如需添加助力码，请在环境变量里添加 CITY_SHARECODES 多个助力码用 @ 拼接`);
+      if(true){
+        throw new Error("您未配置助力码，为防止助力被偷，代码故意写错，终止本次执行");
+      }
     }else{
       $.inviteCodes = $.shareCodesArr;
     }
