@@ -309,7 +309,7 @@ function requireConfig() {
         $.shareCodesArr = process.env.jdwxx_ccfxj.split('&');
         console.log(`您选择的是用"&"隔开\n`)
       } else {
-        $.shareCodesArr = [process.env.jdwxx_ccfxj]
+        $.shareCodesArr = process.env.jdwxx_ccfxj.split('@');
         console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
       }
     }
