@@ -1,4 +1,24 @@
+/*
+微信_金银手指
+1.教程 cxgc.top
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
+[task_local]
+#微信_金银手指
+0 0 8,11,17 * * * https://github.com/JDWXX/jd_job/blob/master/qt/jd_wx_jsz.js, tag=微信_金银手指, img-url=https://raw.githubusercontent.com/Orz-3/task/master/jd.png, enabled=true
+
+================Loon==============
+[Script]
+cron "0 0 8,11,17 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/qt/jd_wx_jsz.js,tag=微信_金银手指
+
+===============Surge=================
+微信_金银手指 = type=cron,cronexp="0 0 8,11,17 * * *",wake-system=1,timeout=33600,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/jd_wx_jsz.js
+
+============小火箭=========
+微信_金银手指 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/jd_wx_jsz.js, cronexpr="0 0 8,11,17 * * *", timeout=33600, enable=true
+*/
 const $ = new Env('微信_金银手指');
+
 const notify = $.isNode() ? require('./sendNotify') : '';
 const CryptoJS = require('crypto-js')
 const app_soy_wx_jysz_token = []
