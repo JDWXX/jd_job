@@ -293,15 +293,28 @@ function requireConfig() {
     //Node.js用户请在jdCookie.js处填写京东ck;
     let shareCodes = "";
     if(!$.isNode()){
-      if (process.env.CITY_SHARECODES && process.env.CITY_SHARECODES.indexOf('@') > -1) {
-        $.shareCodesArr = process.env.CITY_SHARECODES.split('@');
-        console.log(`您选择的是用"@"隔开\n`)
-      }else if (process.env.CITY_SHARECODES && process.env.CITY_SHARECODES.indexOf('&') > -1) {
-        $.shareCodesArr = process.env.CITY_SHARECODES.split('&');
-        console.log(`您选择的是用"&"隔开\n`)
-      } else {
-        $.shareCodesArr = [process.env.CITY_SHARECODES]
-        console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
+      if($.getdata('CITY_SHARECODES')){
+        if ($.getdata('CITY_SHARECODES') && $.getdata('CITY_SHARECODES').indexOf('@') > -1) {
+          $.shareCodesArr = $.getdata('CITY_SHARECODES').split('@');
+          console.log(`您选择的是用"@"隔开\n`)
+        }else if ($.getdata('CITY_SHARECODES') && $.getdata('CITY_SHARECODES').indexOf('&') > -1) {
+          $.shareCodesArr = $.getdata('CITY_SHARECODES').split('&');
+          console.log(`您选择的是用"&"隔开\n`)
+        } else {
+          $.shareCodesArr = [$.getdata('CITY_SHARECODES')]
+          console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
+        }
+      }else{
+        if (process.env.CITY_SHARECODES && process.env.CITY_SHARECODES.indexOf('@') > -1) {
+          $.shareCodesArr = process.env.CITY_SHARECODES.split('@');
+          console.log(`您选择的是用"@"隔开\n`)
+        }else if (process.env.CITY_SHARECODES && process.env.CITY_SHARECODES.indexOf('&') > -1) {
+          $.shareCodesArr = process.env.CITY_SHARECODES.split('&');
+          console.log(`您选择的是用"&"隔开\n`)
+        } else {
+          $.shareCodesArr = [process.env.CITY_SHARECODES]
+          console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
+        }
       }
     }
     console.log(`--------读取到配置文件中助力账号--------`);
