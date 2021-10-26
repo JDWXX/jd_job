@@ -23,87 +23,87 @@ message = ""
 let dsj_header= $.isNode() ? (process.env.dsj_header ? process.env.dsj_header : "") : ($.getdata('dsj_header') ? $.getdata('dsj_header') : "")
 let dsj_headerArr = []
 let dsj_headers = ""
+
+let task_xiaoman,H5Page_4,playTask,M005,ShortvideoPlay,task_mobile_visit_song,task_mobile_visit_album,task_mobile_upload_album,task_mobile_create_family;
 const dianshijia_API = 'http://api.gaoqingdianshi.com/api'
 const walkstep = '20000';
 const gametimes = "1999";
-console.log(`环境变量添加 dsj_header 多个账号用 @ 隔开`)
+
 var time = Date.parse( new Date() ).toString();
 
 
- if (typeof $request !== "undefined") {
+if (typeof $request !== "undefined") {
     getdsj_header()
-     $.done()
- }
+    $.done()
+}
 
 if (!dsj_header) {
-     $.msg($.name, '【提示】没有电视家cookie，获取cookie，再跑一次脚本', '不知道说啥好', {
-         "open-url": "给您劈个叉吧"
-     });
-     $.done()
- }
- else if (dsj_header.indexOf("@") == -1 && dsj_header.indexOf("@") == -1) {
-            dsj_headerArr.push(dsj_header)
- }
- else if (dsj_header.indexOf("@") > -1) {
-            dsj_headers = dsj_header.split("@")
- }
- else if (process.env.dsj_header && process.env.dsj_header.indexOf('@') > -1) {
-            dsj_headerArr = process.env.dsj_header.split('@');
-            console.log(`您选择的是用"@"隔开\n`)
- }
- else {
-            dsj_headers = [process.env.dsj_header]
- };
-    Object.keys(dsj_headers).forEach((item) => {
-        if (dsj_headers[item]) {
-            dsj_headerArr.push(dsj_headers[item])
-        }
-    })
+    $.msg($.name, '【提示】没有电视家cookie，获取cookie，再跑一次脚本', '不知道说啥好', {
+        "open-url": "给您劈个叉吧"
+    });
+    $.done()
+}
+else if (dsj_header.indexOf("@") == -1 && dsj_header.indexOf("@") == -1) {
+    dsj_headerArr.push(dsj_header)
+}
+else if (dsj_header.indexOf("@") > -1) {
+    dsj_headers = dsj_header.split("@")
+}
+else if (process.env.dsj_header && process.env.dsj_header.indexOf('@') > -1) {
+    dsj_headerArr = process.env.dsj_header.split('@');
+    console.log(`您选择的是用"@"隔开\n`)
+}
+else {
+    dsj_headers = [process.env.dsj_header]
+};
+Object.keys(dsj_headers).forEach((item) => {
+    if (dsj_headers[item]) {
+        dsj_headerArr.push(dsj_headers[item])
+    }
+})
 
 
 
 !(async () => {
-        console.log(`共${dsj_headerArr.length}个cookie`)
-	        for (let k = 0; k < dsj_headerArr.length; k++) {
-                $.message = ""
-                let dsjjson = dsj_headerArr[k]
-                if(dsjjson.indexOf('":"') == -1){
-                    console.log(dsjjson)
-                    dsjjson = dsjjson.replace(/{/g,'{"')
-                    dsjjson = dsjjson.replace(/}/g,'"}')
-                    dsjjson = dsjjson.replace(/:/g,'":"')
+    console.log(`共${dsj_headerArr.length}个cookie`)
+    for (let k = 0; k < dsj_headerArr.length; k++) {
+        $.message = ""
+        let dsjjson = dsj_headerArr[k]
+        if(dsjjson.indexOf('":"') == -1){
+            console.log(dsjjson)
+            dsjjson = dsjjson.replace(/{/g,'{"')
+            dsjjson = dsjjson.replace(/}/g,'"}')
+            dsjjson = dsjjson.replace(/:/g,'":"')
+            dsjjson = dsjjson.replace(/,/g,'","')
+        }
+        console.log(dsjjson)
+        dsj_header1 = dsjjson
+        console.log(`--------第 ${k + 1} 个账号任务中--------\n`)
 
-                    dsjjson = dsjjson.replace(/{/g,'{"')
-                    dsjjson = dsjjson.replace(/}/g,'"}')
-                    dsjjson = dsjjson.replace(/:/g,'":"')
-                }
-                dsj_header1 = dsjjson
-                console.log(`--------第 ${k + 1} 个账号任务中--------\n`)
+        await dsj_rwzt();
+        await signin()
+        //await signinfo()
+        await dsj_led()
+        await run()
+        await run_rw()
 
-                    await dsj_rwzt();
-            await signin()
-            //await signinfo()
-            await dsj_led()
-            await run()
-            await run_rw()
-
-            await dsj_lqp()
-            for (let k = 0; k<5;k++){
-                await lhz()
-                await $.wait(60000)
-            }
-            await tasks(); // 任务状态
-            await wx_tasks()
-            await getGametime(); // 游戏时长
-            await dsj_getinfo()// 用户信息
-            //await coinlist(); //总计
-            //await total(); // 金币状态
-            await cash(); // 现金状态
+        await dsj_lqp()
+        for (let k = 0; k<5;k++){
+            await lhz()
+            await $.wait(60000)
+        }
+        await tasks(); // 任务状态
+        await wx_tasks()
+        await getGametime(); // 游戏时长
+        await dsj_getinfo()// 用户信息
+        //await coinlist(); //总计
+        //await total(); // 金币状态
+        await cash(); // 现金状态
 
 
-                console.log("\n\n")
-            }
-     })()
+        console.log("\n\n")
+    }
+})()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
 
@@ -210,7 +210,7 @@ function total() {
                 resolve()
             } catch (e) {
 
-            resolve()
+                resolve()
             }
         })
     })
@@ -239,9 +239,9 @@ function wx_dotask(code) {
             if(result.errCode == 0){
                 console.log('\n【微信任务代码】：' + code + '，获得金币:' + result.data.getCoin)
             }else{
-              console.log('\n【微信任务代码】: '+code+'，'+result.msg)
+                console.log('\n【微信任务代码】: '+code+'，'+result.msg)
             }
-         resolve()
+            resolve()
         })
     })
 }
@@ -269,113 +269,113 @@ function dotask(code) {
             if(result.errCode == 0){
                 console.log('\n【任务代码】：' + code + '，获得金币:' + result.data.getCoin)
             }else{
-              console.log('\n【任务代码】: '+code+ '，'+result.msg)
+                console.log('\n【任务代码】: '+code+ '，'+result.msg)
             }
-        resolve()
+            resolve()
         })
     })
 }
 
 //任务列表查看，待修改
 function dsj_rwzt() {
-  return new Promise((resolve) => {
-let url = {
-      url : `http://act.gaoqingdianshi.com/api/v5/task/get`,
-     headers : JSON.parse(dsj_header1),
-}
-      $.get(url, async (err, resp, data) => {
-      try {
-         //console.log(data)
-     data = JSON.parse(data)
-
-     if(data.errCode==0){
-         console.log(`\n【任务状态】: \n`)
-         //天天看视频任务8次
-         if(data.data[0].dayCompCount==8){
-             console.log(`${data.data[0].name}: 已完成`)
-             task_xiaoman = 1
-         }else{
-             console.log(`${data.data[0].name}: 未完成`)
-             task_xiaoman = 0
-         }
-         //浏览广告赚
-          if(data.data[2].dayCompCount==5){
-            console.log(`${data.data[2].name}: 已完成`)
-            H5Page_4 = 1
-          }else{
-              console.log(`${data.data[2].name}: 未完成`)
-            H5Page_4 = 0
-          }
-
-          //播放任务
-          if(data.data[11].dayCompCount==9){
-              console.log(`${data.data[11].name}: 已完成`)
-              playTask = 1
-          }else{
-             console.log(`${data.data[11].name}: 未完成`)
-              playTask = 0
-          }
-          //手机版分享
-          if(data.data[7].dayCompCount==1){
-              console.log(`${data.data[7].name}: 已完成`)
-              M005 =1
-          }else{
-              console.log(`${data.data[7].name}: 未完成`)
-              M005 =0
-          }
-          //刷短视频
-          if(data.data[12].dayCompCount==5){
-              console.log(`${data.data[12].name}: 已完成`)
-              ShortvideoPlay = 1
-          }else{
-              console.log(`${data.data[12].name}: 未完成`)
-              ShortvideoPlay = 0
-          }
-          //访问点歌台
-          if(data.data[13].dayCompCount==1){
-              console.log(`${data.data[13].name}: 已完成`)
-              task_mobile_visit_song = 1
-          }else{
-              console.log(`${data.data[13].name}: 未完成`)
-              task_mobile_visit_song = 0
-          }
-          //浏览电视相册
-          if(data.data[14].dayCompCount==1){
-              console.log(`${data.data[14].name}: 已完成`)
-              task_mobile_visit_album = 1
-          }else{
-              console.log(`${data.data[14].name}: 未完成`)
-              task_mobile_visit_album = 0
-          }
-          //相册上电视task_mobile_upload_album
-          if(data.data[15].dayCompCount==1){
-              console.log(`${data.data[15].name}: 已完成`)
-              task_mobile_upload_album = 1
-          }else{
-              console.log(`${data.data[15].name}: 未完成`)
-              task_mobile_upload_album = 0
-          }
-          //开家庭号task_mobile_create_family
-          if(data.data[16].dayCompCount==1){
-              console.log(`${data.data[16].name}: 已完成`)
-              task_mobile_create_family = 1
-          }else{
-              console.log(`${data.data[16].name}: 未完成`)
-              task_mobile_create_family = 0
-          }
-
-
-     }else{
-         //console.log(`${data.data[2].name}: 已完成`)
-         console.log(data)
-     }
-
-        } catch (e) {
-        } finally {
-          resolve()
+    return new Promise((resolve) => {
+        let url = {
+            url : `http://act.gaoqingdianshi.com/api/v5/task/get`,
+            headers : JSON.parse(dsj_header1),
         }
+        $.get(url, async (err, resp, data) => {
+            try {
+                //console.log(data)
+                data = JSON.parse(data)
+
+                if(data.errCode==0){
+                    console.log(`\n【任务状态】: \n`)
+                    //天天看视频任务8次
+                    if(data.data[0].dayCompCount==8){
+                        console.log(`${data.data[0].name}: 已完成`)
+                        task_xiaoman = 1
+                    }else{
+                        console.log(`${data.data[0].name}: 未完成`)
+                        task_xiaoman = 0
+                    }
+                    //浏览广告赚
+                    if(data.data[2].dayCompCount==5){
+                        console.log(`${data.data[2].name}: 已完成`)
+                        H5Page_4 = 1
+                    }else{
+                        console.log(`${data.data[2].name}: 未完成`)
+                        H5Page_4 = 0
+                    }
+
+                    //播放任务
+                    if(data.data[11].dayCompCount==9){
+                        console.log(`${data.data[11].name}: 已完成`)
+                        playTask = 1
+                    }else{
+                        console.log(`${data.data[11].name}: 未完成`)
+                        playTask = 0
+                    }
+                    //手机版分享
+                    if(data.data[7].dayCompCount==1){
+                        console.log(`${data.data[7].name}: 已完成`)
+                        M005 =1
+                    }else{
+                        console.log(`${data.data[7].name}: 未完成`)
+                        M005 =0
+                    }
+                    //刷短视频
+                    if(data.data[12].dayCompCount==5){
+                        console.log(`${data.data[12].name}: 已完成`)
+                        ShortvideoPlay = 1
+                    }else{
+                        console.log(`${data.data[12].name}: 未完成`)
+                        ShortvideoPlay = 0
+                    }
+                    //访问点歌台
+                    if(data.data[13].dayCompCount==1){
+                        console.log(`${data.data[13].name}: 已完成`)
+                        task_mobile_visit_song = 1
+                    }else{
+                        console.log(`${data.data[13].name}: 未完成`)
+                        task_mobile_visit_song = 0
+                    }
+                    //浏览电视相册
+                    if(data.data[14].dayCompCount==1){
+                        console.log(`${data.data[14].name}: 已完成`)
+                        task_mobile_visit_album = 1
+                    }else{
+                        console.log(`${data.data[14].name}: 未完成`)
+                        task_mobile_visit_album = 0
+                    }
+                    //相册上电视task_mobile_upload_album
+                    if(data.data[15].dayCompCount==1){
+                        console.log(`${data.data[15].name}: 已完成`)
+                        task_mobile_upload_album = 1
+                    }else{
+                        console.log(`${data.data[15].name}: 未完成`)
+                        task_mobile_upload_album = 0
+                    }
+                    //开家庭号task_mobile_create_family
+                    if(data.data[16].dayCompCount==1){
+                        console.log(`${data.data[16].name}: 已完成`)
+                        task_mobile_create_family = 1
+                    }else{
+                        console.log(`${data.data[16].name}: 未完成`)
+                        task_mobile_create_family = 0
+                    }
+
+
+                }else{
+                    //console.log(`${data.data[2].name}: 已完成`)
+                    console.log(data)
+                }
+
+            } catch (e) {
+            } finally {
+                resolve()
+            }
+        })
     })
-  })
 }
 //看视频奖励
 function video() {
@@ -388,9 +388,9 @@ function video() {
             try {
                 const result = JSON.parse(data)
                 if (result.errCode === 0) {
-               console.log(`\n【看视频赚钱】:获得 ${result.data.getCoin} 金币`)
-            } else {
-                console.log( `\n【看视频赚钱】: ${result.msg}`)
+                    console.log(`\n【看视频赚钱】:获得 ${result.data.getCoin} 金币`)
+                } else {
+                    console.log( `\n【看视频赚钱】: ${result.msg}`)
                 }
 
             } catch (e) {
@@ -398,7 +398,7 @@ function video() {
             } finally {
                 resolve()
             }
-            })
+        })
     })
 }
 //签到
@@ -446,7 +446,7 @@ function dsj_led() {
         }
         $.get(url, (error, response, data) => {
             //console.log(data)
-        resolve()
+            resolve()
         })
     })
 }
@@ -488,7 +488,7 @@ function sleep() {
         }
         $.get(url, (error, response, data) => {
             try {
-                 $.log(`睡觉任务: ${data}\n`)
+                $.log(`睡觉任务: ${data}\n`)
                 let sleepres = JSON.parse(data)
                 if (sleepres.errCode == 0) {
                     sleeping = sleepres.data.name + '报名成功 🛌'
@@ -514,11 +514,11 @@ function CarveUp() {
             headers: JSON.parse(dsj_header1),
         }
         $.get(url, (error, response, data) => {
-             $.log(`瓜分百万金币: ${data}`)
+            $.log(`瓜分百万金币: ${data}`)
             const result = JSON.parse(data)
             if (result.errCode == 0) {
                 //detail += `【金币瓜分】✅ 报名成功\n`
-		    $.log(`金币瓜分】✅ 报名成功\n`)
+                $.log(`金币瓜分】✅ 报名成功\n`)
             }
             resolve()
         })
@@ -533,7 +533,7 @@ function getCUpcoin() {
             headers: JSON.parse(dsj_header1),
         }, (error, response, data) => {
             //console.log(data)
-             $.log(`【瓜分百万金币】: 获得 ${data} 金币`)
+            $.log(`【瓜分百万金币】: 获得 ${data} 金币`)
         })
         resolve()
     })
@@ -546,7 +546,7 @@ function walk() {
             headers: JSON.parse(dsj_header1),
         }
         $.get(url, (error, response, data) => {
-             $.log(`走路任务: ${data}\n`)
+            $.log(`走路任务: ${data}\n`)
             let result = JSON.parse(data)
             if (result.data.unGetCoin > 10) {
                 $.get({
@@ -634,7 +634,7 @@ function dsj_ggz() {
             if (result.errCode == 0) {
                 console.log(`\n【浏览广告赚】:获得 ${result.data.getCoin} 金币`)
             } else {
-               console.log(`\n【浏览广告赚】: ${result.msg}`)
+                console.log(`\n【浏览广告赚】: ${result.msg}`)
             }
             resolve()
         })
@@ -654,7 +654,7 @@ function dsj_jrydz() {
             if (result.errCode == 0) {
                 console.log(`\n【播放任务】:获得 ${result.data.getCoin} 金币`)
             } else {
-               console.log(`\n【播放任务】: ${result.msg}`)
+                console.log(`\n【播放任务】: ${result.msg}`)
             }
             resolve()
         })
@@ -674,7 +674,7 @@ function dsj_sjbfx() {
             if (result.errCode == 0) {
                 console.log(`\n【手机版分享】:获得 ${result.data.getCoin} 金币`)
             } else {
-               console.log(`\n【手机版分享】: ${result.msg}`)
+                console.log(`\n【手机版分享】: ${result.msg}`)
             }
             resolve()
         })
@@ -695,10 +695,10 @@ function dsj_dgt() {
             if(result.errCode == 0){
                 console.log(`\n【访问点歌台】:获得 ${result.data.getCoin} 金币`)
             }else{
-              console.log(`\n【访问点歌台】: ${result.msg}`)
+                console.log(`\n【访问点歌台】: ${result.msg}`)
             }
 
-        resolve()
+            resolve()
         })
     })
 }
@@ -716,10 +716,10 @@ function dsj_fwxc() {
             if(result.errCode == 0){
                 console.log(`\n【访问相册】:获得 ${result.data.getCoin} 金币`)
             }else{
-              console.log(`\n【访问相册】: ${result}`)
+                console.log(`\n【访问相册】: ${result}`)
             }
 
-        resolve()
+            resolve()
         })
     })
 }
@@ -737,10 +737,10 @@ function dsj_xcsds() {
             if(result.errCode == 0){
                 console.log(`\n【相册上电视】:获得 ${result.data.getCoin} 金币`)
             }else{
-              console.log(`\n【相册上电视】: ${result.msg}`)
+                console.log(`\n【相册上电视】: ${result.msg}`)
             }
 
-        resolve()
+            resolve()
         })
     })
 }
@@ -757,10 +757,10 @@ function dsj_kjth() {
             if(result.errCode == 0){
                 console.log(`\n【开家庭号】:获得 ${result.data.getCoin} 金币`)
             }else{
-              console.log(`\n【开家庭号】: ${result.msg}`)
+                console.log(`\n【开家庭号】: ${result.msg}`)
             }
 
-        resolve()
+            resolve()
         })
     })
 }
@@ -778,10 +778,10 @@ function dsj_sdsp() {
             if(result.errCode == 0){
                 console.log(`\n【刷短视频】:获得 ${result.data.getCoin} 金币`)
             }else{
-              console.log(`\n【刷短视频】: ${result.msg}`)
+                console.log(`\n【刷短视频】: ${result.msg}`)
             }
 
-        resolve()
+            resolve()
         })
     })
 }
@@ -801,14 +801,14 @@ function dsj_lqp() {
                 if(!result.data.tempCoin){
                     console.log(`\n【${$.name}】: 首页没有气泡了`)
                 }else{
-                  for(let a=0;a<result.data.tempCoin.length;a++){
-                  await dsj_dqp(result.data.tempCoin[a].id)
-                      await $.wait(3000)
-               }
+                    for(let a=0;a<result.data.tempCoin.length;a++){
+                        await dsj_dqp(result.data.tempCoin[a].id)
+                        await $.wait(3000)
+                    }
                 }
 
             } else {
-               //console.log(`\n【${$.name}】: ${result.msg}`
+                //console.log(`\n【${$.name}】: ${result.msg}`
                 //subTitle = `【看视频赚钱】 失败`
                 /*detail = `原因: ${result.msg}`
                 if ($.isNode()) {
@@ -820,7 +820,7 @@ function dsj_lqp() {
         })
     })
 }
- //点气泡
+//点气泡
 function dsj_dqp(code) {
     return new Promise((resolve, reject) => {
         $.get({
@@ -843,7 +843,7 @@ function getGametime() {
             headers: JSON.parse(dsj_header1),
         }
         $.get(url, (error, response, data) => {
-             $.log(`游戏时长: ${data}\n`)
+            $.log(`游戏时长: ${data}\n`)
         })
         resolve()
     })
@@ -863,10 +863,10 @@ function dsj_getinfo() {
                 headImgUrl=result.data.headImgUrl
                 dsj_info()
             }else{
-              console.log(`\n【电视家提示】: ${result.msg}`)
+                console.log(`\n【电视家提示】: ${result.msg}`)
             }
 
-        resolve()
+            resolve()
         })
     })
 }
@@ -882,24 +882,24 @@ function dsj_info() {
             if(result.errCode == 0){
 
             }else{
-              //console.log(`\n【电视家提示】: ${result.msg}`)
+                //console.log(`\n【电视家提示】: ${result.msg}`)
             }
 
-        resolve()
+            resolve()
         })
     })
 }
 
 async function getdsj_header() {
     if ($request.url.match(/\/v3\/user\/info/)) {
-          bodyVal1 = JSON.stringify($request.headers)
+        bodyVal1 = JSON.stringify($request.headers)
         result = JSON.parse(bodyVal1)
-          uuid = result.uuid
-          userid = result.userid
-          authorization = result.authorization
-          deviceId = result.deviceId
-          let bodyVal = {'uuid' :uuid, 'userid' :userid, 'authorization' :authorization, 'deviceId':deviceId, 'Host':'api.gaoqingdianshi.com', "appid": "0990028e54b2329f2dfb4e5aeea6d625"}
-          bodyVal2 =JSON.stringify(bodyVal)
+        uuid = result.uuid
+        userid = result.userid
+        authorization = result.authorization
+        deviceId = result.deviceId
+        let bodyVal = {'uuid' :uuid, 'userid' :userid, 'authorization' :authorization, 'deviceId':deviceId, 'Host':'api.gaoqingdianshi.com', "appid": "0990028e54b2329f2dfb4e5aeea6d625"}
+        bodyVal2 =JSON.stringify(bodyVal)
 
         if (dsj_header) {
             if (dsj_header.indexOf(userid) > -1) {
@@ -920,9 +920,9 @@ async function getdsj_header() {
         }
     }
 
-  }
+}
 
-  //现金详情
+//现金详情
 function cash() {
     return new Promise((resolve, reject) => {
         $.get({
@@ -932,7 +932,7 @@ function cash() {
             //if (logs) $.log(`现金: ${data}\n`)
             let cashresult = JSON.parse(data)
             if (cashresult.errCode == "0") {
-               console.log(`\n【当前现金状态】总现金: ${cashresult.data.amount/100} , 提现额度: ${cashresult.data.withdrawalQuota/100}`)
+                console.log(`\n【当前现金状态】总现金: ${cashresult.data.amount/100} , 提现额度: ${cashresult.data.withdrawalQuota/100}`)
                 //subTitle += `\n【账号 ${k+1} 现金状态】总现金: ${cashresult.data.amount/100} , 提现额度: ${cashresult.data.withdrawalQuota/100}`
                 //cashtotal = cashresult.data.totalWithdrawn / 100
                 /*zh=i
@@ -960,9 +960,9 @@ function lhz() {
             if(result.errCode == 0){
                 console.log('\n阅读零花赚：' + '阅读次数:' + result.data.dayCompCount)
             }else{
-              console.log('\n【阅读零花赚: '+result.msg)
+                console.log('\n【阅读零花赚: '+result.msg)
             }
-        resolve()
+            resolve()
         })
     })
 }
