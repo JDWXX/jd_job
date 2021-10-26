@@ -41,7 +41,7 @@ let inviteCodes = []
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  inviteCodes = await readShareCode().split('@');
+  await readShareCode();
   await requireConfig();
   if (exchangeFlag) {
     console.log(`脚本自动抽奖`)
@@ -252,7 +252,7 @@ function city_lotteryAward() {
 function shareCodesFormat() {
   return new Promise(async resolve => {
     $.newShareCodes = $.inviteCodes;
-    $.inviteCodes = readShareCode().split('@');
+    readShareCode();
     if($.newShareCodes.length == 1){
       $.newShareCodes.push($.inviteCodes[0])
       $.newShareCodes.push($.inviteCodes[Math.floor((Math.random()*$.inviteCodes.length))])
@@ -297,7 +297,7 @@ function requireConfig() {
         }
       })
     }
-    $.inviteCodes = readShareCode().split('@');
+    readShareCode()
     console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
     console.log(`--------读取到配置文件中助力账号--------`);
     console.log($.shareCodesArr);
@@ -390,10 +390,13 @@ function readShareCode() {
       } catch (e) {
         $.logErr(e, resp)
       } finally {
-        console.log(data)
-        return data
+        $.inviteCodes = data.split('@');
+        console.log($.inviteCodes)
+        resolve(data);
       }
     })
+    await $.wait(10000);
+    resolve()
   })
 }
 // prettier-ignore
