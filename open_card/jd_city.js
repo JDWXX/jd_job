@@ -296,13 +296,13 @@ function requireConfig() {
     }
     if (process.env.CITY_SHARECODES) {
       if (process.env.CITY_SHARECODES.indexOf('@') > -1) {
-        shareCodes = process.env.CITY_SHARECODES.split('@');
+        $.shareCodesArr = process.env.CITY_SHARECODES.split('@');
       } else {
-        shareCodes = process.env.CITY_SHARECODES.split('&');
+        $.shareCodesArr = process.env.CITY_SHARECODES.split('&');
       }
     }
     console.log(`--------读取到配置文件中助力账号--------`);
-    console.log(shareCodes);
+    console.log( $.shareCodesArr);
     console.log(`共${cookiesArr.length}个京东账号\n`);
     $.shareCodesArr = shareCodes;
     // if ($.isNode()) {
