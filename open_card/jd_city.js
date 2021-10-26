@@ -26,6 +26,8 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let exchangeFlag = $.getdata('jdJxdExchange') || !!0;//是否开启自动抽奖，建议活动快结束开启，默认关闭
 //IOS等用户直接用NobyDa的jd cookie
 let uuid, UA;
+let shareCodesArr =[]
+let inviteCodes = []
 let cookiesArr = [], cookie = '', message;
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -36,7 +38,6 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let inviteCodes = []
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -296,9 +297,12 @@ function requireConfig() {
       }else if ($.getdata('jdwxx_ccfxj') && $.getdata('jdwxx_ccfxj').indexOf('&') > -1) {
         $.shareCodesArr = $.getdata('jdwxx_ccfxj').split('&');
         console.log(`您选择的是用"&"隔开\n`)
-      } else {
-        $.shareCodesArr = [$.getdata('jdwxx_ccfxj')]
+      } else if($.getdata('jdwxx_ccfxj')){
+        $.shareCodesArr = $.getdata('jdwxx_ccfxj').split('@');
         console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
+      } else{
+        console.log(`如需添加助力码，请在环境变量里添加 jdwxx_ccfxj 多个助力码用 @ 拼接`);
+        throw new Error("您未配置助力码，为防止助力被偷，代码故意写错，终止本次执行");
       }
     }else{
       console.log(process.env.jdwxx_ccfxj);
@@ -308,34 +312,22 @@ function requireConfig() {
       }else if (process.env.jdwxx_ccfxj && process.env.jdwxx_ccfxj.indexOf('&') > -1) {
         $.shareCodesArr = process.env.jdwxx_ccfxj.split('&');
         console.log(`您选择的是用"&"隔开\n`)
-      } else {
+      } else if(process.env.jdwxx_ccfxj){
         $.shareCodesArr = process.env.jdwxx_ccfxj.split('@');
         console.log(`只配置了一个账号，建议配置三个账号，多个账号用 @ 拼接\n`)
-      }
-    }
-    console.log(`--------读取到配置文件中助力账号--------`);
-    console.log($.shareCodesArr);
-    console.log(`共${shareCodesArr.length}个京东账号\n`);
-    // if ($.isNode()) {
-    //   Object.keys(shareCodes).forEach((item) => {
-    //     if (shareCodes[item]) {
-    //       $.shareCodesArr.push(shareCodes[item])
-    //     }
-    //   })
-    // }
-    // readShareCode()
-    console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
-    console.log(`--------助力码转换数组--------`);
-    console.log($.shareCodesArr);
-    if($.shareCodesArr.length == 0){
-      console.log(`如需添加助力码，请在环境变量里添加 jdwxx_ccfxj 多个助力码用 @ 拼接`);
-      if(true){
+      }else{
+        console.log(`如需添加助力码，请在环境变量里添加 jdwxx_ccfxj 多个助力码用 @ 拼接`);
         throw new Error("您未配置助力码，为防止助力被偷，代码故意写错，终止本次执行");
       }
-    }else{
-      $.inviteCodes = $.shareCodesArr;
     }
-    resolve()
+    $.inviteCodes = $.shareCodesArr
+    // readShareCode()
+    console.log(`您提供了${$.inviteCodes.length}个账号的${$.name}助力码\n`);
+    console.log(`--------读取到配置文件中助力账号--------`);
+    console.log($.inviteCodes);
+    if($.inviteCodes.length > 0)
+      $.inviteCodes = $.inviteCodes;
+      resolve()
   })
 }
 function TotalBean() {
