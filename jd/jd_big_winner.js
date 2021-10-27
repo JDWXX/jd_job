@@ -18,7 +18,7 @@ cron "20 0,6-23 * * *" script-path=jd_big_winner.js,tag=省钱大赢家之翻翻
 ====================================小火箭=============================
 省钱大赢家之翻翻乐 = type=cron,script-path=jd_big_winner.js, cronexpr="20 0,6-23 * * *", timeout=3600, enable=true
  */
-const $ = new Env('省钱大赢家之翻翻乐');
+const $ = new Env('省钱大赢家之翻翻乐2');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
