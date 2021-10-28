@@ -1,5 +1,5 @@
 
-# [使用教程](https://jdwxx.github.io/JD/)
+# [完整使用教程](http://cxgc.top/)
 
 
 ## 特别声明:

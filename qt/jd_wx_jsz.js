@@ -47,7 +47,7 @@ let soy_wx_jysz_token = $.getdata('soy_wx_jysz_token')
             soy_wx_jysz_token = process.env.soy_wx_jysz_token.split('#');
         }else{
             soy_wx_jysz_token = process.env.soy_wx_jysz_token.split();
-        };
+        }
 
         Object.keys(soy_wx_jysz_token).forEach((item) => {
             if (soy_wx_jysz_token[item]) {
