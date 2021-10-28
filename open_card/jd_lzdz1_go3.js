@@ -38,7 +38,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
     authorCodeList = await getAuthorCodeList('https://gitee.com/fatelight/dongge/raw/master/dongge/lzdz1_go3.json')
     if(authorCodeList === '404: Not Found'){
         authorCodeList = [
-            'f0a85730507a4ebcbd28162be46fc8f6',
+            'ae04c341156a45d2aaebdece510a5ab2','adb2cd01c09849abb9e89daf060bf84a'
         ]
     }
 
@@ -64,7 +64,8 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
             // $.authorCode = authorCodeList[random(0, authorCodeList.length)]
-            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            authorCodeList = [authorCodeList[random(0, authorCodeList.length)],ownCode]
+            $.authorCode = authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`
             $.randomCode = random(1000000, 9999999)
             $.activityId = '946hf38m5d4vqjgs5ctfuickj65s69l528'
