@@ -11,18 +11,29 @@ cookies = ''
 
 import os, re, sys
 # 设置助人,用户名 或 pin 用&分割
-qjd_zlzh = ['程序工厂', '程序工厂2号']
-print("===========为防止每次重新配置,可在 [/QL/config/pin.text] 目录文件下配置需要助力的号===========")
-print("===========【QQ群：212796668】 文件格式：账号昵称1&账号昵称2===========")
-if os.path.exists("/ql/config/pin.text"):
-    print("===========读取到配置文件===========")
-    with open("/ql/config/pin.text", "r", encoding="utf-8") as f:
-        pins = f.read()
-        f.close()
-        print("===========读取到的配置文件里的内容===========" + pins)
-        print("===========助力人===========")
-        qjd_zlzh = pins.split("&")
-        print(qjd_zlzh)
+qjd_zlzh = ['pt_pin1', 'pt_pin2']
+print("===========环境变量添加：jdwxx_qjd 或在 [/QL/config/pin.text] 目录文件下配置需要助力的号===========")
+print("===========文件格式：pt_pin1&pt_pin2===========")
+
+if "jdwxx_qjd" in os.environ and len(os.environ["jdwxx_qjd"]) > 1:
+    jdwxxqjd = os.environ["jxkj"]
+    print("===========读取到的配置文件里的内容===========" + jdwxxqjd)
+    print("===========助力人===========")
+    qjd_zlzh = pins.split("&")
+    print(qjd_zlzh)
+else:
+    jdwxxqjd=""
+if jdwxxqjd == "":
+    if os.path.exists("/ql/config/pin.text"):
+        print("===========读取静态配置文件===========")
+        with open("/ql/config/pin.text", "r", encoding="utf-8") as f:
+            pins = f.read()
+            f.close()
+            print("===========读取到的配置文件里的内容===========" + pins)
+            print("===========助力人===========")
+            qjd_zlzh = pins.split("&")
+            print(qjd_zlzh)
+
 # Env环境设置 通知服务
 # export BARK=''                   # bark服务,苹果商店自行搜索;
 # export SCKEY=''                  # Server酱的SCKEY;
