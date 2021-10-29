@@ -16,7 +16,7 @@ print("===========环境变量添加：jdwxx_qjd 或在 [/QL/config/pin.text] �
 print("===========文件格式：pt_pin1&pt_pin2===========")
 
 if "jdwxx_qjd" in os.environ and len(os.environ["jdwxx_qjd"]) > 1:
-    jdwxxqjd = os.environ["jxkj"]
+    jdwxxqjd = os.environ["jdwxx_qjd"]
     print("===========读取到的配置文件里的内容===========" + jdwxxqjd)
     print("===========助力人===========")
     qjd_zlzh = jdwxxqjd.split("&")
