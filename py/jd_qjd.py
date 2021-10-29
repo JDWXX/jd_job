@@ -19,7 +19,7 @@ if "jdwxx_qjd" in os.environ and len(os.environ["jdwxx_qjd"]) > 1:
     jdwxxqjd = os.environ["jxkj"]
     print("===========读取到的配置文件里的内容===========" + jdwxxqjd)
     print("===========助力人===========")
-    qjd_zlzh = pins.split("&")
+    qjd_zlzh = jdwxxqjd.split("&")
     print(qjd_zlzh)
 else:
     jdwxxqjd=""

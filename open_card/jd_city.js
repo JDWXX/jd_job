@@ -94,6 +94,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         }
       }
       await getInviteInfo();//雇佣
+      exchangeFlag = true;
       if (exchangeFlag) {
         const res = await city_lotteryAward();//抽奖
         if (res && res > 0) {
