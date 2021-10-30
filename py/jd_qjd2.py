@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*
 '''
-cron: 0 2 0 * * * jd_qjd.py
-new Env('全民抢京豆 8.6-8.16');
+cron: 0 0 0 * * * jd_qjd2.py
+new Env('全民抢京豆2');
 '''
 #print("全民抢京豆(7.2-7.15）--活动已结束\nTG交流 https://t.me/topstyle996\nTG频道 https://t.me/TopStyle2021")
 #exit(0)
