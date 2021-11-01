@@ -3,7 +3,7 @@
 cron 0,30 0,12,20,22 * * * jd_HongBao.js
 添加环境变量FLCODE 如需自己吃返利，请填写该变量（https://u.jd.com/后面的英文）
 * */
-const $ = new Env('抢双11无门槛红包');
+const $ = new Env('抢双11无门槛红包2');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [];
 if ($.isNode()) {
