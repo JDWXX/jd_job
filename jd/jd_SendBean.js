@@ -6,20 +6,20 @@
 ============Quantumultx===============
 [task_local]
 #送豆得豆
-45 1,12 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_sendBeans.js, tag=送豆得豆, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+5 0,12 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_sendBeans.js, tag=送豆得豆, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 ================Loon==============
 [Script]
-cron "45 1,12 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_sendBeans.js,tag=送豆得豆
+cron "5 0,12 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_sendBeans.js,tag=送豆得豆
 ===============Surge=================
-送豆得豆 = type=cron,cronexp="45 1,12 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_sendBeans.js
+送豆得豆 = type=cron,cronexp="5 0,12 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_sendBeans.js
 ============小火箭=========
-送豆得豆 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_sendBeans.js, cronexpr="45 1,12 * * *", timeout=3600, enable=true
+送豆得豆 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_sendBeans.js, cronexpr="5 0,12 * * *", timeout=3600, enable=true
  */
 const $ = new Env('送豆得豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [];
+let cookiesArr = [], isLoginInfo = {};
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -29,7 +29,6 @@ if ($.isNode()) {
   cookiesArr = [$.getdata("CookieJD"), $.getdata("CookieJD2"), ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
 !(async () => {
-  $.isLoginInfo = {};
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
@@ -42,8 +41,15 @@ if ($.isNode()) {
     $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
     $.isLogin = true;
     $.nickName = ''
-    await TotalBean();
-    if (!$.isLogin) continue
+    if (isLoginInfo[$.UserName] === false) {
+
+    } else {
+      if (!isLoginInfo[$.UserName]) {
+        await TotalBean();
+        isLoginInfo[$.UserName] = $.isLogin
+      }
+    }
+    if (!isLoginInfo[$.UserName]) continue
     await getActivityInfo();
   }
   if ($.activityId === '') {
@@ -60,9 +66,16 @@ if ($.isNode()) {
     $.index = i + 1;
     $.isLogin = true;
     $.nickName = '';
-    await TotalBean();
     console.log(`\n*****开始【京东账号${$.index}】${$.nickName || $.UserName}*****\n`);
-    if (!$.isLogin) continue
+    if (isLoginInfo[$.UserName] === false) {
+
+    } else {
+      if (!isLoginInfo[$.UserName]) {
+        await TotalBean();
+        isLoginInfo[$.UserName] = $.isLogin
+      }
+    }
+    if (!isLoginInfo[$.UserName]) continue
     await openTuan();
   }
   console.log('\n开团信息\n'+JSON.stringify($.openTuanList));
@@ -73,11 +86,18 @@ if ($.isNode()) {
     $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
     $.index = i + 1;
     $.isLogin = true;
-    await TotalBean();
-    $.isLoginInfo[$.UserName] = $.isLogin;
     console.log(`\n*****开始【京东账号${$.index}】${$.nickName || $.UserName}*****\n`);
-    if (!$.isLogin) {
+    if (isLoginInfo[$.UserName] === false) {
+
+    } else {
+      if (!isLoginInfo[$.UserName]) {
+        await TotalBean();
+        isLoginInfo[$.UserName] = $.isLogin
+      }
+    }
+    if (!isLoginInfo[$.UserName]) {
       $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+
       if ($.isNode()) {
         await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
       }
@@ -91,8 +111,16 @@ if ($.isNode()) {
     $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
     $.index = i + 1;
     $.isLogin = true;
-    console.log(`\n*****开始【京东账号${$.index}】${$.UserName}*****\n`);
-    if (!$.isLoginInfo[$.UserName]) continue
+    console.log(`\n*****开始【京东账号${$.index}】${$.nickName || $.UserName}*****\n`);
+    if (isLoginInfo[$.UserName] === false) {
+
+    } else {
+      if (!isLoginInfo[$.UserName]) {
+        await TotalBean();
+        isLoginInfo[$.UserName] = $.isLogin
+      }
+    }
+    if (!isLoginInfo[$.UserName]) continue
     await rewardMain();
   }
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -101,9 +129,16 @@ if ($.isNode()) {
     $.index = i + 1;
     $.isLogin = true;
     $.nickName = ''
-    await TotalBean();
-    console.log(`\n*****开始【京东账号${$.index}】${$.UserName}*****\n`);
-    if (!$.isLogin) continue
+    console.log(`\n*****开始【京东账号${$.index}】${$.nickName || $.UserName}*****\n`);
+    if (isLoginInfo[$.UserName] === false) {
+
+    } else {
+      if (!isLoginInfo[$.UserName]) {
+        await TotalBean();
+        isLoginInfo[$.UserName] = $.isLogin
+      }
+    }
+    if (!isLoginInfo[$.UserName]) continue
     await myReward()
   }
 })().catch((e) => {$.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')}).finally(() => {$.done();});

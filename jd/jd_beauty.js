@@ -4,7 +4,7 @@
 活动入口：京东app首页-美妆馆-底部中间按钮
 只支持Node.js支持N个京东账号
 脚本兼容: Node.js
-cron 1 7,12,19 * * * jd_beauty.js
+cron "1 7,12,19 * * *" jd_beauty.js
  */
 const $ = new Env('美丽研究院');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -16,7 +16,7 @@ let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭�
 const randomCount = $.isNode() ? 20 : 5;
 $.accountCheck = true;
 $.init = false;
-const bean = 500; //兑换多少豆，默认是500
+// const bean = 1; //兑换多少豆，默认是500
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message, helpInfo, ADD_CART = false;
 
@@ -487,13 +487,13 @@ async function mr() {
                 }
               }
               // console.log(`物品【${benefit.description}】需要${benefit.coins}美妆币，库存${benefit.stock}份`)
-              if (parseInt(benefit.setting.beans_count) === bean && //兑换多少豆 bean500就500豆
-                $.total > benefit.coins &&
-                parseInt(benefit.day_exchange_count) < benefit.day_limit) {
-                console.log(`满足条件，去兑换`)
-                client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`)
-                await $.wait(1000)
-              }
+              // if (parseInt(benefit.setting.beans_count) === bean && //兑换多少豆 bean500就500豆
+              //   $.total > benefit.coins &&
+              //   parseInt(benefit.day_exchange_count) < benefit.day_limit) {
+              //   console.log(`满足条件，去兑换`)
+              //   client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`)
+              //   await $.wait(1000)
+              // }
             }
           }
           break

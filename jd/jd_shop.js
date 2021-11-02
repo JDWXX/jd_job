@@ -7,13 +7,13 @@
 ===============Quantumultx===============
 [task_local]
 #进店领豆
-10 0 * * * jd_shop.js, tag=进店领豆, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_shop.png, enabled=true
+10 0 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_shop.js, tag=进店领豆, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_shop.png, enabled=true
 ================Loon============
 [Script]
-cron "10 0 * * *" script-path=jd_shop.js,tag=进店领豆
+cron "10 0 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_shop.js,tag=进店领豆
 ==============Surge===============
 [Script]
-进店领豆 = type=cron,cronexp="10 0 * * *",wake-system=1,timeout=3600,script-path=jd_shop.js
+进店领豆 = type=cron,cronexp="10 0 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_shop.js
 */
 const $ = new Env('进店领豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -132,33 +132,33 @@ function doTask(taskId) {
   })
 }
 function getTask(body = {}) {
- return new Promise(resolve => {
-   const options = {
-     url: `${JD_API_HOST}`,
-     body: `functionId=queryTaskIndex&body=${escape(JSON.stringify(body))}&appid=ld`,
-     headers: {
-       'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-       'Host': 'api.m.jd.com',
-       'Content-Type': 'application/x-www-form-urlencoded',
-       'Cookie': cookie,
-     }
-   }
-   $.post(options, (err, resp, data) => {
-     try {
-       if (err) {
-         console.log('\n进店领豆: API查询请求失败 ‼️‼️')
-         $.logErr(err);
-       } else {
-         // console.log(data)
-         data = JSON.parse(data);
-       }
-     } catch (e) {
-       $.logErr(e, resp);
-     } finally {
-       resolve(data);
-     }
-   })
- })
+  return new Promise(resolve => {
+    const options = {
+      url: `${JD_API_HOST}`,
+      body: `functionId=queryTaskIndex&body=${escape(JSON.stringify(body))}&appid=ld`,
+      headers: {
+        'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        'Host': 'api.m.jd.com',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Cookie': cookie,
+      }
+    }
+    $.post(options, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log('\n进店领豆: API查询请求失败 ‼️‼️')
+          $.logErr(err);
+        } else {
+          // console.log(data)
+          data = JSON.parse(data);
+        }
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve(data);
+      }
+    })
+  })
 }
 function TotalBean() {
   return new Promise(async resolve => {
