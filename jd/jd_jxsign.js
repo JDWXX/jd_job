@@ -1,6 +1,6 @@
 /*
 京喜签到
-cron 20 1 * * * jx_sign.js
+cron 20 1,7 * * * jx_sign.js
 更新时间：2021-7-31
 活动入口：京喜APP-我的-京喜签到
 
@@ -9,11 +9,11 @@ cron 20 1 * * * jx_sign.js
 ============Quantumultx===============
 [task_local]
 #京喜签到
-20 1 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jx_sign.js, tag=京喜签到, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxcfd.png, enabled=true
+20 1,7 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jx_sign.js, tag=京喜签到, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxcfd.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "20 1 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jx_sign.js,tag=京喜签到
+cron "20 1,7 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jx_sign.js,tag=京喜签到
 
 ===============Surge=================
 京喜签到 = type=cron,cronexp="20 1 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jx_sign.js
@@ -66,7 +66,7 @@ if ($.isNode()) {
         continue
       }
       if (i === 0) console.log(`\n正在收集助力码请等待\n`)
-      UA = `jdpingou;iPhone;4.13.0;14.4.2;${randomString()};network/wifi;model/iPhone10,2;appBuild/100609;ADID/00000000-0000-0000-0000-000000000000;supportApplePay/1;hasUPPay/0;pushNoticeIsOpen/1;hasOCPay/0;supportBestPay/0;session/${Math.random * 98 + 1};pap/JA2019_3111789;brand/apple;supportJDSHWK/1;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148`
+      UA = `jdpingou;iPhone;4.13.0;14.4.2;${randomString(40)};network/wifi;model/iPhone10,2;appBuild/100609;ADID/00000000-0000-0000-0000-000000000000;supportApplePay/1;hasUPPay/0;pushNoticeIsOpen/1;hasOCPay/0;supportBestPay/0;session/${Math.random * 98 + 1};pap/JA2019_3111789;brand/apple;supportJDSHWK/1;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148`
       await signhb(1)
       await $.wait(500)
       UAInfo[$.UserName] = UA
@@ -148,12 +148,12 @@ if ($.isNode()) {
     }
   }
 })()
-  .catch((e) => {
-    $.log("", `❌ ${$.name}, 失败! 原因: ${e}!`, "");
-  })
-  .finally(() => {
-    $.done();
-  })
+    .catch((e) => {
+      $.log("", `❌ ${$.name}, 失败! 原因: ${e}!`, "");
+    })
+    .finally(() => {
+      $.done();
+    })
 
 // 查询信息
 function signhb(type = 1) {
@@ -191,7 +191,7 @@ function signhb(type = 1) {
               for (let key of Object.keys(signlist)) {
                 let vo = signlist[key]
                 if (vo.istoday === 1) {
-                  if (vo.status === 1 && vo.tasklist.signtask.status === 1) {
+                  if (vo.status === 1 && data.todaysign === 1) {
                     console.log(`今日已签到`)
                     $.canHelp = false
                   } else {
@@ -240,7 +240,7 @@ function helpSignhb(smp = '') {
           for (let key of Object.keys(signlist)) {
             let vo = signlist[key]
             if (vo.istoday === 1) {
-              if (vo.status === 1 && vo.tasklist.signtask.status === 1) {
+              if (vo.status === 1 && data.todaysign === 1) {
                 // console.log(`今日已签到`)
               } else {
                 console.log(`此账号已黑`)
@@ -262,24 +262,24 @@ function helpSignhb(smp = '') {
 function dotask(task) {
   return new Promise((resolve) => {
     $.get(taskUrl("fanxiantask/signhb/dotask", `signhb_source=1000&task=${task}`, "signhb_source,task"), async (err, resp, data) => {
-        try {
-          if (err) {
-            console.log(JSON.stringify(err));
-            console.log(`${$.name} dotask API请求失败，请检查网路重试`);
+      try {
+        if (err) {
+          console.log(JSON.stringify(err));
+          console.log(`${$.name} dotask API请求失败，请检查网路重试`);
+        } else {
+          data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1])
+          if (data.ret === 0) {
+            console.log(`完成任务 获得${data.sendhb}红包`);
           } else {
-            data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1])
-            if (data.ret === 0) {
-              console.log(`完成任务 获得${data.sendhb}红包`);
-            } else {
-              console.log(data.errmsg);
-            }
+            console.log(data.errmsg);
           }
-        } catch (e) {
-          $.logErr(e, resp);
-        } finally {
-          resolve(data);
         }
-      });
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve(data);
+      }
+    });
   });
 }
 
@@ -362,20 +362,21 @@ function taskUrl(functionId, body = '', stk) {
     }
   }
 }
-function randomString() {
-  return Math.random().toString(16).slice(2, 10) +
-    Math.random().toString(16).slice(2, 10) +
-    Math.random().toString(16).slice(2, 10) +
-    Math.random().toString(16).slice(2, 10) +
-    Math.random().toString(16).slice(2, 10)
+function randomString(e) {
+  e = e || 32;
+  let t = "0123456789abcdef", a = t.length, n = "";
+  for (let i = 0; i < e; i++)
+    n += t.charAt(Math.floor(Math.random() * a));
+  return n
 }
+
 
 function TotalBean() {
   return new Promise(async resolve => {
     const options = {
-      url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",
+      url: "https://wq.jd.com/user_new/info/GetJDUserInfoUnion?sceneval=2",
       headers: {
-        Host: "me-api.jd.com",
+        Host: "wq.jd.com",
         Accept: "*/*",
         Connection: "keep-alive",
         Cookie: cookie,
@@ -392,11 +393,11 @@ function TotalBean() {
         } else {
           if (data) {
             data = JSON.parse(data);
-            if (data['retcode'] === "1001") {
+            if (data['retcode'] === 1001) {
               $.isLogin = false; //cookie过期
               return;
             }
-            if (data['retcode'] === "0" && data.data && data.data.hasOwnProperty("userInfo")) {
+            if (data['retcode'] === 0 && data.data && data.data.hasOwnProperty("userInfo")) {
               $.nickName = data.data.userInfo.baseInfo.nickname;
             }
           } else {

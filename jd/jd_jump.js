@@ -288,10 +288,10 @@ async function doTask() {
             continue;
         }
         if (oneTask.gridTask === 'add_cart' && oneTask.state === 'unfinish' && addFlag) {
-            if (oneTask.gridTask === 'add_cart') {
-                console.log(`不做：【${oneTask.content}】 任务`)
-                continue
-            }
+            // if (oneTask.gridTask === 'add_cart') {
+            //     console.log(`不做：【${oneTask.content}】 任务`)
+            //     continue
+            // }
             console.log(`开始执行任务：${oneTask.content}`);
             let skuList = [];
             for (let j = 0; j < oneTask.goodsInfo.length; j++) {
