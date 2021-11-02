@@ -29,7 +29,7 @@ if ($.isNode()) {
         return;
     }
     authorCodeList = [
-        '143c8d04b3ab4a12b3de1f950731dbf9',
+        '5fbe586c3ff741fb8519ac822e325889',
     ]
     // console.log(authorCodeList)
     for (let i = 0; i < cookiesArr.length; i++) {
