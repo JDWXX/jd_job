@@ -9,7 +9,7 @@ cron 0 0,12,20 * * * gua_1111RedEnvelope.js
 
 let rebateCodes = ''
 
-const $ = new Env('双十一无门槛红包🧧');
+const $ = new Env('双十一无门槛红包🧧2');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 const Faker = $.isNode() ? require('./utils/sign_graphics_validate.js') : '';
@@ -123,7 +123,7 @@ function getCoupons(shareId = '',type = 1) {
             headers: {
                 "Accept-Language": "zh-cn",
                 "Accept-Encoding": "gzip, deflate, br",
-                'Cookie': `${cookie} ${newCookie}`,
+                'Cookie': `${newCookie} ${cookie}`,
                 "User-Agent": $.UA ,
             }
         }
@@ -188,7 +188,7 @@ function shareUnionCoupon() {
             headers: {
                 "Accept-Language": "zh-cn",
                 "Accept-Encoding": "gzip, deflate, br",
-                'Cookie': `${cookie} ${newCookie}`,
+                'Cookie': `${newCookie} ${cookie}`,
                 "User-Agent": $.UA ,
             }
         }
@@ -226,7 +226,7 @@ function getUrl1() {
             url: $.url1,
             followRedirect:false,
             headers: {
-                'Cookie': `${cookie} ${newCookie}`,
+                'Cookie': `${newCookie} ${cookie}`,
                 "User-Agent": $.UA
             }
         }
@@ -251,7 +251,7 @@ function getUrl() {
             url: `https://u.jd.com/${rebateCode}?s=${$.shareCode}`,
             followRedirect:false,
             headers: {
-                'Cookie': `${cookie} ${newCookie}`,
+                'Cookie': `${newCookie} ${cookie}`,
                 "User-Agent": $.UA
             }
         }

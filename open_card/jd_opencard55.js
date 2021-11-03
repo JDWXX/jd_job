@@ -199,14 +199,13 @@ async function run() {
             let goodsArr = []
             if(cleanCart){
                 goodsArr = await cleanCart.clean(cookie,'https://jd.smiek.tk/jdcleancatr_21102717','')
-                await $.wait(parseInt(Math.random() * 1000 + 4000, 10))
+                await takePostRequest('mission');
+                await $.wait(parseInt(Math.random() * 2000 + 3000, 10))
                 if(cleanCart && goodsArr !== false){
-                    await $.wait(parseInt(Math.random() * 1000 + 4000, 10))
+                    await $.wait(parseInt(Math.random() * 1000 + 7000, 10))
                     await cleanCart.clean(cookie,'https://jd.smiek.tk/jdcleancatr_21102717',goodsArr || [ ])
                 }
             }
-            await takePostRequest('mission');
-            await $.wait(parseInt(Math.random() * 2000 + 3000, 10))
         }else{
             console.log('如需加购请设置环境变量[guaopencard_addSku55]为"true"');
         }
@@ -232,10 +231,10 @@ async function run() {
         await takePostRequest('myAward');
         await takePostRequest('missionInviteList');
         console.log($.MixNick)
-        // console.log(`当前助力:${$.inviteNick}`)
+        console.log(`当前助力:${$.inviteNick}`)
         if($.index == 1){
-            // $.inviteNick = $.MixNick
-            // console.log(`后面的号都会助力:${$.MixNick}`)
+            $.inviteNick = $.MixNick
+            console.log(`后面的号都会助力:${$.inviteNick}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
         if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
