@@ -2,7 +2,7 @@
 11.01-11.12 11.11 疯狂抢购
 cron 29 3,21 1-12 11 * jd_opencard49.js
 */
-const $ = new Env('11.01-11.12 11.11 疯狂抢购');
+const $ = new Env('11.01-11.12 11.11 疯狂抢购56');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 //IOS等用户直接用NobyDa的jd cookie

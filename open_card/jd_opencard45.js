@@ -32,7 +32,7 @@ All变量适用
 let guaopencard_addSku = "true"
 let guaopencard = "true"
 let guaopenwait = "0"
-let guaopencard_draw = "0"
+let guaopencard_draw = "3"
 
 const $ = new Env('10.15~10.21 联合开卡');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

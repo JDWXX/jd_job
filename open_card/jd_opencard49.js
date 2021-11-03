@@ -2,7 +2,7 @@
 10.28-11.05 大牌强联合 好物提前购
 cron 8 0,22 * * * jd_opencard49.js
 */
-const $ = new Env('10.28-11.05 大牌强联合 好物提前购');
+const $ = new Env('10.28-11.05 大牌强联合 好物提前购49');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 //IOS等用户直接用NobyDa的jd cookie
