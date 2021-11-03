@@ -196,6 +196,7 @@ async function pasture() {
           }
       );
       await $.wait(2000)
+      const petNum = ($.homeInfo?.petinfo || []).length
       await takeGetRequest('GetCardInfo');
       if ($.GetCardInfo && $.GetCardInfo.cardinfo) {
         let msg = '';
@@ -203,11 +204,13 @@ async function pasture() {
           if (vo.currnum > 0) {
             msg += `${vo.currnum}张${cardinfo[vo.cardtype]}卡片 `
           }
-          $.cardType = vo.cardtype
-          for (let i = vo.currnum; i >= vo.neednum; i -= vo.neednum) {
-            console.log(`${cardinfo[vo.cardtype]}卡片已满${vo.neednum}张，去兑换...`)
-            await $.wait(5000)
-            await takeGetRequest("Combine")
+          if (petNum < 6) {
+            $.cardType = vo.cardtype
+            for (let i = vo.currnum; i >= vo.neednum; i -= vo.neednum) {
+              console.log(`${cardinfo[vo.cardtype]}卡片已满${vo.neednum}张，去兑换...`)
+              await $.wait(5000)
+              await takeGetRequest("Combine")
+            }
           }
         }
         console.log(`\n可抽奖次数：${$.GetCardInfo.times}${msg ? `,拥有卡片：${msg}` : ''}\n`)
@@ -221,7 +224,6 @@ async function pasture() {
         }
       }
       console.log("查看宠物信息")
-      const petNum = ($.homeInfo?.petinfo || []).length
       if (!petNum) {
         console.log(`你的鸡都生完蛋跑掉啦！！`)
         await buyNewPet(true)
@@ -279,12 +281,14 @@ async function pasture() {
     }
     await $.wait(2000);
     await takeGetRequest('GetUserLoveInfo');
-    for (let key of Object.keys($.GetUserLoveInfo)) {
-      let vo = $.GetUserLoveInfo[key]
-      if (vo.drawstatus === 1) {
-        await $.wait(2000);
-        $.lovevalue = vo.lovevalue;
-        await takeGetRequest('DrawLoveHongBao');
+    if ($.GetUserLoveInfo) {
+      for (let key of Object.keys($.GetUserLoveInfo)) {
+        let vo = $.GetUserLoveInfo[key]
+        if (vo.drawstatus === 1) {
+          await $.wait(2000);
+          $.lovevalue = vo.lovevalue;
+          await takeGetRequest('DrawLoveHongBao');
+        }
       }
     }
     $.taskList = [];
