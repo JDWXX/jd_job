@@ -89,8 +89,6 @@
 0 0 * * * node /scripts/jd_bean_change1.js >> /scripts/logs/jd_bean_change1.log 2>&1
 #
 1 0 * * *  node /scripts/jd_shop.js >> /scripts/logs/jd_shop.log 2>&1
-#京喜牧场
-48 0-23/3 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
 #摇钱树
 23 0-23/2 * * * node /scripts/jd_moneyTree.js >> /scripts/logs/jd_moneyTree.log 2>&1
 #排行榜
