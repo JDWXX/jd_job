@@ -31,7 +31,7 @@ guaopenwait57="0"
 
 All变量适用
 ————————————————
-入口：[ 11.1~11.12 爆款福利，惠享低价 (https://lzdz4-isv.isvjcloud.com/dingzhi/syb/active/activity?activityId=dz2110100031064201&shareUuid=a47326152ab848498883a985e410eaf2)]
+入口：[ 11.1~11.12 爆款福利，惠享低价 (https://lzdz4-isv.isvjcloud.com/dingzhi/syb/active/activity?activityId=dz2110100031064201&shareUuid=e11c91a323ae4163aa1611ed8842eb3d)]
 
 请求太频繁会被黑ip
 过10分钟再执行
@@ -106,7 +106,7 @@ let activityCookie =''
     }
     $.shareUuidArr = []
     $.activityId = "dz2110100031064201"
-    $.shareUuid = "a47326152ab848498883a985e410eaf2"
+    $.shareUuid = "e11c91a323ae4163aa1611ed8842eb3d"
     console.log(`入口:\nhttps://lzdz4-isv.isvjcloud.com/dingzhi/syb/active/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
@@ -287,7 +287,7 @@ async function run() {
                 return
             }
             if(flag && $.index !== 1) updateShareUuid($.shareUuid,1)
-            if($.index === 1 || $.shareUuid == 'a47326152ab848498883a985e410eaf2') updateShareUuid($.shareUuid,0)
+            if($.index === 1 || $.shareUuid == 'e11c91a323ae4163aa1611ed8842eb3d') updateShareUuid($.shareUuid,0)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
         if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
