@@ -68,6 +68,7 @@ const JD_API_HOST = `https://api.m.jd.com`;
             if ($.hotFlag) continue;
             await getid()
         } else {
+            console.log(`======读取到=dyjCode=====` + dyjCode)
             dyjStr = dyjCode.split("@")
             if (dyjStr[0]) {
                 $.rid = dyjStr[0]
@@ -309,30 +310,6 @@ function help(rid, inviter, type) {
             }
         });
     });
-}
-
-function getAuthorShareCode() {
-    return new Promise(resolve => {
-        $.get({
-            url: "https://raw.fastgit.org/shufflewzc/updateTeam/main/shareCodes/dyj.json",
-            headers: {
-                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-            }
-        }, async (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`);
-                    console.log(`${$.name} API请求失败，请检查网路重试`);
-                } else {
-                    $.authorCode = JSON.parse(data);
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve();
-            }
-        })
-    })
 }
 function taskUrl(function_id, body) {
     return {
