@@ -1,3 +1,4 @@
+
 /*
 * 活动：APP-美妆馆-右侧浮窗
 cron 23 9,10 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_selectionOfficer.js
@@ -84,7 +85,8 @@ async function main() {
     authorization[$.UserName] = $.accessToken;
     $.userInfo = {};
     $.productList = [];
-    await takeGetRequest('get_user_info');
+    // await takeGetRequest('get_user_info');
+    await takeGetRequest('get_user_info_new')
     if(JSON.stringify($.userInfo) === '{}' || !$.userInfo || !$.userInfo.code){
         console.log(`初始化失败`);
         return;
@@ -99,7 +101,7 @@ async function main() {
         await takePostRequest('edit_info');
     }
     await $.wait(2000);
-    if($.userInfo.select_product.length === 0){
+    if($.userInfo && $.userInfo.is_new === 1){
         let allProductList = [];
         for (let i = 0; i < $.productList.length; i++) {
             let oneList = $.productList[i].get_sub;
@@ -120,11 +122,13 @@ async function main() {
     await doTask();
     await $.wait(1000);
     console.log(`可以抽奖：${$.drawTime}次`);
+    $.stopPrize = false
     for (let i = 0; i < $.drawTime; i++) {
         console.log(`进行第${i+1}次抽奖`);
         await takePostRequest('draw_prize');
         console.log('\n');
-        await $.wait(1000);
+        if ($.stopPrize) break
+        await $.wait(4000);
     }
     await takeGetRequest('get_my_prize?type=2&page=1&page_num=10');
 }
@@ -163,7 +167,7 @@ async function doTask(){
                 await $.wait(1000);
             }
         }
-        if($.oneTask.type === 8){
+        if($.oneTask.type === 8 && ["card","car"].includes(process.env.FS_LEVEL)){
             let subList = $.oneTask.info;
             for (let j = 0; j < subList.length; j++) {
                 $.subListInfo = subList[j];
@@ -181,7 +185,7 @@ async function doTask(){
                 await $.wait(1000);
             }
         }
-        if($.oneTask.type === 6){
+        if($.oneTask.type === 6 && ["card","car"].includes(process.env.FS_LEVEL)){
             let subList = $.oneTask.info;
             for (let j = 0; j < subList.length; j++) {
                 $.subListInfo = subList[j];
@@ -298,7 +302,7 @@ async function takeGetRequest(type) {
             'Connection' : `keep-alive`,
             'Accept' : `application/json, text/plain, */*`,
             'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-            'Authorization':`Bearer ${$.accessToken ?? 'undefined'}`,
+            'Authorization':`Bearer ${$.accessToken || 'undefined'}`,
             'Referer' : `https://xinruimz1-isv.isvjcloud.com/loading/`,
             'Accept-Language':'zh-cn'
         },
@@ -320,7 +324,7 @@ function dealReturn(type, data) {
     try {
         data = JSON.parse(data);
     } catch (e) {
-        console.log(`返回异常：${data}`);
+        console.log(`'${type}'返回异常：${data}`);
         return;
     }
     switch (type) {
@@ -330,6 +334,9 @@ function dealReturn(type, data) {
             }
             break;
         case 'get_user_info':
+            $.userInfo = data;
+            break;
+        case 'get_user_info_new':
             $.userInfo = data;
             break;
         case 'task_list':
@@ -355,6 +362,8 @@ function dealReturn(type, data) {
         case 'draw_prize':
             if(data && data.draw_result && data.draw_result.prize && data.draw_result.prize.name){
                 console.log(`获得：${data.draw_result.prize.name || '空气'}`);
+            }else if([422, ].includes(data.status_code)) {
+                $.stopPrize = true
             }else{
                 console.log(`获得：空气`);
             }
