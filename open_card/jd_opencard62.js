@@ -19,7 +19,7 @@ guaopenwait_All 所有
 guaopenwait62="0"
 All变量适用
 ————————————————
-入口：[ 10.31~11.11 品牌盛典 11.11狂欢购 (https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=7wha71sxzs85074b2et0mw63d4ga01&shareUuid=534bde3f2d174d7699aa764ef1f9d6e5)]
+入口：[ 10.31~11.11 品牌盛典 11.11狂欢购 (https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=7wha71sxzs85074b2et0mw63d4ga01&shareUuid=f92cceac78c34c58b4d7322a9b860960)]
 请求太频繁会被黑ip
 过10分钟再执行
 ============Quantumultx===============
@@ -87,7 +87,7 @@ let activityCookie =''
         return;
     }
     $.activityId = "7wha71sxzs85074b2et0mw63d4ga01"
-    $.shareUuid = "534bde3f2d174d7699aa764ef1f9d6e5"
+    $.shareUuid = "f92cceac78c34c58b4d7322a9b860960"
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
