@@ -41,7 +41,7 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    console.log(`注：脚本默认不做添加物品至购物车任务，守护京东APP最后一片净土。\n`);
+    console.log(`注：脚本默认不做添加物品至购物车任务,请设置FS_LEVEL为car(加购)或card(开卡加购)。\n`);
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -75,7 +75,7 @@ async function jump() {
     $.jumpList = [];
     await getGameList();
     if ($.jumpList.length === 0) {
-        console.log(`获取活动列表失败，请等待下一期活动\n`);
+        console.log(`获取活动列表失败`);
         return;
     }
     await $.wait(1000);
@@ -288,10 +288,10 @@ async function doTask() {
             continue;
         }
         if (oneTask.gridTask === 'add_cart' && oneTask.state === 'unfinish' && addFlag) {
-            // if (oneTask.gridTask === 'add_cart') {
-            //     console.log(`不做：【${oneTask.content}】 任务`)
-            //     continue
-            // }
+            if (oneTask.gridTask === 'add_cart' && !['car','card'].includes(process.env.FS_LEVEL)) {
+                console.log(`不做：【${oneTask.content}】 任务`)
+                continue
+            }
             console.log(`开始执行任务：${oneTask.content}`);
             let skuList = [];
             for (let j = 0; j < oneTask.goodsInfo.length; j++) {
