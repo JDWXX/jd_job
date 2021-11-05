@@ -18,7 +18,7 @@ if ($.isNode()) {
         $.getdata("CookieJD2"),
         ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
-let shareList = [],message = '';
+let shareList = ['06755edd-775c-422e-aee9-16e84e97f829'],message = '';
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
