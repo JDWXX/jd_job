@@ -115,6 +115,10 @@ let Notify_NoCKFalse = "false";
 let Notify_NoLoginSuccess = "false";
 let UseGroupNotify = 1;
 let strAuthor = "";
+const {
+	getEnvs
+} = require('./ql');
+const fs = require('fs');
 
 let strUidFile = './jdSend.json';
 let UidFileexists = fs.existsSync(strUidFile);
