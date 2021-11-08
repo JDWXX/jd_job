@@ -149,8 +149,7 @@ let strCustomArr = [];
 let strCustomTempArr = [];
 let Notify_CKTask = "";
 let Notify_SkipText = [];
-async function sendNotify(text, desp, params = {}, author = '\n\n京东自有品牌一站式省心购\n' +
-'下单链接：https://kzurl05.cn/36OMz\n') {
+async function sendNotify(text, desp, params = {}, author = '\n\n京东自有品牌一站式省心购\n <a href="https://kzurl05.cn/36OMz">品牌专场</a>') {
 	console.log(`开始发送通知...`);
 	try {
 		//Reset 变量
@@ -1126,7 +1125,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n京东自有品
 	//提供6种通知
 	if (strAuthor)
 		desp += '\n\n京东自有品牌一站式省心购\n' +
-			'下单链接：https://kzurl05.cn/36OMz\n ' + strAuthor + "\n通知时间: " + GetDateTime(new Date());
+			' <a href="https://kzurl05.cn/36OMz">品牌专场</a>\n ' + strAuthor + "\n通知时间: " + GetDateTime(new Date());
 	else
 		desp += author + "\n通知时间: " + GetDateTime(new Date());
 
@@ -1181,7 +1180,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n京东自有品
 }
 
 async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n\n京东自有品牌一站式省心购\n' +
-'下单链接：https://kzurl05.cn/36OMz\n') {
+' <a href="https://kzurl05.cn/36OMz">品牌专场</a>\n') {
 
 	try {
 		var Uid = "";
@@ -1212,7 +1211,7 @@ async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n\n京东自�
 				console.log("正在发送一对一通知,请稍后...");
 				if (strAuthor)
 					desp += '\n\n京东自有品牌一站式省心购\n' +
-						'下单链接：https://kzurl05.cn/36OMz\n ' + strAuthor;
+						' <a href="https://kzurl05.cn/36OMz">品牌专场</a>\n ' + strAuthor;
 				else
 					desp += author;
 
