@@ -6,7 +6,7 @@ TG学习交流群：https://t.me/cdles
 5 0 * * * https://raw.githubusercontent.com/cdle/jd_study/main/jd_angryKoi.js
 */
 const $ = new Env("愤怒的锦鲤")
-const JD_API_HOST = 'https://api.m.jd.com/client.action';
+const JD_API_HOST = 'https://api.m.jd.com';
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
 var kois = process.env.kois ?? ""
 let cookiesArr = []
@@ -79,20 +79,36 @@ function open(help){
 
 function requestApi(functionId, cookie, body = {}) {
     return new Promise(resolve => {
+        // console.log("body = " + body)
+        let a = Date.now();
+        console.log(a)
         $.post({
-            url: `${JD_API_HOST}/api?appid=jd_mp_h5&functionId=${functionId}&loginType=2&client=jd_mp_h5&clientVersion=10.0.5&osVersion=AndroidOS&d_brand=Xiaomi&d_model=Xiaomi`,
+        url: `https://api.m.jd.com/api?appid=jinlihongbao&functionId=jinli_h5assist&loginType=2&client=jinlihongbao&t=1636023840524&clientVersion=10.1.6&osVersion=-1`,
             headers: {
-                "Cookie": cookie,
-                "origin": "https://h5.m.jd.com",
-                "referer": "https://h5.m.jd.com/babelDiy/Zeus/2NUvze9e1uWf4amBhe1AV6ynmSuH/index.html",
-                'Content-Type': 'application/x-www-form-urlencoded',
-                "X-Requested-With": "com.jingdong.app.mall",
+                "Connection": "keep-alive",
+                "Content-Length": "1371",
+                "Accept": "application/json, text/plain, */*",
+                "Origin": "https://happy.m.jd.com",
                 "User-Agent": ua,
+                "Sec-Fetch-Mode": "cors",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-Requested-With": "com.jingdong.app.mall",
+                "Sec-Fetch-Site": "same-site",
+                "Referer": "https://happy.m.jd.com/babelDiy/Zeus/3ugedFa7yA6NhxLN5gw2L3PF9sQC/index.html?asid=381176486&lng=120.17373&lat=30.326559&un_area=15_1213_3408_59946",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Accept-Language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
+                "Cookie": cookie,
+                // "User-Agent": ua,
             },
-            body: `body=${escape(JSON.stringify(body))}`,
+            // body = 'functionId=travel_pk_collectPkExpandScore&body={"ss":"%7B%5C%22extraData%5C%22:%7B%5C%22log%5C%22:%5C%22%5C%22,%5C%22sceneid%5C%22:%5C%22HYGJZYh5%5C%22%7D,%5C%22secretp%5C%22:%5C%22' + secretp + '%5C%22,%5C%22random%5C%22:%5C%22%5C%22%7D","inviteId":"' + inviteId + '"}&client=wh5&clientVersion=1.0.0'
+            // body: `body=${escape(JSON.stringify('{"redPacketId":"381176486","followShop":1,"random":"33828211",%7B%5C%22log%5C%22:%5C%22%5C%22,%5C%22sceneid%5C%22:%5C%22HYGJZYh5%5C%22%7D,%5C%22sceneid%5C%22:%5C%22"'+ JLHBhPageh5 +'"}'))}`,
+            // {"redPacketId":"381176486","followShop":1,"random":"33828211","log":"1636023839903~1TlRTQJ2tbOMDFvU2FEYzAxMQ==.XmVSclNdYFl2W19jVzolJmYgHSoOZ1FxHV5/V2hbQ2Ifdh1eLRN9FiMgGAgRXRcsFwoWNjF3GgQ3VmsUUm4f.18da0aa7~8,1~CDA657B7E58E3EB619F257C8F3C754EE022B6B54~01evskb~C~ThZAWhYNOmsfFENYDBdcbUZTAxQFYBlzcRsNfy4aAhgHBlEZEhRIFVIOHgRnGHNyGA4oDx8HGQZRBUpCRmoaG1RAWxYOBhgVEkURDBUHVwZQBlYEDgsLAwACBQYHD0MaEUFSUkMPREIQQ0JNVUdTFhgVQ1IAFAkUUVAVQRJCEVYUFRFCUVoWDW8BTQMFAxsHUBlXBkgGGgxuHhdeXhUOBk0UUEUVDEMAVg5QBQELAwsFVlBVUFUFDwZVD1ACUFUGVwYHWlJRAhYYFVpHQwwRel5YFE1GVwVFVVEFBhcYFkMWDVAAAAAHBFINVQ9dBwUVEVheFg4VGRpTVwVQUQBUDVMOAlYGAVIBFxgWUURVQwwRRA5DLUYfehYFcnRgW0xRZARNXAUBHEEKC0MZRFgSFQwbdF1aU1hSFH4PVR0UGxQPVBAUXhUPCQYBBxYYFUdUExQJbQ4HVBlSB1ZqGhtBXRcObxV5BVAGAX0GdyIXShQFWVJLXFtRFhgVBQZDGhEHBxhQG1AUSBUPCQYBBxYYFQYEUAAFBQEAVwNQBVEEDgoeBwYMBwECBlcGAA4EB1cGVRRIFQcbbh4XXVtWFg1DUFVQUVAHQRIUSBVXUxEIF0EWGxZUCBQJFEAFTwdIAkYbFFpVbUMWDhUEBkMaEVRTFFsXFFcKU1lUDgEGDAYPBgZQFB8UWlxDDz0HSAcaCW4eF1ZYWFMVWxQCAAQAUQdVDlYEBQAHTARzDHJmAVFHA1kHBVQNXwBTBgFdBwcMUgQEBgYCBFdSAFcDUAcOAlJVCldMTBgFSUpJI0hgXnF1JEIVZzFxD1x7XgBtZltfVDZaS1JhXiRgIFolZXVRfmZ9XHJjcWYOZGZ0clUkcyBgBgdja3JabHZ1T31TJAZqZHReJHEndwN/c1EHY2JffWV3ZQ5ze2d6ZSlnKFA1T39zdl53Z2FxeWYpXnViYF4kdiBaLXZ+Xn5UdExyeUoHBAYDQ0MGQxlEWxdQFAMREEg=~1mpkj3b","sceneid":"JLHBhPageh5"}
+            // {"redPacketId":"381176486","followShop":0,"random":"58328911","log":"1636027052482~1rE711oiNtHMDFQTE1wQzAxMQ==.YXp+RnNie31EcWF9dQ5xIiQuBQcxeH4kPWFge1x7fH0zQj1hMj9JNhw/NDwxYggAIyopKR1DOjsoel80bXEz.e969e786~8,1~A262614EB0EBACED035DF6DAE78B019585829EF9~1lftysm~C~TxBDCRdcbkRXABoAfhh4f09SMHwYAxlUBVYZEhEaFVMGGQd5TyspHwVgAkgESAVWAxpDFRwWVAFOVC8ffHobVWcrGVcdBgcHHEASG0EHVx4DfBssfEoENQEaBhkABAAbF0FNEVAEGlN7Sn0vHwdkDhwFHgdTU01HFm8bRkEIWEQJbRVTBxkHeU8rKB8FYXRIBEgFVgMaQxUcFlQCTlU1H3MHG1wDJxlXHQYHBxxAEhtBB1YeAmYbIwBKDVF0GgYZAAQAGxdBPB8WVUUKF1wEShFFRBUKFgEBUFVRAQMCA1YHVgxeCgEBFRwWR1IHQVsRQEZDEEEAQAARGhVAVVUSDUEFB0dARkMRVEQZRENSWRUKbwYbVlVUHwUDG1UFSgRKBmsbFVpeEg1ST0NQRxANRgBWDVIBAQUHCQRSUwEHA1cNB1RcUwVQVQMFBgZTVVMAQU9DXUQQDUZ5D1sTSxZWVkJXWAFXQU0RQBANVQNVA1YBAQcCAgAIBU9BC1gWCBVJGFRUUFVQAQIIAQhRAlNZUgcQG0ZTFldECRRFDkV4Q04vEVN3eWFeHVA2Bh9YUgAYRwkNFU9BD0UWCBUjWglSClYWfllTGhIbQQ0ARRYIFV0FUwZUERoVRFNGEg04WlAGGAYGVmhKFxRcFA1sEnkCBlNRKgJ1cRVIFwdbAkFZXlMSGBIGUkFNEQUCGVUbUBdKEQ8HAgMGEhtBUVICAgQEUgNQA1AAAwQPAxkFBFtQVwUFBAdXDVUEUAAFFRsSBRJqT0EIXFUQDUZTAFMAVVBDQxIYElYJQVsRQRAbRlYPF1wRQQQZAhoEFU9BAlVrRBVeF1YERB8UVVMSDhJFAg0FXFkPAlwGVA1fAgcVGxJZWhVZOFMfBgYbVgE7GURRWlhQEg4SBlVQVwMGBQdXAlQMVU0Hb05UXEFGLQ4wQAcHD10DUQRRVwICDlYEAwVSAFNXUAVWBlAHDQBWVQRTTkwcBh0dH3FKZk8AcDd0U3ZgW0NpYAFbBTI3VG52cQt4M00jamcGU3FwWFg0JDNidnRbE20wZwJ9cFthY1ZbcSQnUX5zc08+eyB3P2R3X25zdnZEKzEjWGNqdSliInc/cXEGZmhgYmUGMSR+eWNxAFcwBD9mYl9udmxybjMyUFBydVApbzBnBVBIBw9IXFgFEkFNEVlBUEYPRBcb~0i2dxwd","sceneid":"JLHBhPageh5"}
+            body: "body=%7B%22redPacketId%22%3A%22381176486%22%2C%22followShop%22%3A0%2C%22random%22%3A%2258328911%22%2C%22log%22%3A%22" + a + "~1rE711oiNtHMDFQTE1wQzAxMQ%3D%3D.YXp%2BRnNie31EcWF9dQ5xIiQuBQcxeH4kPWFge1x7fH0zQj1hMj9JNhw%2FNDwxYggAIyopKR1DOjsoel80bXEz.e969e786~8%2C1~A262614EB0EBACED035DF6DAE78B019585829EF9~1lftysm~C~TxBDCRdcbkRXABoAfhh4f09SMHwYAxlUBVYZEhEaFVMGGQd5TyspHwVgAkgESAVWAxpDFRwWVAFOVC8ffHobVWcrGVcdBgcHHEASG0EHVx4DfBssfEoENQEaBhkABAAbF0FNEVAEGlN7Sn0vHwdkDhwFHgdTU01HFm8bRkEIWEQJbRVTBxkHeU8rKB8FYXRIBEgFVgMaQxUcFlQCTlU1H3MHG1wDJxlXHQYHBxxAEhtBB1YeAmYbIwBKDVF0GgYZAAQAGxdBPB8WVUUKF1wEShFFRBUKFgEBUFVRAQMCA1YHVgxeCgEBFRwWR1IHQVsRQEZDEEEAQAARGhVAVVUSDUEFB0dARkMRVEQZRENSWRUKbwYbVlVUHwUDG1UFSgRKBmsbFVpeEg1ST0NQRxANRgBWDVIBAQUHCQRSUwEHA1cNB1RcUwVQVQMFBgZTVVMAQU9DXUQQDUZ5D1sTSxZWVkJXWAFXQU0RQBANVQNVA1YBAQcCAgAIBU9BC1gWCBVJGFRUUFVQAQIIAQhRAlNZUgcQG0ZTFldECRRFDkV4Q04vEVN3eWFeHVA2Bh9YUgAYRwkNFU9BD0UWCBUjWglSClYWfllTGhIbQQ0ARRYIFV0FUwZUERoVRFNGEg04WlAGGAYGVmhKFxRcFA1sEnkCBlNRKgJ1cRVIFwdbAkFZXlMSGBIGUkFNEQUCGVUbUBdKEQ8HAgMGEhtBUVICAgQEUgNQA1AAAwQPAxkFBFtQVwUFBAdXDVUEUAAFFRsSBRJqT0EIXFUQDUZTAFMAVVBDQxIYElYJQVsRQRAbRlYPF1wRQQQZAhoEFU9BAlVrRBVeF1YERB8UVVMSDhJFAg0FXFkPAlwGVA1fAgcVGxJZWhVZOFMfBgYbVgE7GURRWlhQEg4SBlVQVwMGBQdXAlQMVU0Hb05UXEFGLQ4wQAcHD10DUQRRVwICDlYEAwVSAFNXUAVWBlAHDQBWVQRTTkwcBh0dH3FKZk8AcDd0U3ZgW0NpYAFbBTI3VG52cQt4M00jamcGU3FwWFg0JDNidnRbE20wZwJ9cFthY1ZbcSQnUX5zc08%2BeyB3P2R3X25zdnZEKzEjWGNqdSliInc%2FcXEGZmhgYmUGMSR%2BeWNxAFcwBD9mYl9udmxybjMyUFBydVApbzBnBVBIBw9IXFgFEkFNEVlBUEYPRBcb~0i2dxwd%22%2C%22sceneid%22%3A%22JLHBhPageh5%22%7D",
         }, (_, resp, data) => {
             try {
                 data = JSON.parse(data)
+                console.log(data)
             } catch (e) {
                 $.logErr('Error: ', e, resp)
             } finally {
