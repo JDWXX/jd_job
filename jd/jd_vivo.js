@@ -1,617 +1,565 @@
-/**
-10 0,20 * * * rush_vivo.js
-**/
-const $ = new Env("Phone");
+/*
+第一个号助力作者，其他号助力第一个CK
+cron 10 2,9,17 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_vivo.js
+PS:无开卡，有加购，蚊子推豆子，活动结束可以瓜分
+* */
+const $ = new Env('热血心跳,狂解压');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
-let cookiesArr = [], cookie = '', message = '';
-let ownCode = null;
-if ($.isNode()) {
-    Object.keys(jdCookieNode).forEach((item) => {
-        cookiesArr.push(jdCookieNode[item])
-    })
-    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => { };
-} else {
-    let cookiesData = $.getdata('CookiesJD') || "[]";
-    cookiesData = JSON.parse(cookiesData);
-    cookiesArr = cookiesData.map(item => item.cookie);
-    cookiesArr.reverse();
-    cookiesArr.push(...[$.getdata('CookieJD2'), $.getdata('CookieJD')]);
-    cookiesArr.reverse();
-    cookiesArr = cookiesArr.filter(item => !!item);
-}
+let cookiesArr = [];
+Object.keys(jdCookieNode).forEach((item) => {
+    cookiesArr.push(jdCookieNode[item])
+})
+let activityID = '',cookie = '',userName = '';
+let token = '',LZ_TOKEN_KEY = '',LZ_TOKEN_VALUE = '',Referer = '',nickname = '';
+let Host = '', venderId = ``,shopId = ``,pin =  ``,lz_jdpin_token = ``;
+let hotFlag = false;
+let attrTouXiang = '';
+$.shareUuid = '';
 !(async () => {
     if (!cookiesArr[0]) {
-        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
+        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
+    let res = [];
+    // try{res = await getAuthorShareCode('https://raw.githubusercontent.com/lsh26/share_code/main/vivo.json');}catch (e) {}
+    // if(!res){
+    //     try{res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/lsh26/share_code@main/vivo.json');}catch (e) {}
+    //     if(!res){res = [];}
+    // }
+    if(res.length > 0){
+        $.shareUuid = getRandomArrayElements(res,1)[0];
+    }
+    let activityList = [{'id':'dz2110100000406501','endTime':'1638287999000'},];
     for (let i = 0; i < cookiesArr.length; i++) {
-        if (cookiesArr[i]) {
-            cookie = cookiesArr[i]
-            originCookie = cookiesArr[i]
-            newCookie = ''
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
-            $.index = i + 1;
-            $.isLogin = true;
-            $.nickName = '';
-            await checkCookie();
-            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-            if (!$.isLogin) {
-                continue
-            }
-            authorCodeList = [
-                '9bee8ef1b58e4a8b9d71f0f4808f7f50',
-                'a42fbcb2ec834dfa860bde5ec8353328',
-                '5d49683e9440477a9b5743fa4ef50422',
-                '114c3225ed3a4959b0b8d97d54e6ec2a',
-                'cba91a780a8d434d90f76b5180dea785',
-                '52e7d7ce16de4c7f8b068223489ace95',
-                '2cb46408fd794d839fad9d1fab78da60',
-
-            ]
-            $.bean = 0;
-            $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
-            $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-            authorCodeList.push(ownCode)
-            $.authorCode = authorCodeList[random(0, authorCodeList.length)]
-            // $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
-            $.authorNum = `${random(1000000, 9999999)}`
-            $.activityId = 'dz2110100000406501'
-            $.activityShopId = '1000004065'
-            $.activityUrl = `https://lzdz1-isv.isvjd.com/dingzhi/vivo/iqoojieyapa/activity/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
-            await vivo();
-            await $.wait(2000);
-            if ($.bean > 0) {
-                message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
+        let index = i + 1;
+        cookie = cookiesArr[i];
+        userName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+        console.log(`\n*****开始【京东账号${index}】${userName}*****\n`);
+        hotFlag = false;
+        for (let j = 0; j < activityList.length && !hotFlag; j++) {
+            let nowTime = Date.now();
+            if(nowTime < activityList[j].endTime){
+                activityID = activityList[j].id;
+                console.log(`\n活动ID：`+ activityID);
+                try{
+                    await main();
+                }catch (e) {
+                    console.log(`异常：`+JSON.stringify(e));
+                }
+                console.log(`防止黑IP，等待30秒`);
+                await $.wait(30000);
+            }else{
+                console.log(`\n活动ID：${activityID},已过期`)
             }
         }
     }
-    if (message !== '') {
-        if ($.isNode()) {
-            // await notify.sendNotify($.name, message, '', `\n`);
-            console.log(message)
-        } else {
-            $.msg($.name, '有点儿收获', message);
+})().catch((e) => {
+    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+}).finally(() => {
+    $.done();
+});
+
+async function main() {
+    Host = `lzdz1-isv.isvjcloud.com`;
+    Referer = `https://lzdz1-isv.isvjd.com/dingzhi/vivo/iqoojieyapa/activity/dz2110100000406501?activityId=${activityID}&shareUuid=${$.shareUuid}`;
+    console.log(`活动地址：${Referer}`);
+    token = '',LZ_TOKEN_KEY='',LZ_TOKEN_VALUE='',lz_jdpin_token = ``,venderId = ``,shopId = ``,pin =  ``,nickname = '';
+    token = await getToken();
+    if(!token){console.log(`获取token失败`);return;}
+    await getWxCommonInfoToken('https://lzdz1-isv.isvjcloud.com/wxCommonInfo/token');
+    if(!LZ_TOKEN_KEY || !LZ_TOKEN_VALUE){
+        console.log(`初始化失败`);return;
+    }
+    await takePostRequest('getSimpleActInfoVo');
+    if (venderId === ``) {console.log(`获取venderId失败`);return;}
+    console.log(`venderId :${venderId}`);
+    await getMyPing('https://lzdz1-isv.isvjd.com/customer/getMyPing');
+    if (pin === ``) {hotFlag = true;console.log(`获取pin失败,该账号可能是黑号`);return;}
+    await accessLogWithAD('https://lzdz1-isv.isvjd.com/common/accessLogWithAD');
+    attrTouXiang = 'https://img10.360buyimg.com/imgzone/jfs/t1/7020/27/13511/6142/5c5138d8E4df2e764/5a1216a3a5043c5d.png';
+    await getUserInfo('https://lzdz1-isv.isvjd.com/wxActionCommon/getUserInfo');
+    await getHtml();
+    $.activityData = {};
+    await takePostRequest('activityContent');
+    console.log(`获取活动详情成功`);
+    console.log(`助力码：${$.activityData.actorUuid}`);
+    await doTask();
+    await $.wait(3000);
+    await takePostRequest('activityContent');
+    //await $.wait(2000);
+    //await takePostRequest('guafen');
+    let score = $.activityData.score;
+    console.log(`可投票次数：`+score);
+    let scoreFlag = false;
+    $.canScore = true;
+    let aa = 0;
+    for (let i = 0; i < score && $.canScore && aa < 20; i++) {
+        scoreFlag = true;
+        console.log(`进行第${i+1}次投票`);
+        await takePostRequest('insxintiao');
+        await $.wait(1500);
+        aa++;
+    }
+    if(scoreFlag){
+        await $.wait(1000);
+        await takePostRequest('activityContent');
+        await $.wait(1000);
+    }
+    let score2 = $.activityData.score2;
+    console.log(`可扭蛋次数：`+score2);
+    if(score2 > 0){
+        await takePostRequest('drawContent');
+        await $.wait(1000);
+    }
+    for (let i = 0; i < score2 && i < 10; i++) {
+        console.log(`进行第${i+1}次扭蛋`);
+        await takePostRequest('draw');
+        await $.wait(1500);
+    }
+    if($.index === '1'){$.shareUuid = $.activityData.actorUuid;}
+}
+async function doTask(){
+    $.taskValue = '';
+    if(!$.activityData.signStatus){
+        console.log(`去签到`);
+        $.taskType=0;
+        await takePostRequest('saveTask');
+        await $.wait(1000);
+    }else{
+        console.log(`已签到`);
+    }
+    if(!$.activityData.followShopStatus){
+        console.log(`去关注店铺`);
+        $.taskType=23;
+        await takePostRequest('saveTask');
+        await $.wait(1000);
+    }else{
+        console.log(`已关注`);
+    }
+    if(!$.activityData.addCartStatus){
+        console.log(`去执行加购`);
+        $.taskType=21;
+        await takePostRequest('saveTask');
+        await $.wait(1000);
+    }else{
+        console.log(`已执行加购`);
+    }
+    let toMainData = $.activityData.toMainData;
+    for (let i = 0; i < toMainData.length; i++) {
+        $.taskType=12;
+        if(!toMainData[i].toMainStatus){
+            console.log(`去执行浏览会场`);
+            $.taskValue = toMainData[i].value;
+            await takePostRequest('saveTask');
+            await $.wait(1000);
         }
     }
-})()
-    .catch((e) => {
-        $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    let toShopStatus = $.activityData.toShopStatus;
+    for (let i = 0; i < toShopStatus.length; i++) {
+        $.taskType=14;
+        if(!toShopStatus[i].toShopStatus){
+            console.log(`去执行浏览店铺`);
+            $.taskValue = toShopStatus[i].value;
+            await takePostRequest('saveTask');
+            await $.wait(1000);
+        }
+    }
+    let viewViewData = $.activityData.viewViewData;
+    for (let i = 0; i < viewViewData.length; i++) {
+        $.taskType=31;
+        if(!viewViewData[i].viewViewStatus){
+            console.log(`去执行浏览视频`);
+            $.taskValue = viewViewData[i].value;
+            await takePostRequest('saveTask');
+            await $.wait(1000);
+        }
+    }
+    // if(!$.activityData.zhiboStatus){
+    //     console.log(`去观看直播`);
+    //     $.taskType=10;
+    //     $.taskValue=10;
+    //     await takePostRequest('saveTask');
+    //     await $.wait(1000);
+    // }else{
+    //     console.log(`已观看直播`);
+    // }
+}
+function takePostRequest(type) {
+    let url = '';
+    let body = ``;
+    switch (type) {
+        case 'getSimpleActInfoVo':
+            url = 'https://lzdz1-isv.isvjd.com/dz/common/getSimpleActInfoVo';
+            body = `activityId=${activityID}`;
+            break;
+        case 'activityContent':
+            url = 'https://lzdz1-isv.isvjd.com/dingzhi/vivo/iqoojieyapa/activityContent';
+            body = `activityId=${activityID}&pin=${encodeURIComponent(pin)}&pinImg=${encodeURIComponent(attrTouXiang)}&nick=${encodeURIComponent(nickname)}&cjyxPin=&cjhyPin=&shareUuid=${$.shareUuid}`;
+            break;
+        case 'saveTask':
+            url= 'https://lzdz1-isv.isvjd.com/dingzhi/vivo/iqoojieyapa/saveTask';
+            body = `pin=${encodeURIComponent(pin)}&activityId=${activityID}&taskType=${$.taskType}&actorUuid=${$.activityData.actorUuid}&shareUuid=${$.shareUuid}&taskValue=${$.taskValue}`;
+            break;
+        case 'insxintiao':
+            url= 'https://lzdz1-isv.isvjd.com/dingzhi/vivo/iqoojieyapa/insxintiao';
+            body = `pin=${encodeURIComponent(pin)}&activityId=${activityID}&playerId=37`;
+            break;
+        case 'draw':
+            url= 'https://lzdz1-isv.isvjd.com/dingzhi/vivo/iqoojieyapa/draw';
+            body = `activityId=${activityID}&uuid=${$.activityData.actorUuid}&pin=${encodeURIComponent(pin)}`;
+            break;
+        case 'drawContent':
+            url= 'https://lzdz1-isv.isvjd.com/dingzhi/taskact/common/drawContent';
+            body = `activityId=${activityID}&pin=${encodeURIComponent(pin)}`;
+            break;
+        case 'guafen':
+            url= 'https://lzdz1-isv.isvjcloud.com/dingzhi/vivo/iqoojieyapa/guafen';
+            body = `activityId=${activityID}&pin=${encodeURIComponent(pin)}&playerId=15`;
+            break;
+        default:
+            console.log(`错误${type}`);
+    }
+    let myRequest = getPostRequest(url, body);
+    return new Promise(async resolve => {
+        $.post(myRequest, (err, resp, data) => {
+            try {
+                dealReturn(type, data);
+            } catch (e) {
+                console.log(data);
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
     })
-    .finally(() => {
-        $.done();
-    })
-
-
-async function vivo() {
-    $.token = null;
-    $.secretPin = null;
-    $.openCardActivityId = null
-    await getFirstLZCK()
-    await getToken();
-    await task('dz/common/getSimpleActInfoVo', `activityId=${$.activityId}`, 1)
-    if ($.token) {
-        await getMyPing();
-        if ($.secretPin) {
-            console.log('去助力'+$.authorCode)
-            await $.wait(1000);
-            await task("taskact/common/drawContent", `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`)
-            await $.wait(1000);
-            await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
-            await $.wait(1000);
-            await task('wxActionCommon/getUserInfo', `pin=${encodeURIComponent($.secretPin)}`, 1)
-            await $.wait(1000);
-            await task('vivo/iqoojieyapa/activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&pinImg=${encodeURIComponent($.pinImg)}&nick=${encodeURIComponent($.pin)}&cjyxPin=&cjhyPin=&shareUuid=${encodeURIComponent($.authorCode)}`)
-            await $.wait(1000);
-            await task('vivo/iqoojieyapa/initOpenCard', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}`)
-            if ($.activityContent) {
-                $.log("\n-> 关注店铺")
-                if (!$.activityContent.followShopStatus) {
-                    await $.wait(1000);
-                    await task('vivo/iqoojieyapa/saveTask', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&actorUuid=${encodeURIComponent($.actorUuid)}&taskType=23&taskValue=&shareUuid=${encodeURIComponent($.authorCode)}`)
-                } else {
-                    $.log("    >>>已经关注过了\n")
-                }
-                $.log("\n-> 任务")
-                await task('vivo/iqoojieyapa/saveTask', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&actorUuid=${encodeURIComponent($.actorUuid)}&&shareUuid=${encodeURIComponent($.authorCode)}&taskType=0&taskValue=`)
-                await $.wait(1000);
-                await task('vivo/iqoojieyapa/saveTask', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&actorUuid=${encodeURIComponent($.actorUuid)}&&shareUuid=${encodeURIComponent($.authorCode)}&taskType=12&taskValue=1`)
-                await $.wait(1000);
-                await task('vivo/iqoojieyapa/saveTask', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&actorUuid=${encodeURIComponent($.actorUuid)}&&shareUuid=${encodeURIComponent($.authorCode)}&taskType=14&taskValue=1000007143`)
-                await task('crm/pageVisit/insertCrmPageVisit', `venderId=1000004065&elementId=${encodeURIComponent(`店铺1000007143`)}&pageId=dz2110100000406501&pin=${encodeURIComponent($.secretPin)}`, 1)
-                await task('interaction/write/writePersonInfo', `jdActivityId=${$.jdActivityId}&pin=${encodeURIComponent($.secretPin)}&actionType=4&venderId=${$.venderId}&activityId=${$.activityId}`,1)
-                await $.wait(1000);
-                await task('vivo/iqoojieyapa/saveTask', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&actorUuid=${encodeURIComponent($.actorUuid)}&&shareUuid=${encodeURIComponent($.authorCode)}&taskType=14&taskValue=1000164941`)
-                await task('crm/pageVisit/insertCrmPageVisit', `venderId=1000004065&elementId=${encodeURIComponent(`店铺1000164941`)}&pageId=dz2110100000406501&pin=${encodeURIComponent($.secretPin)}`, 1)
-                await task('interaction/write/writePersonInfo', `jdActivityId=${$.jdActivityId}&pin=${encodeURIComponent($.secretPin)}&actionType=4&venderId=${$.venderId}&activityId=${$.activityId}`,1)
-                await $.wait(1000);
-                await task('vivo/iqoojieyapa/saveTask', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&actorUuid=${encodeURIComponent($.actorUuid)}&&shareUuid=${encodeURIComponent($.authorCode)}&taskType=14&taskValue=1000004123`)
-                await task('crm/pageVisit/insertCrmPageVisit', `venderId=1000004065&elementId=${encodeURIComponent(`店铺1000004123`)}&pageId=dz2110100000406501&pin=${encodeURIComponent($.secretPin)}`, 1)
-                await task('interaction/write/writePersonInfo', `jdActivityId=${$.jdActivityId}&pin=${encodeURIComponent($.secretPin)}&actionType=4&venderId=${$.venderId}&activityId=${$.activityId}`,1)
-                await $.wait(1000);
-                await task('vivo/iqoojieyapa/saveTask', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&actorUuid=${encodeURIComponent($.actorUuid)}&&shareUuid=${encodeURIComponent($.authorCode)}&taskType=14&taskValue=1000004123`)
-                await task('crm/pageVisit/insertCrmPageVisit', `venderId=1000004065&elementId=${encodeURIComponent(`店铺1000004123`)}&pageId=dz2110100000406501&pin=${encodeURIComponent($.secretPin)}`, 1)
-                await task('interaction/write/writePersonInfo', `jdActivityId=${$.jdActivityId}&pin=${encodeURIComponent($.secretPin)}&actionType=4&venderId=${$.venderId}&activityId=${$.activityId}`,1)
-                await $.wait(1000);
-                await task('vivo/iqoojieyapa/saveTask', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&actorUuid=${encodeURIComponent($.actorUuid)}&&shareUuid=${encodeURIComponent($.authorCode)}&taskType=14&taskValue=1000001947`)
-                await task('crm/pageVisit/insertCrmPageVisit', `venderId=1000004065&elementId=${encodeURIComponent(`店铺1000001947`)}&pageId=dz2110100000406501&pin=${encodeURIComponent($.secretPin)}`, 1)
-                await task('interaction/write/writePersonInfo', `jdActivityId=${$.jdActivityId}&pin=${encodeURIComponent($.secretPin)}&actionType=4&venderId=${$.venderId}&activityId=${$.activityId}`,1)
-                await $.wait(1000);
-                await task('vivo/iqoojieyapa/saveTask', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&actorUuid=${encodeURIComponent($.actorUuid)}&&shareUuid=${encodeURIComponent($.authorCode)}&taskType=14&taskValue=1000004065`)
-                await task('crm/pageVisit/insertCrmPageVisit', `venderId=1000004065&elementId=${encodeURIComponent(`店铺1000004065`)}&pageId=dz2110100000406501&pin=${encodeURIComponent($.secretPin)}`, 1)
-                await task('interaction/write/writePersonInfo', `jdActivityId=${$.jdActivityId}&pin=${encodeURIComponent($.secretPin)}&actionType=4&venderId=${$.venderId}&activityId=${$.activityId}`,1)
-
-                await $.wait(1000);
-                $.log("\n-> 关注店铺")
-                await task('vivo/iqoojieyapa/saveTask', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&actorUuid=${encodeURIComponent($.actorUuid)}&&shareUuid=${encodeURIComponent($.authorCode)}&taskType=23&taskValue=`)
-                await $.wait(1000);
-                $.log("\n-> 加购")
-                await task('vivo/iqoojieyapa/saveTask', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&actorUuid=${encodeURIComponent($.actorUuid)}&&shareUuid=${encodeURIComponent($.authorCode)}&taskType=21&taskValue=`)
-
-                console.log('去投票')
-                for (let i = 0; i < 10; i++) {
-                    await $.wait(2000)
-                    await task('vivo/iqoojieyapa/insxintiao', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&playerId=37`)
-                }
-                console.log('抽奖')
-                await task('vivo/iqoojieyapa/draw', `activityId=${$.activityId}&uuid=${encodeURIComponent($.actorUuid)}&pin=${encodeURIComponent($.secretPin)}`)
+}
+function dealReturn(type, data) {
+    if(type === 'drawContent'){
+        return;
+    }
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        console.log(`执行任务异常`);
+        console.log(data);
+    }
+    switch (type) {
+        case 'getSimpleActInfoVo':
+            if (data.result) {
+                shopId = data.data.shopId;
+                venderId = data.data.venderId;
+            }
+            break;
+        case 'activityContent':
+            if (data.data && data.result && data.count === 0) {
+                $.activityData = data.data;
             } else {
-                $.log("无法顺利的获取到活动信息。")
+                console.log(JSON.stringify(data));
             }
-        } else {
-            $.log("没有成功获取到用户信息")
-        }
-    } else {
-        $.log("没有成功获取到用户鉴权信息")
+            break;
+        case 'saveTask':
+            if (data.result === true && data.count === 0) {
+                console.log(`执行成功,获得京豆：${data.data.beans || 0}`);
+            } else {
+                console.log(JSON.stringify(data))
+            }
+            //console.log(JSON.stringify(data))
+            break;
+        case 'insxintiao':
+            if (data.result === true && data.count === 0) {
+                console.log(`投票成功`);
+            }else{
+                $.canScore = false;
+                console.log(JSON.stringify(data));
+            }
+            break;
+        case 'draw':
+            if (data.result === true && data.count === 0) {
+                let wdsrvo = data.data.wdsrvo;
+                if(wdsrvo.drawInfoType === 6){
+                    console.log(`获得京豆：${wdsrvo.name}`);
+                }else if(wdsrvo.drawInfoType === 0){
+                    console.log(`啥都没有抽到`);
+                }else{
+                    console.log(`获得其他`);
+                }
+            } else {
+                //console.log(JSON.stringify(data))
+            }
+            console.log(JSON.stringify(data))
+            break;
+        case 'insertCrmPageVisit':
+            console.log(JSON.stringify(data))
+            break;
+        case 'guafen':
+            if (data.result === true && data.count === 0) {
+                console.log(`瓜分获得：${data.data.beans || '0'}`)
+            }
+            console.log(JSON.stringify(data))
+            break;
+        default:
+            console.log(JSON.stringify(data));
     }
 }
-
-function task(function_id, body, isCommon = 0) {
+function random(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+function getHtml() {
+    let config ={
+        url:Referer,
+        headers: {
+            'Host':Host,
+            'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Cookie': `IsvToken=${token};${cookie} LZ_TOKEN_KEY=${LZ_TOKEN_KEY}; LZ_TOKEN_VALUE=${LZ_TOKEN_VALUE}; AUTH_C_USER=${pin}; ${lz_jdpin_token}`,
+            "User-Agent": 'jdapp;iPhone;10.1.4;14.6;5a8a5743a5d2a4110a8ed396bb047471ea120c6a;network/wifi;JDEbook/openapp.jdreader;model/iPhone9,2;addressid/2214111493;appBuild/167814;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1',
+            'Accept-Language':'zh-cn',
+            'Accept-Encoding':'gzip, deflate, br',
+            'Connection':'keep-alive'
+        }
+    }
     return new Promise(resolve => {
-        $.post(taskUrl(function_id, body, isCommon), async (err, resp, data) => {
+        $.get(config, (err, resp, data) => {
             try {
                 if (err) {
-                    $.log(err)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
 
-                    if (data) {
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+    })
+}
+function getUserInfo(url) {
+    const body = `pin=${encodeURIComponent(pin)}`;
+    let myRequest = getPostRequest(url, body);
+    return new Promise(resolve => {
+        $.post(myRequest, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                }
+                else {
+                    if(data){
                         data = JSON.parse(data);
-                        if (data.result) {
-                            switch (function_id) {
-                                case 'crm/pageVisit/insertCrmPageVisit':
-                                    break;
-                                case 'interaction/write/writePersonInfo':
-                                    break;
-                                case 'dz/common/getSimpleActInfoVo':
-                                    $.jdActivityId = data.data.jdActivityId;
-                                    $.venderId = data.data.venderId;
-                                    break;
-                                case 'wxActionCommon/getUserInfo':
-                                    if (data.data.yunMidImageUrl) {
-                                        $.pinImg = data.data.yunMidImageUrl
-                                    } else {
-                                        $.pin = data.data.nickname
-                                        $.pinImg = 'https://img10.360buyimg.com/imgzone/jfs/t1/7020/27/13511/6142/5c5138d8E4df2e764/5a1216a3a5043c5d.png'
-                                    }
-                                    break;
-                                case 'vivo/iqoojieyapa/activityContent':
-                                    if (!data.data.hasEnd) {
-                                        $.log(`开启【${data.data.activityName}】活动`)
-                                        $.log("-------------------")
-                                        if ($.index === 1) {
-                                            ownCode = data.data.actorUuid
-                                        }
-                                        $.activityContent = data.data;
-                                        $.actorUuid = data.data.actorUuid;
-                                        console.log(data.data.actorUuid)
-                                    } else {
-                                        $.log("活动已经结束");
-                                    }
-                                    break;
-                                case 'openCard/mayOpenbox/openCardDraw':
-                                    if (data.data.sendFlage) {
-                                        $.log(`==>获得【${data.data.benas}】京豆\n`)
-                                    }
-                                    break;
-                                case 'personal/care/checkOpencard':
-                                    if (data.data.openCardBeanNum) {
-                                        $.log(`==>获得【${data.data.openCardBeanNum}】京豆\n`)
-                                        $.bean += data.data.openCardBeanNum
-                                    }
-                                    $.openCardStatus = data.data.openInfo;
-                                    console.log(data.data.assistState);
-                                    break;
-                                case 'personal/care/saveTask':
-                                    if (data.data) {
-                                        if (data.data.sendStatus) {
-                                            $.bean += data.data.sendBeans;
-                                            $.log(`==>获得【${data.data.sendBeans}】京豆\n`)
-                                        }
-                                        if (data.data.addScore) {
-                                            $.log(`==>获得【${data.data.addScore}】积分\n`)
-                                        }
-                                    }
-                                    break;
-                                case 'crm/pageVisit/insertCrmPageVisit':
-                                    console.log(data)
-                                    break;
-                                case 'interaction/write/writePersonInfo':
-                                    console.log(data)
-                                    break;
-                                case 'openCard/mayOpenbox/startDraw':
-                                    if (data.data.drawOk) {
-                                        switch (data.data.drawInfo.type) {
-                                            case 6:
-                                                $.bean += data.data.drawInfo.beanNum;
-                                                $.log(`==>获得【${data.data.drawInfo.beanNum}】京豆\n`)
-                                                break;
-                                            default:
-                                                if ($.isNode()) {
-                                                    await notify.sendNotify($.name, `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${data.data.drawInfo.name}\n活动链接：${$.activityUrl}`, '', '')
-                                                } else {
-                                                    $.msg($.name, '有东西。', {}, `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${data.data.drawInfo.name}\n活动链接：${$.activityUrl}`)
-                                                }
-                                                break;
-                                        }
-                                    } else {
-                                        $.log("==>啥也没抽中")
-                                    }
-                                    break;
-                                case 'crm/pageVisit/insertCrmPageVisit':
-                                    $.log("==> 上报成功")
-
-                                case 'vivo/iqoojieyapa/saveTask':
-                                    if (data.data) {
-                                        $.log(`${data.result}`)
-                                    }
-                                    break;
-                                case 'vivo/iqoojieyapa/insxintiao':
-                                    console.log(data.data)
-                                    break;
-                                case 'openCard/mayOpenbox/startDraw':
-                                    if (data.data.drawOk) {
-                                        switch (data.data.drawInfo.type) {
-                                            case 6:
-                                                $.bean += data.data.drawInfo.beanNum;
-                                                $.log(`==>获得【${data.data.drawInfo.beanNum}】京豆\n`)
-                                                break;
-                                            default:
-                                                if ($.isNode()) {
-                                                    await notify.sendNotify($.name, `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${data.data.drawInfo.name}\n活动链接：${$.activityUrl}`, '', '')
-                                                } else {
-                                                    $.msg($.name, '有东西。', {}, `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${data.data.drawInfo.name}\n活动链接：${$.activityUrl}`)
-                                                }
-                                                break;
-                                        }
-                                    } else {
-                                        $.log("==>啥也没抽中")
-                                    }
-                                    break;
-                                default:
-                                    $.log(JSON.stringify(data))
-                                    break;
+                        if(data.count === 0 && data.result){
+                            if(data.data.yunMidImageUrl){
+                                attrTouXiang = data.data.yunMidImageUrl
                             }
-                        } else {
-                            $.log(JSON.stringify(data))
                         }
                     }
                 }
-            } catch (error) {
-                $.log(error)
+            } catch (e) {
+                console.log(e, resp)
             } finally {
                 resolve();
             }
         })
     })
 }
-
-function getShopOpenCardInfo(venderId) {
-    let opt = {
-        url: `https://api.m.jd.com/client.action?appid=jd_shop_member&functionId=getShopOpenCardInfo&body=${encodeURIComponent(JSON.stringify({ venderId: venderId, channel: 401 }))}&client=H5&clientVersion=9.2.0&uuid=88888`,
-        headers: {
-            Host: 'api.m.jd.com',
-            Accept: '*/*',
-            Connection: 'keep-alive',
-            Cookie: cookie,
-            'User-Agent': `jdapp;iPhone;9.5.4;13.6;${$.UUID};network/wifi;ADID/${$.ADID};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
-            'Accept-Language': 'zh-cn',
-            Referer: `https://shopmember.m.jd.com/shopcard/?venderId=${venderId}}&channel=401&returnUrl=${encodeURIComponent($.activityUrl)}`,
-            'Accept-Encoding': 'gzip, deflate, br'
-        }
-    }
+function accessLogWithAD(url) {
+    let body = `venderId=${venderId}&code=99&pin=${encodeURIComponent(pin)}&activityId=${activityID}&pageUrl=${encodeURIComponent(Referer)}&subType=app&adSource=null`
+    let myRequest = getPostRequest(url, body);
     return new Promise(resolve => {
-        $.get(opt, (err, resp, data) => {
+        $.post(myRequest, (err, resp, data) => {
             try {
                 if (err) {
-                    console.log(err)
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    res = JSON.parse(data)
-                    if (res.success) {
-                        if (res.result.interestsRuleList) {
-                            $.openCardActivityId = res.result.interestsRuleList[0].interestsInfo.activityId;
+                    let setcookie = resp['headers']['set-cookie'] || resp['headers']['Set-Cookie'] || ''
+                    if(setcookie){
+                        let LZTOKENKEY = setcookie.filter(row => row.indexOf("LZ_TOKEN_KEY") !== -1)[0]
+                        if(LZTOKENKEY && LZTOKENKEY.indexOf("LZ_TOKEN_KEY=") > -1){
+                            LZ_TOKEN_KEY = LZTOKENKEY.split(';') && (LZTOKENKEY.split(';')[0]) || ''
+                            LZ_TOKEN_KEY = LZ_TOKEN_KEY.replace('LZ_TOKEN_KEY=','')
+                        }
+                        let LZTOKENVALUE = setcookie.filter(row => row.indexOf("LZ_TOKEN_VALUE") !== -1)[0]
+                        if(LZTOKENVALUE && LZTOKENVALUE.indexOf("LZ_TOKEN_VALUE=") > -1){
+                            LZ_TOKEN_VALUE = LZTOKENVALUE.split(';') && (LZTOKENVALUE.split(';')[0]) || ''
+                            LZ_TOKEN_VALUE = LZ_TOKEN_VALUE.replace('LZ_TOKEN_VALUE=','')
                         }
                     }
                 }
-            } catch (error) {
-                console.log(error)
+            } catch (e) {
+                $.logErr(e, resp)
             } finally {
-                resolve();
+                resolve(data);
             }
         })
-
     })
 }
-function bindWithVender(venderId) {
-    let opt = {
-        url: `https://api.m.jd.com/client.action?appid=jd_shop_member&functionId=bindWithVender&body=${encodeURIComponent(JSON.stringify({ "venderId": venderId, "bindByVerifyCodeFlag": 1, "registerExtend": {}, "writeChildFlag": 0, "channel": 401 }))}&client=H5&clientVersion=9.2.0&uuid=88888`,
-        headers: {
-            Host: 'api.m.jd.com',
-            Accept: '*/*',
-            Connection: 'keep-alive',
-            Cookie: cookie,
-            'User-Agent': `jdapp;iPhone;9.5.4;13.6;${$.UUID};network/wifi;ADID/${$.ADID};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
-            'Accept-Language': 'zh-cn',
-            Referer: `https://shopmember.m.jd.com/shopcard/?venderId=${venderId}}&channel=401&returnUrl=${encodeURIComponent($.activityUrl)}`,
-            'Accept-Encoding': 'gzip, deflate, br'
-        }
-    }
-    return new Promise(resolve => {
-        $.get(opt, (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(err)
-                } else {
-                    res = JSON.parse(data)
-                    if (res.success) {
-                        if (res.result.giftInfo) {
-                            if (res.result.giftInfo.giftList) {
-                                for (const vo of res.result.giftInfo.giftList) {
-                                    $.log(vo.name)
-                                    if (vo.prizeType === 4) {
-                                        $.log(`==>获得【${vo.quantity}】京豆`)
-                                        $.bean += vo.quantity
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-            } catch (error) {
-                console.log(error)
-            } finally {
-                resolve();
-            }
-        })
-
-    })
-}
-function taskUrl(function_id, body, isCommon) {
-    return {
-        url: isCommon ? `https://lzdz1-isv.isvjd.com/${function_id}` : `https://lzdz1-isv.isvjd.com/dingzhi/${function_id}`,
-        headers: {
-            Host: 'lzdz1-isv.isvjd.com',
-            Accept: 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept-Language': 'zh-cn',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Origin: 'https://lzdz1-isv.isvjd.com',
-            'User-Agent': `jdapp;iPhone;9.5.4;13.6;${$.UUID};network/wifi;ADID/${$.ADID};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
-            Connection: 'keep-alive',
-            Referer: $.activityUrl,
-            Cookie: cookie
-        },
-        body: body
-
-    }
-}
-
-function getMyPing() {
-    let opt = {
-        url: `https://lzdz1-isv.isvjd.com/customer/getMyPing`,
-        headers: {
-            "Host": "lzdz1-isv.isvjd.com",
-            "Accept": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            "Accept-Language": "zh-cn",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Origin": "https://lzdz1-isv.isvjd.com",
-            "User-Agent": `jdapp;iPhone;9.5.4;13.6;${$.UUID};network/wifi;ADID/${$.ADID};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
-            "Connection": "keep-alive",
-            "Referer": $.activityUrl,
-            "Cookie": cookie,
-        },
-        body: `userId=${$.activityShopId}&token=${$.token}&fromType=APP&riskType=1`,
+function getPostRequest(url, body) {
+    const headers = {
+        'X-Requested-With' : `XMLHttpRequest`,
+        'Connection' : `keep-alive`,
+        'Accept-Encoding' : `gzip, deflate, br`,
+        'Content-Type' : `application/x-www-form-urlencoded`,
+        'Origin' : `https://${Host}`,
+        "User-Agent": `jdapp;iPhone;10.1.4;14.6;5a8a5743a5d2a4110a8ed396bb047471ea120c6a;network/wifi;JDEbook/openapp.jdreader;model/iPhone9,2;addressid/2214111493;appBuild/167814;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
+        'Cookie': `${cookie} LZ_TOKEN_KEY=${LZ_TOKEN_KEY}; LZ_TOKEN_VALUE=${LZ_TOKEN_VALUE}; AUTH_C_USER=${pin}; ${lz_jdpin_token}`,
+        'Host' : Host,
+        'Referer' : Referer,
+        'Accept-Language' : `zh-cn`,
+        'Accept' : `application/json`
     };
-    return new Promise((resolve) => {
-        $.post(opt, (err, resp, data) => {
+    return {url: url, method: `POST`, headers: headers, body: body};
+}
+function getMyPing(url) {
+    let body = `userId=${venderId}&token=${encodeURIComponent(token)}&fromType=APP`;
+    let myRequest = getPostRequest(url, body);
+    return new Promise(async resolve => {
+        $.post(myRequest, (err, resp, data) => {
             try {
-                if (err) {
-                    $.log(err);
-                } else {
-                    if (resp["headers"]["set-cookie"]) {
-                        cookie = `${originCookie}`;
-                        if ($.isNode()) {
-                            for (let sk of resp["headers"]["set-cookie"]) {
-                                cookie = `${cookie}${sk.split(";")[0]};`;
-                            }
-                        } else {
-                            for (let ck of resp["headers"]["Set-Cookie"].split(",")) {
-                                cookie = `${cookie}${ck.split(";")[0]};`;
-                            }
-                        }
+                let setcookie = resp['headers']['set-cookie'] || resp['headers']['Set-Cookie'] || ''
+                if(setcookie){
+                    let lzjdpintoken = setcookie.filter(row => row.indexOf("lz_jdpin_token") !== -1)[0]
+                    if(lzjdpintoken && lzjdpintoken.indexOf("lz_jdpin_token=") > -1){
+                        lz_jdpin_token = lzjdpintoken.split(';') && (lzjdpintoken.split(';')[0] + ';') || ''
                     }
-                    if (resp["headers"]["Set-Cookie"]) {
-                        cookie = `${originCookie}`;
-                        if ($.isNode()) {
-                            for (let sk of resp["headers"]["set-cookie"]) {
-                                cookie = `${cookie}${sk.split(";")[0]};`;
-                            }
-                        } else {
-                            for (let ck of resp["headers"]["Set-Cookie"].split(",")) {
-                                cookie = `${cookie}${ck.split(";")[0]};`;
-                            }
-                        }
-                    }
-                    if (data) {
-                        data = JSON.parse(data);
-                        if (data.result) {
-                            $.log(`你好：${data.data.nickname}`);
-                            // $.pin = data.data.nickname;
-                            $.secretPin = data.data.secretPin;
-                            // cookie = `${cookie};AUTH_C_USER=${data.data.secretPin}`;
-                        } else {
-                            $.log(data.errorMessage);
-                        }
-                    } else {
-                        $.log("京东返回了空数据");
+                    let LZTOKENVALUE = setcookie.filter(row => row.indexOf("LZ_TOKEN_VALUE") !== -1)[0]
+                    if(LZTOKENVALUE && LZTOKENVALUE.indexOf("LZ_TOKEN_VALUE=") > -1){
+                        LZ_TOKEN_VALUE = LZTOKENVALUE.split(';') && (LZTOKENVALUE.split(';')[0]) || ''
+                        LZ_TOKEN_VALUE = LZ_TOKEN_VALUE.replace('LZ_TOKEN_VALUE=','')
                     }
                 }
-            } catch (error) {
-                $.log(error);
+                try {
+                    data = JSON.parse(data);
+                } catch (e) {
+                    console.log(`执行任务异常`);
+                    console.log(data);
+                }
+                if (data.data && data.data.secretPin) {
+                    pin = data.data.secretPin
+                    nickname = data.data.nickname
+                } else {
+                    console.log(JSON.stringify(data));
+                }
+            } catch (e) {
+                console.log(data);
+                $.logErr(e, resp)
             } finally {
                 resolve();
             }
-        });
-    });
+        })
+    })
 }
-function getFirstLZCK() {
+function getWxCommonInfoToken (url) {
+    const method = `POST`;
+    const headers = {
+        'X-Requested-With' : `XMLHttpRequest`,
+        'Connection' : `keep-alive`,
+        'Accept-Encoding' : `gzip, deflate, br`,
+        'Content-Type' : `application/x-www-form-urlencoded`,
+        'Origin' : `https://${Host}`,
+        'User-Agent' : `jdapp;iPhone;10.1.4;14.6;5a8a5743a5d2a4110a8ed396bb047471ea120c6a;network/wifi;JDEbook/openapp.jdreader;model/iPhone9,2;addressid/2214111493;appBuild/167814;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
+        'Cookie' : cookie,
+        'Host' : Host,
+        'Referer' : Referer,
+        'Accept-Language' : `zh-cn`,
+        'Accept' : `application/json`
+    };
+    const body = ``;
+    const myRequest = {url: url, method: method, headers: headers, body: body};
     return new Promise(resolve => {
-        $.get({ url: $.activityUrl }, (err, resp, data) => {
+        $.post(myRequest, async (err, resp, data) => {
             try {
-                if (err) {
-                    console.log(err)
-                } else {
-                    if (resp['headers']['set-cookie']) {
-                        cookie = `${originCookie}`
-                        if ($.isNode()) {
-                            for (let sk of resp['headers']['set-cookie']) {
-                                cookie = `${cookie}${sk.split(";")[0]};`
-                            }
-                        } else {
-                            for (let ck of resp['headers']['Set-Cookie'].split(',')) {
-                                cookie = `${cookie}${ck.split(";")[0]};`
-                            }
-                        }
-                    }
-                    if (resp['headers']['Set-Cookie']) {
-                        cookie = `${originCookie}`
-                        if ($.isNode()) {
-                            for (let sk of resp['headers']['set-cookie']) {
-                                cookie = `${cookie}${sk.split(";")[0]};`
-                            }
-                        } else {
-                            for (let ck of resp['headers']['Set-Cookie'].split(',')) {
-                                cookie = `${cookie}${ck.split(";")[0]};`
-                            }
-                        }
-                    }
+                let res = $.toObj(data);
+                if(typeof res == 'object' && res.result === true){
+                    if(typeof res.data.LZ_TOKEN_KEY != 'undefined') LZ_TOKEN_KEY = res.data.LZ_TOKEN_KEY;
+                    if(typeof res.data.LZ_TOKEN_VALUE != 'undefined') LZ_TOKEN_VALUE = res.data.LZ_TOKEN_VALUE;
+                }else if(typeof res == 'object' && res.errorMessage){
+                    console.log(`token ${res.errorMessage || ''}`)
+                }else{
+                    console.log(data)
                 }
-            } catch (error) {
-                console.log(error)
+            } catch (e) {
+                $.logErr(e, resp)
             } finally {
-                resolve();
+                resolve(data);
             }
         })
     })
 }
 function getToken() {
-    let opt = {
-        url: `https://api.m.jd.com/client.action?functionId=isvObfuscator`,
+    let config = {
+        url: 'https://api.m.jd.com/client.action?functionId=isvObfuscator',
+        body: 'body=%7B%22url%22%3A%22https%3A%5C/%5C/lzdz1-isv.isvjcloud.com%22%2C%22id%22%3A%22%22%7D&build=167863&client=apple&clientVersion=10.2.2&d_brand=apple&d_model=iPhone9%2C2&ef=1&eid=eidI42470115RDhDRjM1NjktODdGQi00RQ%3D%3DB3mSBu%2BcGp7WhKUUyye8/kqi1lxzA3Dv6a89ttwC7YFdT6JFByyAtAfO0TOmN9G2os20ud7RosfkMq80&ep=%7B%22ciphertype%22%3A5%2C%22cipher%22%3A%7B%22screen%22%3A%22CJS0CseyCtK4%22%2C%22wifiBssid%22%3A%22ENcmCwPtZWYzCzK0DwTvZQZsY2S5YwVwC2CzCWHsDQU%3D%22%2C%22osVersion%22%3A%22CJGkDq%3D%3D%22%2C%22area%22%3A%22Cv8yENCmXzUnENS4XzK%3D%22%2C%22openudid%22%3A%22DWO4YJU3DNDrDWGyYJGnCJLrEQVuCzu2YwSmDNc0DzPvYJOyCQC2YG%3D%3D%22%2C%22uuid%22%3A%22aQf1ZRdxb2r4ovZ1EJZhcxYlVNZSZz09%22%7D%2C%22ts%22%3A1636080197%2C%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22version%22%3A%221.0.3%22%2C%22appname%22%3A%22com.360buy.jdmobile%22%2C%22ridx%22%3A-1%7D&ext=%7B%22prstate%22%3A%220%22%7D&isBackground=N&joycious=88&lang=zh_CN&networkType=wifi&networklibtype=JDNetworkBaseAF&partner=apple&rfs=0000&scope=01&sign=390d7ee95da368f4141370ece33795e3&st=1636081272930&sv=110',
         headers: {
-            Host: 'api.m.jd.com',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Accept: '*/*',
-            Connection: 'keep-alive',
-            Cookie: cookie,
-            'User-Agent': 'JD4iPhone/167650 (iPhone; iOS 13.7; Scale/3.00)',
-            'Accept-Language': 'zh-Hans-CN;q=1',
-            'Accept-Encoding': 'gzip, deflate, br',
-        },
-        body: `body=%7B%22url%22%3A%20%22https%3A//lzdz2-isv.isvjcloud.com%22%2C%20%22id%22%3A%20%22%22%7D&uuid=22ee31cb140e413eb74ce5103e2ee553&client=apple&clientVersion=9.4.0&st=1622020861000&sv=102&sign=20d34e0e16f2736cb8b64da914fd74af`
+            'Host': 'api.m.jd.com',
+            'accept': '*/*',
+            'user-agent': 'JD4iPhone/167490 (iPhone; iOS 14.2; Scale/3.00)',
+            'accept-language': 'zh-Hans-JP;q=1, en-JP;q=0.9, zh-Hant-TW;q=0.8, ja-JP;q=0.7, en-US;q=0.6',
+            'content-type': 'application/x-www-form-urlencoded',
+            'Cookie': cookie
+        }
     }
     return new Promise(resolve => {
-        $.post(opt, (err, resp, data) => {
+        $.post(config, async (err, resp, data) => {
             try {
                 if (err) {
-                    $.log(err)
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    if (data) {
-                        data = JSON.parse(data);
-                        if (data.code === "0") {
-                            $.token = data.token
-                        }
-                    } else {
-                        $.log("京东返回了空数据")
-                    }
-                }
-            } catch (error) {
-                $.log(error)
-            } finally {
-                resolve();
-            }
-        })
-    })
-}
-function random(min, max) {
-
-    return Math.floor(Math.random() * (max - min)) + min;
-
-}
-function getUUID(format = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', UpperCase = 0) {
-    return format.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        if (UpperCase) {
-            uuid = v.toString(36).toUpperCase();
-        } else {
-            uuid = v.toString(36)
-        }
-        return uuid;
-    });
-}
-function checkCookie() {
-    const options = {
-        url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",
-        headers: {
-            "Host": "me-api.jd.com",
-            "Accept": "*/*",
-            "Connection": "keep-alive",
-            "Cookie": cookie,
-            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.2 Mobile/15E148 Safari/604.1",
-            "Accept-Language": "zh-cn",
-            "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
-            "Accept-Encoding": "gzip, deflate, br",
-        }
-    };
-    return new Promise(resolve => {
-        $.get(options, (err, resp, data) => {
-            try {
-                if (err) {
-                    $.logErr(err)
-                } else {
-                    if (data) {
-                        data = JSON.parse(data);
-                        if (data.retcode === "1001") {
-                            $.isLogin = false; //cookie过期
-                            return;
-                        }
-                        if (data.retcode === "0" && data.data.hasOwnProperty("userInfo")) {
-                            $.nickName = data.data.userInfo.baseInfo.nickname;
-                        }
-                    } else {
-                        $.log('京东返回了空数据');
-                    }
+                    data = JSON.parse(data);
                 }
             } catch (e) {
-                $.logErr(e)
+                $.logErr(e, resp)
             } finally {
-                resolve();
+                resolve(data['token'] || '');
             }
         })
     })
 }
-// prettier-ignore
-!function (n) { "use strict"; function t(n, t) { var r = (65535 & n) + (65535 & t); return (n >> 16) + (t >> 16) + (r >> 16) << 16 | 65535 & r } function r(n, t) { return n << t | n >>> 32 - t } function e(n, e, o, u, c, f) { return t(r(t(t(e, n), t(u, f)), c), o) } function o(n, t, r, o, u, c, f) { return e(t & r | ~t & o, n, t, u, c, f) } function u(n, t, r, o, u, c, f) { return e(t & o | r & ~o, n, t, u, c, f) } function c(n, t, r, o, u, c, f) { return e(t ^ r ^ o, n, t, u, c, f) } function f(n, t, r, o, u, c, f) { return e(r ^ (t | ~o), n, t, u, c, f) } function i(n, r) { n[r >> 5] |= 128 << r % 32, n[14 + (r + 64 >>> 9 << 4)] = r; var e, i, a, d, h, l = 1732584193, g = -271733879, v = -1732584194, m = 271733878; for (e = 0; e < n.length; e += 16)i = l, a = g, d = v, h = m, g = f(g = f(g = f(g = f(g = c(g = c(g = c(g = c(g = u(g = u(g = u(g = u(g = o(g = o(g = o(g = o(g, v = o(v, m = o(m, l = o(l, g, v, m, n[e], 7, -680876936), g, v, n[e + 1], 12, -389564586), l, g, n[e + 2], 17, 606105819), m, l, n[e + 3], 22, -1044525330), v = o(v, m = o(m, l = o(l, g, v, m, n[e + 4], 7, -176418897), g, v, n[e + 5], 12, 1200080426), l, g, n[e + 6], 17, -1473231341), m, l, n[e + 7], 22, -45705983), v = o(v, m = o(m, l = o(l, g, v, m, n[e + 8], 7, 1770035416), g, v, n[e + 9], 12, -1958414417), l, g, n[e + 10], 17, -42063), m, l, n[e + 11], 22, -1990404162), v = o(v, m = o(m, l = o(l, g, v, m, n[e + 12], 7, 1804603682), g, v, n[e + 13], 12, -40341101), l, g, n[e + 14], 17, -1502002290), m, l, n[e + 15], 22, 1236535329), v = u(v, m = u(m, l = u(l, g, v, m, n[e + 1], 5, -165796510), g, v, n[e + 6], 9, -1069501632), l, g, n[e + 11], 14, 643717713), m, l, n[e], 20, -373897302), v = u(v, m = u(m, l = u(l, g, v, m, n[e + 5], 5, -701558691), g, v, n[e + 10], 9, 38016083), l, g, n[e + 15], 14, -660478335), m, l, n[e + 4], 20, -405537848), v = u(v, m = u(m, l = u(l, g, v, m, n[e + 9], 5, 568446438), g, v, n[e + 14], 9, -1019803690), l, g, n[e + 3], 14, -187363961), m, l, n[e + 8], 20, 1163531501), v = u(v, m = u(m, l = u(l, g, v, m, n[e + 13], 5, -1444681467), g, v, n[e + 2], 9, -51403784), l, g, n[e + 7], 14, 1735328473), m, l, n[e + 12], 20, -1926607734), v = c(v, m = c(m, l = c(l, g, v, m, n[e + 5], 4, -378558), g, v, n[e + 8], 11, -2022574463), l, g, n[e + 11], 16, 1839030562), m, l, n[e + 14], 23, -35309556), v = c(v, m = c(m, l = c(l, g, v, m, n[e + 1], 4, -1530992060), g, v, n[e + 4], 11, 1272893353), l, g, n[e + 7], 16, -155497632), m, l, n[e + 10], 23, -1094730640), v = c(v, m = c(m, l = c(l, g, v, m, n[e + 13], 4, 681279174), g, v, n[e], 11, -358537222), l, g, n[e + 3], 16, -722521979), m, l, n[e + 6], 23, 76029189), v = c(v, m = c(m, l = c(l, g, v, m, n[e + 9], 4, -640364487), g, v, n[e + 12], 11, -421815835), l, g, n[e + 15], 16, 530742520), m, l, n[e + 2], 23, -995338651), v = f(v, m = f(m, l = f(l, g, v, m, n[e], 6, -198630844), g, v, n[e + 7], 10, 1126891415), l, g, n[e + 14], 15, -1416354905), m, l, n[e + 5], 21, -57434055), v = f(v, m = f(m, l = f(l, g, v, m, n[e + 12], 6, 1700485571), g, v, n[e + 3], 10, -1894986606), l, g, n[e + 10], 15, -1051523), m, l, n[e + 1], 21, -2054922799), v = f(v, m = f(m, l = f(l, g, v, m, n[e + 8], 6, 1873313359), g, v, n[e + 15], 10, -30611744), l, g, n[e + 6], 15, -1560198380), m, l, n[e + 13], 21, 1309151649), v = f(v, m = f(m, l = f(l, g, v, m, n[e + 4], 6, -145523070), g, v, n[e + 11], 10, -1120210379), l, g, n[e + 2], 15, 718787259), m, l, n[e + 9], 21, -343485551), l = t(l, i), g = t(g, a), v = t(v, d), m = t(m, h); return [l, g, v, m] } function a(n) { var t, r = "", e = 32 * n.length; for (t = 0; t < e; t += 8)r += String.fromCharCode(n[t >> 5] >>> t % 32 & 255); return r } function d(n) { var t, r = []; for (r[(n.length >> 2) - 1] = void 0, t = 0; t < r.length; t += 1)r[t] = 0; var e = 8 * n.length; for (t = 0; t < e; t += 8)r[t >> 5] |= (255 & n.charCodeAt(t / 8)) << t % 32; return r } function h(n) { return a(i(d(n), 8 * n.length)) } function l(n, t) { var r, e, o = d(n), u = [], c = []; for (u[15] = c[15] = void 0, o.length > 16 && (o = i(o, 8 * n.length)), r = 0; r < 16; r += 1)u[r] = 909522486 ^ o[r], c[r] = 1549556828 ^ o[r]; return e = i(u.concat(d(t)), 512 + 8 * t.length), a(i(c.concat(e), 640)) } function g(n) { var t, r, e = ""; for (r = 0; r < n.length; r += 1)t = n.charCodeAt(r), e += "0123456789abcdef".charAt(t >>> 4 & 15) + "0123456789abcdef".charAt(15 & t); return e } function v(n) { return unescape(encodeURIComponent(n)) } function m(n) { return h(v(n)) } function p(n) { return g(m(n)) } function s(n, t) { return l(v(n), v(t)) } function C(n, t) { return g(s(n, t)) } function A(n, t, r) { return t ? r ? s(t, n) : C(t, n) : r ? m(n) : p(n) } $.md5 = A }(this);
-function Env(t, e) { "undefined" != typeof process && JSON.stringify(process.env).indexOf("GITHUB") > -1 && process.exit(0); class s { constructor(t) { this.env = t } send(t, e = "GET") { t = "string" == typeof t ? { url: t } : t; let s = this.get; return "POST" === e && (s = this.post), new Promise((e, i) => { s.call(this, t, (t, s, r) => { t ? i(t) : e(s) }) }) } get(t) { return this.send.call(this.env, t) } post(t) { return this.send.call(this.env, t, "POST") } } return new class { constructor(t, e) { this.name = t, this.http = new s(this), this.data = null, this.dataFile = "box.dat", this.logs = [], this.isMute = !1, this.isNeedRewrite = !1, this.logSeparator = "\n", this.startTime = (new Date).getTime(), Object.assign(this, e), this.log("", `🔔${this.name}, 开始!`) } isNode() { return "undefined" != typeof module && !!module.exports } isQuanX() { return "undefined" != typeof $task } isSurge() { return "undefined" != typeof $httpClient && "undefined" == typeof $loon } isLoon() { return "undefined" != typeof $loon } toObj(t, e = null) { try { return JSON.parse(t) } catch { return e } } toStr(t, e = null) { try { return JSON.stringify(t) } catch { return e } } getjson(t, e) { let s = e; const i = this.getdata(t); if (i) try { s = JSON.parse(this.getdata(t)) } catch { } return s } setjson(t, e) { try { return this.setdata(JSON.stringify(t), e) } catch { return !1 } } getScript(t) { return new Promise(e => { this.get({ url: t }, (t, s, i) => e(i)) }) } runScript(t, e) { return new Promise(s => { let i = this.getdata("@chavy_boxjs_userCfgs.httpapi"); i = i ? i.replace(/\n/g, "").trim() : i; let r = this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout"); r = r ? 1 * r : 20, r = e && e.timeout ? e.timeout : r; const [o, h] = i.split("@"), n = { url: `http://${h}/v1/scripting/evaluate`, body: { script_text: t, mock_type: "cron", timeout: r }, headers: { "X-Key": o, Accept: "*/*" } }; this.post(n, (t, e, i) => s(i)) }).catch(t => this.logErr(t)) } loaddata() { if (!this.isNode()) return {}; { this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path"); const t = this.path.resolve(this.dataFile), e = this.path.resolve(process.cwd(), this.dataFile), s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e); if (!s && !i) return {}; { const i = s ? t : e; try { return JSON.parse(this.fs.readFileSync(i)) } catch (t) { return {} } } } } writedata() { if (this.isNode()) { this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path"); const t = this.path.resolve(this.dataFile), e = this.path.resolve(process.cwd(), this.dataFile), s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e), r = JSON.stringify(this.data); s ? this.fs.writeFileSync(t, r) : i ? this.fs.writeFileSync(e, r) : this.fs.writeFileSync(t, r) } } lodash_get(t, e, s) { const i = e.replace(/\[(\d+)\]/g, ".$1").split("."); let r = t; for (const t of i) if (r = Object(r)[t], void 0 === r) return s; return r } lodash_set(t, e, s) { return Object(t) !== t ? t : (Array.isArray(e) || (e = e.toString().match(/[^.[\]]+/g) || []), e.slice(0, -1).reduce((t, s, i) => Object(t[s]) === t[s] ? t[s] : t[s] = Math.abs(e[i + 1]) >> 0 == +e[i + 1] ? [] : {}, t)[e[e.length - 1]] = s, t) } getdata(t) { let e = this.getval(t); if (/^@/.test(t)) { const [, s, i] = /^@(.*?)\.(.*?)$/.exec(t), r = s ? this.getval(s) : ""; if (r) try { const t = JSON.parse(r); e = t ? this.lodash_get(t, i, "") : e } catch (t) { e = "" } } return e } setdata(t, e) { let s = !1; if (/^@/.test(e)) { const [, i, r] = /^@(.*?)\.(.*?)$/.exec(e), o = this.getval(i), h = i ? "null" === o ? null : o || "{}" : "{}"; try { const e = JSON.parse(h); this.lodash_set(e, r, t), s = this.setval(JSON.stringify(e), i) } catch (e) { const o = {}; this.lodash_set(o, r, t), s = this.setval(JSON.stringify(o), i) } } else s = this.setval(t, e); return s } getval(t) { return this.isSurge() || this.isLoon() ? $persistentStore.read(t) : this.isQuanX() ? $prefs.valueForKey(t) : this.isNode() ? (this.data = this.loaddata(), this.data[t]) : this.data && this.data[t] || null } setval(t, e) { return this.isSurge() || this.isLoon() ? $persistentStore.write(t, e) : this.isQuanX() ? $prefs.setValueForKey(t, e) : this.isNode() ? (this.data = this.loaddata(), this.data[e] = t, this.writedata(), !0) : this.data && this.data[e] || null } initGotEnv(t) { this.got = this.got ? this.got : require("got"), this.cktough = this.cktough ? this.cktough : require("tough-cookie"), this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar, t && (t.headers = t.headers ? t.headers : {}, void 0 === t.headers.Cookie && void 0 === t.cookieJar && (t.cookieJar = this.ckjar)) } get(t, e = (() => { })) { t.headers && (delete t.headers["Content-Type"], delete t.headers["Content-Length"]), this.isSurge() || this.isLoon() ? (this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })), $httpClient.get(t, (t, s, i) => { !t && s && (s.body = i, s.statusCode = s.status), e(t, s, i) })) : this.isQuanX() ? (this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, { hints: !1 })), $task.fetch(t).then(t => { const { statusCode: s, statusCode: i, headers: r, body: o } = t; e(null, { status: s, statusCode: i, headers: r, body: o }, o) }, t => e(t))) : this.isNode() && (this.initGotEnv(t), this.got(t).on("redirect", (t, e) => { try { if (t.headers["set-cookie"]) { const s = t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString(); s && this.ckjar.setCookieSync(s, null), e.cookieJar = this.ckjar } } catch (t) { this.logErr(t) } }).then(t => { const { statusCode: s, statusCode: i, headers: r, body: o } = t; e(null, { status: s, statusCode: i, headers: r, body: o }, o) }, t => { const { message: s, response: i } = t; e(s, i, i && i.body) })) } post(t, e = (() => { })) { if (t.body && t.headers && !t.headers["Content-Type"] && (t.headers["Content-Type"] = "application/x-www-form-urlencoded"), t.headers && delete t.headers["Content-Length"], this.isSurge() || this.isLoon()) this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })), $httpClient.post(t, (t, s, i) => { !t && s && (s.body = i, s.statusCode = s.status), e(t, s, i) }); else if (this.isQuanX()) t.method = "POST", this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, { hints: !1 })), $task.fetch(t).then(t => { const { statusCode: s, statusCode: i, headers: r, body: o } = t; e(null, { status: s, statusCode: i, headers: r, body: o }, o) }, t => e(t)); else if (this.isNode()) { this.initGotEnv(t); const { url: s, ...i } = t; this.got.post(s, i).then(t => { const { statusCode: s, statusCode: i, headers: r, body: o } = t; e(null, { status: s, statusCode: i, headers: r, body: o }, o) }, t => { const { message: s, response: i } = t; e(s, i, i && i.body) }) } } time(t, e = null) { const s = e ? new Date(e) : new Date; let i = { "M+": s.getMonth() + 1, "d+": s.getDate(), "H+": s.getHours(), "m+": s.getMinutes(), "s+": s.getSeconds(), "q+": Math.floor((s.getMonth() + 3) / 3), S: s.getMilliseconds() }; /(y+)/.test(t) && (t = t.replace(RegExp.$1, (s.getFullYear() + "").substr(4 - RegExp.$1.length))); for (let e in i) new RegExp("(" + e + ")").test(t) && (t = t.replace(RegExp.$1, 1 == RegExp.$1.length ? i[e] : ("00" + i[e]).substr(("" + i[e]).length))); return t } msg(e = t, s = "", i = "", r) { const o = t => { if (!t) return t; if ("string" == typeof t) return this.isLoon() ? t : this.isQuanX() ? { "open-url": t } : this.isSurge() ? { url: t } : void 0; if ("object" == typeof t) { if (this.isLoon()) { let e = t.openUrl || t.url || t["open-url"], s = t.mediaUrl || t["media-url"]; return { openUrl: e, mediaUrl: s } } if (this.isQuanX()) { let e = t["open-url"] || t.url || t.openUrl, s = t["media-url"] || t.mediaUrl; return { "open-url": e, "media-url": s } } if (this.isSurge()) { let e = t.url || t.openUrl || t["open-url"]; return { url: e } } } }; if (this.isMute || (this.isSurge() || this.isLoon() ? $notification.post(e, s, i, o(r)) : this.isQuanX() && $notify(e, s, i, o(r))), !this.isMuteLog) { let t = ["", "==============📣系统通知📣=============="]; t.push(e), s && t.push(s), i && t.push(i), console.log(t.join("\n")), this.logs = this.logs.concat(t) } } log(...t) { t.length > 0 && (this.logs = [...this.logs, ...t]), console.log(t.join(this.logSeparator)) } logErr(t, e) { const s = !this.isSurge() && !this.isQuanX() && !this.isLoon(); s ? this.log("", `❗️${this.name}, 错误!`, t.stack) : this.log("", `❗️${this.name}, 错误!`, t) } wait(t) { return new Promise(e => setTimeout(e, t)) } done(t = {}) { const e = (new Date).getTime(), s = (e - this.startTime) / 1e3; this.log("", `🔔${this.name}, 结束! 🕛 ${s} 秒`), this.log(), (this.isSurge() || this.isQuanX() || this.isLoon()) && $done(t) } }(t, e) }
+function getRandomArrayElements(arr, count) {
+    var shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
+    while (i-- > min) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(min);
+}
+function getAuthorShareCode(url) {
+    return new Promise(async resolve => {
+        const options = {
+            "url": `${url}`,
+            "timeout": 10000,
+            "headers": {
+                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+            }
+        };
+        if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
+            const tunnel = require("tunnel");
+            const agent = {
+                https: tunnel.httpsOverHttp({
+                    proxy: {
+                        host: process.env.TG_PROXY_HOST,
+                        port: process.env.TG_PROXY_PORT * 1
+                    }
+                })
+            }
+            Object.assign(options, { agent })
+        }
+        $.get(options, async (err, resp, data) => {
+            try {
+                if (err) {
+                } else {
+                    if (data) data = JSON.parse(data)
+                }
+            } catch (e) {
+                // $.logErr(e, resp)
+            } finally {
+                resolve(data || []);
+            }
+        })
+        await $.wait(10000)
+        resolve();
+    })
+}
+function Env(t,e){"undefined"!=typeof process&&JSON.stringify(process.env).indexOf("GITHUB")>-1&&process.exit(0);class s{constructor(t){this.env=t}send(t,e="GET"){t="string"==typeof t?{url:t}:t;let s=this.get;return"POST"===e&&(s=this.post),new Promise((e,i)=>{s.call(this,t,(t,s,r)=>{t?i(t):e(s)})})}get(t){return this.send.call(this.env,t)}post(t){return this.send.call(this.env,t,"POST")}}return new class{constructor(t,e){this.name=t,this.http=new s(this),this.data=null,this.dataFile="box.dat",this.logs=[],this.isMute=!1,this.isNeedRewrite=!1,this.logSeparator="\n",this.startTime=(new Date).getTime(),Object.assign(this,e),this.log("",`🔔${this.name}, 开始!`)}isNode(){return"undefined"!=typeof module&&!!module.exports}isQuanX(){return"undefined"!=typeof $task}isSurge(){return"undefined"!=typeof $httpClient&&"undefined"==typeof $loon}isLoon(){return"undefined"!=typeof $loon}toObj(t,e=null){try{return JSON.parse(t)}catch{return e}}toStr(t,e=null){try{return JSON.stringify(t)}catch{return e}}getjson(t,e){let s=e;const i=this.getdata(t);if(i)try{s=JSON.parse(this.getdata(t))}catch{}return s}setjson(t,e){try{return this.setdata(JSON.stringify(t),e)}catch{return!1}}getScript(t){return new Promise(e=>{this.get({url:t},(t,s,i)=>e(i))})}runScript(t,e){return new Promise(s=>{let i=this.getdata("@chavy_boxjs_userCfgs.httpapi");i=i?i.replace(/\n/g,"").trim():i;let r=this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout");r=r?1*r:20,r=e&&e.timeout?e.timeout:r;const[o,h]=i.split("@"),n={url:`http://${h}/v1/scripting/evaluate`,body:{script_text:t,mock_type:"cron",timeout:r},headers:{"X-Key":o,Accept:"*/*"}};this.post(n,(t,e,i)=>s(i))}).catch(t=>this.logErr(t))}loaddata(){if(!this.isNode())return{};{this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),i=!s&&this.fs.existsSync(e);if(!s&&!i)return{};{const i=s?t:e;try{return JSON.parse(this.fs.readFileSync(i))}catch(t){return{}}}}}writedata(){if(this.isNode()){this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),i=!s&&this.fs.existsSync(e),r=JSON.stringify(this.data);s?this.fs.writeFileSync(t,r):i?this.fs.writeFileSync(e,r):this.fs.writeFileSync(t,r)}}lodash_get(t,e,s){const i=e.replace(/\[(\d+)\]/g,".$1").split(".");let r=t;for(const t of i)if(r=Object(r)[t],void 0===r)return s;return r}lodash_set(t,e,s){return Object(t)!==t?t:(Array.isArray(e)||(e=e.toString().match(/[^.[\]]+/g)||[]),e.slice(0,-1).reduce((t,s,i)=>Object(t[s])===t[s]?t[s]:t[s]=Math.abs(e[i+1])>>0==+e[i+1]?[]:{},t)[e[e.length-1]]=s,t)}getdata(t){let e=this.getval(t);if(/^@/.test(t)){const[,s,i]=/^@(.*?)\.(.*?)$/.exec(t),r=s?this.getval(s):"";if(r)try{const t=JSON.parse(r);e=t?this.lodash_get(t,i,""):e}catch(t){e=""}}return e}setdata(t,e){let s=!1;if(/^@/.test(e)){const[,i,r]=/^@(.*?)\.(.*?)$/.exec(e),o=this.getval(i),h=i?"null"===o?null:o||"{}":"{}";try{const e=JSON.parse(h);this.lodash_set(e,r,t),s=this.setval(JSON.stringify(e),i)}catch(e){const o={};this.lodash_set(o,r,t),s=this.setval(JSON.stringify(o),i)}}else s=this.setval(t,e);return s}getval(t){return this.isSurge()||this.isLoon()?$persistentStore.read(t):this.isQuanX()?$prefs.valueForKey(t):this.isNode()?(this.data=this.loaddata(),this.data[t]):this.data&&this.data[t]||null}setval(t,e){return this.isSurge()||this.isLoon()?$persistentStore.write(t,e):this.isQuanX()?$prefs.setValueForKey(t,e):this.isNode()?(this.data=this.loaddata(),this.data[e]=t,this.writedata(),!0):this.data&&this.data[e]||null}initGotEnv(t){this.got=this.got?this.got:require("got"),this.cktough=this.cktough?this.cktough:require("tough-cookie"),this.ckjar=this.ckjar?this.ckjar:new this.cktough.CookieJar,t&&(t.headers=t.headers?t.headers:{},void 0===t.headers.Cookie&&void 0===t.cookieJar&&(t.cookieJar=this.ckjar))}get(t,e=(()=>{})){t.headers&&(delete t.headers["Content-Type"],delete t.headers["Content-Length"]),this.isSurge()||this.isLoon()?(this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient.get(t,(t,s,i)=>{!t&&s&&(s.body=i,s.statusCode=s.status),e(t,s,i)})):this.isQuanX()?(this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>e(t))):this.isNode()&&(this.initGotEnv(t),this.got(t).on("redirect",(t,e)=>{try{if(t.headers["set-cookie"]){const s=t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();s&&this.ckjar.setCookieSync(s,null),e.cookieJar=this.ckjar}}catch(t){this.logErr(t)}}).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>{const{message:s,response:i}=t;e(s,i,i&&i.body)}))}post(t,e=(()=>{})){if(t.body&&t.headers&&!t.headers["Content-Type"]&&(t.headers["Content-Type"]="application/x-www-form-urlencoded"),t.headers&&delete t.headers["Content-Length"],this.isSurge()||this.isLoon())this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient.post(t,(t,s,i)=>{!t&&s&&(s.body=i,s.statusCode=s.status),e(t,s,i)});else if(this.isQuanX())t.method="POST",this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>e(t));else if(this.isNode()){this.initGotEnv(t);const{url:s,...i}=t;this.got.post(s,i).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>{const{message:s,response:i}=t;e(s,i,i&&i.body)})}}time(t,e=null){const s=e?new Date(e):new Date;let i={"M+":s.getMonth()+1,"d+":s.getDate(),"H+":s.getHours(),"m+":s.getMinutes(),"s+":s.getSeconds(),"q+":Math.floor((s.getMonth()+3)/3),S:s.getMilliseconds()};/(y+)/.test(t)&&(t=t.replace(RegExp.$1,(s.getFullYear()+"").substr(4-RegExp.$1.length)));for(let e in i)new RegExp("("+e+")").test(t)&&(t=t.replace(RegExp.$1,1==RegExp.$1.length?i[e]:("00"+i[e]).substr((""+i[e]).length)));return t}msg(e=t,s="",i="",r){const o=t=>{if(!t)return t;if("string"==typeof t)return this.isLoon()?t:this.isQuanX()?{"open-url":t}:this.isSurge()?{url:t}:void 0;if("object"==typeof t){if(this.isLoon()){let e=t.openUrl||t.url||t["open-url"],s=t.mediaUrl||t["media-url"];return{openUrl:e,mediaUrl:s}}if(this.isQuanX()){let e=t["open-url"]||t.url||t.openUrl,s=t["media-url"]||t.mediaUrl;return{"open-url":e,"media-url":s}}if(this.isSurge()){let e=t.url||t.openUrl||t["open-url"];return{url:e}}}};if(this.isMute||(this.isSurge()||this.isLoon()?$notification.post(e,s,i,o(r)):this.isQuanX()&&$notify(e,s,i,o(r))),!this.isMuteLog){let t=["","==============📣系统通知📣=============="];t.push(e),s&&t.push(s),i&&t.push(i),console.log(t.join("\n")),this.logs=this.logs.concat(t)}}log(...t){t.length>0&&(this.logs=[...this.logs,...t]),console.log(t.join(this.logSeparator))}logErr(t,e){const s=!this.isSurge()&&!this.isQuanX()&&!this.isLoon();s?this.log("",`❗️${this.name}, 错误!`,t.stack):this.log("",`❗️${this.name}, 错误!`,t)}wait(t){return new Promise(e=>setTimeout(e,t))}done(t={}){const e=(new Date).getTime(),s=(e-this.startTime)/1e3;this.log("",`🔔${this.name}, 结束! 🕛 ${s} 秒`),this.log(),(this.isSurge()||this.isQuanX()||this.isLoon())&&$done(t)}}(t,e)}

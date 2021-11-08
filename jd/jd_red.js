@@ -2,7 +2,7 @@
 双十一无门槛红包🧧
 ck1助力 作者
 其余助力ck1
-https://u.jd.com/lJmZi
+https://u.jd.com/yCXwdQJ
 跳转到app 可查看助力情况
 cron 0 0,12,20 * * * gua_1111RedEnvelope.js
 */
@@ -31,7 +31,7 @@ message = ''
 newCookie = ''
 resMsg = ''
 
-let flCodeArr = ['lJmZi', 'aifDY', 'U2KQe', 'xavxt', 'IBDuD', 'tm8Hb', 'U2LEp'];
+let flCodeArr = ['yCXwdQJ'];
 const activeEndTime = '2021/11/12 00:00:00+08:00';//活动结束时间
 let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000;
 !(async () => {
