@@ -120,7 +120,7 @@ const {
 } = require('./ql');
 const fs = require('fs');
 
-let strUidFile = './JDSend.js';
+let strUidFile = './jdCookieSend.js';
 let UidFileexists = fs.existsSync(strUidFile);
 let TempCKUid = [];
 if (UidFileexists) {
