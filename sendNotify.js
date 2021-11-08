@@ -120,7 +120,7 @@ const {
 } = require('./ql');
 const fs = require('fs');
 
-let strUidFile = './JDOneSend.json';
+let strUidFile = './JDSend.js';
 let UidFileexists = fs.existsSync(strUidFile);
 let TempCKUid = [];
 if (UidFileexists) {
