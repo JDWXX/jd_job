@@ -1,4 +1,3 @@
-# -*- coding:utf-8 -*-
 """
 const $ = new Env("禁用重复任务");
 禁用重复任务
