@@ -56,7 +56,6 @@ if ($.isNode()) {
     }
     if (flag_hb) {
         console.log('\n##################开始账号内互助(红包)#################\n');
-        $.inviteCodeList_rp = []
         for (let j = 0; j < cookiesArr.length; j++) {
             $.cookie = cookiesArr[j];
             $.UserName = decodeURIComponent($.cookie.match(/pt_pin=(.+?);/) && $.cookie.match(/pt_pin=(.+?);/)[1]);
@@ -78,7 +77,6 @@ if ($.isNode()) {
         }
     }
     console.log('\n##################开始账号内互助#################\n');
-    $.inviteCodeList = []
     for (let j = 0; j < cookiesArr.length; j++) {
         $.cookie = cookiesArr[j];
         $.UserName = decodeURIComponent($.cookie.match(/pt_pin=(.+?);/) && $.cookie.match(/pt_pin=(.+?);/)[1]);
