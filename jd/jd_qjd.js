@@ -25,7 +25,6 @@ if ($.isNode()) {
 }
 !(async () => {
   console.log(`\n【抢京豆脚本】优先账号内部互相助力，有剩余次数再助力【zero205】\n`)
-  // await getAuthorShareCode();
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
     return;
@@ -66,29 +65,6 @@ if ($.isNode()) {
           $.shareCode = helpInfo[helpItem].shareCode
           $.activityId = helpInfo[helpItem].activityId
           await doHelp($.groupCode, $.shareCode, $.activityId)
-          if (!$.canHelp)
-            break
-        }
-      }
-      console.log(`${$.UserName}账号内部互助已完成，尝试帮【zero205】助力`)
-      for (let code of $.authorCode) {
-        $.canHelp = true
-        await doHelp(code.groupCode, code.shareCode, $.activityId)
-        if (!$.canHelp)
-          break
-      }
-    }
-  } else {
-    console.log(`\n账号少于3个，不够成团，去助力【zero205】，感谢！\n`)
-    for (let j = 0; j < cookiesArr.length; j++) {
-      if (cookiesArr[j]) {
-        cookie = cookiesArr[j];
-        $.canHelp = true
-        for (let helpItem in helpInfo) {
-          $.activityId = helpInfo[helpItem].activityId
-        }
-        for (let code of $.authorCode) {
-          await doHelp(code.groupCode, code.shareCode, $.activityId)
           if (!$.canHelp)
             break
         }
