@@ -36,7 +36,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
     }
 
     authorCodeList = [
-        'b56485541148443bb2831bf6425645d5',
+        '6c7b987cf7dc4777b1ee13966c097493',
     ]
 
     for (let i = 0; i < cookiesArr.length; i++) {
