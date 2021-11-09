@@ -32,6 +32,8 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
+    console.log('\nJDWXX库');
+    console.log('https://github.com/JDWXX/jd_job\n');
     for (let i = 0; i < cookiesArr.length; i++) {
         $.index = i + 1;
         $.cookie = cookiesArr[i];
@@ -126,8 +128,6 @@ async function get_rp(){
     }
 }
 async function main() {
-    console.log('\nJDWXX库\n');
-    console.log('\nhttps://github.com/JDWXX/jd_job\n');
     ua = '';
     if(JXUserAgent){
         ua = JXUserAgent;
