@@ -1,9 +1,11 @@
 # -*- coding:utf-8 -*-
-'''
-cron: 0 0 0 6 *
-new Env('禁用重复任务');
-'''
+"""
+const $ = new Env("禁用重复任务");
+禁用重复任务
 
+cron:
+0 0 0 6 * jd_delete.py
+"""
 import json
 import os, sys
 import requests
