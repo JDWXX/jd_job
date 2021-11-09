@@ -1,6 +1,6 @@
 /**
-cron=15 3,9 * * * jd_aid_ftzy.js
-new Env('京东沸腾之夜助力');
+ cron=15 3,9 * * * jd_aid_ftzy.js
+ new Env('京东沸腾之夜助力');
  */
 let common = require("./function/common");
 let $ = new common.env('京东沸腾之夜助力');
