@@ -36,7 +36,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
         return;
     }
     authorCodeList = [
-        'ea06b7c53d9b49e89b77eb7cfc5ca4cd',
+        'ea06b7c53d9b49e89b77eb7cfc5ca4cd','96a6e2e94e77483e87caa60fdf710d50',
     ]
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
