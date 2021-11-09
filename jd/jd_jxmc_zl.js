@@ -1,12 +1,11 @@
 /**
- 惊喜牧场-助力
+ 惊喜牧场
  cron 23 0-23/3 * * * https://github.com/JDWXX/jd_job/blob/master/jd/jd_jxmc_zl.js
  */
 const $ = new Env('惊喜牧场-助力');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 const JXUserAgent =  $.isNode() ? (process.env.JX_USER_AGENT ? process.env.JX_USER_AGENT : ``):``;
-const ByType = $.isNode() ? (process.env.BYTYPE ? process.env.BYTYPE : `888`):`888`;
 let cookiesArr = [],token = {},ua = '';
 $.appId = 10028;
 let activeid = 'null';
@@ -57,7 +56,7 @@ if ($.isNode()) {
     }
     if (flag_hb) {
         console.log('\n##################开始账号内互助(红包)#################\n');
-        $.inviteCodeList_rp = [...($.inviteCodeList_rp || []), ...($.shareCode || [])]
+        $.inviteCodeList_rp = []
         for (let j = 0; j < cookiesArr.length; j++) {
             $.cookie = cookiesArr[j];
             $.UserName = decodeURIComponent($.cookie.match(/pt_pin=(.+?);/) && $.cookie.match(/pt_pin=(.+?);/)[1]);
@@ -79,8 +78,7 @@ if ($.isNode()) {
         }
     }
     console.log('\n##################开始账号内互助#################\n');
-    $.shareCode = undefined
-    $.inviteCodeList = [...($.inviteCodeList || []), ...($.shareCode || [])]
+    $.inviteCodeList = []
     for (let j = 0; j < cookiesArr.length; j++) {
         $.cookie = cookiesArr[j];
         $.UserName = decodeURIComponent($.cookie.match(/pt_pin=(.+?);/) && $.cookie.match(/pt_pin=(.+?);/)[1]);
@@ -110,30 +108,7 @@ if ($.isNode()) {
         }
     }
 })().catch((e) => {$.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')}).finally(() => {$.done();})
-function getShareCode(name) {
-    return new Promise(resolve => {
-        $.get({
-            url: "https://raw.fastgit.org/zero205/updateTeam/main/"+name,
-            headers: {
-                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-            }
-        }, async (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`);
-                    console.log(`${$.name} API请求失败，请检查网路重试`);
-                } else {
-                    console.log(`优先账号内部互助，有剩余助力次数再帮【zero205】助力`);
-                    $.shareCode = JSON.parse(data);
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve();
-            }
-        })
-    })
-}
+
 async function get_rp(){
     let rpInfo = await takeRequest(`jxmc`,`operservice/GetInviteStatus`,``,``,true);
     if (rpInfo.ret === 0) {
@@ -153,6 +128,8 @@ async function get_rp(){
     }
 }
 async function main() {
+    console.log('\nJDWXX库\n');
+    console.log('\nhttps://github.com/JDWXX/jd_job\n');
     ua = '';
     if(JXUserAgent){
         ua = JXUserAgent;
@@ -164,9 +141,7 @@ async function main() {
     let configInfo = await takeRequest(`jxmc`,`queryservice/GetConfigInfo`,``,undefined,true);
     let homePageInfo = await takeRequest(`jxmc`,`queryservice/GetHomePageInfo`,`&isgift=1&isquerypicksite=1&isqueryinviteicon=1`,`activeid%2Cactivekey%2Cchannel%2Cisgift%2Cisqueryinviteicon%2Cisquerypicksite%2Cjxmc_jstoken%2Cphoneid%2Csceneid%2Ctimestamp`,true);
     activeid = homePageInfo.activeid;
-    let cardInfo = await takeRequest(`jxmc`,`queryservice/GetCardInfo`,``,undefined,true);
     let signInfo = await takeRequest(`jxmc`,`queryservice/GetSignInfo`,``,undefined,true);
-    let visitBackInfo = await takeRequest(`jxmc`,`queryservice/GetVisitBackInfo`,``,undefined,true);
     if(JSON.stringify(configInfo) === '{}' || JSON.stringify(homePageInfo) === '{}'){
         console.log(`初始化失败,可能是牧场黑号`);
         return ;
