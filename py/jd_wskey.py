@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*
 '''
-cron: 15 2 * * * jd_wskey.py
+cron: 15 2 * * * wskey.py
 new Env('wskey转换');
 '''
 
@@ -28,7 +28,7 @@ try:
 except:
     logger.info("无推送文件")
 
-ver = 1103
+ver = 1110
 
 
 # 登录青龙 返回值 token
@@ -383,13 +383,14 @@ def ql_insert(i_ck):
 
 
 def cloud_info():
-    url = str(base64.b64decode('aHR0cDovLzE1MC4xNTguMTUzLjUzOjg0NDMvY2hlY2tfYXBp').decode())
+    url = 'http://150.158.153.53:8443/wskey'
     for i in range(3):
         try:
             headers = {
                 "authorization": "Bearer Shizuku",
                 "Connection": "close"
             }
+            logger.info("\n向云端提交的参数" + headers)
             res = requests.get(url=url, verify=False, headers=headers, timeout=20).text
         except requests.exceptions.ConnectTimeout:
             logger.info("\n获取云端参数超时, 正在重试!" + str(i))
@@ -455,9 +456,9 @@ if __name__ == '__main__':
                         eid = return_serch[2]
                         logger.info(str(wspin) + "账号禁用")
                         ql_disable(eid)
-                        dd = serch_ck(ws)[2]
-                        ql_disable(dd)
-                        text = "账号: {0} WsKey失效, 已禁用Cookie & Wskey!".format(wspin)
+                        # dd = serch_ck(ws)[2]
+                        # ql_disable(dd)
+                        text = "账号: {0} WsKey失效, 已禁用Cookie".format(wspin)
                         try:
                             send('WsKey转换脚本', text)
                         except:
