@@ -322,7 +322,7 @@ def helpCode(ck, groupCode, shareCode,u, unum, user, activityId):
             'Referer': f'https://h5.m.jd.com/rn/42yjy8na6pFsq1cx9MJQ5aTgu3kX/index.html?jklActivityId=115&source=SignSuccess&jklGroupCode={groupCode}&ad_od=1&jklShareCode={shareCode}',
             'Accept-Encoding': 'gzip, deflate, br',
             'Host': 'api.m.jd.com',
-            'User-Agent': userAgent(),
+            'User-Agent': "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1",
             'Accept-Language': 'zh-cn'
         }
         url = 'https://api.m.jd.com/client.action?functionId=signGroupHelp&body=%7B%22activeType%22%3A2%2C%22groupCode%22%3A%22' + str(groupCode) + '%22%2C%22shareCode%22%3A%22' + shareCode + f'%22%2C%22activeId%22%3A%22{activityId}%22%2C%22source%22%3A%22guest%22%7D&appid=ld&client=apple&clientVersion=10.0.4&networkType=wifi&osVersion=13.7&uuid=&openudid=&jsonp=jsonp_{int(round(t * 1000))}_{v_num1}'
