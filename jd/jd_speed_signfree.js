@@ -16,15 +16,6 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 $.message = "\n";
-
-let WP_APP_TOKEN_ONE = "";
-let strmessagebyone="";
-let strmessage="";
-if ($.isNode() && process.env.WP_APP_TOKEN_ONE) {
-    WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE;
-}
-
-
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
@@ -37,42 +28,29 @@ if ($.isNode() && process.env.WP_APP_TOKEN_ONE) {
             $.index = i + 1;
             $.isLogin = true;
             $.nickName = '';
-            $.mian_dan_list = [];
-            $.mian_Name_list = [];
+            $.mian_dan_list = []
             await TotalBean();
             console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
             if (!$.isLogin) {
                 $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
 
                 if ($.isNode()) {
-                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+                    //await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
                 }
                 continue
             }
             $.message += `【京东账号】${$.nickName || $.UserName}\n`
-            strmessagebyone="";
             await get_order_ids(cookie)
             if ($.mian_dan_list.length > 0) {
                 for (let i = 0; i < $.mian_dan_list.length; i++) {
                     const orderId = $.mian_dan_list[i];
-                    console.log(`商品名称:`+$.mian_Name_list[i]+`,商品id:${orderId}`);
-                    $.message += `商品名称:`+$.mian_Name_list[i]+`\n`;
-                    strmessagebyone+=`商品名称:`+$.mian_Name_list[i]+`\n`;
                     await sign(cookie, orderId);
                     await $.wait(2000)
                 }
             }
-            if(strmessagebyone)
-                strmessage+=`【京东账号】${$.nickName || $.UserName}\n`+strmessagebyone+`\n`;
-
-            if (strmessagebyone && $.isNode() && WP_APP_TOKEN_ONE) {
-                strmessagebyone=`【京东账号】${$.nickName || $.UserName}\n`+strmessagebyone;
-                await notify.sendNotifybyWxPucher("京东极速版签到免单",strmessagebyone, `${$.UserName}`);
-            }
-
         }
     }
-    await notify.sendNotify(`${$.name}`, strmessage);
+    // notify.sendNotify(`${$.name}`, $.message);
 })()
     .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -103,12 +81,14 @@ function get_order_ids(cookie) {
             }, (err, resp, data) => {
                 data = JSON.parse(data)
                 if (data.success == true) {
-                    /* if (data.data.risk == true) {
-                        console.log("风控用户,跳过");
-                        $.message += "风控用户,跳过\n"
-                        resolve()
-                        return
-                    } */
+                    if (data.data.risk == true) {
+                        console.log("风控用户,继续操作");
+                        $.message += "风控用户,继续操作\n"
+                        // console.log("风控用户,跳过");
+                        // $.message += "风控用户,跳过\n"
+                        // resolve()
+                        // return
+                    }
                     if (!data.data.signFreeOrderInfoList) {
                         console.log("没有需要签到的商品,请到京东极速版[签到免单]购买商品");
                         $.message += "没有需要签到的商品,请到京东极速版[签到免单]购买商品\n"
@@ -118,7 +98,8 @@ function get_order_ids(cookie) {
                             var respdemo = { "success": true, "code": 0, "errMsg": "success", "data": { "newUser": false, "backRecord": false, "risk": false, "surplusCount": 2, "sumTotalFreeAmount": "0.00", "signFreeOrderInfoList": [{ "id": 472, "productName": "百事可乐 300ml*6瓶", "productImg": "jfs/t1/177052/32/20077/117620/611e1a4cE0065cc54/b19fb6ed2ff59493.jpg", "needSignDays": 20, "hasSignDays": 0, "freeAmount": "6.54", "moneyReceiveMode": "3", "orderId": 225947891472, "surplusTime": 0, "combination": 1 }], "interruptInfoList": null } }
                             const order = data.data.signFreeOrderInfoList[i];
                             $.mian_dan_list.push(order.orderId)
-                            $.mian_Name_list.push(order.productName)
+                            console.log(`商品名称:${order.productName},商品id:${order.orderId}`);
+                            $.message += `商品名称:${order.productName}\n`
                         }
                     }
                 }
@@ -159,10 +140,8 @@ function sign(cookie, orderId) {
                 var dataDemo = { "success": false, "code": 400015, "errMsg": "明日签到", "data": null }
                 if (data.success == false) {
                     console.log(data.errMsg);
-                    strmessagebyone+="签到失败:"+data.errMsg+"\n";
                 } else {
                     console.log("签到成功");
-                    strmessagebyone+="签到成功\n";
                 }
             } catch (e) {
                 $.logErr(e, resp);

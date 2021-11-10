@@ -1,15 +1,6 @@
 /*
-author：https://github.com/shufflewzc/faker2/edit/main/jd_joy_park_help.js
-[task_local]
-#汪汪乐园每日助力
-20 20 * * * jd_joy_park_help.js, tag= 汪汪乐园每日助力
-================Loon==============
-[Script]
-cron "20 20 * * *" script-path= jd_joy_park_help.js,tag= 汪汪乐园每日助力
-===============Surge=================
-汪汪乐园每日助力 = type=cron,cronexp="20 20 * * *",wake-system=1,timeout=3600,script-path= jd_joy_park_help.js
-============小火箭=========
-汪汪乐园每日助力 = type=cron,script-path= jd_joy_park_help.js, cronexpr="20 20 * * *", timeout=3600, enable=true
+
+30 23 * * * jd_joy_park_help.js
 */
 const $ = Env("汪汪乐园每日助力")
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
@@ -82,7 +73,7 @@ let inviter = {};
             tasks.data.forEach(function (task) {
                 if(task.taskType == "SHARE_INVITE"){
                     if (task.taskDoTimes < task.taskLimitTimes) {
-                        helpInfo.taskLimitTimes = task.taskLimitTimes
+                        helpInfo.taskLimitTimes = task.taskLimitTimes 
                         helpInfo.taskDoTimes = task.taskDoTimes
                         helpInfo.index = i
                         inviters.push(helpInfo)

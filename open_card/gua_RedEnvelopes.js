@@ -3,7 +3,7 @@
 cron 0,30 0,12,20,22 * * * jd_HongBao.js
 添加环境变量FLCODE 如需自己吃返利，请填写该变量（https://u.jd.com/后面的英文）
 * */
-const $ = new Env('抢双11无门槛红包11');
+const $ = new Env('抢双11无门槛红包_1110');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [];
 if ($.isNode()) {
@@ -55,7 +55,7 @@ async function main() {
     $.UA = `jdapp;iPhone;10.2.2;14.3;${randomString(40)};M/5.0;network/wifi;ADID/;model/iPhone12,1;addressid/4199175193;appBuild/167863;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;`
     $.max = false;
     $.hotFlag = false;
-    const flCodeArr = ['yCXwdQJ','2MtR27f'];
+    const flCodeArr = ['yCXwdQJ', '2MtR27f'];
     const flCode = $.isNode() ? (process.env.FLCODE ? process.env.FLCODE : flCodeArr[Math.floor((Math.random() * flCodeArr.length))]) : flCodeArr[Math.floor((Math.random() * flCodeArr.length))];
     $.code = flCode;
     for (let i = 0; i < 10 && !$.max; i++) {

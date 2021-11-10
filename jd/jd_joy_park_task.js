@@ -35,7 +35,7 @@ if ($.isNode()) {
 }
 $.invitePinTaskList = []
 $.invitePin = [
-  ""
+  "bcVxt4PbZdbX7tiT1Q_ubg"
 ]
 const JD_API_HOST = `https://api.m.jd.com/client.action`;
 message = ""
@@ -211,8 +211,8 @@ message = ""
     }
   }
 })()
-  .catch((e) => $.logErr(e))
-  .finally(() => $.done())
+    .catch((e) => $.logErr(e))
+    .finally(() => $.done())
 //获取活动信息
 
 //任务列表
