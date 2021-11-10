@@ -390,13 +390,13 @@ def cloud_info():
                 "authorization": "Bearer Shizuku",
                 "Connection": "close"
             }
-            logger.info("\n向云端提交的参数" + headers)
             res = requests.get(url=url, verify=False, headers=headers, timeout=20).text
         except requests.exceptions.ConnectTimeout:
             logger.info("\n获取云端参数超时, 正在重试!" + str(i))
         except requests.exceptions.ReadTimeout:
             logger.info("\n获取云端参数超时, 正在重试!" + str(i))
         except Exception as err:
+            logger.info("\n向云端提交的参数" + headers)
             logger.info(str(err) + "\n未知错误云端, 退出脚本!")
             sys.exit(1)
         else:
