@@ -2,12 +2,12 @@
 双十一无门槛红包🧧
 ck1助力 作者
 其余助力ck1
-https://u.jd.com/3K9D5Kc
+https://u.jd.com/2tdySJP
 跳转到app 可查看助力情况
 1 0,12,18 * * * gua_1111RedEnvelope.js
 */
 
-let rebateCodes = ''
+let rebateCodes = '2tdySJP'
 
 const $ = new Env('双十一无门槛红包🧧');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -26,7 +26,7 @@ if ($.isNode()) {
 }
 rebateCodes = $.isNode() ? (process.env.gua_redEnvelope_rebateCode ? process.env.gua_redEnvelope_rebateCode : `${rebateCodes}`) : ($.getdata('gua_redEnvelope_rebateCode') ? $.getdata('gua_redEnvelope_rebateCode') : `${rebateCodes}`);
 
-rebateCode = ''
+rebateCode = '2tdySJP'
 message = ''
 newCookie = ''
 resMsg = ''
@@ -45,7 +45,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
     if ($.isNode()) await notify.sendNotify($.name + '活动已结束', `请删除此脚本\n咱江湖再见`);
     return
   }
-  $.shareCode = 'zZDrk'
+  $.shareCode = '2tdySJP'
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     if (cookie) {
@@ -57,9 +57,9 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
     }
   }
   if(message){
-    $.msg($.name, ``, `${message}\nhttps://u.jd.com/3K9D5Kc\n\n跳转到app 可查看助力情况`);
+    $.msg($.name, ``, `${message}\nhttps://u.jd.com/2tdySJP\n\n跳转到app 可查看助力情况`);
     if ($.isNode()){
-      await notify.sendNotify(`${$.name}`, `${message}\n\nhttps://u.jd.com/3K9D5Kc\n跳转到app 可查看助力情况`);
+      await notify.sendNotify(`${$.name}`, `${message}\n\nhttps://u.jd.com/2tdySJP\n跳转到app 可查看助力情况`);
     }
   }
 })()

@@ -2,12 +2,12 @@
 双十一无门槛红包🧧
 ck1助力 作者
 其余助力ck1
-https://u.jd.com/yCXwdQJ
+https://u.jd.com/yL57hK9
 跳转到app 可查看助力情况
 cron 0 0,12,20 * * * gua_1111RedEnvelope.js
 */
 
-let rebateCodes = ''
+let rebateCodes = 'yL57hK9'
 
 const $ = new Env('双十一无门槛红包🧧2');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -26,12 +26,12 @@ if ($.isNode()) {
 }
 rebateCodes = $.isNode() ? (process.env.gua_redEnvelope_rebateCode ? process.env.gua_redEnvelope_rebateCode : `${rebateCodes}`) : ($.getdata('gua_redEnvelope_rebateCode') ? $.getdata('gua_redEnvelope_rebateCode') : `${rebateCodes}`);
 
-rebateCode = ''
+rebateCode = 'yL57hK9'
 message = ''
 newCookie = ''
 resMsg = ''
 
-let flCodeArr = ['yCXwdQJ'];
+let flCodeArr = ['yL57hK9'];
 const activeEndTime = '2021/11/12 00:00:00+08:00';//活动结束时间
 let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000;
 !(async () => {
