@@ -63,11 +63,11 @@ $.appId = 10032;
     }
   }
 })()
-  .catch((e) => {
-    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-  }).finally(() => {
-    $.done();
-  })
+    .catch((e) => {
+      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    }).finally(() => {
+      $.done();
+    })
 async function run() {
   try{
     $.HomeInfo = ''
@@ -78,7 +78,7 @@ async function run() {
     $.Biztask = []
     $.Aggrtask = []
     $.Employtask = []
-    
+
     await GetHomePageInfo()
 
     if($.HomeInfo){
@@ -179,14 +179,14 @@ async function GetProp(){
     $.propTask = await taskGet(`story/GetPropTask`, '_cfd_t,bizCode,dwEnv,ptag,source,strZone', '&ptag=')
     if($.propTask && $.propTask.Data && $.propTask.Data.TaskList){
       for(let t of $.propTask.Data.TaskList || []){
-        if([9,11].includes(t.dwPointType)) continue
         let res = ''
         if(t.dwCompleteNum < t.dwTargetNum){
+          if([9,11].includes(t.dwPointType)) continue
           res = await taskGet('DoTask2', '_cfd_t,bizCode,configExtra,dwEnv,ptag,source,strZone,taskId', `&ptag=&taskId=${t.ddwTaskId}&configExtra=`)
           if (res.ret === 0) {
             console.log(`[${t.strTaskName}]加速卡任务完成`)
           } else {
-            console.log(`[${t.strTaskName}]加速卡任务失败`, res)
+            console.log(`[${t.strTaskName}]加速卡任务失败`, $.toStr(res,res))
             await $.wait(2000)
             continue
           }
@@ -196,8 +196,16 @@ async function GetProp(){
           res = await taskGet('Award2', '_cfd_t,bizCode,dwEnv,ptag,source,strZone,taskId', `&ptag=&taskId=${t.ddwTaskId}`)
           if (res.ret === 0) {
             console.log(`[${t.strTaskName}]加速卡领取成功`)
+            if(res.data.prizeInfo){
+              let task = $.toObj(res.data.prizeInfo,res.data.prizeInfo)
+              let msg = []
+              for(let card of task.CardInfo.CardList || []){
+                msg.push(card.strCardName)
+              }
+              console.log(`获得[${msg.join(',')}]加速卡`)
+            }
           } else {
-            console.log(`[${t.strTaskName}]加速卡领取失败`, res)
+            console.log(`[${t.strTaskName}]加速卡领取失败`, $.toStr(res,res))
             await $.wait(2000)
             continue
           }
@@ -221,7 +229,7 @@ async function GetProp(){
             if(res.ddwCardTargetTm > 0 ) console.log(`[金币卡]结束时间:${$.time('yyyy-MM-dd HH:mm:ss',res.ddwCardTargetTm*1000)}`)
             flag += 1
           } else {
-            console.log(`[${card.strCardName}]金币卡使用失败`, res)
+            console.log(`[${card.strCardName}]金币卡使用失败`, $.toStr(res,res))
           }
           await $.wait(2000)
         }
@@ -236,7 +244,7 @@ async function GetProp(){
             if(res.ddwCardTargetTm > 0 ) console.log(`[财富卡]结束时间:${$.time('yyyy-MM-dd HH:mm:ss',res.ddwCardTargetTm*1000)}`)
             flag += 2
           } else {
-            console.log(`[${card.strCardName}]财富卡使用失败`, res)
+            console.log(`[${card.strCardName}]财富卡使用失败`, $.toStr(res,res))
           }
           await $.wait(2000)
         }
@@ -445,9 +453,9 @@ async function sign(){
         }
       }
     }
-    
+
     if($.Aggrtask && $.Aggrtask.Data && $.Aggrtask.Data.Employee && $.Aggrtask.Data.Employee.EmployeeList){
-        if($.Aggrtask.Data && $.Aggrtask.Data.Employee && $.Aggrtask.Data.Employee.EmployeeList){
+      if($.Aggrtask.Data && $.Aggrtask.Data.Employee && $.Aggrtask.Data.Employee.EmployeeList){
         console.log(`\n领取邀请奖励(${$.Aggrtask.Data.Employee.EmployeeList.length || 0}/${$.Aggrtask.Data.Employee.dwNeedTotalPeople || 0})`)
         for(let i of $.Aggrtask.Data.Employee.EmployeeList){
           if(i.dwStatus == 0){
@@ -605,7 +613,7 @@ async function Guide(){
       console.log(`当前可雇佣劳动人数:${num}`)
       let arr = [];
       for(let i in $.Employtask.TourGuideList){
-      let item = $.Employtask.TourGuideList[i]
+        let item = $.Employtask.TourGuideList[i]
         let larr = [],res = true
         arr.forEach((x)=>{
           if(x.ddwProductCoin < item.ddwProductCoin && res == true){
@@ -634,7 +642,7 @@ async function Guide(){
         }
       }
     }
-    
+
   }catch (e) {
     $.logErr(e);
   }
@@ -785,7 +793,7 @@ async function UserTask(){
     let res = ''
     $.task = await taskGet(`GetUserTaskStatusList`, '_cfd_t,bizCode,dwEnv,ptag,source,strZone,taskId', '&ptag=&taskId=0')
     if($.task && $.task.data && $.task.data.userTaskStatusList){
-        console.log(`\n日常任务、成就任务`)
+      console.log(`\n日常任务、成就任务`)
       for(let i in $.task.data.userTaskStatusList){
         let item = $.task.data.userTaskStatusList[i]
         if(item.awardStatus != 2 && item.completedTimes === item.targetTimes) continue
@@ -1126,10 +1134,10 @@ async function requestAlgo() {
 
 function getRandomIDPro() {
   var e,
-    t,
-    a = void 0 === (n = (t = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : {}).size) ? 10 : n,
-    n = void 0 === (n = t.dictType) ? 'number' : n,
-    i = '';
+      t,
+      a = void 0 === (n = (t = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : {}).size) ? 10 : n,
+      n = void 0 === (n = t.dictType) ? 'number' : n,
+      i = '';
   if ((t = t.customDict) && 'string' == typeof t) e = t;
   else
     switch (n) {
@@ -1172,25 +1180,25 @@ function format(a, time) {
     t = new Date(time);
   }
   var e,
-    n = new Date(t),
-    d = a,
-    l = {
-      'M+': n.getMonth() + 1,
-      'd+': n.getDate(),
-      'D+': n.getDate(),
-      'h+': n.getHours(),
-      'H+': n.getHours(),
-      'm+': n.getMinutes(),
-      's+': n.getSeconds(),
-      'w+': n.getDay(),
-      'q+': Math.floor((n.getMonth() + 3) / 3),
-      'S+': n.getMilliseconds(),
-    };
+      n = new Date(t),
+      d = a,
+      l = {
+        'M+': n.getMonth() + 1,
+        'd+': n.getDate(),
+        'D+': n.getDate(),
+        'h+': n.getHours(),
+        'H+': n.getHours(),
+        'm+': n.getMinutes(),
+        's+': n.getSeconds(),
+        'w+': n.getDay(),
+        'q+': Math.floor((n.getMonth() + 3) / 3),
+        'S+': n.getMilliseconds(),
+      };
   /(y+)/i.test(d) && (d = d.replace(RegExp.$1, ''.concat(n.getFullYear()).substr(4 - RegExp.$1.length)));
   Object.keys(l).forEach(e => {
     if (new RegExp('('.concat(e, ')')).test(d)) {
       var t,
-        a = 'S+' === e ? '000' : '00';
+          a = 'S+' === e ? '000' : '00';
       d = d.replace(RegExp.$1, 1 == RegExp.$1.length ? l[e] : ''.concat(a).concat(l[e]).substr(''.concat(l[e]).length));
     }
   });
@@ -1253,7 +1261,7 @@ function getAuthorShareCode(url) {
  * @param count
  * @returns {Buffer}
  */
- function getRandomArrayElements(arr, count) {
+function getRandomArrayElements(arr, count) {
   var shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
   while (i-- > min) {
     index = Math.floor((i + 1) * Math.random());
