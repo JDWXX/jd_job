@@ -68,8 +68,6 @@ ql repo https://hub.fastgit.org/JDWXX/jd_job.git "jd_|jx_|gua_|jddj_|getJDCookie
 
 ## 助力教程
 
-[城城领现金助力教程](http://cxgc.top/archives/jing-dong-xin-huo-dong--cheng-cheng-ling-xian-jin--shui-duo)
-
 ## 抓取 wskey
 ### 所需软件 抓包工具 （Fiddler） 模拟器 （MM模拟器） （京东无线宝） 
 ### 软件都在 wskey目录下（main.exe 为 wskey转换ck工具）

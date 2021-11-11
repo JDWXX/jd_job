@@ -80,7 +80,7 @@ $.appId = 10032;
   let getShareNum = 10
   let getShareNums = 0
   if (HelpAuthorFlag) {
-    $.innerInviteList = await getAuthorShareCode('https://raw.githubusercontent.com/smiek2221/updateTeam/master/shareCodes/wealth_island_code_one.json');
+    $.innerInviteList = [];
     if(!$.innerInviteList[0]) $.innerInviteList = await getAuthorShareCode('https://gitee.com/smiek2221/updateTeam/raw/master/shareCodes/wealth_island_code_one.json');
     res2 = await getAuthorShareCode('https://raw.githubusercontent.com/smiek2221/updateTeam/master/shareCodes/wealth_island_code.json');
     if(!res2[0]) res2 = await getAuthorShareCode('https://gitee.com/smiek2221/updateTeam/raw/master/shareCodes/wealth_island_code.json');
