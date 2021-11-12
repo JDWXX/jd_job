@@ -54,7 +54,7 @@ let args_xh = {
      * C商品原价99元，试用价1元，如果下面设置为50，那么C商品将会被加入到待提交的试用组
      * 默认为0
      * */
-	jdPrice: process.env.JD_TRY_PRICE * 1 || 50,
+	jdPrice: process.env.JD_TRY_PRICE * 1 || 10,
 	/*
      * 获取试用商品类型，默认为1，原来不是数组形式，我以为就只有几个tab，结果后面还有我服了
      * 1 - 精选
@@ -479,6 +479,9 @@ function try_apply(title, activityId){
 						console.log(data.message)   // 操作不要太快哦！
 					} else {
 						console.log("申请失败", data)
+						if(data.code === '-114'){
+							trialActivityIdList.remove(activityId);
+						}
 					}
 				}
 			} catch(e){
