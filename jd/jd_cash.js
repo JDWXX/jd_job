@@ -26,9 +26,10 @@ let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭�
 let cookiesArr = [], cookie = '', message;
 let helpAuthor = true;
 const randomCount = $.isNode() ? 5 : 5;
-let cash_exchange = true;//是否消耗2元红包兑换200京豆，默认否
+let cash_exchange = false;//是否消耗2元红包兑换200京豆，默认否
 const inviteCodes = [
-
+  `Zxozbu21Zw@eU9YELXUJol8qTO_shJ3@eU9YGJryLJVYhSmutTdI@eU9YN4TNPL18uTGgvi93@9r-XukAXv1id@eU9YKbT3N7pyhyuHvyZp@XuGQ_vlyb8W3UyQ@-56ytUAeb_gi-Wg@eU9Yar3nYPl3pTqEmXca0A@ZE9_P4_SIYF8uR20lyc@eU9Ya76yZ6p392jSwiVA1w@eU9YaeWyYf8koj3Vn3cV0g@eU9YDrbMJ5lutjirqBZo@Jx82beu1Zvwn7GvTy3IT0A@9beHuWQHsVaSKOB8HueEAiny@Ih43a-ywZPwk9m26iw@eU9Ya-63N_gi8m3SziYW0Q@eU9Ya-m3ZKh1omrTy3BB0A@cUpkN6jtZ_Uv8Q`,
+  `Zxozbu21Zw@eU9YELXUJol8qTO_shJ3@eU9YGJryLJVYhSmutTdI@eU9YN4TNPL18uTGgvi93@9r-XukAXv1id@eU9YKbT3N7pyhyuHvyZp@XuGQ_vlyb8W3UyQ@-56ytUAeb_gi-Wg@eU9Yar3nYPl3pTqEmXca0A@ZE9_P4_SIYF8uR20lyc@eU9Ya76yZ6p392jSwiVA1w@eU9YaeWyYf8koj3Vn3cV0g@eU9YDrbMJ5lutjirqBZo@Jx82beu1Zvwn7GvTy3IT0A@9beHuWQHsVaSKOB8HueEAiny@Ih43a-ywZPwk9m26iw@eU9Ya-63N_gi8m3SziYW0Q@eU9Ya-m3ZKh1omrTy3BB0A@cUpkN6jtZ_Uv8Q`,
 ]
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -552,7 +553,7 @@ function requireConfig() {
       if ($.getdata('jd_cash_invite')) $.shareCodesArr = $.getdata('jd_cash_invite').split('\n').filter(item => !!item);
       console.log(`\nBoxJs设置的京东签到领现金邀请码:${$.getdata('jd_cash_invite')}\n`);
     }
-    console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
+    console.log(`加上内部助力，您一共提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
     resolve()
   })
 }

@@ -9,18 +9,14 @@ token获取途径：
 1、微信搜索'来客有礼'小程序,登陆京东账号，点击底部的'我的'或者'发现'两处地方,即可获取Token，脚本运行提示token失效后，继续按此方法获取即可
 2、或者每天去'来客有礼'小程序->宠汪汪里面，领狗粮->签到领京豆 也可获取Token(此方法每天只能获取一次)
 脚本里面有内置提供的friendPin，如果你没有修改脚本或者BoxJs处填写自己的互助码，会默认给脚本内置的助力。
-
 docker 设置环境变量 JOY_RUN_HELP_MYSELF 为true,则开启账号内部互助.默认关闭(即给脚本作者内置的助力).
-
 [MITM]
 hostname = draw.jdfcloud.com
-
 ===========Surge=================
 [Script]
 宠汪汪邀请助力与赛跑助力 = type=cron,cronexp="15 10 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_joy_run.js
 宠汪汪助力更新Token = type=http-response,pattern=^https:\/\/draw\.jdfcloud\.com(\/mirror)?\/\/api\/user\/addUser\?code=, requires-body=1, max-size=0, script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_joy_run.js
 宠汪汪助力获取Token = type=http-request,pattern=^https:\/\/draw\.jdfcloud\.com(\/mirror)?\/\/api\/user\/user\/detail\?openId=, max-size=0, script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_joy_run.js
-
 ===================Quantumult X=====================
 [task_local]
 # 宠汪汪邀请助力与赛跑助力
@@ -30,7 +26,6 @@ hostname = draw.jdfcloud.com
 ^https:\/\/draw\.jdfcloud\.com(\/mirror)?\/\/api\/user\/addUser\?code= url script-response-body https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_joy_run.js
 # 宠汪汪助力获取Token
 ^https:\/\/draw\.jdfcloud\.com(\/mirror)?\/\/api\/user\/user\/detail\?openId= url script-request-header https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_joy_run.js
-
 =====================Loon=====================
 [Script]
 cron "15 10 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_joy_run.js, tag=宠汪汪邀请助力与赛跑助力
@@ -55,7 +50,6 @@ let invite_pins = ['t142171,%E5%94%90%E6%9C%95%E9%94%8B,jd_kXOjqjxoEElT,jd_uhuav
 let run_pins = ['t142171,%E5%94%90%E6%9C%95%E9%94%8B,jd_kXOjqjxoEElT,jd_uhuavdFubDeJ,441177001-560106,backto1990,jd_61f1269fd3236,jaysherlock'];
 //friendsArr内置太多会导致IOS端部分软件重启,可PR过来(此处目的:帮别人助力可得30g狗粮)
 let friendsArr = ["t142171", "%E5%94%90%E6%9C%95%E9%94%8B", "jd_kXOjqjxoEElT", "jd_uhuavdFubDeJ", "441177001-560106", "backto1990", "jd_61f1269fd3236", "jaysherlock"]
-
 
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
@@ -132,7 +126,7 @@ async function main() {
       // const zooFaker = require('./utils/JDJRValidator_Pure');
       // $.validate = await zooFaker.injectToRequest()
       if ($.isNode()) {
-        if (true) {
+        if (process.env.JOY_RUN_HELP_MYSELF) {
           console.log(`\n赛跑会先给账号内部助力,如您当前账户有剩下助力机会则为lx0301作者助力\n`)
           let my_run_pins = [];
           Object.values(jdCookieNode).filter(item => item.match(/pt_pin=([^; ]+)(?=;?)/)).map(item => my_run_pins.push(decodeURIComponent(item.match(/pt_pin=([^; ]+)(?=;?)/)[1])))
@@ -145,7 +139,8 @@ async function main() {
           Object.values(jdCookieNode).filter(item => item.match(/pt_pin=([^; ]+)(?=;?)/)).map(item => run_pins.push(decodeURIComponent(item.match(/pt_pin=([^; ]+)(?=;?)/)[1])))
           run_pins = [...new Set(run_pins)];
           let fixPins = run_pins.splice(run_pins.indexOf('zhaosen2580'), 1);
-          // fixPins.push(...run_pins.splice(run_pins.indexOf('jd_61f1269fd3236'), 1));
+          fixPins.push(...run_pins.splice(run_pins.indexOf('jd_gYZtkBfPpRVv'), 1));
+          fixPins.push(...run_pins.splice(run_pins.indexOf('jd_41df9b41af810'), 1));
           const randomPins = getRandomArrayElements(run_pins, run_pins.length);
           run_pins = [[...fixPins, ...randomPins].join(',')];
           invite_pins = run_pins;
@@ -353,13 +348,13 @@ async function invite(invite_pins) {
 function enterRoom(invitePin) {
   return new Promise(resolve => {
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
+    let lks = $.md5('' + 'q8DNJdpcfRQ69gIx' + lkt).toString()
     headers['lkt'] = lkt;
     headers['lks'] = lks;
     headers.Cookie = cookie;
     headers.LKYLToken = $.LKYLToken;
     headers['Content-Type'] = "application/json";
-    const url = `https://draw.jdfcloud.com//common/pet/enterRoom/h5?reqSource=weapp&invitePin=${encodeURIComponent(invitePin)}&inviteSource=task_invite&shareSource=weapp&inviteTimeStamp=${Date.now()}&invokeKey=JL1VTNRadM68cIMQ` + $.validate;
+    const url = `https://draw.jdfcloud.com//common/pet/enterRoom/h5?reqSource=weapp&invitePin=${encodeURIComponent(invitePin)}&inviteSource=task_invite&shareSource=weapp&inviteTimeStamp=${Date.now()}&invokeKey=q8DNJdpcfRQ69gIx` + $.validate;
     const options = {
       url,
       body: JSON.stringify({}),
@@ -385,12 +380,12 @@ function enterRoom(invitePin) {
 function helpInviteFriend(friendPin) {
   return new Promise((resolve) => {
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
+    let lks = $.md5('' + 'q8DNJdpcfRQ69gIx' + lkt).toString()
     headers['lkt'] = lkt;
     headers['lks'] = lks;
     headers.Cookie = cookie;
     headers.LKYLToken = $.LKYLToken;
-    const url = `https://draw.jdfcloud.com//common/pet/helpFriend?friendPin=${encodeURIComponent(friendPin)}&reqSource=weapp&invokeKey=JL1VTNRadM68cIMQ` + $.validate;
+    const url = `https://draw.jdfcloud.com//common/pet/helpFriend?friendPin=${encodeURIComponent(friendPin)}&reqSource=weapp&invokeKey=q8DNJdpcfRQ69gIx` + $.validate;
     const options = {
       url,
       headers
@@ -452,12 +447,12 @@ async function run(run_pins) {
 function combatHelp(friendPin) {
   return new Promise(resolve => {
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
+    let lks = $.md5('' + 'q8DNJdpcfRQ69gIx' + lkt).toString()
     headers['lkt'] = lkt;
     headers['lks'] = lks;
     headers.Cookie = cookie;
     headers.LKYLToken = $.LKYLToken;
-    const url = `https://draw.jdfcloud.com//common/pet/combat/help?friendPin=${encodeURIComponent(friendPin)}&reqSource=weapp&invokeKey=JL1VTNRadM68cIMQ` + $.validate;
+    const url = `https://draw.jdfcloud.com//common/pet/combat/help?friendPin=${encodeURIComponent(friendPin)}&reqSource=weapp&invokeKey=q8DNJdpcfRQ69gIx` + $.validate;
     const options = {
       url,
       headers
@@ -487,12 +482,12 @@ function combatHelp(friendPin) {
 function combatDetail(invitePin) {
   return new Promise(resolve => {
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
+    let lks = $.md5('' + 'q8DNJdpcfRQ69gIx' + lkt).toString()
     headers['lkt'] = lkt;
     headers['lks'] = lks;
     headers.Cookie = cookie;
     headers.LKYLToken = $.LKYLToken;
-    const url = `https://draw.jdfcloud.com//common/pet/combat/detail/v2?help=true&inviterPin=${encodeURIComponent(invitePin)}&reqSource=weapp&invokeKey=JL1VTNRadM68cIMQ` + $.validate;
+    const url = `https://draw.jdfcloud.com//common/pet/combat/detail/v2?help=true&inviterPin=${encodeURIComponent(invitePin)}&reqSource=weapp&invokeKey=q8DNJdpcfRQ69gIx` + $.validate;
     const options = {
       url,
       headers
