@@ -45,8 +45,8 @@ unstartTime = datetime.datetime.now().strftime('%Y-%m-%d 23:55:00.00000000')
 tomorrow = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
 starttime = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%Y-%m-%d 00:00:00.00000000')
 
-printT("【填写您要兑换的商品】ENV设置： export coinToBeans='京豆包' ")
-printT(" 多账号并发，默认关闭 ENV设置开启： export blueCoin_Cc=True ")
+print("【填写您要兑换的商品】ENV设置： export coinToBeans='1000' ")
+print(" 多账号并发，默认关闭 ENV设置开启： export blueCoin_Cc=True ")
 
 def printT(s):
     print("[{0}]: {1}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), s))
@@ -137,7 +137,7 @@ class getJDCookie(object):
 
         # 检测cookie格式是否正确
     def getUserInfo(self, ck, pinName, userNum):
-        url = 'https://me-api.jd.com/user_new/info/GetJDUserInfoUnion?orgFlag=JD_PinGou_New&callSource=mainorder&channel=4&isHomewhite=0&sceneval=2&sceneval=2&callback='
+        url = 'https://me-api.jd.com/user_new/info/GetJDUserInfoUnion?orgFlag=JD_PinGou_New&callSource=mainorder&channel=4&isHomewhite=0&sceneval=2&sceneval=2&callback=GetJDUserInfoUnion'
         headers = {
             'Cookie': ck,
             'Accept': '*/*',
@@ -149,17 +149,12 @@ class getJDCookie(object):
             'Accept-Language': 'zh-cn'
         }
         try:
-            if sys.platform == 'ios':
-                resp = requests.get(url=url, verify=False, headers=headers, timeout=60).json()
-            else:
-                resp = requests.get(url=url, headers=headers, timeout=60).json()
-            if resp['retcode'] == "0":
-                nickname = resp['data']['userInfo']['baseInfo']['nickname']
-                return ck, nickname
-            else:
-                context = f"账号{userNum}【{pinName}】Cookie 已失效！请重新获取。"
-                print(context)
-                return ck, False
+            resp = requests.get(url=url, verify=False, headers=headers, timeout=60).text
+            r = re.compile(r'GetJDUserInfoUnion.*?\((.*?)\)')
+            result = r.findall(resp)
+            userInfo = json.loads(result[0])
+            nickname = userInfo['data']['userInfo']['baseInfo']['nickname']
+            return ck, nickname
         except Exception:
             context = f"账号{userNum}【{pinName}】Cookie 已失效！请重新获取。"
             print(context)
