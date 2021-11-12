@@ -675,11 +675,10 @@ function taskGetUrl(function_id, body) {
 function invite2() {
   let t = +new Date()
   let inviterId = [
-    "5V7vHE23qh2EkdBHXRFDuA==",
-    "4AVQao+eH8Q8kvmXnWmkG8ef/fNr5fdejnD9+9Ugbec=",
-    "jbGBRBPo5DmwB9ntTCSVOGXuh1YQyccCuZpWwb3PlIc=",
-    "wXX9SjXOdYMWe5Ru/1+x9A==",
-    "mCvmrmFghpDCLcL3VZs53BkAhucziHAYn3HhPmURJJE="
+    'UtYmOqFJrh4Sl45d4mqg6Q%3D%3D',
+    'WOthVgy8sELwGTrVkIwITA%3D%3D',
+    '9v56HCBE5cvJerOxwnLQUg%3D%3D',
+    'CESx%2BbJc4LbLt9cktRkbuw%3D%3D'
   ][Math.floor((Math.random() * 5))]
   let headers = {
     'Host': 'api.m.jd.com',
@@ -707,13 +706,10 @@ function invite2() {
 function invite() {
   let t = +new Date()
   let inviterId = [
-    "5V7vHE23qh2EkdBHXRFDuA==",
-    "jbGBRBPo5DmwB9ntTCSVOGXuh1YQyccCuZpWwb3PlIc=",
-    "wXX9SjXOdYMWe5Ru/1+x9A==",
-    "mCvmrmFghpDCLcL3VZs53BkAhucziHAYn3HhPmURJJE=",
-    "YQ5wwbSWDzNIudDC2OWvSw==",
-    "+vbK7QKOtpHM4dsSRqUPPX/11g/P71iBYh46dyiMuKk=",
-    "4AVQao+eH8Q8kvmXnWmkG8ef/fNr5fdejnD9+9Ugbec="
+    'UtYmOqFJrh4Sl45d4mqg6Q%3D%3D',
+    'WOthVgy8sELwGTrVkIwITA%3D%3D',
+    '9v56HCBE5cvJerOxwnLQUg%3D%3D',
+    'CESx%2BbJc4LbLt9cktRkbuw%3D%3D'
   ][Math.floor((Math.random() * 7))]
   var headers = {
     'Host': 'api.m.jd.com',
