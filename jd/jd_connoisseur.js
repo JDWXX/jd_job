@@ -43,12 +43,6 @@ let allMessage = '';
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  // let res = await getAuthorShareCode('https://raw.githubusercontent.com/Aaron-lv/updateTeam/master/shareCodes/connoisseur.json')
-  // if (!res) {
-  //   $.http.get({url: 'https://purge.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/connoisseur.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
-  //   await $.wait(1000)
-  //   res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/connoisseur.json')
-  // }
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -71,35 +65,35 @@ let allMessage = '';
       await jdConnoisseur()
     }
   }
-  // $.shareCodes = [...new Set([...$.shareCodes, ...(res || [])])]
-  // for (let i = 0; i < cookiesArr.length; i++) {
-  //   if (cookiesArr[i]) {
-  //     cookie = cookiesArr[i];
-  //     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-  //     if (!isLoginInfo[$.UserName]) continue
-  //     $.canHelp = true
-  //     if ($.shareCodes && $.shareCodes.length) {
-  //       console.log(`\n开始互助\n`)
-  //       for (let j = 0; j < $.shareCodes.length && $.canHelp; j++) {
-  //         console.log(`账号${$.UserName} 去助力 ${$.shareCodes[j].use} 的助力码 ${$.shareCodes[j].code}`)
-  //         if ($.UserName === $.shareCodes[j].use) {
-  //           console.log(`助力失败：不能助力自己`)
-  //           continue
-  //         }
-  //         $.delcode = false
-  //         await getTaskInfo("2", $.projectCode, $.taskCode, "2", $.shareCodes[j].code)
-  //         await $.wait(2000)
-  //         if ($.delcode) {
-  //           $.shareCodes.splice(j, 1)
-  //           j--
-  //           continue
-  //         }
-  //       }
-  //     } else {
-  //       break
-  //     }
-  //   }
-  // }
+  $.shareCodes = [...new Set([...$.shareCodes, ...(res || [])])]
+  for (let i = 0; i < cookiesArr.length; i++) {
+    if (cookiesArr[i]) {
+      cookie = cookiesArr[i];
+      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+      if (!isLoginInfo[$.UserName]) continue
+      $.canHelp = true
+      if ($.shareCodes && $.shareCodes.length) {
+        console.log(`\n开始互助\n`)
+        for (let j = 0; j < $.shareCodes.length && $.canHelp; j++) {
+          console.log(`账号${$.UserName} 去助力 ${$.shareCodes[j].use} 的助力码 ${$.shareCodes[j].code}`)
+          if ($.UserName === $.shareCodes[j].use) {
+            console.log(`助力失败：不能助力自己`)
+            continue
+          }
+          $.delcode = false
+          await getTaskInfo("2", $.projectCode, $.taskCode, "2", $.shareCodes[j].code)
+          await $.wait(2000)
+          if ($.delcode) {
+            $.shareCodes.splice(j, 1)
+            j--
+            continue
+          }
+        }
+      } else {
+        break
+      }
+    }
+  }
 })()
     .catch((e) => {
       $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
