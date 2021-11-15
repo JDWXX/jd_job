@@ -249,9 +249,6 @@ async function takePostRequest(type) {
   let body = ``;
   let method = 'POST'
   let admJson = ''
-  $.invite = 'OZWWyV+UF+4hIUxWAWXPsqnQSaK0OgzhoJLIa/XEluWWXc0uQ5WlWk8J2tBF2Jsj'
-  $.authorCodeList=[$.invite,$.inviteNick,$.inviteNick]
-  $.inviteNick = authorCodeList[random(0, authorCodeList.length)]
   switch (type) {
     case 'isvObfuscator':
       url = `https://api.m.jd.com/client.action?functionId=isvObfuscator`;
