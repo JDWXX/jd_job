@@ -1,7 +1,7 @@
 /*
 入口 京东 京东试用
 
-cron 0 0 7,14 * * * jd_try_bf.js
+cron 0 0 5,15,19 * * * jd_try_bf.js
 
  */
 const $ = new Env('京东试用_并发版')
