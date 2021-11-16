@@ -20,7 +20,17 @@ var tools= []
     for (let i in cookiesArr) {
         cookie = cookiesArr[i]
         if(kois.indexOf(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])!=-1){
-            var data = await requestApi('h5launch',cookie);
+                var num="";
+                for(var g=0;g<6;g++)
+                {
+                     num+=Math.floor(Math.random()*10);
+                }
+            var data = await requestApi('h5launch',cookie,{
+                 "followShop":0,
+                 "random": num,
+                 "log":"42588613~8,~0iuxyee",
+                 "sceneid":"JLHBhPageh5"
+            });
             switch (data?.data?.result?.status) {
                 case 1://火爆
                     continue;
@@ -32,7 +42,10 @@ var tools= []
                     }
                     continue;
             }   
-            data = await requestApi('h5activityIndex',cookie);
+            data = await requestApi('h5activityIndex',cookie,{
+                "isjdapp":1
+            });
+            console.log("发起请求")
             switch (data?.data?.code) {
                 case 20002://已达拆红包数量限制
                     break;
@@ -59,11 +72,20 @@ var tools= []
   })
 
 function open(help){
+    var num="";
+    for(var i=0;i<6;i++)
+    {
+        num+=Math.floor(Math.random()*10);
+        }
     var tool = tools.pop()
     if(!tool)return
     if(help.success)return
     requestApi('jinli_h5assist', tool.cookie, {
-        "redPacketId": help.redPacketId
+        "redPacketId": help.redPacketId,
+        "followShop":0,
+        "random": num,
+        "log":"42588613~8,~0iuxyee",
+        "sceneid":"JLHBhPageh5"
     }).then(function(data){
         desc = data?.data?.result?.statusDesc
         if (desc && desc.indexOf("助力已满") != -1) {
@@ -76,7 +98,6 @@ function open(help){
         open(help)         
     })   
 }
-
 function requestApi(functionId, cookie, body = {}) {
     return new Promise(resolve => {
         $.post({
