@@ -1,8 +1,10 @@
 """
 const $ = new Env("统计东哥历史红包");
 统计东哥历史红包
-"""
 
+cron:
+0 20 21 * * * jd_hbtj.py
+"""
 import requests
 import sys
 import re
