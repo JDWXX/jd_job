@@ -91,24 +91,30 @@ def loadToken():
 
 
 if __name__ == '__main__':
-    print("开始！")
-    loadSend()
-    # 直接从 /ql/config/auth.json中读取当前token
-    token=loadToken()
-    # send("成功获取token!","")
-    headers["Authorization"] = "Bearer %s"%token
-    taskList=getTaskList()
-    # 如果仍旧是空的，则报警
-    if len(taskList)==0:
-        print("无法获取taskList!")
-    duplicateID=getDuplicate(taskList)
-    before="禁用前数量为：%d"%len(taskList)
-    print(before)
-    after="禁用重复任务后，数量为:%d"%(len(taskList)-len(duplicateID))
-    print(after)
-    if len(duplicateID)==0:
-        print("没有重复任务")
+    print("环境变量添加 QL_JY  填写任意值开启本脚本!")
+    if "QL_JY" in os.environ and len(os.environ["QL_JY"]) > 1:
+        QL_JY = os.environ["QL_JY"]
+        print("===========读取到环境变量里的QL_JY内容===========" + QL_JY)
+        print("开始执行禁用脚本！")
+        loadSend()
+        # 直接从 /ql/config/auth.json中读取当前token
+        token=loadToken()
+        # send("成功获取token!","")
+        headers["Authorization"] = "Bearer %s"%token
+        taskList=getTaskList()
+        # 如果仍旧是空的，则报警
+        if len(taskList)==0:
+            print("无法获取taskList!")
+        duplicateID=getDuplicate(taskList)
+        before="禁用前数量为：%d"%len(taskList)
+        print(before)
+        after="禁用重复任务后，数量为:%d"%(len(taskList)-len(duplicateID))
+        print(after)
+        if len(duplicateID)==0:
+            print("没有重复任务")
+        else:
+            disableDuplicateTasks(duplicateID)
+        send("禁用成功","\n%s\n%s"%(before,after))
     else:
-        disableDuplicateTasks(duplicateID)
-    send("禁用成功","\n%s\n%s"%(before,after))
-        # print("禁用结束！")
+        print("===========未读取到环境变量里的 QL_JY ===========")
+    # print("禁用结束！")
