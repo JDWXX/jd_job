@@ -35,7 +35,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    authorCodeList = []
+    authorCodeList = ["5f30bf40391240498fd983a18a772aef"]
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -46,6 +46,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
             $.index = i + 1;
             $.isLogin = true;
             $.nickName = '';
+            authorCodeList = []
             await checkCookie();
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             if (!$.isLogin) {
@@ -64,7 +65,6 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
             authorCodeList.push(ownCode);
             authorCodeList.push(ownCode);
             authorCodeList.push("620e19bfeedf435aae281e79816078cc");
-            authorCodeList.push("5f30bf40391240498fd983a18a772aef");
             $.authorCode = authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`
             $.randomCode = random(1000000, 9999999)
