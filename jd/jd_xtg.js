@@ -18,8 +18,7 @@ if ($.isNode()) {
         $.getdata("CookieJD2"),
         ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
-
-let shareList = ['06755edd-775c-422e-aee9-16e84e97f829'],message = '';
+let shareList = [],message = '';
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -30,8 +29,6 @@ let shareList = ['06755edd-775c-422e-aee9-16e84e97f829'],message = '';
         return;
     }
 
-    console.log(`\n==================活动地址===================\n`)
-    console.log(`\nhttps://starintroducer.jd.com/#/?shareId=06755edd-775c-422e-aee9-16e84e97f829?t=1636073894281\n`)
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             $.cookie = cookiesArr[i];
