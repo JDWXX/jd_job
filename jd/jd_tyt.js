@@ -6,7 +6,7 @@
 0 0 * * * http://47.101.146.160/scripts/jd_tyt.js, tag=搞基大神-推一推, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 */
 
-const $ = new Env('搞基大神-推一推');
+const $ = new Env('推一推');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -15,8 +15,9 @@ const JD_API_HOST = 'https://api.m.jd.com';
 let cookiesArr = [], cookie = '', message;
 let status=''
 
-let insertCodes = []
 let inviteCodes = []
+let inviteNames = []
+let tytzl = 5
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -32,8 +33,12 @@ if ($.isNode()) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-
-  for (let i = 0; i < cookiesArr.length; i++) {
+  console.log('\n入口 狗东极速版 赚金币 推一推\n');
+  console.log('\n本脚本无任何内置助力\n如果你发现有那么就是别人二改加的\n一切与本人无关\n');
+  if(cookiesArr.length < 5)
+    tytzl = 1
+  console.log('\n推一推助力前' + tytzl + '名账号 默认 如需修改 环境变量添加 tytzl 值 10，则前10账号会被助力\n');
+  for (let i = 0; i < tytzl; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -52,42 +57,33 @@ if ($.isNode()) {
         continue
       }
 
-
-
     }
-    console.log('\n入口 狗东极速版 赚金币 推一推\n');
-    console.log('\n本脚本无任何内置助力\n如果你发现有那么就是别人二改加的\n一切与本人无关\n');
     await info()
     await coinDozerBackFlow()
     await getCoinDozerInfo()
-    console.log('\n注意全部助力给账号一\n');
-
-
   }
-
-
-  console.log('\n#######开始全部助力账号1#######\n');
+  console.log('\n#######开始助力#######\n');
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
     $.index = i + 1;
-
     if (!cookie) continue
-    for (let code of inviteCodes) {
-      if ($.UserName === code['user']) continue;
-      if ($.index === 1 && 2)
-        break
-      await helpCoinDozer(code['packetId'])
-      console.log(`\n【${$.UserName}】去助力【${code['user']}】邀请码：${code['packetId']}`);
-      if (status == 1) {
-        break
-      }
-
-      await $.wait(10000)
-      let res = await help(code['packetId'])}
+    console.log(inviteCodes);
+    for (let j = 0; j < inviteCodes.length; j++) {
+        if ($.UserName === inviteCodes[j]) continue;
+        if ($.index === 1 && 2)
+          break
+        await helpCoinDozer(inviteCodes[j])
+      console.log(`\n【${$.UserName}】去助力【${inviteNames[j]}】邀请码：${inviteCodes[j]}`);
+        if (status == 1) {
+          inviteCodes.splice(inviteCodes.findIndex(item => item == inviteCodes[j]), 1);
+          console.log(inviteCodes);
+          break
+        }
+        await $.wait(10000)
+        let res = await help(inviteCodes[j])
+    }
   }
-
-
 })()
     .catch((e) => {
       $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -95,8 +91,6 @@ if ($.isNode()) {
     .finally(() => {
       $.done();
     })
-
-
 function info() {
   return new Promise((resolve) => {
 
@@ -104,15 +98,12 @@ function info() {
       url: `${JD_API_HOST}`,
       body:`functionId=initiateCoinDozer&body={"actId":"d5a8c7198ee54de093d2adb04089d3ec","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s"}&appid=megatron&client=ios&clientVersion=14.3&t=1636014459632&networkType=4g&eid=&fp=-1&frontendInitStatus=s&uuid=8888&osVersion=14.3&d_brand=&d_model=&agent=-1&pageClickKey=-1&screen=400*700&platform=3&lang=zh_CN`,
       headers: {
-
         "Cookie": cookie,
         "Origin": "https://pushgold.jd.com",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
-
       }
     }
     $.post(nm, async (err, resp, data) => {
-
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -123,12 +114,9 @@ function info() {
             if(data.success==true){
               console.log('邀请码：'+data.data.packetId)
               console.log('初始推出：'+data.data.amount)
-              if (data.data && data.data.packetId && inviteCodes.length === 0) {
-                inviteCodes.push({
-                  user: $.UserName,
-                  packetId: data.data.packetId,
-
-                });
+              if (data.data && data.data.packetId) {
+                inviteNames.push($.UserName)
+                inviteCodes.push(data.data.packetId)
               }
             }else if(data.success==false){
               console.log(data.msg)}
@@ -144,16 +132,13 @@ function info() {
 }
 function coinDozerBackFlow() {
   return new Promise((resolve) => {
-
     const nm= {
       url: `${JD_API_HOST}`,
       body:`functionId=coinDozerBackFlow&body={"actId":"d5a8c7198ee54de093d2adb04089d3ec","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s"}&appid=megatron&client=ios&clientVersion=14.3&t=1636015617899&networkType=4g&eid=&fp=-1&frontendInitStatus=s&uuid=8888&osVersion=14.3&d_brand=&d_model=&agent=-1&pageClickKey=-1&screen=400*700&platform=3&lang=zh_CN`,
       headers: {
-
         "Cookie": cookie,
         "Origin": "https://pushgold.jd.com",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
-
       }
     }
     $.post(nm, async (err, resp, data) => {
@@ -167,13 +152,10 @@ function coinDozerBackFlow() {
             data = JSON.parse(data);
             if(data.success==true){
               console.log('浏览任务完成再推一次')
-
-
             }
           }else if(data.success==false){
             console.log(data.msg)}
         }
-
       } catch (e) {
         $.logErr(e, resp)
       } finally {
@@ -185,7 +167,6 @@ function coinDozerBackFlow() {
 
 function helpCoinDozer(packetId) {
   return new Promise((resolve) => {
-
     const nm= {
       url: `${JD_API_HOST}`,
       body:`functionId=helpCoinDozer&appid=station-soa-h5&client=H5&clientVersion=1.0.0&t=1636015855103&body={"actId":"d5a8c7198ee54de093d2adb04089d3ec","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s","packetId":"${packetId}"}&_ste=1&_stk=appid,body,client,clientVersion,functionId,t&h5st=20211104165055104;9806356985655163;10005;tk01wd1ed1d5f30nBDriGzaeVZZ9vuiX+cBzRLExSEzpfTriRD0nxU6BbRIOcSQvnfh74uInjSeb6i+VHpnHrBJdVwzs;017f330f7a84896d31a8d6017a1504dc16be8001273aaea9a04a8d04aad033d9`,
@@ -198,7 +179,6 @@ function helpCoinDozer(packetId) {
       }
     }
     $.post(nm, async (err, resp, data) => {
-
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -209,7 +189,6 @@ function helpCoinDozer(packetId) {
             if(data.success==true){
               console.log('推出：'+data.data.amount)
               console.log('已经推出：'+data.data.dismantledAmount)
-
             }
           }else if(data.success==false){
             console.log(data.msg)}
@@ -224,19 +203,15 @@ function helpCoinDozer(packetId) {
   })
 }
 
-
 function help(packetId) {
   return new Promise((resolve) => {
-
     const nm= {
       url: `${JD_API_HOST}`,
       body:`functionId=helpCoinDozer&appid=station-soa-h5&client=H5&clientVersion=1.0.0&t=1623120183787&body={"actId":"d5a8c7198ee54de093d2adb04089d3ec","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s","packetId":"${packetId}","helperStatus":"0"}&_ste=1&_stk=appid,body,client,clientVersion,functionId,t&h5st=20210608104303790;8489907903583162;10005;tk01w89681aa9a8nZDdIanIyWnVuWFLK4gnqY+05WKcPY3NWU2dcfa73B7PBM7ufJEN0U+4MyHW5N2mT/RNMq72ycJxH;7e6b956f1a8a71b269a0038bbb4abd24bcfb834a88910818cf1bdfc55b7b96e5`,
       headers: {
-
         "Cookie": cookie,
         "Origin": "https://pushgold.jd.com",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
-
       }
     }
     $.post(nm, async (err, resp, data) => {
@@ -248,19 +223,17 @@ function help(packetId) {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-            if(data.success==true){
+            if (data.success == true) {
               console.log("帮砍：" + data.data.amount)
-
+            }else if (data.success == false) {
+              console.log(data.msg)
+              status = 1
             }
-          }
-          else
-          if (data.msg.indexOf("完成") != -1) {
+          } else {
             status = 1
+            console.log(data)
           }
-          if(data.success==false){
-            console.log(data.msg)}
         }
-
       } catch (e) {
         $.logErr(e, resp)
       } finally {
@@ -272,20 +245,16 @@ function help(packetId) {
 
 function getCoinDozerInfo() {
   return new Promise((resolve) => {
-
     const nm= {
       url: `${JD_API_HOST}`,
       body:`functionId=getCoinDozerInfo&body={"actId":"d5a8c7198ee54de093d2adb04089d3ec","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s"}&appid=megatron&client=ios&clientVersion=14.3&t=1636015858295&networkType=4g&eid=&fp=-1&frontendInitStatus=s&uuid=8888&osVersion=14.3&d_brand=&d_model=&agent=-1&pageClickKey=-1&screen=400*700&platform=3&lang=zh_CN`,
       headers: {
-
         "Cookie": cookie,
         "Origin": "https://pushgold.jd.com",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
-
       }
     }
     $.post(nm, async (err, resp, data) => {
-
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -294,22 +263,17 @@ function getCoinDozerInfo() {
           if (safeGet(data)) {
             data = JSON.parse(data);
             if(data.success==true){
-              console.log('叼毛：'+data.data.sponsorActivityInfo.initiatorNickname)
+              console.log('账号：'+data.data.sponsorActivityInfo.initiatorNickname)
               console.log('邀请码：'+data.data.sponsorActivityInfo.packetId)
               console.log('推出：'+data.data.sponsorActivityInfo.dismantledAmount)
-
-              if (data.data && data.data.sponsorActivityInfo.packetId && inviteCodes.length === 0) {
-                inviteCodes.push({
-                  user: $.UserName,
-                  packetId: data.data.sponsorActivityInfo.packetId
-
-                });
+              if (data.data && data.data.sponsorActivityInfo.packetId) {
+                inviteNames.push($.UserName)
+                inviteCodes.push(data.data.sponsorActivityInfo.packetId)
               }
             }else if(data.success==false){
               console.log(data.msg)}
           }
         }
-
       } catch (e) {
         $.logErr(e, resp)
       } finally {
