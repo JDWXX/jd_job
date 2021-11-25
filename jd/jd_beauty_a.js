@@ -4,7 +4,7 @@
 活动入口：京东app首页-美妆馆-底部中间按钮
 只支持Node.js支持N个京东账号
 脚本兼容: Node.js
-cron "1 7,12,19 * * *" jd_beauty.js
+cron "0 1 7,12,19 * * *" jd_beauty.js
  */
 const $ = new Env('美丽研究院');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -466,13 +466,13 @@ async function mr() {
             console.log(`收取产品失败，错误信息${vo.msg}`)
           }
           break
-        // case "get_task":
-        //   console.log(`当前任务【${vo.data.describe}】，需要【${vo.data.product.name}】${vo.data.package_stock}/${vo.data.num}份`)
-        //   if (vo.data.package_stock >= vo.data.num) {
-        //     console.log(`满足任务要求，去完成任务`)
-        //     client.send(`{"msg":{"type":"action","args":{"task_id":${vo.data.id}},"action":"complete_task"}}`)
-        //   }
-        //   break
+        case "get_task":
+          console.log(`当前任务【${vo.data.describe}】，需要【${vo.data.product.name}】${vo.data.package_stock}/${vo.data.num}份`)
+          if (vo.data.package_stock >= vo.data.num) {
+            console.log(`满足任务要求，去完成任务`)
+            client.send(`{"msg":{"type":"action","args":{"task_id":${vo.data.id}},"action":"complete_task"}}`)
+          }
+          break
         case 'get_benefit':
           for (let benefit of vo.data) {
             if (benefit.type === 1) { //type 1 是京豆
@@ -486,14 +486,14 @@ async function mr() {
                   await $.wait(1000);
                 }
               }
-              // console.log(`物品【${benefit.description}】需要${benefit.coins}美妆币，库存${benefit.stock}份`)
-              // if (parseInt(benefit.setting.beans_count) === bean && //兑换多少豆 bean500就500豆
-              //   $.total > benefit.coins &&
-              //   parseInt(benefit.day_exchange_count) < benefit.day_limit) {
-              //   console.log(`满足条件，去兑换`)
-              //   client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`)
-              //   await $.wait(1000)
-              // }
+              console.log(`物品【${benefit.description}】需要${benefit.coins}美妆币，库存${benefit.stock}份`)
+              if (parseInt(benefit.setting.beans_count) === bean && //兑换多少豆 bean500就500豆
+                $.total > benefit.coins &&
+                parseInt(benefit.day_exchange_count) < benefit.day_limit) {
+                console.log(`满足条件，去兑换`)
+                client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`)
+                await $.wait(1000)
+              }
             }
           }
           break
