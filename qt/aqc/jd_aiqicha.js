@@ -340,8 +340,8 @@ if (aqcookie) {
     } else {
         aqcookieArr.push(aqcookie);
     }
+    console.log("爱企查共:" + aqcookieArr.length + "个账号");
     aqc();
-    //console.log("爱企查共:" + aqcookieArr.length + "个账号");
 } else {
     console.log("请手动抓取cookies");
     return;
