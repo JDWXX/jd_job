@@ -1,18 +1,32 @@
 /*
-0 0,30 8 * * ? https://ghproxy.com/github.com/WindFgg/QuantumultX_Conf/blob/main/Scripts/aiqicha.js 爱企查日常任务
- 爱企查下载地址：https://aiqicha.baidu.com/m/usercenter/inviteCode?uid=xlTM-TogKuTwvdzTq9EFdGvdxrmJpAANFgmd
+爱企查日常任务
+爱企查下载地址：https://aiqicha.baidu.com/m/usercenter/inviteCode?uid=xlTM-TogKuTwvdzTq9EFdGvdxrmJpAANFgmd
+手动抓取CK:https://passport.baidu.com/v2/?login 一个BDUSS=xxxxx;就行了
+定时每天早上8点执行一次 8点半执行一次 账号多的请加大延迟 可能有一些任务跑不完 如:高级搜索 浏览监控日报 属正常现象 (百度抽风)
+多账号请用@分割Cookie  格式:ck1@ck2@ck2 青龙变量aqcCookies qx和v2p不可用
+批量查询任务暂时无法完成
+感谢Wenmoux的爱妻查任务脚本 Wenmoux github地址:https://github.com/Wenmoux/checkbox 作者仅完善和修改
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
+[task_local]
+#爱企查日常任务
+0 0,30 8 * * ? https://github.com/JDWXX/jd_job/blob/master/qt/jd_aiqicha.js.js, tag=爱企查日常任务, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxcfd.png, enabled=true
 
- 手动抓取CK:https://passport.baidu.com/v2/?login 一个BDUSS=xxxxx;就行了
- 定时每天早上8点执行一次 8点半执行一次 账号多的请加大延迟 可能有一些任务跑不完 如:高级搜索 浏览监控日报 属正常现象 (百度抽风)
- 多账号请用@分割Cookie  格式:ck1@ck2@ck2 青龙变量aqcCookies qx和v2p不可用
- 批量查询任务暂时无法完成
- 感谢Wenmoux的爱妻查任务脚本 Wenmoux github地址:https://github.com/Wenmoux/checkbox 作者仅完善和修改
+================Loon==============
+[Script]
+cron "0 0,30 8 * * ?" script-path=https://github.com/JDWXX/jd_job/blob/master/qt/jd_aiqicha.js.js,tag=爱企查日常任务
+
+===============Surge=================
+爱企查日常任务 = type=cron,cronexp="0 0,30 8 * * ?",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/jd_aiqicha.js.js
+
+============小火箭=========
+爱企查日常任务 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/jd_aiqicha.js.js, cronexpr="0 0,30 8 * * ?", timeout=3600, enable=true
 */
 const $ = new Env("爱企查日常任务");
 const axios = require("axios");
 const notify = $.isNode() ? require("./sendNotify") : "";
-aqcookie = $.isNode() ? process.env.aqcCookies : "";
-aqcookieArr = [];
+const aqcookie = $.isNode() ? process.env.aqcCookies : "";
+const aqcookieArr = [];
 
 var sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 let oo = {
