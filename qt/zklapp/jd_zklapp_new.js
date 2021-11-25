@@ -18,7 +18,7 @@ cron "20 10 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/qt/zk
 ============小火箭=========
 养鸡真快乐APP = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/zklapp/jd_zklapp_new.js, cronexpr="20 10 * * *", timeout=3600, enable=true
 */
-const $ = new Env('养鸡真快乐APP');
+const $ = new Env('养鸡真快乐APP-非京东活动');
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookieZkl.js') : '';
 console.log(`\n请勿频繁调用，最好一天只执行一次，不然会黑号\n`);

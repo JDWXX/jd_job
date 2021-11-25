@@ -22,11 +22,11 @@ cron "0 0,30 8 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/qt
 ============小火箭=========
 爱企查日常任务 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/aqc/jd_aiqicha.js, cronexpr="0 0,30 8 * * *", timeout=3600, enable=true
 */
-const $ = new Env("爱企查日常任务");
+const $ = new Env("爱企查日常任务-非京东活动");
 const axios = require("axios");
 const notify = $.isNode() ? require("./sendNotify") : "";
-const aqcookie = $.isNode() ? process.env.aqcCookies : "";
-const aqcookieArr = [];
+let aqcookie= $.isNode() ? (process.env.aqcCookies ? process.env.aqcCookies : "") : ($.getdata('aqcCookies') ? $.getdata('aqcCookies') : "")
+let aqcookieArr = [];
 
 var sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 let oo = {
