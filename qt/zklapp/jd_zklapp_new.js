@@ -6,17 +6,17 @@
 ============Quantumultx===============
 [task_local]
 #养鸡真快乐APP
-20 10 * * * https://github.com/JDWXX/jd_job/blob/master/qt/jd_zklapp_new.js, tag=养鸡真快乐APP, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxcfd.png, enabled=true
+20 10 * * * https://github.com/JDWXX/jd_job/blob/master/qt/zklapp/jd_zklapp_new.js, tag=养鸡真快乐APP, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxcfd.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "20 10 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/qt/jd_zklapp_new.js,tag=养鸡真快乐APP
+cron "20 10 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/qt/zklapp/jd_zklapp_new.js,tag=养鸡真快乐APP
 
 ===============Surge=================
-养鸡真快乐APP = type=cron,cronexp="20 10 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/jd_zklapp_new.js
+养鸡真快乐APP = type=cron,cronexp="20 10 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/zklapp/jd_zklapp_new.js
 
 ============小火箭=========
-养鸡真快乐APP = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/jd_zklapp_new.js, cronexpr="20 10 * * *", timeout=3600, enable=true
+养鸡真快乐APP = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/zklapp/jd_zklapp_new.js, cronexpr="20 10 * * *", timeout=3600, enable=true
 */
 const $ = new Env('养鸡真快乐APP');
 //Node.js用户请在jdCookie.js处填写京东ck;
