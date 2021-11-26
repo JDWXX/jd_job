@@ -17,7 +17,7 @@ cron "0 30 9 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/qt/z
 ============小火箭=========
 中青看点分享阅读 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/zqkd/jd_zqkd_shareRead.js, cronexpr="0 30 9 * * *", timeout=3600, enable=true
 */
-const $ = new Env("中青看点分享阅读-非京东活动");
+const $ = new Env("中青看点-分享阅读");
 const notifyFlag = 1; //0为关闭通知，1为打开通知,默认为1
 const logDebug = 0
 
@@ -33,7 +33,7 @@ let zqkdCookieArr = []
 let userCk = ''
 let readCount = 0
 
-let zqkdShareNum = ($.isNode() ? process.env.zqkdShareNum : $.getdata('zqkdShareNum')) || 0;
+let zqkdShareNum = ($.isNode() ? process.env.zqkdShareNum : $.getdata('zqkdShareNum')) || 10;
 
 let newsItem = ''
 let UserAgent = ''
