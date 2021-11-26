@@ -6,7 +6,7 @@
 #                使用方式为：./install-node.sh               #
 ############################################################
 
-nodeVersion="16.9.0"  # 安装的默认版本
+nodeVersion="15.10.0"  # 安装的默认版本
 VERSIONPATTERN="[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}"
 
 echo -n "Please input a  node version number (Enter 10.15.0): "
