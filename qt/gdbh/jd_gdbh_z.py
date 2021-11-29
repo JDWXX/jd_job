@@ -15,10 +15,10 @@
 
 """
 const $ = new Env("果冻宝盒-非京东活动");
-愤怒的锦鲤-开红包
+果冻宝盒-非京东活动
 
 cron:
-15 5,21 * * * jd_gdbh.py
+0 15 5,21 * * * jd_gdbh_z.py
 """
 import requests
 import time
