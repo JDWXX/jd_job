@@ -1,7 +1,6 @@
 /*
-下载地址：
-APP商店 九章头条
-
+九章头条
+下载地址：APP商店 九章头条
 使用方法
 获取数据打开APP即可获取
 一天预算2块的样子
@@ -14,17 +13,23 @@ export jzreadurl='https://api.st615.com/v1/user/info?token=抓包的token'
 提现变量为cashtx
 面额为0.3 2 5 30 50 100
 新账号提现改为export cashtx='0.3'
+已支持IOS双京东账号,Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
+[task_local]
+#九章头条
+60 * * * * https://github.com/JDWXX/jd_job/blob/master/qt/jztt/jd_jzread.js, tag=九章头条, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxcfd.png, enabled=true
 
-========isQuanX=========
-[rewrite_local]
-https://api.st615.com/v1/user/info\?token=\S+ url script-request-header http://nm66.top/jzread.js
+================Loon==============
+[Script]
+cron "60 * * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/qt/jztt/jd_jzread.js,tag=九章头条
 
-hostname = api.st615.com
+===============Surge=================
+九章头条 = type=cron,cronexp="60 * * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/jztt/jd_jzread.js
+
+============小火箭=========
+九章头条 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/jztt/jd_jzread.js, cronexpr="60 * * * *", timeout=3600, enable=true
 */
-
-// [task_local]
-// */60 * * * * http://nm66.top/jzread.js, tag=柠檬九章头条, img-url=circles.hexagongrid.fill.system, enabled=true
-
 const $ = new Env('九章头条-非京东活动');
 let status;
 status = (status = ($.getval("jzreadstatus") || "1")) > 1 ? `${status}` : "";
