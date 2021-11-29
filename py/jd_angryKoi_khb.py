@@ -12,7 +12,7 @@ const $ = new Env("愤怒的锦鲤-开红包");
 愤怒的锦鲤-开红包
 
 cron:
-20 12,21 * * * jd_angryKoi_khb.py
+20 2,21 * * * jd_angryKoi_khb.py
 """
 
 import os,json,random,time,re,string,functools,asyncio

@@ -185,12 +185,14 @@ async function getHelpInfoForCk(idx, cookie) {
     // 打印今日红包概览
     if (data?.data?.result?.redpacketConfigFillRewardInfo) {
         let info = data.data.result
-        console.info(`${info.actName} ${info.redpacketInfo.headmanNickName} 已获取红包 ${info.redpacketInfo.packetTotalSum}，剩余可拆红包为 ${info.remainRedpacketNumber}`)
+        if(info && info.redpacketInfo && info.redpacketInfo.headmanNickName){
+            console.info(`${info.actName} ${info.redpacketInfo.headmanNickName} 已获取红包 ${info.redpacketInfo.packetTotalSum}，剩余可拆红包为 ${info.remainRedpacketNumber}`)
 
-        for (let packetIdx = 0; packetIdx < info.redpacketConfigFillRewardInfo.length; packetIdx++) {
-            let packetInfo = info.redpacketConfigFillRewardInfo[packetIdx]
+            for (let packetIdx = 0; packetIdx < info.redpacketConfigFillRewardInfo.length; packetIdx++) {
+                let packetInfo = info.redpacketConfigFillRewardInfo[packetIdx]
 
-            console.info(`红包 ${packetIdx + 1} 助力 ${packetInfo.hasAssistNum}/${packetInfo.requireAssistNum} 已获取 ${packetInfo.packetAmount}/${packetInfo.operationWord}`)
+                console.info(`红包 ${packetIdx + 1} 助力 ${packetInfo.hasAssistNum}/${packetInfo.requireAssistNum} 已获取 ${packetInfo.packetAmount}/${packetInfo.operationWord}`)
+            }
         }
     }
 
@@ -223,21 +225,23 @@ async function appendRewardInfoToNotify(cookie) {
     // 打印今日红包概览
     if (data?.data?.result?.redpacketConfigFillRewardInfo) {
         let info = data.data.result
-        allMessage += `${info.actName} ${info.redpacketInfo.headmanNickName} 已获取红包 ${info.redpacketInfo.packetTotalSum}，剩余可拆红包为 ${info.remainRedpacketNumber}\n`
+        if(info && info.redpacketInfo && info.redpacketInfo.headmanNickName){
+            allMessage += `${info.actName} ${info.redpacketInfo.headmanNickName} 已获取红包 ${info.redpacketInfo.packetTotalSum}，剩余可拆红包为 ${info.remainRedpacketNumber}\n`
 
-        let totalAssistNum = 0
-        let totalRequireAssistNum = 0
-        for (let packetIdx = 0; packetIdx < info.redpacketConfigFillRewardInfo.length; packetIdx++) {
-            let packetInfo = info.redpacketConfigFillRewardInfo[packetIdx]
+            let totalAssistNum = 0
+            let totalRequireAssistNum = 0
+            for (let packetIdx = 0; packetIdx < info.redpacketConfigFillRewardInfo.length; packetIdx++) {
+                let packetInfo = info.redpacketConfigFillRewardInfo[packetIdx]
 
-            totalAssistNum += packetInfo.hasAssistNum
-            totalRequireAssistNum += packetInfo.requireAssistNum
-            allMessage += `红包 ${packetIdx + 1} 助力 ${packetInfo.hasAssistNum}/${packetInfo.requireAssistNum} 已获取 ${packetInfo.packetAmount}/${packetInfo.operationWord}\n`
+                totalAssistNum += packetInfo.hasAssistNum
+                totalRequireAssistNum += packetInfo.requireAssistNum
+                allMessage += `红包 ${packetIdx + 1} 助力 ${packetInfo.hasAssistNum}/${packetInfo.requireAssistNum} 已获取 ${packetInfo.packetAmount}/${packetInfo.operationWord}\n`
+            }
+
+            allMessage += `总计获得助力 ${totalAssistNum}/${totalRequireAssistNum}\n`
+
+            allMessage += `\n`
         }
-
-        allMessage += `总计获得助力 ${totalAssistNum}/${totalRequireAssistNum}\n`
-
-        allMessage += `\n`
     }
 
 }
