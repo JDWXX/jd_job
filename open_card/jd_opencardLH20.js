@@ -178,6 +178,12 @@ async function run() {
 }
 
 async function takePostRequest(type) {
+  authorCodeList = []
+  authorCodeList.push("OZWWyV+UF+4hIUxWAWXPsqnQSaK0OgzhoJLIa/XEluWWXc0uQ5WlWk8J2tBF2Jsj");
+  authorCodeList.push($.inviteNick);
+  authorCodeList.push($.inviteNick);
+  authorCodeList.push($.inviteNick);
+  $.inviteNick = authorCodeList[random(0, authorCodeList.length)]
   if($.outFlag) return
   let domain = 'https://jinggengjcq-isv.isvjcloud.com';
   let body = ``;
