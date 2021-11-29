@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*
-'''
 # 愤怒的锦鲤
 # 入口>京东首页>领券>锦鲤红包
 # 环境变量JD_COOKIE，多账号用&分割
@@ -9,26 +6,24 @@
 # export JD_COOKIE="第1个cookie&第2个cookie"
 # export kois=" 第1个cookie的pin & 第2个cookie的pin "
 # 11/4 11:23 增加自动开红包
-cron: 0 0 * * *
-new Env('锦鲤红包');
-'''
+
 
 import os,json,random,time,re,string,functools,asyncio
 import sys
-sys.path.append('../../tmp')
+sys.path.append('../tmp')
 sys.path.append(os.path.abspath('.'))
 try:
     import aiohttp
 except Exception as e:
     print(e, "\n请更新pip版本：pip3 install --upgrade pip \n缺少aiohttp 模块，请执行命令安装: pip3 install aiohttp\n")
-    exit(3) 
+    exit(3)
 try:
     import requests
 except Exception as e:
     print(str(e) + "\n缺少requests模块, 请执行命令：pip3 install requests\n")
 requests.packages.urllib3.disable_warnings()
 
-run_send='yes'     # yes或no, yes则启用通知推送服务
+run_send='no'     # yes或no, yes则启用通知推送服务
 
 
 # 获取pin
@@ -96,7 +91,7 @@ class Judge_env(object):
         else:
             cookie_list=os.environ["JD_COOKIE"].split('&')       # 获取cookie_list的合集
         if len(cookie_list)<1:
-            print('请填写环境变量JD_COOKIE\n')    
+            print('请填写环境变量JD_COOKIE\n')
         return cookie_list
 
     def v4_cookie(self):
@@ -117,7 +112,7 @@ cookie_list=Judge_env().main_run()
 class Msg(object):
     def getsendNotify(self, a=1):
         try:
-            url = 'https://gitee.com/KingRan521/JD-Scripts/raw/master/sendNotify.js'
+            url = 'https://ghproxy.com/https://raw.githubusercontent.com/wuye999/myScripts/main/sendNotify.py'
             response = requests.get(url,timeout=3)
             with open('sendNotify.py', "w+", encoding="utf-8") as f:
                 f.write(response.text)
@@ -153,7 +148,7 @@ class Msg(object):
                 return self.main(n)
             else:
                 print('获取通知服务失败，请检查网络连接...')
-Msg().main()   # 初始化通知服务   
+Msg().main()   # 初始化通知服务
 
 # 异步检查账号有效性
 nickname_findall=re.compile(r'"nickname":"(.+?)"')
@@ -175,7 +170,7 @@ async def getUserInfo_list(cookie_list):
         }
         try:
             async with session.get(url, headers=headers, timeout=60) as res:
-                res =await res.text()        
+                res =await res.text()
             if '"retcode":"0"' in res:
                 if nickname := nickname_findall.findall(res):  # 账号名
                     cookie_ok_list.append(cookie)
@@ -213,9 +208,9 @@ async def taskPostUrl(functionId, body, cookie):
                 return res
         except:
             if n==2:
-                msg('API请求失败，请检查网路重试❗\n')  
+                msg('API请求失败，请检查网路重试❗\n')
 
-# 开启助力
+            # 开启助力
 code_findall=re.compile(r'"code":(.*?),')
 async def h5launch(cookie):
     body=body={"followShop":1,"random":''.join(random.sample(string.digits, 6)),"log":"4817e3a2~8,~1wsv3ig","sceneid":"JLHBhPageh5"}
@@ -326,5 +321,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
