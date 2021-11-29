@@ -11,7 +11,7 @@ export  FAIR_MODE="true"
 export CHETOU_NUMBER="1"
 
 TG学习交流群：https://t.me/cdles
-5 0 * * * https://raw.githubusercontent.com/cdle/jd_study/main/jd_angryKoi.js
+5 1 * * * https://raw.githubusercontent.com/cdle/jd_study/main/jd_angryKoi.js
 */
 const $ = new Env("愤怒的锦鲤")
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
