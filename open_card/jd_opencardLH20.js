@@ -21,7 +21,7 @@ cron:7 4,11 27-30,1,2 11,12 *
 ============Quantumultx===============
 [task_local]
 #11.27~12.2 联合开卡
-7 4,11 27-30,1,2 11,12 * jd_opencardLH20.js, tag=11.27~12.2 联合开卡, enabled=true
+10 14 * * * jd_opencardLH20.js, tag=11.27~12.2 联合开卡, enabled=true
 
 */
 
@@ -50,7 +50,7 @@ $.activityEnd = false
   $.userId = '10299171'
   $.actId = '0ce138cf44eb4b62999fdf1042_1127'
   $.MixNicks = ''
-  $.inviteNick = 'k1Nobb+P0er+C2sysxnx/P2KELO9izRVpwCyqu0eqVZ5aW7RHzlMobrzJ/e9r/uf'
+  $.inviteNick = 'OZWWyV+UF+4hIUxWAWXPsqnQSaK0OgzhoJLIa/XEluWWXc0uQ5WlWk8J2tBF2Jsj'
   console.log(`活动地址:https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20211125/unitedCardNew20211125?actId=0ce138cf44eb4b62999fdf1042_1127`)
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
@@ -190,7 +190,7 @@ async function takePostRequest(type) {
       break;
       case 'activity_load':
         url = `${domain}/dm/front/openCardNew/activity_load?mix_nick=${$.MixNick || $.MixNicks || ""}`;
-        admJson = {"jdToken": $.Token, "source": "01", "inviteNick":($.inviteNick || "")}
+        admJson = {"jdToken": $.Token, "source": "01", "inviteNick":($.inviteNick || "OZWWyV+UF+4hIUxWAWXPsqnQSaK0OgzhoJLIa/XEluWWXc0uQ5WlWk8J2tBF2Jsj")}
         if($.joinVenderId) admJson = {...admJson, "shopId": `${$.joinVenderId}`}
         body = taskPostUrl("/openCardNew/activity_load", admJson);
         break;
@@ -201,7 +201,7 @@ async function takePostRequest(type) {
         break;
       case '绑定':
         url = `${domain}/dm/front/openCardNew/complete/mission?mix_nick=${$.MixNick || $.MixNicks || ""}`;
-        admJson = {"missionType": "relationBind", "inviterNick":($.inviteNick || "")}
+        admJson = {"missionType": "relationBind", "inviterNick":($.inviteNick || "OZWWyV+UF+4hIUxWAWXPsqnQSaK0OgzhoJLIa/XEluWWXc0uQ5WlWk8J2tBF2Jsj")}
         body = taskPostUrl("/openCardNew/complete/mission", admJson);
         break;
       case 'mission':
