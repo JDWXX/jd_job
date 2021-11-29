@@ -1,22 +1,22 @@
 /*
-养鸡真快乐APP
+养鸡真快乐APP-非京东活动
 2021年11月24日11:12:15 修改调用次数，一天一次，频率太高会黑号
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
 [task_local]
-#养鸡真快乐APP
-20 10 * * * https://github.com/JDWXX/jd_job/blob/master/qt/zklapp/jd_zklapp_new.js, tag=养鸡真快乐APP, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxcfd.png, enabled=true
+#养鸡真快乐APP-非京东活动
+20 10 * * * https://github.com/JDWXX/jd_job/blob/master/qt/zklapp/jd_zklapp_new.js, tag=养鸡真快乐APP-非京东活动, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxcfd.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "20 10 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/qt/zklapp/jd_zklapp_new.js,tag=养鸡真快乐APP
+cron "20 10 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/qt/zklapp/jd_zklapp_new.js,tag=养鸡真快乐APP-非京东活动
 
 ===============Surge=================
-养鸡真快乐APP = type=cron,cronexp="20 10 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/zklapp/jd_zklapp_new.js
+养鸡真快乐APP-非京东活动 = type=cron,cronexp="20 10 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/zklapp/jd_zklapp_new.js
 
 ============小火箭=========
-养鸡真快乐APP = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/zklapp/jd_zklapp_new.js, cronexpr="20 10 * * *", timeout=3600, enable=true
+养鸡真快乐APP-非京东活动 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/qt/zklapp/jd_zklapp_new.js, cronexpr="20 10 * * *", timeout=3600, enable=true
 */
 const $ = new Env('养鸡真快乐APP-非京东活动');
 //Node.js用户请在jdCookie.js处填写京东ck;
