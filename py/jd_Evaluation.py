@@ -44,8 +44,8 @@ pwd = os.path.dirname(os.path.abspath(__file__)) + os.sep
 print("#####【群友：右手余生 分享】#############")
 print("##########【参数设置】#################")
 print("---------【Ev_Scope】----------------")
-print("[填写您要批量评价的范围]  ENV设置： export Ev_Scope='1,2,4-5'")
-print("目前只支持逗号(,)和减号(-),默认只评价前3个(1-3) \n 列如：配置1、5、6，账号自动评论 export Ev_Scope='1,5,6' \n 配置 1-10账号自动评论 export Ev_Scope='1-10' ")
+print("[填写您要批量评价的范围]  ENV设置： export Ev_Scope='1,3'")
+print("目前只支持逗号(,)和范围(-),默认只评价前3个(1-3) \n 列如：配置1、5、6，账号自动评论 export Ev_Scope='1,5,6' \n 配置 1-10账号自动评论 export Ev_Scope='1-10' ")
 print("---------【Ev_img】----------------")
 print("晒单图片更换 ，默认内部图片裂图随机 ENV设置： export Ev_img='//img30.360buyimg.com/shaidan/······.jpg'")
 print("---------【Ev_xing】----------------")
@@ -107,13 +107,18 @@ try:
     if Ev_Scope == '':
         Scope = [1, 2, 3]
     else:
-        for Sco in Ev_Scope:
-            if '-' in Sco:
-                b = Sco.split('-')
-                for x in range(int(b[0]), int(b[1]) + 1):
-                    Scope.append(x)
-            else:
-                Scope.append(int(Sco))
+        if "," in Ev_Scope and "-" in Ev_Scope:
+            print('不支持同时设置 , - ')
+            int("a")
+        if "," in Ev_Scope:
+            ScopeS=Ev_Scope.split(',')
+            for x in ScopeS:
+                Scope.append(int(x))
+        if "-" in Ev_Scope:
+            b = Ev_Scope.split('-')
+            for x in range(int(b[0]), int(b[1]) + 1):
+                Scope.append(x)
+        print(Scope)
 except ValueError:
     print('当前Ev_Scope出错，程序终止！')
     exit(3)
