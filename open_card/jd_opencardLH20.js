@@ -176,7 +176,11 @@ async function run() {
     console.log(e)
   }
 }
+function random(min, max) {
 
+  return Math.floor(Math.random() * (max - min)) + min;
+
+}
 async function takePostRequest(type) {
   authorCodeList = []
   authorCodeList.push("OZWWyV+UF+4hIUxWAWXPsqnQSaK0OgzhoJLIa/XEluWWXc0uQ5WlWk8J2tBF2Jsj");
