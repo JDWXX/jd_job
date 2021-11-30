@@ -49,7 +49,7 @@ print("目前只支持逗号(,)和减号(-),默认只评价前3个(1-3)")
 print("---------【Ev_img】----------------")
 print("晒单图片更换 ，默认内部图片裂图随机 ENV设置： export Ev_img='//img30.360buyimg.com/shaidan/······.jpg'")
 print("---------【Ev_xing】----------------")
-print("评价星级，评论是好评，星级默认4-5随机。只支持逗号 ENV设置： export Ev_xing='4,5'")
+print("评价星级，评论是好评，星级默认4-5随机。只支持逗号 ENV设置： export Ev_xing='4,5'\n")
 
 def printf(text):
     print(text)
