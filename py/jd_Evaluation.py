@@ -41,6 +41,7 @@ except Exception as e:
 
 pwd = os.path.dirname(os.path.abspath(__file__)) + os.sep
 
+printf("################【群友：右手余生 分享】######################")
 printf("################【参数设置】######################")
 printf("----------------【Ev_Scope】---------------------")
 printf("[填写您要批量评价的范围]  ENV设置： export Ev_Scope='1,2,4-5'")
