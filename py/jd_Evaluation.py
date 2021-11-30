@@ -41,6 +41,14 @@ except Exception as e:
 
 pwd = os.path.dirname(os.path.abspath(__file__)) + os.sep
 
+printf("################【参数设置】######################")
+printf("----------------【Ev_Scope】---------------------")
+printf("[填写您要批量评价的范围]  ENV设置： export Ev_Scope='1,2,4-5'")
+printf("目前只支持逗号(,)和减号(-),默认只评价前3个(1-3)")
+printf("----------------【Ev_img】---------------------")
+printf("晒单图片更换 ，默认内部图片裂图随机 ENV设置： export Ev_img='//img30.360buyimg.com/shaidan/······.jpg'")
+printf("----------------【Ev_xing】---------------------")
+printf("评价星级，评论是好评，星级默认4-5随机。只支持逗号 ENV设置： export Ev_xing='4,5'")
 
 def printf(text):
     print(text)
@@ -459,7 +467,7 @@ def start():
                 url = 'https://comment-api.jd.com/comment/appendComment?sceneval=2&g_login_type=1&g_ty=ajax'
                 if Ev_img == '':
                     Ev_img = random.sample(
-                        ['//img30.360buyimg.com/shaidan/jfs/t1/169124/31/25110/42459/61a586c7Ec6b49656/1549ee98784f868d.jpg,//img30.360buyimg.com/shaidan/jfs/t1/220117/4/6009/64307/61a586d6E0d3462c9/2d49512023e40761.jpg,//img30.360buyimg.com/shaidan/jfs/t1/213046/15/6166/10322/61a586e5Ea4397e3d/d143a8d0a0d96bd8.jpg', '//img30.360buyimg.com/shaidan/jfs/t1/143995/15/24443/5327/61860ba4Ecba97817/d7faafa606f76b1f.jpg'], 1)
+                        ['//img30.360buyimg.com/shaidan/jfs/t1/169124/31/25110/42459/61a586c7Ec6b49656/1549ee98784f868d.jpg,//img30.360buyimg.com/shaidan/jfs/t1/220117/4/6009/64307/61a586d6E0d3462c9/2d49512023e40761.jpg,//img30.360buyimg.com/shaidan/jfs/t1/213046/15/6166/10322/61a586e5Ea4397e3d/d143a8d0a0d96bd8.jpg', '//img30.360buyimg.com/shaidan/jfs/t1/169124/31/25110/42459/61a586c7Ec6b49656/1549ee98784f868d.jpg,//img30.360buyimg.com/shaidan/jfs/t1/220117/4/6009/64307/61a586d6E0d3462c9/2d49512023e40761.jpg,//img30.360buyimg.com/shaidan/jfs/t1/143995/15/24443/5327/61860ba4Ecba97817/d7faafa606f76b1f.jpg'], 1)
                 data = {
                     'productId': da['pid'],
                     'orderId': da['oid'],
