@@ -41,15 +41,15 @@ except Exception as e:
 
 pwd = os.path.dirname(os.path.abspath(__file__)) + os.sep
 
-printf("################【群友：右手余生 分享】######################")
-printf("################【参数设置】######################")
-printf("----------------【Ev_Scope】---------------------")
-printf("[填写您要批量评价的范围]  ENV设置： export Ev_Scope='1,2,4-5'")
-printf("目前只支持逗号(,)和减号(-),默认只评价前3个(1-3)")
-printf("----------------【Ev_img】---------------------")
-printf("晒单图片更换 ，默认内部图片裂图随机 ENV设置： export Ev_img='//img30.360buyimg.com/shaidan/······.jpg'")
-printf("----------------【Ev_xing】---------------------")
-printf("评价星级，评论是好评，星级默认4-5随机。只支持逗号 ENV设置： export Ev_xing='4,5'")
+print("#####【群友：右手余生 分享】#############")
+print("##########【参数设置】#################")
+print("---------【Ev_Scope】----------------")
+print("[填写您要批量评价的范围]  ENV设置： export Ev_Scope='1,2,4-5'")
+print("目前只支持逗号(,)和减号(-),默认只评价前3个(1-3)")
+print("---------【Ev_img】----------------")
+print("晒单图片更换 ，默认内部图片裂图随机 ENV设置： export Ev_img='//img30.360buyimg.com/shaidan/······.jpg'")
+print("---------【Ev_xing】----------------")
+print("评价星级，评论是好评，星级默认4-5随机。只支持逗号 ENV设置： export Ev_xing='4,5'")
 
 def printf(text):
     print(text)
