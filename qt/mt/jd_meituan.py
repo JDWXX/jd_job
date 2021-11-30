@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+'''
+项目原地址: https://github.com/fuguiKz/meituan-shenquan 二转地址 https://github.com/wuye999/myScripts/tree/main/mei_tuan
+Author: jd_meituan.py
+功能：美团红包
+cron: 0 11,14,17,21,0,1,2,3 * * *
+new Env('美团红包');
+'''
 #author:fugui
 
 from typing import Text
