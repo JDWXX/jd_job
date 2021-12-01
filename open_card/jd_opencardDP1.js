@@ -34,7 +34,7 @@ if ($.isNode()) {
     authorCodeList = await getAuthorCodeList('https://gitee.com/KingRan521/JD-Scripts/raw/master/shareCodes/opencardDP1.json')
     if($.getAuthorCodeListerr === false){
         authorCodeList = [
-            '8dbc3f224eaa49608c2d84a700f0a201',
+            'd68e187b23164d1c9050de83a13c0b68',
         ]
     }
 
@@ -57,7 +57,12 @@ if ($.isNode()) {
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
             // $.authorCode = authorCodeList[random(0, authorCodeList.length)]
-            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            //$.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            authorCodeList.push(ownCode);
+            authorCodeList.push(ownCode);
+            authorCodeList.push("d68e187b23164d1c9050de83a13c0b68");
+            $.authorCode = authorCodeList[random(0, authorCodeList.length)]
+
             $.authorNum = `${random(1000000, 9999999)}`
             $.activityId = 'dz211122100001616201shop'
             $.activityShopId = '1000334325'
@@ -95,7 +100,7 @@ async function superFans() {
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
-            console.log("去助力 -> "+$.authorCode)
+            console.log("去助力 -> "+ownCode)
             await task("taskact/common/drawContent", `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`)
             await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
             await task('wxActionCommon/getUserInfo', `pin=${encodeURIComponent($.secretPin)}`, 1)
