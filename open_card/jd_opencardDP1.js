@@ -1,7 +1,7 @@
 /*
 大牌联合 赢大额京豆
 12.1 - 12.12
-https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity/6758593?activityId=dz211122100001616201shop&shareUuid=8dbc3f224eaa49608c2d84a700f0a201
+https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity/6758593?activityId=dz211122100001616201shop&shareUuid=d68e187b23164d1c9050de83a13c0b68
 
 cron 17 2,19 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_opencardDP1.js
 */
