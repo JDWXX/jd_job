@@ -344,12 +344,14 @@ async function doUserLoveInfo() {
     }
     let userLoveInfo = await takeRequest(`jxmc`, `queryservice/GetUserLoveInfo`, ``, undefined, true);
     let lovelevel = userLoveInfo.lovelevel;
-    for (let i = 0; i < lovelevel.length; i++) {
-        if(lovelevel[i].drawstatus === 1){
-            console.log(`抽取红包`);
-            let drawLoveHongBao =await takeRequest(`jxmc`, `operservice/DrawLoveHongBao`, `&lovevalue=${lovelevel[i].lovevalue}`, `activeid%2Cactivekey%2Cchannel%2Cjxmc_jstoken%2Clovevalue%2Cphoneid%2Csceneid%2Ctimestamp`, true);
-            console.log(`抽取结果：${JSON.stringify(drawLoveHongBao)}`);
-            await $.wait(3000);
+    if(lovelevel && lovelevel.length){
+        for (let i = 0; i < lovelevel.length; i++) {
+            if(lovelevel[i].drawstatus === 1){
+                console.log(`抽取红包`);
+                let drawLoveHongBao =await takeRequest(`jxmc`, `operservice/DrawLoveHongBao`, `&lovevalue=${lovelevel[i].lovevalue}`, `activeid%2Cactivekey%2Cchannel%2Cjxmc_jstoken%2Clovevalue%2Cphoneid%2Csceneid%2Ctimestamp`, true);
+                console.log(`抽取结果：${JSON.stringify(drawLoveHongBao)}`);
+                await $.wait(3000);
+            }
         }
     }
 }
