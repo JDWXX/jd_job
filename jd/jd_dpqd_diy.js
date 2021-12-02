@@ -70,7 +70,7 @@ if ($.isNode()) {
 	$.TokenLists.push(...$.TokenList,...$.innerTokenList);
 
 
-  console.log(`\n********签到奖励店铺贡献*******\n`);
+  console.log(`\n********签到奖励店铺群友贡献列表*******\n`);
   console.log(`********星晴*******`);
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
