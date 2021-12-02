@@ -1,10 +1,10 @@
 /*
 [task_local]
 免费领京豆-周周领30京豆
-0 0 0 0 0 1 * jd_zzljd.js, tag=免费领京豆-周周领30京豆, enabled=true
+0 0 20 * * ?  jd_zzljd.js, tag=免费领京豆-周周领30京豆, enabled=true
 ================Loon==============
 [Script]
-cron "0 0 0 0 0 1 *" script-path=jd_zzljd.js,tag=免费领京豆-周周领30京豆
+cron "0 0 20 * * ? " script-path=jd_zzljd.js,tag=免费领京豆-周周领30京豆
 */
 const $ = new Env('免费领京豆-周周领30京豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
