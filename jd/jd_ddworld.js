@@ -78,7 +78,15 @@ let tokenInfo = {}, hotInfo = {}
   //   await $.wait(1000)
   //   res2 = await getAuthorShareCode('https://raw.fastgit.org/zero205/updateTeam/main/shareCodes/ddworld.json')
   // }
-  $.shareCodes = []
+  $.shareCodes =[]
+  console.log(`\n环境变量添加助力码 ddwjzl 指定账号助力 多账号 @ 拼接\n`);
+  if (process.env.ddwjzl && process.env.ddwjzl.indexOf('@') > -1) {
+    shareCodes = process.env.ddwjzl.split('@');
+    console.log(`您选择的是用"@"隔开\n`)
+  }
+  authorCodeList.push("eqPNrMZXgbQ_qSjzcYiJRtNkaE7umdx8GiVKoVLlbqM");
+  authorCodeList.push('vdTAQTxX5vADXZ_yetAhSeYl8bEVULElSCeOVLqpfk4');
+  authorCodeList.push('8avXD72L1UE-GcmozbExwS1SsFjp4H3Sh92gjUZNNXY');
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
