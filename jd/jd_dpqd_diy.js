@@ -1,11 +1,7 @@
 /*
-店铺签到，各类店铺签到，有新的店铺直接添加token即可
-搬运cui521大佬脚本，请勿外传！！！
 
-自带的Token List网址已不可用
-
-由Shy_yhS更新店铺数据，每天超过20间店铺会火爆
-更新日期:2021-10-25
+由https://github.com/JDWXX/jd_job.git 更新店铺数据，每天超过20间店铺会火爆
+更新日期:2021-12-03
 cron 0 0 * * * jd_qpqd_diy.js, tag=店铺签到diy
 */
 const $ = new Env('店铺签到');
@@ -46,6 +42,15 @@ const token=[
   "91CC3F9699320158FAC003F71F4A6C03",//7天50豆 100份 https://u.jd.com/ntyt2Qz
   "18EF5FBC139F9BC5B8DE703E9AB1ABDB",// 2-7天45豆 300份 https://u.jd.com/ndytC9H
   "2A8794EC8DA4659DDDA0DF0E1A2AF4AF",// 3-30天180豆 10份   https://u.jd.com/nLytQmb
+
+  // 20211203
+  "25F1232C9097D0C54386E2DC5B42A4B0",// 3天100京豆 2000份   3天100京豆 2000份 https://u.jd.com/nIPfKam
+  "011BAF6E366D356E7694B0999CE3DE03",// 3-30天180豆 10份   7天2亓虹包 500份 https://u.jd.com/nCPjRyp
+  "0BC8DD418E64D11837AA95714040E5A3",// 3-30天180豆 10份   10天80京豆 500份 https://u.jd.com/nIPjhgc
+  "C19201D1BBFABECF9184E970DF985F62",// 3-30天180豆 10份   10天50京豆 1000份 https://u.jd.com/nMPjeQX
+  "467FF39E95F017E61AD68BB11859C5B2",// 3-30天180豆 10份   3天20京豆 https://u.jd.com/nMPjhEX
+
+
 ]
 //IOS等用户直接用NobyDa的jd cookie
 
@@ -80,6 +85,8 @@ if ($.isNode()) {
 	$.TokenLists.push(...$.TokenList,...$.innerTokenList);
 
 
+  console.log(`********更新库【https://github.com/JDWXX/jd_job.git】*******`);
+  console.log(`********新活动请提 issue *******`);
   console.log(`\n********签到奖励店铺群友贡献列表*******\n`);
   console.log(`********星晴*******`);
   for (let i = 0; i < cookiesArr.length; i++) {
