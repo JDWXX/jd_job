@@ -84,9 +84,10 @@ if ($.isNode()) {
 
 
   console.log(`********更新库【https://github.com/JDWXX/jd_job.git】*******`);
-  console.log(`********新活动请提 issue *******`);
-  console.log(`\n********签到奖励店铺群友贡献列表*******\n`);
-  console.log(`********星晴*******`);
+  console.log(`********新活动请在GitHub提 issue ***********************************`);
+  console.log(`********本次更新时间：【2021-12-03】 *************************`);
+  console.log(`********签到奖励店铺群友贡献列表*******************************`);
+  console.log(`********星晴***********************************************`);
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
