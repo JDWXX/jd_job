@@ -48,6 +48,7 @@ const token=[
   "0BC8DD418E64D11837AA95714040E5A3",// THREE SEVEN777旗舰店   10天80京豆 500份 https://u.jd.com/nIPjhgc
   "C19201D1BBFABECF9184E970DF985F62",// 屹林宏业旗舰店  10天50京豆 1000份 https://u.jd.com/nMPjeQX
   "467FF39E95F017E61AD68BB11859C5B2",// 费雪水杯旗舰店   3天20京豆 https://u.jd.com/nMPjhEX
+  "11CD3D32563C80BDE473B2C732F093E3",// 28天100京豆
 
 ]
 //IOS等用户直接用NobyDa的jd cookie
