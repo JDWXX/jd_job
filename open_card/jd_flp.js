@@ -449,6 +449,7 @@ function getUUID(format = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', UpperCase 
         return uuid;
     });
 }
+
 function checkCookie() {
     const options = {
         url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",
