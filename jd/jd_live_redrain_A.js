@@ -48,10 +48,8 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
 
   let nowTs = new Date().getTime()
   if (!($.st <= nowTs && nowTs < $.ed)) {
-    $.log(`\n远程红包雨配置获取错误，尝试从本地读取配置`);
-    // $.http.get({url: `https://purge.jsdelivr.net/gh/gitupdate/updateTeam@master/redrain.json`}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
-    // let hour = (new Date().getUTCHours() + 8) % 24;
-    let redIds = await getRedRainIds();
+    let hour = (new Date().getUTCHours() + 8) % 24;
+    let redIds = await getRedRainIds('https://gitee.com/KingRan521/JD-Scripts/raw/master/shareCodes/redrain.json');
     if (!redIds) redIds = await getRedRainIds('https://cdn.jsdelivr.net/gh/gitupdate/updateTeam@master/redrain.json');
     $.newAcids = [...(redIds || [])];
     if ($.newAcids && $.newAcids.length) {
@@ -97,6 +95,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
         // console.log(nowTs, $.startTime, $.endTime)
         // await showMsg();
         if (id) await receiveRedRain(id);
+        await $.wait(2000)
       }
     }
   }
