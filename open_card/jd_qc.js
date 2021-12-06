@@ -4,7 +4,7 @@
 0 0 0,10,20 * * ?  jd_qc.js, tag=雀巢母婴京东自营旗舰店-抢券, enabled=true
 ================Loon==============
 [Script]
-cron "0 0 0,10,20 * * ?" script-path=jd_qc.js,tag=雀巢母婴京东自营旗舰店-抢券
+cron "0 0 0,10,20 * * ? " script-path=jd_qc.js,tag=雀巢母婴京东自营旗舰店-抢券
 */
 const $ = new Env('雀巢母婴京东自营旗舰店-抢券');
 const notify = $.isNode() ? require('./sendNotify') : '';
