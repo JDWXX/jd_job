@@ -148,7 +148,7 @@ function task(function_id, body, isCommon = 0) {
                                     $.log("-------------------")
                                         if ($.index === 1) {
                                             ownCode = data.data.actorUuid
-                                            console.log(ownCode)
+                                            console.log("你的互助码 >" + ownCode)
                                         }
                                     break;
                                 case 'wxActionCommon/getUserInfo':
