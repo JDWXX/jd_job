@@ -11,9 +11,9 @@ cron "59 * * * *" script-path=jd_jx_cfd_pearl_exchange.js,tag=财富岛珍珠兑
 // noinspection JSUnresolvedFunction
 const {Env} = require('./utils/magic');
 const $ = new Env('M财富岛珍珠兑换');
-let money = 10
+let money = 0.2
 
-$.log(`环境变量添加 PEARL_MONEY 设置兑换金额，不填默认5元`)
+// $.log(`环境变量添加 PEARL_MONEY 设置兑换金额，不填默认5元`)
 $.logic = async function () {
     const {ddwVirHb, exchangeInfo} = await ExchangePearlState();
     if (ddwVirHb / 100 < money) {
@@ -26,15 +26,7 @@ $.logic = async function () {
         let prizeInfo = prizeInfos[i];
         let number = prizeInfo.strPrizeName.replace('元', '') * 1;
         if (money === number) {
-
-            if (prizeInfo.dwState === 3) {
-                $.log('你已经换过了\n')
-                break;
-            }
-            if (prizeInfo.dwState === 1) {
-                $.log('没货\n')
-                break;
-            }
+            $.log(`脚本将开始分别兑换0.2、1、5、10 元`)
             for (let qq = 0; qq < 5; qq++) {
                 await ExchangePearlHb(2, 1000,prizeInfo.strPool)//10元
                 await ExchangePearlHb(3, 500,prizeInfo.strPool)//5元
@@ -42,7 +34,15 @@ $.logic = async function () {
                 await ExchangePearlHb(5, 20,prizeInfo.strPool)//0.2元
                 await ExchangePearlHb(prizeInfo.dwLvl, prizeInfo.ddwVirHb,prizeInfo.strPool)//5元
             }
-            $.log('将要兑换', prizeInfo.strPrizeName, '参数', prizeInfo.dwLvl,prizeInfo.ddwVirHb, prizeInfo.strPool)
+            // if (prizeInfo.dwState === 3) {
+            //     $.log('你已经换过了\n')
+            //     break;
+            // }
+            // if (prizeInfo.dwState === 1) {
+            //     $.log('没货\n')
+            //     break;
+            // }
+            // $.log('将要兑换', prizeInfo.strPrizeName, '参数', prizeInfo.dwLvl,prizeInfo.ddwVirHb, prizeInfo.strPool)
             for (let j = 0; j < 3; j++) {
                 if (await ExchangePearlHb(prizeInfo.dwLvl, prizeInfo.ddwVirHb,
                     prizeInfo.strPool)) {
