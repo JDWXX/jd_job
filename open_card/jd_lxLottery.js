@@ -100,10 +100,10 @@ async function run() {
         console.log(`任务${vo.taskName}，已完成`);
         continue;
       }
-      if (vo.taskName.includes('加购') && !['card','car'].includes(process.env.FS_LEVEL)) {
-        console.log('默认跳过加购,请设置通用加购/开卡变量FS_LEVEL为car(加购)或card(开卡+加购)')
-        continue
-      }
+      // if (vo.taskName.includes('加购') && !['card','car'].includes(process.env.FS_LEVEL)) {
+      //   console.log('默认跳过加购,请设置通用加购/开卡变量FS_LEVEL为car(加购)或card(开卡+加购)')
+      //   continue
+      // }
       console.log(`开始做${vo.taskName}:${vo.taskItem.itemName}`);
       await doTask(vo.taskType, vo.taskItem.itemId);
       await $.wait(1000 * vo.viewTime)
