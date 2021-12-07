@@ -58,7 +58,7 @@ if ($.isNode()) {
             }
         }
     }
-    let res = ["T010-vx3Qh8e9ACjRQmoaX5kRrbA","T012a1nTlrK8LPBsCjRQmoaX5kRrbA"];
+    let res = [];
     // let res = await getAuthorShareCode('')
     // if (!res) {
     //   $.http.get({url: ''}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
