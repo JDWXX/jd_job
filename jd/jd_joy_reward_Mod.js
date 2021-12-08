@@ -265,7 +265,9 @@ async function joyReward() {
 							if (!saleInfoId)
 								continue;
 							console.log(`开始兑换${rewardNum}京豆,时间 ${(new Date()).Format("yyyy-MM-dd hh:mm:ss | S")}`);
-							await exchange(saleInfoId, 'pet');
+							for (let i = 0; i < 10; i++) {
+								await exchange(saleInfoId, 'pet');
+							}
 							console.log(`结束兑换API后时间 ${(new Date()).Format("yyyy-MM-dd hh:mm:ss | S")}`);
 							if ($.exchangeRes && $.exchangeRes.success) {
 								if ($.exchangeRes.errorCode === 'buy_success') {
