@@ -1,7 +1,7 @@
 /*
 入口 京东 京东试用
 
-cron 0 40 5,6,7,8,11,13,15,15,19,21 * * * jd_try_bfc.js
+cron 0 40 3,15,15 * * * jd_try_bfc.js
 
  */
 const $ = new Env('京东试用_并发版')
@@ -91,14 +91,14 @@ let args_xh = {
      * 可设置环境变量：JD_TRY_APPLYINTERVAL
      * 默认为3000，也就是3秒
      * */
-	applyInterval: process.env.JD_TRY_APPLYINTERVAL * 1 || 32000,//每个账号提交间隔调大，防止黑IP
+	applyInterval: process.env.JD_TRY_APPLYINTERVAL * 1 || 64000,//每个账号提交间隔调大，防止黑IP
 	/*
      * 商品数组的最大长度，通俗来说就是即将申请的商品队列长度
      * 例如设置为20，当第一次获取后获得12件，过滤后剩下5件，将会进行第二次获取，过滤后加上第一次剩余件数
      * 例如是18件，将会进行第三次获取，直到过滤完毕后为20件才会停止，不建议设置太大
      * 可设置环境变量：JD_TRY_MAXLENGTH
      * */
-	maxLength: process.env.JD_TRY_MAXLENGTH * 1 || 20,
+	maxLength: process.env.JD_TRY_MAXLENGTH * 1 || 100,
 	/*
      * 过滤种草官类试用，某些试用商品是专属官专属，考虑到部分账号不是种草官账号
      * 例如A商品是种草官专属试用商品，下面设置为true，而你又不是种草官账号，那A商品将不会被添加到待提交试用组
