@@ -1,0 +1,105 @@
+# -*- coding: utf8 -*-
+"""
+cron: 59 59 * * * *
+new Env('P财富岛珍珠兑换');
+活动入口:https://st.jingxi.com/sns/202103/20/jxhlk/list.html
+"""
+import requests,os,json
+from concurrent.futures import ProcessPoolExecutor
+import requests
+import datetime
+
+print ("当前时间")
+print (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
+def task(url):
+    res=requests.get(url)
+    return res
+
+def done(future,*args,**kwargs):
+
+    print ("当前时间")
+    print (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
+    print(future,args,kwargs)
+    response=future.result()#得到response对象
+    print(response)
+
+if __name__=='__main__':
+    pool=ProcessPoolExecutor(10)
+    url_list=[
+        "http://www.cnblogs.com",
+        "http://huaban.com/favorite",
+        "http://www.bing.com",
+        "http://www.zhihu.com",
+        "http://www.sina.com",
+        "http://www.baidu.com",
+        "http://jd.zjhzcp.top/",
+        "http://jd.zjhzcp.top/weiXin/",
+        "http://www.baidu.com",
+        "http://www.autohome.com.cn"
+    ]
+    for url in url_list:
+        v=pool.submit(task,url)
+        v.add_done_callback(done)
+        #在收到task()的返回值后执行done(),传入的参数中就包括task()的返回值
+    pool.shutdown(wait=True)
+#
+#
+# def env(key):
+#     return os.environ.get(key)
+#
+# # Cookie
+# cookies = []
+# if env("JD_COOKIE"):
+#     cookies.extend(env("JD_COOKIE").split('&'))
+#
+# # launchid=os.environ['launchid']
+# # print ("环境变量:export launchi=\"\"")
+#
+# print ("活动入口:https://st.jingxi.com/sns/202103/20/jxhlk/list.html")
+# print ("脚本会自动查找CK1下面的砍价商品进行砍价，如有剩余助力次数则会助力作者")
+#
+# headers={
+#     "Host":"m.jingxi.com",
+#     "Connection":"keep-alive",
+#     "Sec-Fetch-Mode":"no-cors",
+#     "User-Agent":"jdpingou;android;5.8.0;11;58f90d6af88fe89f;network/wifi;model/Mi 10;appBuild/19037;partner/xiaomi;;session/199;aid/58f90d6653589f;oaid/60446b553564e;pap/JA2019_3111789;brand/;eu/53836346635;35636fv/6563656853666;Mozilla/5.0 (Linux; Android 11; Mi 10 Build/RKQ1.200826.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/94.0.4606.85 Mobile Safari/537.36",
+#     "Accept":"*/*",
+#     "X-Requested-With":"com.jd.pingou",
+#     "Sec-Fetch-Site":"same-site",
+#     "Referer":"https://st.jingxi.com/sns/202103/20/jxhlk/record.html?newwebview=1",
+#     "Accept-Encoding":"gzip, deflate, br",
+#     "Accept-Language":"zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
+#     "Cookie":cookies[0]
+# }
+#
+# print("如需指定账号，请在环境变量中添加邀请码，参数名：jxkj ")
+# if data["data"]["onling"] != []:
+#     launchid=data["data"]["onling"][0]["launchid"]
+#     print("你当前CK1账号商品邀请码："+launchid)
+# if "jxkj" in os.environ and len(os.environ["jxkj"]) > 1:
+#     launchid = os.environ["jxkj"]
+#     print("读取的配置文件中的邀请码为："+launchid)
+# else:
+#     launchid="dd5b4448b7a98f1200911e6c69d04a31"
+# for i in cookies:
+#     headers={
+#         "Host":"m.jingxi.com",
+#         "Connection":"keep-alive",
+#         "Sec-Fetch-Mode":"no-cors",
+#         "User-Agent":"jdpingou;android;5.8.0;11;58f90d6af88fe89f;network/wifi;model/Mi 10;appBuild/19037;partner/xiaomi;;session/186;aid/58f90d6af88fe14f;oaid/60446b582895464e;pap/JA2019_3111789;brand/;eu/5383669303466316;fv/6683836656839366;Mozilla/5.0 (Linux; Android 11; Mi 10 Build/RKQ1.200826.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/94.0.4606.85 Mobile Safari/537.36",
+#         "Accept":"*/*",
+#         "X-Requested-With":"com.jd.pingou",
+#         "Sec-Fetch-Site":"same-site",
+#         "Referer":"https://st.jingxi.com/sns/202103/20/jxhlk/list.html?launchid="+launchid+"=139022.1.2&srv=jx_cxyw_https%3A%2F%2Fwq.jd.com%2Fcube%2Ffront%2FactivePublish%2Fjxhlkv2%2F486449.html_jing",
+#         "Accept-Encoding":"gzip, deflate, br",
+#         "Accept-Language":"zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
+#         "Cookie":i
+#     }
+#     try:
+#         res=requests.get("https://m.jingxi.com/kjactive/jxhlk/jxhlk_queryhelp?launchid="+launchid+"&clicktype=0&nomoving=1&_stk=clicktype%2Claunchid%2Cnomoving&_ste=1&h5st=20211022212829803%3B0265027467319163%3B10029%3Btk01wc6341d3830nxrLb%2FUIVQp4wf3n7VRx5NUooArjZTUCs3pdnDbigVtSczYSc%2B3fu2%2BtrlWLO9CuLwzUOU6zStqPq%3Bfb2561fe9086095abb45032f148c54fbaa3cc308307e6f52716969b32bab452c&t=1634909309853&_=1634909309853&sceneval=2&g_login_type=1&callback=jsonpCBKC&g_ty=ls",headers=headers).text
+#         x = slice(10, -1)
+#         data=json.loads(res[x])
+#         msg=data["data"]["guestinfo"]["contenttips"]
+#         print(msg)
+#     except:
+#         print("错误")
