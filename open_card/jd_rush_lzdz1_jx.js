@@ -60,13 +60,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
             // $.authorCode = authorCodeList[random(0, authorCodeList.length)]
-            // $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
-            authorCodeList.push(ownCode);
-            authorCodeList.push(ownCode);
-            authorCodeList.push(ownCode);
-            authorCodeList.push(ownCode);
-            authorCodeList.push("d820d3639e654244b3bf23890a8592d0");
-            $.authorCode = authorCodeList[random(0, authorCodeList.length)]
+            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`
             $.randomCode = random(1000000, 9999999)
             $.activityId = '5870cf9ea76046b4bfc5493f82784eef'

@@ -1,7 +1,7 @@
 /**
  大牌联合 赢大额京豆
  12.1 - 12.12
- https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity/6758593?activityId=dz211122100001616201shop&shareUuid=6579dde1e3b34091baecb2cd4381786f
+ https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity/6758593?activityId=dz211122100001616201shop&shareUuid=d68e187b23164d1c9050de83a13c0b68
  **/
 
 const $ = new Env("大牌联合 赢大额京豆");
@@ -52,19 +52,12 @@ if ($.isNode()) {
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
             // $.authorCode = authorCodeList[random(0, authorCodeList.length)]
-            // $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
-            authorCodeList.push(ownCode);
-            authorCodeList.push(ownCode);
-            authorCodeList.push(ownCode);
-            authorCodeList.push(ownCode);
-            authorCodeList.push("d820d3639e654244b3bf23890a8592d0");
-            $.authorCode = authorCodeList[random(0, authorCodeList.length)]
+            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`
             $.activityId = 'dz211122100001616201shop'
             $.activityShopId = '1000334325'
             $.activityUrl = `https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
             await superFans();
-
             if ($.bean > 0) {
                 message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
             }
@@ -87,6 +80,7 @@ if ($.isNode()) {
 
 
 async function superFans() {
+    $.authorCode="d68e187b23164d1c9050de83a13c0b68"//没奖励了，助我拿排名
     $.token = null;
     $.secretPin = null;
     $.openCardActivityId = null
