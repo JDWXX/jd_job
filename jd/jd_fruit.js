@@ -44,6 +44,7 @@ const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%2
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
+  console.log("\n 运行逻辑 -> 配置过助力的会读取您配置的助力，没配置过助力的默认助力前20 -------------- 【JDWXX】\n")
   if(shareCodesArr == 0){
     console.log("\n由于你不会设置配置助力码，本次将自动助力前20名ck\n")
     for (let i = 0; i < cookiesArr.length; i++) {
