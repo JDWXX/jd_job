@@ -22,6 +22,7 @@ cron "0 1 0 * * *" script-path=https://raw.githubusercontent.com/JDWXX/jd_job/bl
 京喜财富岛合成月饼-助力 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_cfd_mooncake.js, cronexpr="0 1 0 * * *", timeout=3600, enable=true
  */
 const $ = new Env("京喜财富岛合成月饼-助力");
+
 const JD_API_HOST = "https://m.jingxi.com/";
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
