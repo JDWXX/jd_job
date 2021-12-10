@@ -1358,7 +1358,7 @@ function requireConfig() {
     if ($.isNode()) {
       Object.keys(jdFruitShareCodes).forEach((item) => {
         if (jdFruitShareCodes[item]) {
-          // shareCodesArr.push(jdFruitShareCodes[item])
+          shareCodesArr.push(jdFruitShareCodes[item])
         }
       })
     } else {
