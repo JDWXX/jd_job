@@ -46,7 +46,7 @@ const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%2
     return;
   }
 
-  console.log("---------本脚本会默认助力前20ck-----------\n")
+  console.log("---------每人每天可以助力前20，本脚本会默认助力前20ck-----------\n")
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
