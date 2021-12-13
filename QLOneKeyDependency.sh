@@ -1,14 +1,9 @@
 #!/usr/bin/env bash
 #
 
-# 青龙一键安装依赖脚本
+# 青龙一键安装脚本
 # GitHub仓库： https://github.com/FlechazoPh/QLDependency
 # GitHub仓库： https://github.com/JDWXX/jd_job.git
-
-# 安装报错，请提交Issue
-
-# 有其他需要的依赖，欢迎到源仓库提交Pull Request
-
 TIME() {
 [[ -z "$1" ]] && {
 	echo -ne " "
@@ -36,75 +31,49 @@ echo
 sleep 3
 echo
 echo
-
-echo
-"当前node版本(如果没有node，请自行安装): "
-npm -v
-
-echo
-"当前npm版本(如果没有npm，请自行安装): "
-npm -v
-
 npm config set registry https://registry.npm.taobao.org
 cd /ql
-pnpm add -g pnpm
-
-pnpm install -g
-
 npm install -g npm
-
+cd /ql
 npm install -g png-js
-
+cd /ql
 npm install -g date-fns
-
+cd /ql
 npm install -g axios
-
+cd /ql
 npm install -g crypto-js
-
+cd /ql
 npm install -g ts-md5
-
+cd /ql
 npm install -g tslib
-
+cd /ql
 npm install -g @types/node
-
+cd /ql
 npm install -g requests
-
+cd /ql
 npm install -g tough-cookie
-
+cd /ql
 npm install -g jsdom
-
-npm install -g typescript
-
-npm install -g crypto -g
-
+cd /ql
 npm install -g download
-
+cd /ql
 npm install -g tunnel
-
+cd /ql
 npm install -g fs
-
+cd /ql
 npm install -g ws
-
+cd /ql
 npm install -g form-data
-
-pnpm install -g js-base64
-
-pnpm install -g qrcode-terminal
-
-pnpm install -g silly-datetime
-
+cd /ql
 pip3 install requests
-
+cd /ql
 cd /ql/scripts/ && apk add --no-cache build-base g++ cairo-dev pango-dev giflib-dev && npm i && npm i -S ts-node typescript @types/node date-fns axios png-js canvas --build-from-source
 cd /ql
 apk add --no-cache build-base g++ cairo-dev pango-dev giflib-dev && cd scripts && npm install canvas --build-from-source
 cd /ql
 apk add python3 zlib-dev gcc jpeg-dev python3-dev musl-dev freetype-dev
-
+cd /ql
 echo
-TIME g "依赖安装完毕...建议重启 Docker "
-
-echo
-TIME g "有任何问题，请在此仓库提交Issue： https://github.com/JDWXX/jd_job.git"
+TIME g "依赖安装完毕..."
 echo
 exit 0
