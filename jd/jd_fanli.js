@@ -1,4 +1,3 @@
-
 /* 
 京东饭粒
 已支持IOS双京东账号,Node.js支持N个京东账号
@@ -7,14 +6,11 @@
 [task_local]
 #京东饭粒
 40 0,9,17 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_fanli.js, tag=京东饭粒, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxcfd.png, enabled=true
-
 ================Loon==============
 [Script]
 cron "40 0,9,17 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_fanli.js,tag=京东饭粒
-
 ===============Surge=================
 京东饭粒 = type=cron,cronexp="40 0,9,17 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_fanli.js
-
 ============小火箭=========
 京东饭粒 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_fanli.js, cronexpr="40 0,9,17 * * *", timeout=3600, enable=true
 */
@@ -75,8 +71,10 @@ if ($.isNode()) {
                 let range = $.count.maxTaskCount - $.count.finishCount;
                 await getTaskList(cookie)
                 await $.wait(2000)
+                var CountDoTask =0;
                 for (let k in $.taskList) {
-                    if ($.taskList[k].taskId !== null && $.taskList[k].status == 1) {
+                    if ($.taskList[k].taskId !== null && $.taskList[k].statusName != "活动结束" && $.taskList[k].statusName != "明日再来") {
+                        CountDoTask+=0;
                         console.log(`开始尝试活动:` + $.taskList[k].taskName);
                         await saveTaskRecord(cookie, $.taskList[k].taskId, $.taskList[k].businessId, $.taskList[k].taskType);
                         if ($.sendBody) {
@@ -85,7 +83,7 @@ if ($.isNode()) {
                         } else {
                             continue;
                         }
-                        if ($.count.finishCount = $.count.maxTaskCount) {
+                        if ($.count.finishCount == $.count.maxTaskCount) {
                             console.log(`任务全部完成!`);
                             break;
                         }
