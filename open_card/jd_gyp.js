@@ -94,28 +94,30 @@ async function main() {
         } while (JSON.stringify($.activity) === '{}' && $.runTime < 10);
         console.log(`任务列表：${$.activityID},获取成功`);
         $.moduleBaseInfo = $.activity.moduleBaseInfo;
-        $.dailyTaskList = $.activity.dailyTask.taskList;
-        if ($.moduleBaseInfo.rewardStatus === 1) {
-            console.log(`领取最后奖励`);
-            await getReward();
-        }
-        await $.wait(1000);
-        $.runFlag = false;
-        for (let i = 0; i < $.dailyTaskList.length; i++) {
-            $.oneTask = $.dailyTaskList[i];
-            if ($.oneTask.taskCount === $.oneTask.finishCount) {
-                console.log(`groupType:${$.oneTask.groupType},已完成`);
-                continue;
+        if($.activity.dailyTask && $.activity.dailyTask.taskList){
+            $.dailyTaskList = $.activity.dailyTask.taskList;
+            if ($.moduleBaseInfo.rewardStatus === 1) {
+                console.log(`领取最后奖励`);
+                await getReward();
             }
-            console.log(`groupType:${$.oneTask.groupType},已完成:${$.oneTask.finishCount}次，需要完成：${$.oneTask.taskCount}次`);
-            $.item = $.oneTask.item;
-            let viewTime = $.oneTask.viewTime || 3;
-            console.log(`浏览：${$.item.itemName},等待${viewTime}秒`);
-            await $.wait(viewTime * 1000);
             await $.wait(1000);
-            await doTask();
-            $.runFlag = true;
-            break;
+            $.runFlag = false;
+            for (let i = 0; i < $.dailyTaskList.length; i++) {
+                $.oneTask = $.dailyTaskList[i];
+                if ($.oneTask.taskCount === $.oneTask.finishCount) {
+                    console.log(`groupType:${$.oneTask.groupType},已完成`);
+                    continue;
+                }
+                console.log(`groupType:${$.oneTask.groupType},已完成:${$.oneTask.finishCount}次，需要完成：${$.oneTask.taskCount}次`);
+                $.item = $.oneTask.item;
+                let viewTime = $.oneTask.viewTime || 3;
+                console.log(`浏览：${$.item.itemName},等待${viewTime}秒`);
+                await $.wait(viewTime * 1000);
+                await $.wait(1000);
+                await doTask();
+                $.runFlag = true;
+                break;
+            }
         }
         $.mainTime++;
     } while ($.runFlag && $.mainTime < 40);
