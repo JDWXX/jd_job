@@ -75,9 +75,9 @@ async function main() {
     await getEid(arr);
     console.log(`$.actId:` + $.actId);
     await getcouponUrl()
-    if ($.eid) {
-      await getCoupons("");
-    }
+    // if ($.eid) {
+    //   await getCoupons("");
+    // }
     await $.wait(2000);
   }
 }
