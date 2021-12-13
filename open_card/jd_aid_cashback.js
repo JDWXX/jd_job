@@ -1,6 +1,6 @@
-const $ = new Env("京喜购物返红包助力");
 let common = require("./function/common");
-let min = 5,
+let $ = new common.env('京喜购物返红包助力');
+let min = 10,
     help = $.config[$.filename(__filename)] || Math.min(min, $.config.JdMain) || min;
 $.setOptions({
     headers: {
@@ -9,11 +9,7 @@ $.setOptions({
         'referer': 'https://happy.m.jd.com/babelDiy/Zeus/3ugedFa7yA6NhxLN5gw2L3PF9sQC/index.html?asid=287215626&un_area=12_904_905_57901&lng=117.612969135975&lat=23.94014745198865',
     }
 });
-$.readme = `
-在京喜下单,如订单有购物返现,脚本会自动查询返现groupid并予以助力,目前每个账号每天能助力3次
-44 */6 * * * task ${$.runfile}
-export ${$.runfile}=2  #如需增加被助力账号,在这边修改人数
-`
+console.log("如需增加被助力账号,请自行修改吧")
 eval(common.eval.mainEval($));
 async function prepare() {
     let url = `https://wq.jd.com/bases/orderlist/list?order_type=3&start_page=1&last_page=0&page_size=10&callersource=newbiz&t=${$.timestamp}&traceid=&g_ty=ls&g_tk=606717070`
