@@ -1,5 +1,5 @@
+const $ = new Env("京喜购物返红包助力");
 let common = require("./function/common");
-const $ = new Env('京喜购物返红包助力');
 let min = 5,
     help = $.config[$.filename(__filename)] || Math.min(min, $.config.JdMain) || min;
 $.setOptions({
