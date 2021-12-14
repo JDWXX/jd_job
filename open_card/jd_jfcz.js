@@ -63,7 +63,7 @@ if ($.isNode()) {
             //获取下关等级
             await getNeedleLevelInfo();
             console.log('当前关卡: ',needleLevel+"/"+totalLevel)
-            await $.wait(500);
+            await $.wait(200);
             for (let i = needleLevel; i <= totalLevel; i++) {
                 await getNeedleLevelInfo();
                 console.log('当前关卡: ',needleLevel+"/"+totalLevel)
@@ -72,7 +72,7 @@ if ($.isNode()) {
                     break
                 }
                 await saveNeedleLevelInfo(needleLevel);
-                await $.wait(3000);
+                await $.wait(200);
             }
             await needleMyPrize()
         }
