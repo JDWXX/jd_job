@@ -13,19 +13,19 @@ const $ = new Env('柠檬是兄弟就砍我');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-
+console.log(`****** 环境变量添加 *********`);
+console.log(`****** kjactId 你要参加砍价的商品ID *********`);
+console.log(`****** kjpacketId 你要参加砍价的邀请码 *********`);
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 let actId = ''; //你要参加砍价的商品ID
 let packetId = '';//你要参加砍价的邀请码
-//c50d6379ad3b4782bfc05940e358ace3
-//ac4a4b0b300e4fc6a2fdb88412f51e94-amRfTFBtdnNBVGdyQ0t1
-if (process.env.actId) {
-  actId = process.env.actId;
+if (process.env.kjactId) {
+  actId = process.env.kjactId;
 }
 
-if (process.env.packetId) {
-  packetId = process.env.packetId;
+if (process.env.kjpacketId) {
+  packetId = process.env.kjpacketId;
 }
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -63,9 +63,9 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
       }
 
       await list()
-     
-     await $.wait(10000)
-     
+
+     await $.wait(500)
+
      await kanjia()
      
 

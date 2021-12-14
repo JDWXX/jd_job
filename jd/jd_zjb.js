@@ -12,22 +12,17 @@ export InviterPin="dS%2Bp85VyjydPuAOOnFP%2Faw%3D%3D" ##你的邀请码
 const $ = new Env('柠檬赚金币');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('./jdCookie3.js') : '';
 
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
-let InviterPin = ''; //
+let InviterPin = 'WOthVgy8sELwGTrVkIwITA=='; //
 
 
-if (process.env.InviterPin) {
-    InviterPin = process.env.InviterPin;
+if (process.env.JDWXX_InviterPin) {
+    InviterPin = process.env.JDWXX_InviterPin;
 }
-
-
-
-
-
-
+console.log("环境变量添加：JDWXX_InviterPin  值为您的邀请码")
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -86,7 +81,6 @@ function info() {
 
         let options = {
             url: `https://api.m.jd.com`,
-
             body: `functionId=TaskInviteService&body={"method":"inviteTaskHomePage","data":{"channel":"1"}}&appid=market-task-h5&uuid=7303439343432346-7356431353233311&eu=7303439343432341&fv=7356431353233321&_t=1623475839367`,
             headers: {
                 "Origin": "https://assignment.jd.com",
