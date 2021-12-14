@@ -2,7 +2,6 @@
  京喜-首页-牛牛福利
  Author：zxx
  Date：2021-11-2
- 先内部助力，有剩余助力作者
  cron 1 0,9,19,23 * * * https://raw.githubusercontent.com/ZXX2021/jd-scripts/main/jd_nnfls.js
  */
 const $ = new Env('牛牛福利');
@@ -51,7 +50,7 @@ if ($.isNode()) {
     }
     shareCodes = shareCodes.filter(code => code)
     const author = Math.random() > 0.5 ? 'shufflewzc' : 'shufflewzc'
-    await getShareCode('nnfls.json', author, 3, true)
+    // await getShareCode('nnfls.json', author, 3, true)
     shareCodes = [...new Set([...shareCodes, ...($.shareCode || [])])];
     if (shareCodes.length > 0) {
         console.log(`\n开始互助\n`);
@@ -66,7 +65,7 @@ if ($.isNode()) {
                 break;
             }
             await help(shareCodes[j]);
-            await $.wait(1000);
+            await $.wait(200);
         }
     }
     console.log(`\===执行任务抽奖===\n`);
@@ -113,7 +112,7 @@ function getShareCode(name, author = 'zero205', num = -1, shuffle = false) {
 async function help(sharecode) {
     console.log(`${$.UserName} 去助力 ${sharecode}`)
     res = await api('sign/helpSign', 'flag,sceneval,token', { flag: 0, token: sharecode })
-    await $.wait(3000)
+    await $.wait(200)
     res = await api('sign/helpSign', 'flag,sceneval,token', { flag: 1, token: sharecode })
     if (res) {
         switch (res.retCode) {
@@ -140,7 +139,7 @@ async function help(sharecode) {
     } else {
         console.log('助力失败！');
     }
-    await $.wait(2000)
+    await $.wait(200)
 }
 
 async function drawUserTask() {
@@ -190,9 +189,9 @@ async function drawUserTask() {
             console.log('抽奖失败，返回数据为空')
         }
         coin -= 10
-        await $.wait(5000)
+        await $.wait(1000)
     }
-    await $.wait(2000)
+    await $.wait(1000)
 }
 
 async function UserSignNew() {

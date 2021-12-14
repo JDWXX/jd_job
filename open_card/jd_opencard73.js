@@ -54,14 +54,9 @@ if ($.isNode()) {
             $.actId = "9438536da98941ddafd17f6_1125"
             // $.authorCode = authorCodeList[random(0, authorCodeList.length)]
             // $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
-            authorCodeList.push(ownCode);
-            authorCodeList.push(ownCode);
-            authorCodeList.push(ownCode);
-            authorCodeList.push(ownCode);
             authorCodeList.push("OZWWyV+UF+4hIUxWAWXPsqnQSaK0OgzhoJLIa/XEluWWXc0uQ5WlWk8J2tBF2Jsj");
-            authorCodeList.push("4r/t+DSsNK9Wu79lYpAA0l4tLNYA4seuA67MOIYQxEk3Vl9+AVo4NF+tgyeIc6A6kdK3rLBQpEQH9V4tdrrh0w==");
             $.authorCode = authorCodeList[random(0, authorCodeList.length)]
-            console.log('去助力 -> '+$.authorCode);
+            console.log('去助力 -> '+ownCode);
             await openCardNew();
             if ($.bean > 0) {
                 message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`

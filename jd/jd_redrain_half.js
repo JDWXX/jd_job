@@ -2,17 +2,18 @@
 半点京豆雨
 更新时间：2021-12-8
 脚本兼容: Quantumult X, Surge, Loon, JSBox, Node.js
+by：msechen
 ==============Quantumult X==============
 [task_local]
 #半点京豆雨
-30 20-23/1 * * * https://raw.githubusercontent.com/msechen/jdrain/main/jd_live_redrain.js, tag=半点京豆雨, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+30 20-23/1 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_live_redrain.js, tag=半点京豆雨, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 ==============Loon==============
 [Script]
-cron "30 20-23/1 * * *" script-path=https://raw.githubusercontent.com/msechen/jdrain/main/jd_redrain_half.js,tag=半点京豆雨
+cron "30 20-23/1 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_redrain_half.js,tag=半点京豆雨
 ================Surge===============
-半点京豆雨 = type=cron,cronexp="30 20-23/1 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/msechen/jdrain/main/jd_redrain_half.js
+半点京豆雨 = type=cron,cronexp="30 20-23/1 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_redrain_half.js
 ===============小火箭==========
-半点京豆雨 = type=cron,script-path=https://raw.githubusercontent.com/msechen/jdrain/main/jd_redrain_half.js, cronexpr="30 20-23/1 * * *", timeout=3600, enable=true
+半点京豆雨 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_redrain_half.js, cronexpr="30 20-23/1 * * *", timeout=3600, enable=true
 */
 const $ = new Env('半点京豆雨');
 let allMessage = '', id = '';
@@ -76,12 +77,12 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
     $.msg($.name, '', allMessage);
   }
 })()
-  .catch((e) => {
-    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-  })
-  .finally(() => {
-    $.done();
-  })
+    .catch((e) => {
+      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    })
+    .finally(() => {
+      $.done();
+    })
 
 function receiveRedRain(actId) {
   return new Promise(resolve => {

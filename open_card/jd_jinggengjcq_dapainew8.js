@@ -54,8 +54,6 @@ if ($.isNode()) {
             $.actId = "002sfydcg550d840ce832_1118"
             // $.authorCode = authorCodeList[random(0, authorCodeList.length)]
             //$.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
-            authorCodeList.push(ownCode);
-            authorCodeList.push(ownCode);
             authorCodeList.push("OZWWyV+UF+4hIUxWAWXPsqnQSaK0OgzhoJLIa/XEluWWXc0uQ5WlWk8J2tBF2Jsj");
             $.authorCode = authorCodeList[random(0, authorCodeList.length)]
             console.log('去助力 -> '+ownCode);
