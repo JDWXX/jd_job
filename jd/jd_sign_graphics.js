@@ -10,7 +10,7 @@ npm i png-js 或者 npm i png-js -S
 */
 
 const validator = require('./JDJRValidator_Pure_Smiek.js');
-const Faker=require('./sign_graphics_validate.js') 
+const Faker=require('./sign_graphics_validate.js')
 
 const $ = new Env('京东签到图形验证');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -86,12 +86,12 @@ const turnTableId = [
   }
   await showMsg();
 })()
-  .catch((e) => {
-    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-  })
-  .finally(() => {
-    $.done();
-  })
+    .catch((e) => {
+      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    })
+    .finally(() => {
+      $.done();
+    })
 
 async function showMsg() {
   $.msg($.name, `【签到数量】:  ${turnTableId.length}个\n` + subTitle + message);
@@ -108,7 +108,7 @@ async function signRun() {
     }else{
       errorNum++;
     }
-    let time = Math.random() * 5000 + 10000
+    let time = Math.random() * 5000 + 2000
     console.log(`等待${(time/1000).toFixed(3)}秒`)
     await $.wait(parseInt(time, 10))
   }
@@ -136,7 +136,7 @@ function Login(i) {
                 $.appId = 'b342e';
                 await requestAlgo();
                 await Sign(i,1)
-                let time = Math.random() * 5000 + 10000
+                let time = Math.random() * 5000 + 15000
                 console.log(`等待${(time/1000).toFixed(3)}秒`)
                 await $.wait(parseInt(time, 10))
               } else if (data.hasSign === true) {
@@ -332,10 +332,10 @@ async function requestAlgo() {
 
 function getRandomIDPro() {
   var e,
-    t,
-    a = void 0 === (n = (t = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : {}).size) ? 10 : n,
-    n = void 0 === (n = t.dictType) ? 'number' : n,
-    i = '';
+      t,
+      a = void 0 === (n = (t = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : {}).size) ? 10 : n,
+      n = void 0 === (n = t.dictType) ? 'number' : n,
+      i = '';
   if ((t = t.customDict) && 'string' == typeof t) e = t;
   else
     switch (n) {
@@ -356,7 +356,7 @@ function getRandomIDPro() {
 function geth5st(t){
   // return ''
   let a = t.map(function(e) {
-  return e["key"] + ":" + e["value"]
+    return e["key"] + ":" + e["value"]
   })["join"]("&")
   let time = Date.now()
   const timestamp = format("yyyyMMddhhmmssSSS", time);
@@ -374,25 +374,25 @@ function format(a, time) {
     t = new Date(time);
   }
   var e,
-    n = new Date(t),
-    d = a,
-    l = {
-      'M+': n.getMonth() + 1,
-      'd+': n.getDate(),
-      'D+': n.getDate(),
-      'h+': n.getHours(),
-      'H+': n.getHours(),
-      'm+': n.getMinutes(),
-      's+': n.getSeconds(),
-      'w+': n.getDay(),
-      'q+': Math.floor((n.getMonth() + 3) / 3),
-      'S+': n.getMilliseconds(),
-    };
+      n = new Date(t),
+      d = a,
+      l = {
+        'M+': n.getMonth() + 1,
+        'd+': n.getDate(),
+        'D+': n.getDate(),
+        'h+': n.getHours(),
+        'H+': n.getHours(),
+        'm+': n.getMinutes(),
+        's+': n.getSeconds(),
+        'w+': n.getDay(),
+        'q+': Math.floor((n.getMonth() + 3) / 3),
+        'S+': n.getMilliseconds(),
+      };
   /(y+)/i.test(d) && (d = d.replace(RegExp.$1, ''.concat(n.getFullYear()).substr(4 - RegExp.$1.length)));
   Object.keys(l).forEach(e => {
     if (new RegExp('('.concat(e, ')')).test(d)) {
       var t,
-        a = 'S+' === e ? '000' : '00';
+          a = 'S+' === e ? '000' : '00';
       d = d.replace(RegExp.$1, 1 == RegExp.$1.length ? l[e] : ''.concat(a).concat(l[e]).substr(''.concat(l[e]).length));
     }
   });
