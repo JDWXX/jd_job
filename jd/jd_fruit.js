@@ -1331,7 +1331,11 @@ function shareCodesFormat() {
     } else {
       console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
       const tempIndex = $.index > shareCodes.length ? (shareCodes.length - 1) : ($.index - 1);
-      newShareCodes = shareCodes[tempIndex].split('@');
+      if(shareCodes[tempIndex] != null){
+        newShareCodes = shareCodes[tempIndex].split('@');
+      }else{
+        newShareCodes = "c375f5806c5a406ca238dc4e5410f009@f010bfbb75fa403b8facd45d91954b6f@c466e4f13cbe467c850276d7c356c1ea@fa4753f4ceba4cce82029815d6638ea0@29b94db0d81e41dfa977026f1b27aa79@31a3b3b208a04c0bbc90e11425a53042@51a8f379bbc04876a2f78d21ba4186bf@kjaxqa3r5slp5jm36f2q6yaxxqpsqfjcsllcuwy@MTAxODc2NTEzNDAwMDAwMDAyMTUyNjE1NQ==@e428c343e3a54647972129defc96e655".split('@');
+      }
     }
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)
     resolve();
