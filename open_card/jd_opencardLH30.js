@@ -189,11 +189,11 @@ async function run() {
             console.log('此ip已被限制，请过10分钟后再执行脚本\n')
             return
         }
-        console.log($.actorUuid)
-        console.log(`当前助力:${$.shareUuid}`)
         if($.index == 1){
             $.shareUuid = $.actorUuid
-            console.log(`后面的号都会助力:${$.shareUuid}`)
+            console.log(`后面的号都会助力:${$.actorUuid}`)
+        }else{
+            console.log(`当前助力:${$.actorUuid}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
         if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
@@ -269,11 +269,13 @@ async function takePostRequest(type) {
         case '邀请':
         case '助力':
             if(type == '助力'){
+                authorCodeList = ["4ead1cc5f1f9466c90a819b0697e02c9",$.shareUuid,$.shareUuid,$.shareUuid]
+                $.authorCode = authorCodeList[random(0, authorCodeList.length)]
                 url = `${domain}/play/monopoly/getAssistStatus`;
             }else{
                 url = `${domain}/play/monopoly/assist`;
             }
-            body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&shareUuid=${$.shareUuid}&actorUuid=${$.actorUuid}`
+            body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&shareUuid=${$.authorCode}&actorUuid=${$.actorUuid}`
             break;
         case 'viewVideo':
         case 'visitSku':
@@ -339,7 +341,7 @@ async function takePostRequest(type) {
         })
     })
 }
-
+function random(min, max) {return Math.floor(Math.random() * (max - min)) + min;}
 async function dealReturn(type, data) {
     let res = ''
     try {
