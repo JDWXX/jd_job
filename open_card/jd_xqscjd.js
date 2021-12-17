@@ -105,7 +105,7 @@ if (cookiesArr.length > 1 && $.shareCoseList.length > 0){
             //助力
             for (let y = 0; y < $.shareCoseList.length; y++){
                 var judge = "";
-                if ($.shareCoseList[y].user === $.UserName || $.shareCoseList[y].seen === true || $.haveSeenId === $.shareCoseList[y].user){
+                if ($.shareCoseList[y].user === $.UserName || $.shareCoseList[y].seen === true || $.haveSeenId === $.shareCoseList[y].user){
                 console.log(`${JSON.stringify($.shareCoseList[y])},${$.haveSeenId}`)
                 }else{
                     console.log(`${$.UserName}去助力${$.shareCoseList[y].user},${$.shareCoseList[y].user_id},${$.shareCoseList[y].code_id}`)
