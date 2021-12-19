@@ -2,7 +2,7 @@
 大牌联合开卡
 cron 15 2,18 * * * jd_opencard.js
 */
-const $ = new Env("大牌联合");
+const $ = new Env("大牌联合1219");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
