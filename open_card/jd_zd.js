@@ -70,8 +70,8 @@ function tythelp() {
     $.get(options, async (err, resp, data) => {
       try {
         data = JSON.parse(data);
-        // console.log(data)
-        if (data.code == 0) {
+        console.log(data)
+        if (data.code == 0 && data.data.prizeValue) {
           console.log(`获得:${data.data.prizeValue}豆`)
         } else {
           console.log(data.errMsg)
