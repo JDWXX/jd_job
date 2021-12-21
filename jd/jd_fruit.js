@@ -31,6 +31,7 @@ let cookiesArr = [], cookie = '', jdFruitShareArr = [], isBox = false, notify, n
 let JDWXX_ZL = $.isNode() ? (process.env.JDWXX_ZL ? process.env.JDWXX_ZL : "JDWXX") : "JDWXX";//开启内置助力
 let shareCodesdq = ""
 let shareCodesArr = []
+console.log('\nQQ技术交流群 681030097\n')
 //助力好友分享码(最多3个,否则后面的助力失败),原因:京东农场每人每天只有3次助力机会
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
@@ -1400,11 +1401,10 @@ function requireConfig() {
       cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
     }
     console.log(`共${cookiesArr.length}个京东账号\n`)
-
     if(JDWXX_ZL == "JDWXX"){
-      console.log("已开启【JDWXX】库内置助力")
-    }else{
-      console.log("如需启用内置助力 请在环境变量里添加 JDWXX_ZL  值 JDWXX  开启内置助力")
+      console.log("\n已开启【JDWXX】库内置助力\n");
+    }else {
+      console.log("\n如需启用内置助力 请在环境变量里添加 JDWXX_ZL  值 JDWXX  开启内置助力\n")
       $.shareCodesArr = [];
       if ($.isNode()) {
         Object.keys(jdFruitShareCodes).forEach((item) => {
