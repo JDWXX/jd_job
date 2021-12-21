@@ -47,10 +47,10 @@ let tuanActiveId = ``, hasSend = false;
 const jxOpenUrl = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://wqsd.jd.com/pingou/dream_factory/index.html%22%20%7D`;
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
 const inviteCodes = [
-  '6e9cQId9a_zbWhpMb9XSYg==@1_I8MUjrb-aQDsqz2LaMAA==@nAwjo4ygOh99OVE_UQwgOw==@UOLfmpfmlAwVNt7E-y1a_A==',
-  '6e9cQId9a_zbWhpMb9XSYg==@1_I8MUjrb-aQDsqz2LaMAA==@nAwjo4ygOh99OVE_UQwgOw==@UOLfmpfmlAwVNt7E-y1a_A==',
-  '6e9cQId9a_zbWhpMb9XSYg==@1_I8MUjrb-aQDsqz2LaMAA==@nAwjo4ygOh99OVE_UQwgOw==@UOLfmpfmlAwVNt7E-y1a_A==',
-  '6e9cQId9a_zbWhpMb9XSYg==@1_I8MUjrb-aQDsqz2LaMAA==@nAwjo4ygOh99OVE_UQwgOw==@UOLfmpfmlAwVNt7E-y1a_A==',
+  '6e9cQId9a_zbWhpMb9XSYg==',
+  '1_I8MUjrb-aQDsqz2LaMAA==',
+  'nAwjo4ygOh99OVE_UQwgOw==',
+  'UOLfmpfmlAwVNt7E-y1a_A==',
 ];
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 $.tuanIds = [];
@@ -131,7 +131,13 @@ if ($.isNode()) {
             await $.wait(1000);
           }
         }
-        if ($.canHelp) await joinLeaderTuan();//参团
+
+        if(JDWXX_ZL == "JDWXX")
+          if ($.canHelp) await joinLeaderTuanJDWXX();
+        else
+          if ($.canHelp) await joinLeaderTuan();//参团
+
+
 
 
       }
@@ -1069,6 +1075,15 @@ async function tuanActivity() {
 }
 
 async function shareCodesFormatJDWXX() {
+  return new Promise(async resolve => {
+    newShareCodes = [];
+    newShareCodes = shareCodesdq.split('@');
+    console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)
+    resolve();
+  })
+
+}
+async function joinLeaderTuanJDWXX() {
   $.authorTuanIds = shareCodesdq.split('@');
   if ($.authorTuanIds && $.authorTuanIds.length) {
     for (let tuanId of $.authorTuanIds) {
@@ -1079,7 +1094,6 @@ async function shareCodesFormatJDWXX() {
       await $.wait(1000);
     }
   }
-
 }
 async function joinLeaderTuan() {
   $.authorTuanIds = inviteCodes
