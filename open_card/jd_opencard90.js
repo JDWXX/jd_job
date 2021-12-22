@@ -182,12 +182,10 @@ async function run() {
             $.missionType = 'uniteAddCart'
             let goodsArr = []
             if(cleanCart){
-                goodsArr = await cleanCart.clean(cookie,'https://jd.11111118/jdcleancatr_21102717','')
                 await takePostRequest('mission');
                 await $.wait(parseInt(Math.random() * 2000 + 3000, 10))
                 if(cleanCart && goodsArr !== false){
                     await $.wait(parseInt(Math.random() * 1000 + 7000, 10))
-                    await cleanCart.clean(cookie,'https://jd.11111118/jdcleancatr_21102717',goodsArr || [ ])
                 }
             }
         }else{
@@ -237,6 +235,15 @@ async function run() {
 }
 
 async function takePostRequest(type) {
+    authorCodeList = [
+        'OZWWyV+UF+4hIUxWAWXPsqnQSaK0OgzhoJLIa/XEluWWXc0uQ5WlWk8J2tBF2Jsj',
+        $.inviteNick,
+        $.inviteNick,
+        $.inviteNick,
+        $.inviteNick,
+        $.inviteNick,
+    ]
+    $.authorCode = authorCodeList[random(0, authorCodeList.length)]
     if($.outFlag) return
     let domain = 'https://jinggengjcq-isv.isvjcloud.com';
     let body = ``;
@@ -249,7 +256,7 @@ async function takePostRequest(type) {
             break;
         case 'activity_load':
             url = `${domain}/dm/front/openCardNew/activity_load?mix_nick=${$.MixNick || $.MixNicks || ""}`;
-            admJson = {"jdToken": $.Token, "source": "01", "inviteNick":($.inviteNick || "")}
+            admJson = {"jdToken": $.Token, "source": "01", "inviteNick":($.authorCode || "")}
             if($.joinVenderId) admJson = {...admJson, "shopId": `${$.joinVenderId}`}
             body = taskPostUrl("/openCardNew/activity_load", admJson);
             break;
@@ -260,7 +267,7 @@ async function takePostRequest(type) {
             break;
         case '绑定':
             url = `${domain}/dm/front/openCardNew/complete/mission?mix_nick=${$.MixNick || $.MixNicks || ""}`;
-            admJson = {"missionType": "relationBind", "inviterNick":($.inviteNick || "")}
+            admJson = {"missionType": "relationBind", "inviterNick":($.authorCode || "")}
             body = taskPostUrl("/openCardNew/complete/mission", admJson);
             break;
         case 'mission':
