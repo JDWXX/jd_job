@@ -184,9 +184,6 @@ async function run() {
             if(cleanCart){
                 await takePostRequest('mission');
                 await $.wait(parseInt(Math.random() * 2000 + 3000, 10))
-                if(cleanCart && goodsArr !== false){
-                    await $.wait(parseInt(Math.random() * 1000 + 7000, 10))
-                }
             }
         }else{
             console.log('如需加购请设置环境变量[guaopencard_addSku90]为"true"');
