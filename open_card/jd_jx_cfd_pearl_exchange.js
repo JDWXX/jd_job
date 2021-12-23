@@ -28,8 +28,8 @@ $.logic = async function () {
         if (money === number) {
             $.log(`脚本将开始分别兑换0.2、1、5、10 元`)
             for (let qq = 0; qq < 5; qq++) {
-                await ExchangePearlHb(3, 500,prizeInfo.strPool)//5元
                 await ExchangePearlHb(2, 1000,prizeInfo.strPool)//10元
+                await ExchangePearlHb(3, 500,prizeInfo.strPool)//5元
                 await ExchangePearlHb(4, 100,prizeInfo.strPool)//1元
                 await ExchangePearlHb(5, 20,prizeInfo.strPool)//0.2元
                 await ExchangePearlHb(prizeInfo.dwLvl, prizeInfo.ddwVirHb,prizeInfo.strPool)//5元
