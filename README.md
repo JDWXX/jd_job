@@ -1,6 +1,24 @@
 
 # [完整使用教程](http://cxgc.top/)
 
+# 所有非京东的脚本都从新库拉取
+```
+【JDWXX-非京东任务汇总】
+```
+##### 命令
+
+```
+ql repo https://github.com/JDWXX/ql_all.git "" "Backup|index|HT.*|sendNotify|ql" "HT.*|sendNotify|ql"
+```
+##### 备用命令
+```
+ql repo https://hub.fastgit.org/JDWXX/ql_all.git "" "Backup|index|HT.*|sendNotify|ql" "HT.*|sendNotify|ql"
+```
+##### 定时规则
+
+```
+0 0 1,10,15 * * *
+```
 
 ## 特别声明:
 
