@@ -269,7 +269,7 @@ async function takePostRequest(type) {
         case '邀请':
         case '助力':
             if(type == '助力'){
-                authorCodeList = ["ed7350f0aa954b17976b7d41067e0ce5",$.shareUuid,$.shareUuid]
+                authorCodeList = ["ed7350f0aa954b17976b7d41067e0ce5"]
                 $.authorCode = authorCodeList[random(0, authorCodeList.length)]
                 url = `${domain}/play/monopoly/getAssistStatus`;
             }else{
