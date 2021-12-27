@@ -1,41 +1,36 @@
 /*
-
-由https://github.com/JDWXX/jd_job.git 更新店铺数据，每天超过20间店铺会火爆
-更新日期:2021-12-03
-cron 0 0 * * * jd_qpqd_diy.js, tag=店铺签到diy
+店铺签到，各类店铺签到，有新的店铺直接添加token即可
+============Quantumultx===============
+[task_local]
+#店铺签到
+15 2,14 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.js, tag=店铺签到, enabled=true
+===========Loon============
+[Script]
+cron "15 2,14 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.js,tag=店铺签到
+============Surge=============
+店铺签到 = type=cron,cronexp="15 2,14 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.js
+===========小火箭========
+店铺签到 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.jss, cronexpr="15 2,14 * * *", timeout=3600, enable=true
 */
 const $ = new Env('店铺签到');
-
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], cookie = '', message;
-
+let cookiesArr = [], cookie = '', allMessage = '', message;
 const JD_API_HOST = 'https://api.m.jd.com/api?appid=interCenter_shopSign';
 
 let activityId=''
 let vender=''
 let num=0
 let shopname=''
+const token = [
 
-const token=[
   "CBCE98732A9A051E4BC238EEE485B570",//5-30天65豆 100+50份 大华京东自营官方旗舰店
   "D35A8990A9E30D2857E93AF9BF2A1291",// 5-30天65豆 100+50份 紫林京东自营旗舰店
   "2A8794EC8DA4659DDDA0DF0E1A2AF4AF",//catalo海外旗舰店  3-30天180豆 10份   https://u.jd.com/nLytQmb
   "11CD3D32563C80BDE473B2C732F093E3",// 28天100京豆
-  // "78419F505BFF990180FF253BA10965E5",// 10天10.0豆
-  // "4575711E8DE40C9344E01693FB41EB4E",//15天50.0豆
-  // "ECBFA23705C0BB800729523D60901669",
-  // "C95E089D9B98C766E020415D87078E9B",//七天30京豆
-  // "2F369612D54CF212F1F01ED84912F512",
-  // "01B3D5EAB2AB6FCCA4A8B699D560A458",
-  // "C18676D5A717F320CA8013506872AD8F",
-  // "61905EBC993BCEB8F571C52CB3A59B33",
-  // "5B774C8524A02A0F411A35A6D5253415",
-
-
-    //20211226
+  //20211226
   '5BEFC891C256D515C4F0F94F15989055',
   'D0DB6641A279674F401E52B867E595BC',
   '9E610DED3B2F61B9A745375A2BD0D094',
@@ -43,19 +38,21 @@ const token=[
   'B1482DB6CB72FBF33FFC90B2AB53D32C',
   '2B9F928FC8B52D8504E230CDA71F1C54',
   '2C7846818F0216300CB6BEC38C04E7B4',
-  'C490E5EB6729345183A5900B275ED6BC',
-  '52F91C4B6735B9AA21B33BE55DC703BA',
   '873C3CC1B8EC220D12D9EB2F0185731A',
-  'EC38F89355A7489A3B55BF2552464791',
   '01B246C8A8B575023E686E3B52D54A6B',
   '571AE9B735114EEF52E43F9CD83EA02F',
-  '958D52E3CA7D9558626739F0ECC88908',
   'AB3EB4ED5DB4E48516230C858A1AEE52',
-  '678380AA2C2CEFF8F755E170840E0FCD',
-  '4A4D430C2833D68E3D8589FD8BB9A5EA',
-]
 
-$.TokenList =[];
+   //20211227
+  "39415200CB5E286A4DB604A54C901A13",
+  "0BF55BE48940544DF131B825756973C0",
+  "09B63A54599F85A17BACA9C81F50B1B8",
+  "09E4730770FD2E15F9C60365F7FEA6E4",
+  "C718DA981DBB8CF73FAC7D5480733B43",
+  "77A6C7B5C2BC9175521931ADE8E3B2E0",
+
+
+]
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -77,25 +74,17 @@ if ($.isNode()) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  
-	$.TokenLists = []
-  
-        //$.innerTokenList = await getStoreTokee('https://zy.kejiwanjia.com/jd_dpqiandao.php');
-        $.innerTokenList = token
-	
-	$.TokenLists.push(...$.TokenList,...$.innerTokenList);
-
 
   console.log(`********更新库【https://github.com/JDWXX/jd_job.git】*******`);
   console.log(`********新活动请在GitHub提 issue ***********************************`);
-  console.log(`********最新更新时间：【2021-12-26】 *************************`);
+  console.log(`********最新更新时间：【2021-12-27】 *************************`);
   console.log(`********签到奖励店铺群友贡献列表*******************************`);
   console.log(`******* 星晴 **********************************************`);
   console.log(`******* A.网商念-全能选手 ***********************************`);
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
-      $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
+      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = i + 1;
       $.isLogin = true;
       $.nickName = '';
@@ -104,16 +93,18 @@ if ($.isNode()) {
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
-
         if ($.isNode()) {
           await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
         }
         continue
       }
-      await babel_diy_zeus();
-	  await showMsg()
-      //if(i  <1 ) {await showMsg()}
+      await dpqd()
+      await showMsg()
+      await $.wait(1500)
     }
+  }
+  if ($.isNode() && allMessage) {
+    await notify.sendNotify(`${$.name}`, `${allMessage}`)
   }
 })()
     .catch((e) => {
@@ -124,19 +115,16 @@ if ($.isNode()) {
     })
 
 //开始店铺签到
-async function babel_diy_zeus(){
-	
-  for (var j = 0; j < $.TokenLists.length; j++) {
-	  
-	await $.wait(3000);  
+async function dpqd(){
+  for (var j = 0; j < token.length; j++) {
     num=j+1
-    if ($.TokenLists[j]=='') {continue}
-    await getvenderId($.TokenLists[j])
+    if (token[j]=='') {continue}
+    await getvenderId(token[j])
     if (vender=='') {continue}
     await getvenderName(vender)
-    await getActivityInfo($.TokenLists[j],vender)
-    await signCollectGift($.TokenLists[j],vender,activityId)
-    await taskUrl($.TokenLists[j],vender)
+    await getActivityInfo(token[j],vender)
+    await signCollectGift(token[j],vender,activityId)
+    await taskUrl(token[j],vender)
   }
 }
 
@@ -224,7 +212,7 @@ function getActivityInfo(token,venderId) {
         "accept-encoding": "gzip, deflate",
         "accept-language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
         "cookie": cookie,
-         "referer": `https://h5.m.jd.com/babelDiy/Zeus/2PAAf74aG3D61qvfKUM5dxUssJQ9/index.html?token=${token}&sceneval=2&jxsid=16178634353215523301&cu=true&utm_source=kong&utm_medium=jingfen&utm_campaign=t_2009753434_&utm_term=fa3f8f38c56f44e2b4bfc2f37bce9713`,
+        "referer": `https://h5.m.jd.com/babelDiy/Zeus/2PAAf74aG3D61qvfKUM5dxUssJQ9/index.html?token=${token}&sceneval=2&jxsid=16105853541009626903&cu=true&utm_source=kong&utm_medium=jingfen&utm_campaign=t_1001280291_&utm_term=fa3f8f38c56f44e2b4bfc2f37bce9713`,
         "User-Agent": `Mozilla/5.0 (Linux; U; Android 10; zh-cn; MI 8 Build/QKQ1.190828.002) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/79.0.3945.147 Mobile Safari/537.36 XiaoMi/MiuiBrowser/13.5.40`
       }
     }
@@ -245,8 +233,8 @@ function getActivityInfo(token,venderId) {
             const discount=data.data.continuePrizeRuleList[i].prizeList[0].discount
             mes += "签到"+level+"天,获得"+discount+'豆'
           }
-          //console.log(message+mes+'\n')
-          //message += mes+'\n'
+          // console.log(message+mes+'\n')
+          // message += mes+'\n'
         }
       } catch (e) {
         $.logErr(e, resp);
@@ -267,7 +255,7 @@ function signCollectGift(token,venderId,activitytemp) {
         "accept-encoding": "gzip, deflate",
         "accept-language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
         "cookie": cookie,
-        "referer": `https://h5.m.jd.com/babelDiy/Zeus/2PAAf74aG3D61qvfKUM5dxUssJQ9/index.html?token=${token}&sceneval=2&jxsid=16178634353215523301&cu=true&utm_source=kong&utm_medium=jingfen&utm_campaign=t_2009753434_&utm_term=fa3f8f38c56f44e2b4bfc2f37bce9713`,
+        "referer": `https://h5.m.jd.com/babelDiy/Zeus/2PAAf74aG3D61qvfKUM5dxUssJQ9/index.html?token=${token}&sceneval=2&jxsid=16105853541009626903&cu=true&utm_source=kong&utm_medium=jingfen&utm_campaign=t_1001280291_&utm_term=fa3f8f38c56f44e2b4bfc2f37bce9713`,
         "User-Agent": `Mozilla/5.0 (Linux; U; Android 10; zh-cn; MI 8 Build/QKQ1.190828.002) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/79.0.3945.147 Mobile Safari/537.36 XiaoMi/MiuiBrowser/13.5.40`
       }
     }
@@ -309,10 +297,10 @@ function taskUrl(token,venderId) {
           console.log(`\n${$.name}: API查询请求失败 ‼️‼️`)
           $.logErr(err);
         } else {
-            //console.log(data)
-            data = JSON.parse(/{(.*)}/g.exec(data)[0])
-            console.log(`已签到：`+data.data.days+`天`)
-            message +=`已签到：`+data.data.days+`天\n`
+          //console.log(data)
+          data = JSON.parse(/{(.*)}/g.exec(data)[0])
+          console.log(`已签到：`+data.data.days+`天`)
+          message +=`已签到：`+data.data.days+`天\n`
         }
       } catch (e) {
         $.logErr(e, resp);
@@ -326,7 +314,7 @@ function taskUrl(token,venderId) {
 async function showMsg() {
   if ($.isNode()) {
     $.msg($.name, '', `【京东账号${$.index}】${$.nickName}\n${message}`);
-    //await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `【京东账号${$.index}】${$.nickName}\n${message}`);
+    allMessage += `【京东账号${$.index}】${$.nickName}\n${message}${$.index !== cookiesArr.length ? '\n\n' : ''}`;
   }
 }
 
@@ -357,7 +345,11 @@ function TotalBean() {
               $.isLogin = false; //cookie过期
               return
             }
-            $.nickName = (data['base'] && data['base'].nickname) || $.UserName;
+            if (data['retcode'] === 0) {
+              $.nickName = data['base'].nickname;
+            } else {
+              $.nickName = $.UserName
+            }
           } else {
             console.log(`京东服务器返回空数据`)
           }
@@ -381,45 +373,6 @@ function jsonParse(str) {
       return [];
     }
   }
-}
-
-function getStoreTokee(url) {
-  return new Promise(async resolve => {
-    const options = {
-      "url": `${url}?${new Date()}`,
-      "timeout": 10000,
-      "headers": {
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-      }
-    };
-    if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
-      const tunnel = require("tunnel");
-      const agent = {
-        https: tunnel.httpsOverHttp({
-          proxy: {
-            host: process.env.TG_PROXY_HOST,
-            port: process.env.TG_PROXY_PORT * 1
-          }
-        })
-      }
-      Object.assign(options, { agent })
-    }
-    let res = []
-    $.get(options, async (err, resp, data) => {
-      try {
-        if (err) {
-        } else {
-          if (data) res = JSON.parse(data)
-        }
-      } catch (e) {
-        // $.logErr(e, resp)
-      } finally {
-        resolve(res || []);
-      }
-    })
-    await $.wait(10000)
-    resolve(res);
-  })
 }
 
 // prettier-ignore
