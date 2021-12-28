@@ -106,29 +106,29 @@ if ($.isNode()) {
       }
     }
   }
-  let res = [];
-  if(helpFlag){
-    res = await getAuthorShareCode('https://raw.githubusercontent.com/star261/jd/main/code/dreamFactory_tuan.json');
-    if(!res){
-      res = [];
-    }
-    if(res.length === 0){
-      return ;
-    }
-    console.log(`\n===============开始助力作者团===================`);
-    let thisTuanID = getRandomArrayElements(res, 1)[0];
-    $.tuanMax = false;
-    for (let i = 0; i < cookiesArr.length && !$.tuanMax; i++) {
-      if(openTuanCKList.includes((i+1).toString())){
-        $.index = i + 1;
-        cookie = cookiesArr[i];
-        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
-        console.log(`账号${$.UserName} 去参加作者团： ${thisTuanID}`);
-        await JoinTuan(thisTuanID);
-        await $.wait(2000);
-      }
-    }
-  }
+  // let res = [];
+  // if(helpFlag){
+  //   res = await getAuthorShareCode('https://raw.githubusercontent.com/star261/jd/main/code/dreamFactory_tuan.json');
+  //   if(!res){
+  //     res = [];
+  //   }
+  //   if(res.length === 0){
+  //     return ;
+  //   }
+  //   console.log(`\n===============开始助力作者团===================`);
+  //   let thisTuanID = getRandomArrayElements(res, 1)[0];
+  //   $.tuanMax = false;
+  //   for (let i = 0; i < cookiesArr.length && !$.tuanMax; i++) {
+  //     if(openTuanCKList.includes((i+1).toString())){
+  //       $.index = i + 1;
+  //       cookie = cookiesArr[i];
+  //       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+  //       console.log(`账号${$.UserName} 去参加作者团： ${thisTuanID}`);
+  //       await JoinTuan(thisTuanID);
+  //       await $.wait(2000);
+  //     }
+  //   }
+  // }
 })().catch((e) => {$.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')}).finally(() => {$.done();});
 
 async function jdDreamFactoryTuan() {try {await userInfo();await tuanActivity();} catch (e) {$.logErr(e);}}
