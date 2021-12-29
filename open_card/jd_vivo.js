@@ -26,7 +26,7 @@ let shareList = [];
         return;
     }
     $.shareUuid = '';
-    shareList = ['b6400209b8b240f093731b7e25005aed'];
+    shareList = ['41eeb596f4a64d989b9c88fd2c7ea8d2','b6400209b8b240f093731b7e25005aed'];
     let activityList = [{'id':'2112100008586801','endTime':'1640966400000'}];
     for (let i = 0; i < cookiesArr.length; i++) {
         if(shareList.length > 0){
@@ -398,7 +398,7 @@ function getMyPing(url) {
 function getToken() {
     let config = {
         url: 'https://api.m.jd.com/client.action?functionId=isvObfuscator',
-        body: `body=%7B%22url%22%3A%22https%3A//lzkjdz-isv.isvjcloud.com%22%2C%22id%22%3A%22%22%7D&uuid=dacd2d8b7ceb4b909d1601b4d3b6fc1f&client=apple&clientVersion=9.4.0&st=1639109215000&sv=111&sign=41eeb596f4a64d989b9c88fd2c7ea8d2`,
+        body: `body=%7B%22url%22%3A%22https%3A//lzkjdz-isv.isvjcloud.com%22%2C%22id%22%3A%22%22%7D&uuid=dacd2d8b7ceb4b909d1601b4d3b6fc1f&client=apple&clientVersion=9.4.0&st=1639109215000&sv=111&sign=25846b1c57375bba2500f0f0c243f5d9`,
         headers: {
             'Host': 'api.m.jd.com',
             'accept': '*/*',

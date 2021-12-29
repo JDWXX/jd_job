@@ -11,7 +11,7 @@ let ownCode = {};
 let isdoTask = true;
 let isplayGame = true;
 let lz_cookie = {}
-let wxgameActivityId = '';
+let wxgameActivityId = 'e5cff304b4b545a98ba6130ceb4027d2';
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -26,6 +26,8 @@ if ($.isNode()) {
     cookiesArr.reverse();
     cookiesArr = cookiesArr.filter(item => !!item);
 }
+console.log("活动ID环境变量 WXGAME_ACT_ID")
+console.log("默认 e5cff304b4b545a98ba6130ceb4027d2 活动已结束")
 if (process.env.WXGAME_ACT_ID && process.env.WXGAME_ACT_ID != "") {
     wxgameActivityId = process.env.WXGAME_ACT_ID.split(',');
 }
@@ -175,10 +177,8 @@ function task(function_id, body, isCommon = 0) {
                         if (data.result) {
                             switch (function_id) {
                                 case 'customer/getSimpleActInfoVo':
-                                    if(data.data.jdActivityId)
-                                        $.jdActivityId = data.data.jdActivityId;
-                                    else
-                                        $.jdActivityId = '';
+                                    $.jdActivityId = data.data.jdActivityId;
+                                    $.jdActivityId = '';
                                     $.venderId = data.data.venderId;
                                     $.activityShopId = data.data.venderId;
                                     break;
