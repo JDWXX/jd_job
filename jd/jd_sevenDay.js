@@ -15,7 +15,6 @@ let cookiesArr = [], cookie = '', message = '';
 // https://lzkj-isv.isvjcloud.com/sign/sevenDay/signActivity?activityId=
 let activityIdList = [
     'eaf0e5313fa1484db90c3fc467af33e5',
-    '5758b4c61a954367af1d654df11e37f2',
     'f3207d49ac8e4fcfbd542befc1338916',
     'ba2d672b1fc44814aef1c3ee4c3ac5fa',
     'f46601936b40496b97a85de2b5ab97eb',
@@ -44,6 +43,7 @@ let activityIdList2 = [
     'c3fde07f69bb43e79f12686013b45f8b',
     'd7d28539c7e54d0896cec5089f1b82f2',
     'e6d46a5b87854723bcca14096fdbf828',
+    'b04348f10238493fa937669035f88d31',
 ]
 let activityIdList3 = [
     '456de0f620024cbda71e9a9cbaaf95e1',

@@ -461,39 +461,41 @@ def start():
 
     # 晒单
     def sunbw(headers, ce):
-        global Ev_img
-        url = "https://wq.jd.com/eval/SendEval?g_login_type=0&g_ty=ajax"
-        for i, da in enumerate(op(headers, _type=False)):
-            if da['cname'] == "追加评价":
-                context = generation(da['name'], _type=0)
-                printf(f'开始晒单{i}\t[{da["oid"]}]')
-                if da['multi']:
-                    # printf('\t多个商品跳过！')
-                    continue
-                url = 'https://comment-api.jd.com/comment/appendComment?sceneval=2&g_login_type=1&g_ty=ajax'
-                if Ev_img == '':
-                    Ev_img = random.sample(
-                        ['//img30.360buyimg.com/shaidan/jfs/t1/169124/31/25110/42459/61a586c7Ec6b49656/1549ee98784f868d.jpg,//img30.360buyimg.com/shaidan/jfs/t1/220117/4/6009/64307/61a586d6E0d3462c9/2d49512023e40761.jpg,//img30.360buyimg.com/shaidan/jfs/t1/213046/15/6166/10322/61a586e5Ea4397e3d/d143a8d0a0d96bd8.jpg', '//img30.360buyimg.com/shaidan/jfs/t1/169124/31/25110/42459/61a586c7Ec6b49656/1549ee98784f868d.jpg,//img30.360buyimg.com/shaidan/jfs/t1/220117/4/6009/64307/61a586d6E0d3462c9/2d49512023e40761.jpg,//img30.360buyimg.com/shaidan/jfs/t1/143995/15/24443/5327/61860ba4Ecba97817/d7faafa606f76b1f.jpg'], 1)
-                data = {
-                    'productId': da['pid'],
-                    'orderId': da['oid'],
-                    'content': context,
-                    'userclient': 29,
-                    'imageJson': Ev_img
-                }
-                req = requests.post(url, headers=headers, data=data)
-                try:
-                    if req.json()['data']['result'] != {}:
-                        # printf("\t晒单成功！！！")
-                        Cent[ce]['晒单'] += 1
-                    else:
-                        printf("\t晒单失败...")
-                        printf(req.json())
-                    # printf('等待5秒-可持续发展！')
-                    time.sleep(20)
-                except KeyError:
-                    printf(f'当前无数据！返回，可能被风控，返回的数据：{req.json()}')
-                    return
+        printf("\t接口已更新，跳过晒单")
+        return
+        # global Ev_img
+        # url = "https://wq.jd.com/eval/SendEval?g_login_type=0&g_ty=ajax"
+        # for i, da in enumerate(op(headers, _type=False)):
+        #     if da['cname'] == "追加评价":
+        #         context = generation(da['name'], _type=0)
+        #         printf(f'开始晒单{i}\t[{da["oid"]}]')
+        #         if da['multi']:
+        #             # printf('\t多个商品跳过！')
+        #             continue
+        #         url = 'https://comment-api.jd.com/comment/appendComment?sceneval=2&g_login_type=1&g_ty=ajax'
+        #         if Ev_img == '':
+        #             Ev_img = random.sample(
+        #                 ['//img30.360buyimg.com/shaidan/jfs/t1/169124/31/25110/42459/61a586c7Ec6b49656/1549ee98784f868d.jpg,//img30.360buyimg.com/shaidan/jfs/t1/220117/4/6009/64307/61a586d6E0d3462c9/2d49512023e40761.jpg,//img30.360buyimg.com/shaidan/jfs/t1/213046/15/6166/10322/61a586e5Ea4397e3d/d143a8d0a0d96bd8.jpg', '//img30.360buyimg.com/shaidan/jfs/t1/169124/31/25110/42459/61a586c7Ec6b49656/1549ee98784f868d.jpg,//img30.360buyimg.com/shaidan/jfs/t1/220117/4/6009/64307/61a586d6E0d3462c9/2d49512023e40761.jpg,//img30.360buyimg.com/shaidan/jfs/t1/143995/15/24443/5327/61860ba4Ecba97817/d7faafa606f76b1f.jpg'], 1)
+        #         data = {
+        #             'productId': da['pid'],
+        #             'orderId': da['oid'],
+        #             'content': context,
+        #             'userclient': 29,
+        #             'imageJson': Ev_img
+        #         }
+        #         req = requests.post(url, headers=headers, data=data)
+        #         try:
+        #             if req.json()['data']['result'] != {}:
+        #                 # printf("\t晒单成功！！！")
+        #                 Cent[ce]['晒单'] += 1
+        #             else:
+        #                 printf("\t晒单失败...")
+        #                 printf(req.json())
+        #             # printf('等待5秒-可持续发展！')
+        #             time.sleep(20)
+        #         except KeyError:
+        #             printf(f'当前无数据！返回，可能被风控，返回的数据：{req.json()}')
+        #             return
 
     printf('### 开始批量评价 ###')
     global cookiesList, userNameList, pinNameList, ckNum, beanCount, userCount
