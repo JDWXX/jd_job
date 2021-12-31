@@ -758,7 +758,7 @@ function joinShop() {
         // console.log(data)
         let res = $.toObj(data);
         if(typeof res == 'object'){
-          if(res.success === true){
+          if(res && res.success && res.success === true){
             console.log(res.message)
             if(res.result && res.result.giftInfo){
               for(let i of res.result.giftInfo.giftList){
@@ -798,7 +798,7 @@ function getshopactivityId() {
     $.get(options, async (err, resp, data) => {
       try {
         let res = $.toObj(data);
-        if(res.success == true){
+        if(res && res.success &&  res.success == true){
           // console.log($.toStr(res.result))
           console.log(`入会:${res.result.shopMemberCardInfo.venderCardName || ''}`)
           $.shopactivityId = res.result.interestsRuleList && res.result.interestsRuleList[0] && res.result.interestsRuleList[0].interestsInfo && res.result.interestsRuleList[0].interestsInfo.activityId || ''
