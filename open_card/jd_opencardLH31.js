@@ -9,7 +9,7 @@
 第一个账号助力作者 其他依次助力CK1
 第一个CK失效会退出脚本
 ————————————————
-入口：[ 12.20~1.5 双旦寻宝 玩转大富翁 (https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dfw2021121701vrb6n1c0ilo0uw&shareUuid=ed7350f0aa954b17976b7d41067e0ce5)]
+入口：[ 12.20~1.5 双旦寻宝 玩转大富翁 (https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dfw2021121701vrb6n1c0ilo0uw&shareUuid=84d6d99f0526493da6ba1952c06d5808)]
 请求太频繁会被黑ip
 过10分钟再执行
 cron:30 2,16 21-31,2-5 12,1 *
@@ -50,7 +50,7 @@ let activityCookie =''
         return;
     }
     $.activityId = "dfw2021121701vrb6n1c0ilo0uw"
-    $.shareUuid = "ed7350f0aa954b17976b7d41067e0ce5"
+    $.shareUuid = "84d6d99f0526493da6ba1952c06d5808"
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
 
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -269,7 +269,7 @@ async function takePostRequest(type) {
         case '邀请':
         case '助力':
             if(type == '助力'){
-                authorCodeList = ["ed7350f0aa954b17976b7d41067e0ce5"]
+                authorCodeList = ["84d6d99f0526493da6ba1952c06d5808"]
                 $.authorCode = authorCodeList[random(0, authorCodeList.length)]
                 url = `${domain}/play/monopoly/getAssistStatus`;
             }else{

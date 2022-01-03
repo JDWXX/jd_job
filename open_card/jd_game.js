@@ -1,22 +1,29 @@
 /*
-https://lzkj-isv.isvjcloud.com/wxgame/activity/8530275?activityId=5e733f46fd1b4d7db9ee3fbe345542ef
-
-JD_CART_REMOVESIZE || 20; // 运行一次取消多全部已关注的商品。数字0表示不取关任何商品
-JD_CART_REMOVEALL || true;    //是否清空，如果为false，则上面设置了多少就只删除多少条
-
-
+通用游戏任务
+活动ID环境变量 WXGAME_ACT_ID
+https://lzkj-isv.isvjcloud.com/wxgame/activity/8530275?activityId=xxxxxx
+即时任务，无需cron,短期或者长期请参考活动规则设置cron
+============Quantumultx===============
+[task_local]
+#通用游戏任务
+31 1 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_game.js, tag=通用游戏任务, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+================Loon==============
+[Script]
+cron "31 1 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_game.js,tag=通用游戏任务
+===============Surge=================
+通用游戏任务 = type=cron,cronexp="31 1 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_game.js
+============小火箭=========
+通用游戏任务 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_game.js, cronexpr="31 1 * * *", timeout=3600, enable=true
 */
-const $ = new Env('加购物车抽奖');
+const $ = new Env('通用游戏任务');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
-let cookiesArr = [], cookie = '', message = '' ,isPush = false;
-let activityIdList = ['5e733f46fd1b4d7db9ee3fbe345542ef', '0d609439062847e8a7b79db2968ba9d5', 'cb2f397a60994ae5b6f05913a3fd6384', '7ba1c4420f094931a90508bda10d92b1', '21a824f2b2c149528667179ed08a334a', 'ba0a7dcabdab4ae2af6aa3912c8f3f12', '5113f35b6f2a4c08bd413eb8573ebead', '1900f76d7d37467ca2eaf17992e67e57', '4b83932e9860452f8d102c3dae21a8ea', '49f8d4ba5be245bfa808ec98c0b9c95b', '29432360178c48bda065f6769e5ec1f4', 'aabfd610b86b482e81a513cb36d72af3', 'f728e93a6d694096845e80e6c537f852', 'c0c2a97214c7468c936220d01d74e556', 'de50659b20bc4dfe957d473ce799f22c', 'a9635959cc8a4672bd5ae5e4facf2194', '199c985626ff4cd2b8095e73376485ac', '82b2e9dd9e8f405c8c7b2cb4d6c412a9', '1b29dceb483541f68ce56c0c24aef172']
+let cookiesArr = [], cookie = '', message = '';
+let ownCode = {};
+let isdoTask = true;
+let isplayGame = true;
 let lz_cookie = {}
-
-if (process.env.ACTIVITY_ID && process.env.ACTIVITY_ID != "") {
-    activityId = process.env.ACTIVITY_ID;
-}
-
+let wxgameActivityId = '';
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -31,76 +38,60 @@ if ($.isNode()) {
     cookiesArr.reverse();
     cookiesArr = cookiesArr.filter(item => !!item);
 }
-let doPush = process.env.DoPush || true; // 设置为 false 每次推送, true 跑完了推送
-let removeSize = process.env.JD_CART_REMOVESIZE || 20; // 运行一次取消多全部已关注的商品。数字0表示不取关任何商品
-let isRemoveAll = process.env.JD_CART_REMOVEALL || true;    //是否清空，如果为false，则上面设置了多少就只删除多少条
-$.keywords = process.env.JD_CART_KEYWORDS || []
-$.keywordsNum = 0;
+if (process.env.WXGAME_ACT_ID && process.env.WXGAME_ACT_ID != "") {
+    wxgameActivityId = process.env.WXGAME_ACT_ID.split(',');
+}
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    // activityIdList = await getActivityIdList('https://raw.githubusercontent.com/FKPYW/dongge/master/code/wxCollectionActivity.json')
-    for(let a in activityIdList){
-        activityId = activityIdList[a];
-        console.log("开起第 "+ a +" 个活动，活动id："+activityId)
-        for (let i = 0; i < cookiesArr.length; i++) {
-            if (cookiesArr[i]) {
-                cookie = cookiesArr[i]
-                originCookie = cookiesArr[i]
-                newCookie = ''
-                $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
-                $.index = i + 1;
-                $.isLogin = true;
-                $.nickName = '';
-                await checkCookie();
-                console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-                if (!$.isLogin) {
-                    $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
-                    if ($.isNode()) {
-                        await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-                    }
-                    continue
+    if (!wxgameActivityId) {
+        $.log(`没有通用ID任务，尝试获取远程`);
+        let data = await getData("https://gitee.com/KingRan521/JD-Scripts/raw/master/shareCodes/jd_game.json")
+        if (data.wxgameActivityId && data.wxgameActivityId.length) {
+            $.log(`获取到远程且有数据`);
+            wxgameActivityId = data.wxgameActivityId.join('@')
+        }else{
+            $.log(`获取失败或当前无远程数据`);
+            return
+        }
+    }
+    console.log(`通用ID任务就位，准备开始薅豆`);
+    for (let i = 0; i < cookiesArr.length; i++) {
+        if (cookiesArr[i]) {
+            cookie = cookiesArr[i]
+            originCookie = cookiesArr[i]
+            newCookie = ''
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
+            $.index = i + 1;
+            $.isLogin = true;
+            $.nickName = '';
+            await checkCookie();
+            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+            if (!$.isLogin) {
+                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
+                if ($.isNode()) {
+                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
                 }
-                authorCodeList = [
-                    '',
-                ]
-                $.bean = 0;
-                $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
-                $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-                $.authorCode = authorCodeList[random(0, authorCodeList.length)]
-                $.authorNum = `${random(1000000, 9999999)}`
-                $.activityId = activityId
-                $.activityUrl = `https://lzkj-isv.isvjcloud.com/wxCollectionActivity/activity2/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&sid=&un_area=`
-                $.drawInfoName = false
-                $.getPrize = null;
-                await addCart();
-                // if($.drawInfoName === false || $.getPrize === null){
-                //     break
-                // } else if($.getPrize != null && !$.getPrize.includes("京豆")){
-                //     break
-                // }
-                // await $.wait(3000)
-                // await requireConfig();
-                // do {
-                //     await getCart_xh();
-                //     $.keywordsNum = 0
-                //     if($.beforeRemove !== "0"){
-                //         await cartFilter_xh(venderCart);
-                //         if(parseInt($.beforeRemove) !== $.keywordsNum) await removeCart();
-                //         else {
-                //             console.log('由于购物车内的商品均包含关键字，本次执行将不删除购物车数据')
-                //             break;
-                //         }
-                //     } else break;
-                // } while(isRemoveAll && $.keywordsNum !== $.beforeRemove)
-                if ($.bean > 0) {
-                    message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
-                }
+                continue
+            }
+            authorCodeList = [
+                '',
+            ]
+            $.bean = 0;
+            $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
+            $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+            $.authorCode = authorCodeList[random(0, authorCodeList.length)]
+            $.authorNum = `${random(1000000, 9999999)}`
+            $.activityId = wxgameActivityId
+            $.activityShopId = ''
+            $.activityUrl = `https://lzkj-isv.isvjcloud.com/wxgame/activity/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
+            await member_08();
+            if ($.bean > 0) {
+                message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
             }
         }
-        await $.wait(3000)
     }
     if (message !== '') {
         if ($.isNode()) {
@@ -118,28 +109,62 @@ $.keywordsNum = 0;
     })
 
 
-async function addCart() {
+async function member_08() {
+    await $.wait(500)
     $.token = null;
     $.secretPin = null;
-    $.venderId = null;
+    $.startScore = null
+    $.endScore = null
+    $.rankingList = null
+    $.rankingListscore = null
+    $.gameOverRecord = null
     await getFirstLZCK()
     await getToken();
     await task('customer/getSimpleActInfoVo', `activityId=${$.activityId}`, 1)
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
-            await task('common/accessLogWithAD', `venderId=${$.venderId}&code=6&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=tg_xuanFuTuBiao`, 1);
-            // await task('wxActionCommon/getUserInfo', `pin=${encodeURIComponent($.secretPin)}`, 1)
-            await task('activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`)
-            if ($.activityContent.drawInfo.name.includes("京豆")) {
-                $.log("-> 加入购物车")
-                for(let i in $.activityContent.cpvos){
-                    await $.wait(3000)
-                    await task('addCart', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&productId=${$.activityContent.cpvos[i].skuId}`)
+            await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
+            await task('wxActionCommon/getUserInfo', `pin=${encodeURIComponent($.secretPin)}`, 1)
+            await task('activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&pinImg=${encodeURIComponent($.pinImg)}&nick=${encodeURIComponent($.pin)}&cjyxPin=&cjhyPin=&shareUuid=${encodeURIComponent($.authorCode)}`)
+
+            if ($.activityContent) {
+                // $.log("开始助力")
+                // await task('helpFriend', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&shareUuid=${encodeURIComponent($.authorCode)}`)
+
+                if (isdoTask) {
+                    $.log("关注店铺")
+                    await task('doTask', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&taskId=followshop&param=`)
+                    $.log("签到")
+                    await task('doTask', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&taskId=dailysign&param=`)
+
+                    await task('doTask', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&taskId=scanshop&param=`)
+                    await task('getProduct', `type=3&activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`)
+                    for (let j = 0; j < $.getProduct.length; j++) {
+                        await task('doTask', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&taskId=followsku&param=${$.getProduct[j]['skuId']}`)
+                    }
+                    await task('getProduct', `type=1&activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`)
+                    for (let j = 0; j < $.getProduct.length; j++) {
+                        await task('doTask', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&taskId=add2cart&param=${$.getProduct[j]['skuId']}`)
+                    }
                 }
-                $.log("-> 抽奖")
-                await $.wait(3000)
-                await task('getPrize', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`)
+
+                if (isplayGame) {
+                    $.stopGame = false
+                    do {
+                        $.gameId = null
+                        $.gameScore = random(15000, 20000)
+                        await task('game/start', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`)
+                        await $.wait(2000)
+                        if ($.gameId) {
+                            let reqtime = new Date().getTime()
+                            let gamesign = $.md5($.gameId + "," + reqtime + "," + $.gameScore + ",0eed6538f6e84b754ad2ab95b45c54f8")
+                            await task('game/end', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&score=${$.gameScore}&gameId=${$.gameId}&reqtime=${reqtime}&sign=${gamesign}&getRank=true&getScoreRank=true&getPlayerNum=true`)
+
+                        }
+                        await $.wait(2000)
+                    } while (!$.stopGame);
+                }
             } else {
                 $.log("未能成功获取到活动信息")
             }
@@ -161,6 +186,7 @@ function task(function_id, body, isCommon = 0) {
 
                     if (data) {
                         data = JSON.parse(data);
+                        // console.log(function_id);
                         if (resp['headers']['set-cookie']) {
                             cookie = `${originCookie};`
                             for (let sk of resp['headers']['set-cookie']) {
@@ -178,30 +204,83 @@ function task(function_id, body, isCommon = 0) {
                                     $.activityShopId = data.data.venderId;
                                     break;
                                 case 'activityContent':
-                                    $.activityContent = data.data;
-                                    $.drawInfoName = $.activityContent.drawInfo.name.includes("京豆")
+                                    $.log(`开启【${data.data.activityName}】活动`)
+                                    $.log("-------------------")
+                                    $.activityContent = data.data.activityId;
+                                    console.log(data.data.uid)
                                     break;
-                                case 'addCart':
+                                case 'wxActionCommon/getUserInfo':
+                                    if (data.data.yunMidImageUrl) {
+                                        if ($.index === 1) {
+                                            ownCode['pinImg'] = data.data.yunMidImageUrl
+                                            ownCode['nickname'] = data.data.nickname
+                                        }
+                                        $.pinImg = data.data.yunMidImageUrl
+                                    } else {
+                                        if ($.index === 1) {
+                                            ownCode['pinImg'] = 'https://img10.360buyimg.com/imgzone/jfs/t1/7020/27/13511/6142/5c5138d8E4df2e764/5a1216a3a5043c5d.png'
+                                            ownCode['nickname'] = data.data.nickname
+                                        }
+                                        $.pinImg = 'https://img10.360buyimg.com/imgzone/jfs/t1/7020/27/13511/6142/5c5138d8E4df2e764/5a1216a3a5043c5d.png'
+                                    }
+                                    break;
+                                case 'helpFriend':
+                                    $.helpFriend = data.data.helpFriendMsg
+                                    console.log($.helpFriend)
+                                    break;
+                                case 'gameOverRecord':
+                                    $.gameOverRecord = data.data
+                                    break;
+                                case 'wxAssemblePage/shopinfo':
+                                    break
+                                case 'rankingList':
+                                    $.rankingList = data.data
+                                    break
+                                case 'doTask':
                                     console.log(data.data)
                                     break
-                                case 'getPrize':
-                                    console.log(data.data.name)
-                                    $.getPrize = data.data.name;
-                                    if (doPush === true) {
-                                        if (data.data.name) {
-                                            message += data.data.name + " "
-                                        }
-                                    } else {
-                                        //await notify.sendNotify($.name, data.data.name, '', `\n`);
+                                case 'getProduct':
+                                    $.getProduct = data.data
+                                    break
+                                case 'game/start':
+                                    $.gameId = data.data
+                                    break
+                                case 'game/end':
+                                    console.log(data.data);
+                                    if (data.data.status === 1) {
+                                        console.log("抽奖");
+                                        let reqTime = new Date().getTime().toString()
+                                        await task('game/luckyDraw', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&score=${$.gameScore}&gameId=${$.gameId}&reqtime=${reqTime}&sign=${$.md5($.gameId + "," + reqTime + ",0eed6538f6e84b754ad2ab95b45c54f8")}`)
                                     }
                                     break
+                                case 'game/luckyDraw':
+                                    if (data.data.drawOk) {
+                                        console.log(data.data.name);
+                                        message+=data.data.name
+                                    } else {
+                                        console.log("没有中奖");
+                                    }
+
+                                    break;
                                 default:
                                     $.log(JSON.stringify(data))
                                     break;
                             }
+                        } else {
+                            switch (function_id) {
+                                case 'game/start':
+                                    $.stopGame = true
+                                    break;
+
+                                default:
+                                    $.log(JSON.stringify(data))
+                                    break;
+                            }
+
+
                         }
                     } else {
-                        // $.log("京东没有返回数据")
+                        $.log("京东没有返回数据")
                     }
                 }
             } catch (error) {
@@ -214,7 +293,7 @@ function task(function_id, body, isCommon = 0) {
 }
 function taskUrl(function_id, body, isCommon) {
     return {
-        url: isCommon ? `https://lzkj-isv.isvjcloud.com/${function_id}` : `https://lzkj-isv.isvjcloud.com/wxCollectionActivity/${function_id}`,
+        url: isCommon ? `https://lzkj-isv.isvjcloud.com/${function_id}` : `https://lzkj-isv.isvjcloud.com/wxgame/${function_id}`,
         headers: {
             Host: 'lzkj-isv.isvjcloud.com',
             Accept: 'application/json',
@@ -356,142 +435,6 @@ function random(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 
 }
-function requireConfig(){
-    return new Promise(resolve => {
-        if($.isNode() && process.env.JD_CART){
-            if(process.env.JD_CART_KEYWORDS){
-                $.keywords = process.env.JD_CART_KEYWORDS.split('@')
-            }
-        }
-        resolve()
-    })
-}
-function getCart_xh(){
-    console.log('正在获取购物车数据...')
-    return new Promise((resolve) => {
-        const option = {
-            url: 'https://p.m.jd.com/cart/cart.action?fromnav=1&sceneval=2',
-            headers: {
-                "Cookie": cookie,
-                "User-Agent": "jdapp;JD4iPhone/167724 (iPhone; iOS 15.0; Scale/3.00)",
-            },
-        }
-        $.get(option, async(err, resp, data) => {
-            try{
-                data = JSON.parse(getSubstr(data, "window.cartData = ", "window._PFM_TIMING"));
-                $.areaId = data.areaId;   // locationId的传值
-                $.traceId = data.traceId; // traceid的传值
-                venderCart = data.cart.venderCart;
-                postBody = 'pingouchannel=0&commlist=';
-                $.beforeRemove = data.cartJson.num
-                console.log(`获取到购物车数据 ${$.beforeRemove} 条`)
-            } catch(e){
-                $.logErr(e, resp);
-            } finally{
-                resolve(data);
-            }
-        });
-    })
-}
-function cartFilter_xh(cartData){
-    console.log("正在整理数据...")
-    let pid;
-    $.pushed = 0
-    for(let cartJson of cartData){
-        if($.pushed === removeSize) break;
-        for(let sortedItem of cartJson.sortedItems){
-            if($.pushed === removeSize) break;
-            pid = typeof (sortedItem.polyItem.promotion) !== "undefined" ? sortedItem.polyItem.promotion.pid : ""
-            for(let product of sortedItem.polyItem.products){
-                if($.pushed === removeSize) break;
-                let mainSkuName = product.mainSku.name
-                $.isKeyword = false
-                $.isPush = true
-                for(let keyword of $.keywords){
-                    if(mainSkuName.indexOf(keyword) !== -1){
-                        $.keywordsNum += 1
-                        $.isPush = false
-                        $.keyword = keyword;
-                        break;
-                    } else $.isPush = true
-                }
-                if($.isPush){
-                    let skuUuid = product.skuUuid;
-                    let mainSkuId = product.mainSku.id
-                    if(pid === "") postBody += `${mainSkuId},,1,${mainSkuId},1,,0,skuUuid:${skuUuid}@@useUuid:0$`
-                    else postBody += `${mainSkuId},,1,${mainSkuId},11,${pid},0,skuUuid:${skuUuid}@@useUuid:0$`
-                    $.pushed += 1;
-                } else {
-                    console.log(`\n${mainSkuName}`)
-                    console.log(`商品已被过滤，原因：包含关键字 ${$.keyword}`)
-                    $.isKeyword = true
-                }
-            }
-        }
-    }
-    postBody += `&type=0&checked=0&locationid=${$.areaId}&templete=1&reg=1&scene=0&version=20190418&traceid=${$.traceId}&tabMenuType=1&sceneval=2`
-}
-function removeCart(){
-    console.log('正在删除购物车数据...')
-    return new Promise((resolve) => {
-        const option = {
-            url: 'https://wq.jd.com/deal/mshopcart/rmvCmdy?sceneval=2&g_login_type=1&g_ty=ajax',
-            body: postBody,
-            headers: {
-                "Cookie": cookie,
-                "User-Agent": "jdapp;JD4iPhone/167724 (iPhone; iOS 15.0; Scale/3.00)",
-                "referer": "https://p.m.jd.com/",
-                "origin": "https://p.m.jd.com/"
-            },
-        }
-        $.post(option, async(err, resp, data) => {
-            try{
-                data = JSON.parse(data);
-                $.afterRemove = data.cartJson.num
-                if($.afterRemove < $.beforeRemove){
-                    console.log(`删除成功，当前购物车剩余数据 ${$.afterRemove} 条\n`)
-                    $.beforeRemove = $.afterRemove
-                } else {
-                    console.log('删除失败')
-                    console.log(data.errMsg)
-                    isRemoveAll = false;
-                }
-            } catch(e){
-                $.logErr(e, resp);
-            } finally{
-                resolve(data);
-            }
-        });
-    })
-}
-function getSubstr(str, leftStr, rightStr){
-    let left = str.indexOf(leftStr);
-    let right = str.indexOf(rightStr, left);
-    if(left < 0 || right < left) return '';
-    return str.substring(left + leftStr.length, right);
-}
-function getActivityIdList(url) {
-    return new Promise(resolve => {
-        const options = {
-            url: `${url}?${new Date()}`, "timeout": 10000, headers: {
-                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-            }
-        };
-        $.get(options, async (err, resp, data) => {
-            try {
-                if (err) {
-                    $.log(err)
-                } else {
-                    if (data) data = JSON.parse(data)
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve(data);
-            }
-        })
-    })
-}
 function getUUID(format = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', UpperCase = 0) {
     return format.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -502,6 +445,29 @@ function getUUID(format = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', UpperCase 
         }
         return uuid;
     });
+}
+function getData(url) {
+    return new Promise(async resolve => {
+        const options = {
+            url: `${url}?${new Date()}`, "timeout": 10000, headers: {
+                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+            }
+        };
+        $.get(options, async (err, resp, data) => {
+            try {
+                if (err) {
+                } else {
+                    if (data) data = JSON.parse(data)
+                }
+            } catch (e) {
+                // $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+        await $.wait(10000)
+        resolve();
+    })
 }
 function checkCookie() {
     const options = {
