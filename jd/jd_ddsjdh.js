@@ -62,6 +62,7 @@ if ($.isNode()) {
 })().catch((e) => { $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '') }).finally(() => { $.done(); })
 
 async function main(tpye) {
+
     $.token = '';
     $.accessToken = '';
     await getToken();
@@ -73,7 +74,7 @@ async function main(tpye) {
                 if ($.exchangeList) {
                     for (const vo of $.exchangeList.reverse()) {
                         if( vo.name === tpye){
-                            $.log($.tsy + `==> 去兑换：${vo.name}\n`)
+                            $.log($.tsy + `==> 去兑换：${vo.name}`)
                             await taskPost('do_exchange', `id=${vo.id}`);
                             await $.wait(50);
                         }
