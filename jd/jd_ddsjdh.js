@@ -1,11 +1,12 @@
 
 /**
  东东世界兑换
- cron 0 0 * * * jd_ddworld_exchange.js
+ cron 0 0 * * * jd_ddsjdh.js
  TG频道：https://t.me/sheeplost
  */
-const $ = new Env("东东世界兑换");
+const $ = new Env("东东世界快速兑换");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+let ddsjdh= $.isNode() ? (process.env.ddsjdh ? process.env.ddsjdh : "1000京豆,500个京豆,200京豆,2元红包") : ($.getdata('ddsjdh') ? $.getdata('ddsjdh') : "1000京豆,500个京豆,200京豆,2元红包")
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = ''
 if ($.isNode()) {
@@ -28,30 +29,39 @@ if ($.isNode()) {
         return;
     }
     UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-    for (let i = 0; i < cookiesArr.length; i++) {
-        UA = `jdapp;iPhone;10.1.6;13.5;${UUID};network/wifi;model/iPhone11,6;addressid/4596882376;appBuild/167841;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`;
-        if (cookiesArr[i]) {
-            cookie = cookiesArr[i];
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
-            $.index = i + 1;
-            $.isLogin = true;
-            $.nickName = '';
-            $.hotFlag = false;
-            await TotalBean();
-            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-            if (!$.isLogin) {
-                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
-                if ($.isNode()) {
-                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+
+    console.log("\n【东东世界将于2022年1月12日18:00下线，没兑换的抓紧兑换】")
+    console.log("\n设置兑换优先级：环境变量添加 ddsjdh 默认设置 【1000京豆,500个京豆,200京豆,2元红包】，如需调整，自己重新排序")
+    let ddsj = ddsjdh.split(",")
+
+    for (let k = 0; k < ddsj.length; k++) {
+        console.log("\n===========【开始兑换：" + ddsj[k] + "】===========\n")
+        for (let i = 0; i < cookiesArr.length; i++) {
+            UA = `jdapp;iPhone;10.1.6;13.5;${UUID};network/wifi;model/iPhone11,6;addressid/4596882376;appBuild/167841;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`;
+            if (cookiesArr[i]) {
+                cookie = cookiesArr[i];
+                $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
+                $.index = i + 1;
+                $.isLogin = true;
+                $.nickName = '';
+                $.hotFlag = false;
+                await TotalBean();
+                $.tsy = `【京东账号${$.index}】${$.nickName || $.UserName}`;
+                // console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+                if (!$.isLogin) {
+                    $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
+                    if ($.isNode()) {
+                        await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+                    }
+                    continue
                 }
-                continue
+                await main(ddsj[k]);
             }
-            await main();
         }
     }
 })().catch((e) => { $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '') }).finally(() => { $.done(); })
 
-async function main() {
+async function main(tpye) {
     $.token = '';
     $.accessToken = '';
     await getToken();
@@ -62,9 +72,11 @@ async function main() {
             if (!$.hotFlag) {
                 if ($.exchangeList) {
                     for (const vo of $.exchangeList.reverse()) {
-                        $.log(`去兑换：${vo.name}`)
-                        await taskPost('do_exchange', `id=${vo.id}`);
-                        await $.wait(5000);
+                        if( vo.name === tpye){
+                            $.log($.tsy + `==> 去兑换：${vo.name}\n`)
+                            await taskPost('do_exchange', `id=${vo.id}`);
+                            await $.wait(50);
+                        }
                     }
                 } else {
                     $.log("没有获取到兑换列表！")
