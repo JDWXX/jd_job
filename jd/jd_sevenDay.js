@@ -17,33 +17,21 @@ let activityIdList = [
     'eaf0e5313fa1484db90c3fc467af33e5',
     'f3207d49ac8e4fcfbd542befc1338916',
     'ba2d672b1fc44814aef1c3ee4c3ac5fa',
-    'f46601936b40496b97a85de2b5ab97eb',
-    '13126645fcb2477fa1090a94cb7f3ca2',
+
+    //20220105
+    'adc1604f43d44990a8f8161913332dad',
+    'ab24ac34a2a34ef08d6fc0176ad748ef',
 ]
 // https://lzkj-isv.isvjcloud.com/sign/signActivity2?activityId=
 let activityIdList2 = [
-    'ddeb92bbfb364c1f8d78fcfefeabbf27',
-    'fa9904f5666e477d955c66e043ca7e3f',
-    '562e959648844c4ab9dcc410684c7726',
-    'c2560ac2bcc94894ae41bb66e5921640',
-    '05b2ea9157ef4d6d9094af302edad286',
     'af38e0ae3c534e5882a2c29cbd08a355',
     '478c9f15a4fc43f691db0451d956cfef',
-    '233d27dfc35e423a98bbe142ec0544c2',
-    'c23c2c321e6e4f81bc1a524315d082f5',
-    'd8449f1ac94d4f2fa8a78c674ede1a0a',
-    '4c1acceddc4444538937d06aed855a35',
     'b688a802471443d092343821a8403531',
-    'c4415b2b45a34d219821dba08c334512',
     'ab51ff694beb41948a554aade50d5608',
     '020c62972942451e887d060bd4abb2ad',
-    '412a10bdb3094730b22c1955e1c545b6',
     '462aae0d426443cd962257afce4b760f',
-    '2b3ee1b59f7a401d878216c8053687b2',
     'c3fde07f69bb43e79f12686013b45f8b',
     'd7d28539c7e54d0896cec5089f1b82f2',
-    'e6d46a5b87854723bcca14096fdbf828',
-    'b04348f10238493fa937669035f88d31',
 ]
 let activityIdList3 = [
     '456de0f620024cbda71e9a9cbaaf95e1',
@@ -79,6 +67,11 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
+    console.log(`********更新库【https://github.com/JDWXX/jd_job.git】*******`);
+    console.log(`********新活动请在GitHub提 issue ***********************************`);
+    console.log(`********最新更新时间：【2022-01-05】 *************************`);
+    console.log(`********签到奖励店铺群友贡献列表(本年度恭喜列表)*******************************`);
+    console.log(`******* 星晴 **********************************************`);
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]
