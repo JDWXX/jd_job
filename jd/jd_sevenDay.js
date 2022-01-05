@@ -17,9 +17,6 @@ let activityIdList = [
     'eaf0e5313fa1484db90c3fc467af33e5',
     'f3207d49ac8e4fcfbd542befc1338916',
     'ba2d672b1fc44814aef1c3ee4c3ac5fa',
-    //20220105
-    'adc1604f43d44990a8f8161913332dad',
-    'ab24ac34a2a34ef08d6fc0176ad748ef',
 ]
 // https://lzkj-isv.isvjcloud.com/sign/signActivity2?activityId=
 let activityIdList2 = [
@@ -33,6 +30,10 @@ let activityIdList2 = [
 ]
 let activityIdList3 = [
     '456de0f620024cbda71e9a9cbaaf95e1',
+
+    //20220105
+    'adc1604f43d44990a8f8161913332dad',
+    'ab24ac34a2a34ef08d6fc0176ad748ef',
 ]
 let lz_cookie = {}
 
