@@ -17,7 +17,6 @@ let activityIdList = [
     'eaf0e5313fa1484db90c3fc467af33e5',
     'f3207d49ac8e4fcfbd542befc1338916',
     'ba2d672b1fc44814aef1c3ee4c3ac5fa',
-
     //20220105
     'adc1604f43d44990a8f8161913332dad',
     'ab24ac34a2a34ef08d6fc0176ad748ef',
@@ -28,7 +27,6 @@ let activityIdList2 = [
     '478c9f15a4fc43f691db0451d956cfef',
     'b688a802471443d092343821a8403531',
     'ab51ff694beb41948a554aade50d5608',
-    '020c62972942451e887d060bd4abb2ad',
     '462aae0d426443cd962257afce4b760f',
     'c3fde07f69bb43e79f12686013b45f8b',
     'd7d28539c7e54d0896cec5089f1b82f2',
