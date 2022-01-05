@@ -25,16 +25,30 @@ let vender=''
 let num=0
 let shopname=''
 const token = [
-  // '2C7846818F0216300CB6BEC38C04E7B4',
 
    //20211227
   "39415200CB5E286A4DB604A54C901A13",
-  // "BE7ED7D6EB18F9B04D6B6886E83BE73A",
-
     //20220101
-  // "465E8EB4C517F5A8B92D368EF2242276",
   "4734C19F6E009FB7A93AFB59CD37400D",
+
+
+  //20220105
+  "90B5C52E83B188F4C99382E8A2EE3983",
+  "45DBA1666FC56F3040F2F68396F1CDCE",
+  "0F1BF9A5EC7FCFB93D34C7054C1CC288",
+  "497B4D1570FE43688370FC86A829F681",
+  "94501E6CEDE9B496870B7292C203C040",
+  "E32042DAE362A2A939DB01AB87977D9E",
+  "C4FF5A919CEE68F9669A32950697694C",
+  "A79E3097CDF6192937A92D32D7DE8AA1",
+  "F21F54D77A164114746ABFBFD509393F",
+  "F932E5DE653968BB1D92A2DFFD5318C7",
+  "F5E2E3856C6FF1869CCE53153D237112",
+  "2B2FC4F571881A8A0FD0AA5AD117DAEF",
 ]
+
+
+
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -59,7 +73,7 @@ if ($.isNode()) {
 
   console.log(`********更新库【https://github.com/JDWXX/jd_job.git】*******`);
   console.log(`********新活动请在GitHub提 issue ***********************************`);
-  console.log(`********最新更新时间：【2022-01-01】 *************************`);
+  console.log(`********最新更新时间：【2022-01-05】 *************************`);
   console.log(`********签到奖励店铺群友贡献列表(本年度恭喜列表)*******************************`);
   console.log(`******* 星晴 **********************************************`);
   for (let i = 0; i < cookiesArr.length; i++) {
