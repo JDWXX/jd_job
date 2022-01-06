@@ -1,20 +1,17 @@
-#!/usr/bin/env python3
+#!/bin/env python3
 # -*- coding: utf-8 -*
 '''
 cron: 0 0 10,15 * * * jd_OpenCard_T.py
 new Env('JD入会开卡领取京豆');
 '''
-
-version = 'v1.2.2'
+version = 'v1.3.1'
 readmes = """
 # JD入会领豆小程序
 ![JD入会领豆小程序](https://raw.githubusercontent.com/curtinlv/JD-Script/main/OpenCrad/resultCount.png)
-
 ## 使用方法
 #### [手机用户（参考） https://mp.weixin.qq.com/s/ih6aOURXWM-iKrhvMyR3mw](https://mp.weixin.qq.com/s/ih6aOURXWM-iKrhvMyR3mw)
 #### [PC用户 （参考） https://mp.weixin.qq.com/s/JmLxAecZAlEc4L2sZWnn1A](https://mp.weixin.qq.com/s/JmLxAecZAlEc4L2sZWnn1A)
 #### [v4-bot用户 （参考） https://github.com/curtinlv/JD-Script/pull/12#issue-652134788](https://github.com/curtinlv/JD-Script/pull/12#issue-652134788)
-
 ##  目录结构
     JD-Script/                  #仓库
     |-- LICENSE
@@ -25,7 +22,6 @@ readmes = """
     |   |-- Readme.md           # 说明书
     |   `-- start.sh            # shell脚本（非必要）
     `-- README.md
-
     log目录结构、临时目录（可删除）：
     log
     ├── memory.json                        # 记忆、统计功能临时存放参数
@@ -33,27 +29,26 @@ readmes = """
     ├── 入会N豆以上的shopid-2021-05-23.txt   # 记录满足入会条件的shopid
     ├── 入会汇总.txt                        # 记录所有入会店铺送豆的加入、注销链接
     ├── 可退会账号【账号id】.txt              # 记录跑脚本之前已经过入会且目前送豆的注销链接（可优先退会）
-
 ### `【兼容环境】`
     1.Python3.3+ 环境
-    2.兼容ios设备软件：Pythonista 3、Pyto(已测试正常跑，其他软件自行测试)
-    3.Windows exe
-
+    2.兼容ios设备软件：Pythonista 3、Pyto(已测试正常跑，其他软件自行测试)   
+    3.Windows exe 
     安装依赖模块 :
     pip3 install requests
     执行：
     python3 jd_OpenCard.py
-
     start.sh 脚本运行方法：
-    1.适合定时任务或不想依赖ini配置文件。
+    1.适合定时任务或不想依赖ini配置文件。 
     2.支持单号跑多开，如
        cp start.sh start_2.sh
        sh start_2.sh  #只跑里面配置的参数，如cookie
     3.定时任务（参考）：
        0 8 * * * sh /home/curtin/JD-Script/OpenCard/start.sh
        2 8 * * * sh /home/curtin/JD-Script/OpenCard/start_2.sh
-
 ## `【更新记录】`
+    2022.1.1: (v1.3.1)
+        * 修复cookie检测接口
+        * 增加cookie检测开关
     2021.6.19: (v1.2.2)
         * 修复多线程报错
     2021.6.14: (v1.2.1)
@@ -82,11 +77,9 @@ readmes = """
         * 新增远程获取shopid功能
             - isRemoteSid=yes #开启
         * 修改已知Bug
-
     2021.5.9：(v1.0.4 Beta)
         * 优化代码逻辑
         * 打包exe版本测试
-
     2021.5.8：(v1.0.3)
         * 优化记忆功能逻辑：
             - cookiek个数检测
@@ -94,18 +87,15 @@ readmes = """
             - 上一次中断最后记录的账号id检测不存在本次ck里面
             - 临时文件log/memory.json是否存在
             - 以上任意一条命中则记忆接力功能不生效。
-
     2021.5.7：(v1.0.2)
         * 优化代码逻辑
         * 修复已知Bug
-
     2021.5.5：(v1.0.1)
         * 新增记忆功能，如中断后下次跑会接着力跑（默认开启）
             - memory= True
         * 新增仅记录shopid，不入会功能（默认关闭）
             - onlyRecord = no
         * 修复已知Bug
-
     2021.5.4：(v1.0.0)
         * 支持多账号
             - JD_COOKIE=pt_key=xxx;pt_pin=xxx;&pt_key=xxx;pt_pin=xxx; #多账号&分隔
@@ -117,41 +107,34 @@ readmes = """
             - log/可销卡汇总.txt #记录开卡送豆的店铺销卡链接
             - log/shopid-yyyy-mm-dd.txt #记录当天所有入会送豆的shopid
             - log/可销卡账号xxx.txt #记录账号可销卡的店铺
-
 ### `【账号参数配置说明】`
 ### 主配置文件[ OpenCardConfig.ini ] 请保持utf-8默认格式
-
  变量  | 值  | 说明
- ---- | ----- | ------
- JD_COOKIE  | pt_key=xxx;pt_pin=xxx;  | 必要(多账号&分隔)
- openCardBean  | 30 | int，入会送豆满足此值，否则不入会
- record    | False或True | 布尔值，是否记录符合条件的shopid(默认True)
- onlyRecord  | False或True |布尔值， True:仅记录，不入会(默认False)
- memory  | False或True | 布尔值，开启记忆功能，接力上一次异常中断位置继续。(默认yes)
- printlog  | False或True | 布尔值，True：只打印部分日志 False:打印所有日志
- sleepNum  | False或True | Float，限制速度，单位秒，如果请求过快报错适当调整0.5秒以上
- isRemoteSid  | False或True | 布尔值，True:使用作者远程仓库更新的id，False：使用本地shopid.txt的id
-#### 兼容Env环境（如有配置则优先使用，适合AC、云服务环境等）
+ ---- | ----- | ------  
+ JD_COOKIE  | pt_key=xxx;pt_pin=xxx;  | 必要(多账号&分隔) 
+ openCardBean  | 30 | int，入会送豆满足此值，否则不入会 
+ record    | False或True | 布尔值，是否记录符合条件的shopid(默认True) 
+ onlyRecord  | False或True |布尔值， True:仅记录，不入会(默认False) 
+ memory  | False或True | 布尔值，开启记忆功能，接力上一次异常中断位置继续。(默认yes) 
+ printlog  | False或True | 布尔值，True：只打印部分日志 False:打印所有日志 
+ sleepNum  | False或True | Float，限制速度，单位秒，如果请求过快报错适当调整0.5秒以上 
+ isRemoteSid  | False或True | 布尔值，True:使用作者远程仓库更新的id，False：使用本地shopid.txt的id 
+#### 兼容Env环境（如有配置则优先使用，适合AC、云服务环境等）    
         export JD_COOKIE='pt_key=xxx;pt_pin=xxx;' (多账号&分隔)
         export openCardBean=30
         export xxx=xxx
-
 #### Ps:您可以到以下途径获取最新的shopid.txt，定期更新：
-
-###### [GitHub仓库 https://github.com/curtinlv/JD-Script](https://github.com/curtinlv/JD-Script)
+###### [GitHub仓库 https://github.com/curtinlv/JD-Script](https://github.com/curtinlv/JD-Script) 
 ###### [Gitee仓库 https://gitee.com/curtinlv/JD-Script](https://gitee.com/curtinlv/JD-Script)
 ###### [TG频道 https://t.me/TopStyle2021](https://t.me/TopStyle2021)
 ###### [TG群 https://t.me/topStyle996](https://t.me/topStyle996)
 ###### 关注公众号【TopStyle】回复：shopid
 ![TopStyle](https://gitee.com/curtinlv/img/raw/master/gzhcode.jpg)
-#
+# 
     @Last Version: %s
-
     @Last Time: 2021-06-19 13:55
-
     @Author: Curtin
-#### **仅以学习交流为主，请勿商业用途、禁止违反国家法律 ，转载请留个名字，谢谢!**
-
+#### **仅以学习交流为主，请勿商业用途、禁止违反国家法律 ，转载请留个名字，谢谢!** 
 # End.
 [回到顶部](#readme)
 """ % version
@@ -174,7 +157,7 @@ scriptHeader = """
 ║                                      ║
 ════════════════════════════════════════
 @Version: {}""".format(version)
-remarks = ''
+remarks = '\n\n\tQQ群 212796668、681030097\n'
 
 timestamp = int(round(time.time() * 1000))
 today = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -183,7 +166,7 @@ pwd = os.path.dirname(os.path.abspath(__file__)) + os.sep
 
 ######
 openCardBean = 5
-sleepNum = 0.0
+sleepNum = 0.1
 record = True
 onlyRecord = False
 memory = True
@@ -199,6 +182,7 @@ TG_API_HOST = ''
 QYWX_AM = ''
 BARK = ''
 DoubleThread = True
+JD_COOKIE_CHECK = "true"
 
 # 获取账号参数
 try:
@@ -232,6 +216,7 @@ try:
     Concurrent = configinfo.getboolean('main', 'Concurrent')
     DoubleThread = configinfo.getboolean('main', 'DoubleThread')
     BARK = configinfo.get('main', 'BARK')
+    JD_COOKIE_CHECK = configinfo.get('main', 'JD_COOKIE_CHECK')
 except Exception as e:
     OpenCardConfigLabel = 1
     print("参数配置有误，请检查OpenCardConfig.ini\nError:", e)
@@ -255,6 +240,7 @@ if "JD_COOKIE" in os.environ:
         cookies = os.environ["JD_COOKIE"]
         print("已获取并使用Env环境 Cookie")
 # 只入送豆数量大于此值
+print("只入送豆数量大于此值 openCardBean => 5 ")
 if "openCardBean" in os.environ:
     if len(os.environ["openCardBean"]) > 0:
         openCardBean = int(os.environ["openCardBean"])
@@ -262,11 +248,13 @@ if "openCardBean" in os.environ:
     elif not openCardBean:
         openCardBean = 5
 # 是否开启双线程
+print("是否开启双线程 DoubleThread => True False ")
 if "DoubleThread" in os.environ:
     if len(os.environ["DoubleThread"]) > 1:
         DoubleThread = getBool(os.environ["DoubleThread"])
         print("已获取并使用Env环境 DoubleThread", DoubleThread)
 # 多账号并发
+print("多账号并发 Concurrent  => True False ")
 if "Concurrent" in os.environ:
     if len(os.environ["Concurrent"]) > 1:
         Concurrent = getBool(os.environ["Concurrent"])
@@ -274,19 +262,20 @@ if "Concurrent" in os.environ:
     elif not Concurrent:
         Concurrent = True
 # 限制速度，单位秒，如果请求过快报错适当调整0.5秒以上
+print("限制速度，单位秒，如果请求过快报错适当调整0.5秒以上 sleepNum => 0.2 ")
 if "sleepNum" in os.environ:
     if len(os.environ["sleepNum"]) > 0:
         sleepNum = float(os.environ["sleepNum"])
         print("已获取并使用Env环境 sleepNum:", sleepNum)
     elif not sleepNum:
-        sleepNum = 0
+        sleepNum = 0.1
 if "printlog" in os.environ:
     if len(os.environ["printlog"]) > 1:
         printlog = getBool(os.environ["printlog"])
         print("已获取并使用Env环境 printlog:", printlog)
     elif not printlog:
         printlog = True
-    # 是否记录符合条件的shopid，输出文件【OpenCardlog/yes_shopid.txt】 False|True
+# 是否记录符合条件的shopid，输出文件【OpenCardlog/yes_shopid.txt】 False|True
 if "record" in os.environ:
     if len(os.environ["record"]) > 1:
         record = getBool(os.environ["record"])
@@ -308,6 +297,7 @@ if "memory" in os.environ:
     elif not memory:
         memory = True
 # 是否启用远程shopid
+print("是否启用远程 isRemoteSid => True False ")
 if "isRemoteSid" in os.environ:
     if len(os.environ["isRemoteSid"]) > 1:
         isRemoteSid = getBool(os.environ["isRemoteSid"])
@@ -356,6 +346,13 @@ if "BARK" in os.environ:
     if len(os.environ["BARK"]) > 1:
         BARK = os.environ["BARK"]
         print("已获取并使用Env环境 BARK")
+
+if "JD_COOKIE_CHECK" in os.environ:
+    if len(os.environ["JD_COOKIE_CHECK"]) > 1:
+        JD_COOKIE_CHECK = os.environ["JD_COOKIE_CHECK"]
+else:
+    JD_COOKIE_CHECK = "true"
+
 # 判断参数是否存在
 try:
     cookies
@@ -442,7 +439,10 @@ def telegram_bot(title, content):
             return
         print("tg服务启动")
         if TG_API_HOST:
-            url = f"{TG_API_HOST}/bot{TG_BOT_TOKEN}/sendMessage"
+            if 'http' in TG_API_HOST:
+                url = f"{TG_API_HOST}/bot{TG_BOT_TOKEN}/sendMessage"
+            else:
+                url = f"https://{TG_API_HOST}/bot{TG_BOT_TOKEN}/sendMessage"
         else:
             url = f"https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage"
 
@@ -647,14 +647,19 @@ def iscookie():
                 pinName = r.findall(i)
                 pinName = unquote(pinName[0])
                 # 获取账号名
-                ck, nickname = getUserInfo(i, pinName, u)
-                if nickname != False:
-                    cookiesList.append(ck)
-                    userNameList.append(nickname)
-                    pinNameList.append(pinName)
+                if JD_COOKIE_CHECK == "true":
+                    ck, nickname = getUserInfo(i, pinName, u)
+                    if nickname != False:
+                        cookiesList.append(ck)
+                        userNameList.append(nickname)
+                        pinNameList.append(pinName)
+                    else:
+                        u += 1
+                        continue
                 else:
-                    u += 1
-                    continue
+                    cookiesList.append(i)
+                    userNameList.append(pinName)
+                    pinNameList.append(pinName)
                 u += 1
             if len(cookiesList) > 0 and len(userNameList) > 0:
                 return cookiesList, userNameList, pinNameList
@@ -712,30 +717,60 @@ def isUpdate():
         message("请检查您的环境/版本是否正常！")
         time.sleep(10)
         exit(666)
-
+#
+# def getUserInfo(ck, pinName, userNum):
+#     url = 'https://me-api.jd.com/user_new/info/GetJDUserInfoUnion?orgFlag=JD_PinGou_New&callSource=mainorder&channel=4&isHomewhite=0&sceneval=2&sceneval=2&callback=GetJDUserInfoUnion'
+#     headers = {
+#         'Cookie': ck,
+#         'Accept': '*/*',
+#         'Connection': 'close',
+#         'Referer': 'https://home.m.jd.com/myJd/home.action',
+#         'Accept-Encoding': 'gzip, deflate, br',
+#         'Host': 'me-api.jd.com',
+#         'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.2 Mobile/15E148 Safari/604.1',
+#         'Accept-Language': 'zh-cn'
+#     }
+#     try:
+#         resp = requests.get(url=url, verify=False, headers=headers, timeout=60).text
+#         r = re.compile(r'GetJDUserInfoUnion.*?\((.*?)\)')
+#         result = r.findall(resp)
+#         userInfo = json.loads(result[0])
+#         nickname = userInfo['data']['userInfo']['baseInfo']['nickname']
+#         return ck, nickname
+#     except Exception:
+#         context = f"账号{userNum}【{pinName}】Cookie 已失效！请重新获取。"
+#         message(context)
+#         send("【JD入会领豆】Cookie 已失效！", context)
+#         return ck, False
 def getUserInfo(ck, pinName, userNum):
-    url = 'https://me-api.jd.com/user_new/info/GetJDUserInfoUnion?orgFlag=JD_PinGou_New&callSource=mainorder&channel=4&isHomewhite=0&sceneval=2&sceneval=2&callback=GetJDUserInfoUnion'
+    url = 'https://me-api.jd.com/user_new/info/GetJDUserInfoUnion?orgFlag=JD_PinGou_New&callSource=mainorder&channel=4&isHomewhite=0&sceneval=2&_=&sceneval=2&g_login_type=1'
     headers = {
-        'Cookie': ck,
-        'Accept': '*/*',
-        'Connection': 'close',
-        'Referer': 'https://home.m.jd.com/myJd/home.action',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Host': 'me-api.jd.com',
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.2 Mobile/15E148 Safari/604.1',
-        'Accept-Language': 'zh-cn'
+        'Cookie' : ck,
+        'Accept' : '*/*',
+        'Connection' : 'keep-alive',
+        'Referer' : 'https://home.m.jd.com/',
+        'Accept-Encoding' : 'gzip, deflate, br',
+        'Host' : 'me-api.jd.com',
+        'User-Agent' : 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
+        'Accept-Language' : 'zh-CN,zh-Hans;q=0.9'
     }
     try:
-        resp = requests.get(url=url, verify=False, headers=headers, timeout=60).text
-        r = re.compile(r'GetJDUserInfoUnion.*?\((.*?)\)')
-        result = r.findall(resp)
-        userInfo = json.loads(result[0])
-        nickname = userInfo['data']['userInfo']['baseInfo']['nickname']
-        return ck, nickname
+        if sys.platform == 'ios':
+            requests.packages.urllib3.disable_warnings()
+            resp = requests.get(url=url, verify=False, headers=headers, timeout=60).json()
+        else:
+            resp = requests.get(url=url, headers=headers, timeout=60).json()
+        # print(json.dumps(resp, indent=4 , ensure_ascii=False))
+        if resp['retcode'] == "0":
+            nickname = resp['data']['userInfo']['baseInfo']['nickname']
+            return ck, nickname
+        else:
+            context = f"账号{userNum}【{pinName}】Cookie 已失效！请重新获取。"
+            print(context)
+            return ck, False
     except Exception:
         context = f"账号{userNum}【{pinName}】Cookie 已失效！请重新获取。"
-        message(context)
-        send("【JD入会领豆】Cookie 已失效！", context)
+        print(context)
         return ck, False
 
 # 设置Headers
@@ -884,20 +919,10 @@ def isMemory(memorylabel, startNum1, startNum2, midNum, endNum, pinNameList):
                         rmCount()
                         return startNum1, startNum2, memorylabel
                     if memoryJson['t1_startNum'] + 1 == midNum and memoryJson['t2_startNum'] + 1 == endNum:
-                        print(
-                            f"\n上次已完成所有shopid，\n\nPs:您可以关注公众号或TG频道获取最新shopid。\n公众号: TopStyle\n电报TG:https://t.me/TopStyle2021\n\n请输入 0 或 1\n0 : 退出。\n1 : 重新跑一次，以防有漏")
                         try:
-                            #getyourNum = int(input("正在等待您的选择："))
-                            getyourNum = 1
-                            if getyourNum == 1:
-                                print("Ok,那就重新跑一次~")
-                                rmCount()
-                                memorylabel = 1
-                                return startNum1, startNum2, memorylabel
-                            elif getyourNum == 0:
-                                print("Ok,已退出~")
-                                time.sleep(10)
-                                exit(0)
+                            rmCount()
+                            memorylabel = 1
+                            return startNum1, startNum2, memorylabel
                         except:
                             # print("Error: 您的输入有误！已退出。")
                             exitCodeFun(3)
@@ -1144,7 +1169,8 @@ def sss(ii, ck, userName, pinName, endNum, user_num, shopids, threadNum):
             pass
     except Exception as e:
         if user_num == 1:
-            print(f"【Error】：多账号并发报错，请求过快建议适当调整 sleepNum 参数限制速度 \n{e}")
+            # print(f"【Error】：多账号并发报错，请求过快建议适当调整 sleepNum 参数限制速度 \n{e}")
+            pass
 
 # 为多线程准备
 def OpenVipCard(startNum: int, endNum: int, shopids, cookies, userNames, pinNameList, threadNum):
@@ -1232,7 +1258,7 @@ def start():
     endShopidNum = len(allShopid)
     midNum = int(endShopidNum / 2)
     message("获取到店铺数量: {}".format(endShopidNum))
-    message(f"您已设置入会条件：{openCardBean} 京豆")
+    message(f"您已设置入会条件：{openCardBean} 京豆，如需修改 环境变量设置 openCardBean ")
     print("获取账号...")
     cookies, userNames, pinNameList = iscookie()
     allUserCount = len(cookies)
@@ -1293,4 +1319,3 @@ def start():
     exitCodeFun(0)
 if __name__ == '__main__':
     start()
-
