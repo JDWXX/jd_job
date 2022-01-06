@@ -110,10 +110,6 @@ let notify, allMessage = '';
 
                     console.debug(`尝试用 ${tool.id} 账号助力 ${help.id} 账号，用于互助的账号剩余 ${tools.length}`)
 
-                    console.log("==================")
-                    console.log(help)
-                    console.log(tool)
-                    console.log("==================")
                     await helpThisUser(help, tool)
                     if (!tool.assisted) {
                         // 如果没有助力成功，则放入互助列表头部
