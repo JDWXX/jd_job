@@ -30,41 +30,6 @@ QYWX_AM = ''
 
 #######################################
 version = 'v1.0.0 Beta'
-readmes = """
-# JD 关注有礼
-##  目录结构
-    JD-Script/                  #主仓库
-    |-- getFollowGifts                # 主目录
-    |   |-- jd_getFollowGift.py       # 主代码 （必要）
-    |   |-- JDCookies.txt             # 存放JD cookie，一行一个ck
-    |   |-- Readme.md                 # 说明书
-    |   `-- start.sh                  # shell脚本（非必要）
-    `-- README.md
-### `【兼容环境】`
-    1.Python3.6+ 环境
-    2.兼容ios设备软件：Pythonista 3、Pyto(已测试正常跑，其他软件自行测试)   
-    3.Windows exe 
-    安装依赖模块 :
-    pip3 install requests
-    执行：
-    python3 jd_getFollowGift.py
-## `【更新记录】`
-    2021.6.6：（v1.0.0 Beta）
-        * Test
-###### [GitHub仓库 https://github.com/curtinlv/JD-Script](https://github.com/curtinlv/JD-Script) 
-###### [TG频道 https://t.me/TopStyle2021](https://t.me/TopStyle2021)
-###### [TG群 https://t.me/topStyle996](https://t.me/topStyle996)
-###### 关注公众号【TopStyle】
-![TopStyle](https://gitee.com/curtinlv/img/raw/master/gzhcode.jpg)
-# 
-    @Last Version: %s
-    @Last Time: 2021-06-06 07:57
-    @Author: Curtin
-#### **仅以学习交流为主，请勿商业用途、禁止违反国家法律 ，转载请留个名字，谢谢!** 
-# End.
-[回到顶部](#readme)
-""" % version
-
 ################################ 【Main】################################
 import time, os, sys, datetime
 import requests
@@ -144,15 +109,16 @@ class getJDCookie(object):
 
     # 检测cookie格式是否正确
     def getUserInfo(self, ck, pinName, userNum):
-        url = 'https://wq.jd.com/user_new/info/GetJDUserInfoUnion?orgFlag=JD_PinGou_New&callSource=mainorder'
+        url = 'https://me-api.jd.com/user_new/info/GetJDUserInfoUnion?orgFlag=JD_PinGou_New&callSource=mainorder&channel=4&isHomewhite=0&sceneval=2&_=&sceneval=2&g_login_type=1'
         headers = {
-            'Cookie': ck,
-            'Accept': '*/*',
-            'Connection': 'close',
-            'Referer': 'https://home.m.jd.com/myJd/home.action',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.2 Mobile/15E148 Safari/604.1',
-            'Accept-Language': 'zh-cn'
+            'Cookie' : ck,
+            'Accept' : '*/*',
+            'Connection' : 'keep-alive',
+            'Referer' : 'https://home.m.jd.com/',
+            'Accept-Encoding' : 'gzip, deflate, br',
+            'Host' : 'me-api.jd.com',
+            'User-Agent' : 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
+            'Accept-Language' : 'zh-CN,zh-Hans;q=0.9'
         }
         try:
             if sys.platform == 'ios':
@@ -160,8 +126,7 @@ class getJDCookie(object):
                 resp = requests.get(url=url, verify=False, headers=headers, timeout=60).json()
             else:
                 resp = requests.get(url=url, headers=headers, timeout=60).json()
-
-            if resp['retcode'] == 0:
+            if resp['retcode'] == "0":
                 nickname = resp['data']['userInfo']['baseInfo']['nickname']
                 return ck, nickname
             else:
@@ -486,9 +451,7 @@ def send(title, content):
 # 检查是否有更新版本
 def gettext(url):
     try:
-        resp = requests.get(url, timeout=60).text
-        if '该内容无法显示' in resp or '违规' in resp:
-            return gettext(url)
+        resp = requests.get(url, timeout=6000).text
         return resp
     except Exception as e:
         print(e)
@@ -497,7 +460,7 @@ def gettext(url):
 def isUpdate():
     global footer,readme,uPversion,scriptName
     url = base64.decodebytes(
-        b"aHR0cHM6Ly9naXRlZS5jb20vY3VydGlubHYvUHVibGljL3Jhdy9tYXN0ZXIvRm9sbG93R2lmdHMvdXBkYXRlLmpzb24=")
+        b"aHR0cHM6Ly9qZHd4eC5naXRodWIuaW8vamRfam9iL3VwZGF0ZS5qc29u")
     try:
         result = gettext(url)
         result = json.loads(result)
@@ -533,7 +496,7 @@ def outfile(filename, context):
 
 def getRemoteShopid():
     url = base64.decodebytes(
-        b"aHR0cHM6Ly9naXRlZS5jb20vY3VydGlubHYvUHVibGljL3Jhdy9tYXN0ZXIvRm9sbG93R2lmdHMvc2hvcGlkLnR4dA==")
+        b"aHR0cHM6Ly9qZHd4eC5naXRodWIuaW8vamRfam9iL2pkX3Nob3BpZC50eHQ=")
     try:
         rShopid = gettext(url)
         rShopid = rShopid.split("\n")
@@ -619,7 +582,6 @@ def getGiftresult(result, nickname, pinName, uNum):
 def start():
     print(scriptHeader)
     isUpdate()
-    outfile("Readme.md", readmes)
     cookiesList, userNameList, pinNameList = getCk.iscookie()
     userNum = len(cookiesList)
     message(f"有效账号{userNum}个")
