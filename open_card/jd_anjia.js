@@ -85,7 +85,7 @@ async function anjia() {
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
-            console.log('去助力 -> ' + $.ownCode);
+            console.log('去助力 -> ' + $.authorCode);
             await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
             await $.wait(500)
             await task('activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&signUuid=${encodeURIComponent($.authorCode)}`)
