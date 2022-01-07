@@ -29,13 +29,11 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    // authorCodeList = await getAuthorCodeList('https://gitee.com/fatelight/code/raw/master/lzdz1_customized.json')
-    // if($.getAuthorCodeListerr === false){
-    //     authorCodeList = [
-    //         '9df288c6b072416984e60e5f62ab8459',
-    //     ]
-    // }
-    // console.log(authorCodeList)
+    console.log(` 1月26号记得进来【合成福片】瓜分500000个京豆,看到的人记得群里提醒下 `)
+    console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=cd2022n4ci22tlj1s2w3245u1mk&shareUuid=d580d32b36b44c1f8ac35129a6f81113`)
+    authorCodeList = [
+        'd580d32b36b44c1f8ac35129a6f81113',
+    ]
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]
@@ -57,10 +55,6 @@ if ($.isNode()) {
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-            authorCodeList = [
-                'd580d32b36b44c1f8ac35129a6f81113',
-            ]
-            // $.authorCode = authorCodeList[random(0, authorCodeList.length)]
             $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`
             $.randomCode = random(1000000, 9999999)
@@ -100,7 +94,7 @@ async function member() {
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
-            console.log("去助力 -> "+$.authorCode)
+            console.log("去助力 -> "+$.ownCode)
             await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
             await task('wxActionCommon/getUserInfo', `pin=${encodeURIComponent($.secretPin)}`, 1)
             await task('play/monopoly/getContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&pinImg=&nick=${encodeURIComponent($.pin)}&cjyxPin=&cjhyPin=&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null`,1)
