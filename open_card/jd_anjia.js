@@ -4,7 +4,7 @@ https://t.me/aaron_scriptsG
 https://t.me/jdscrip
 */
 const $ = new Env("安佳");
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('./jdCookie2.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
 let ownCode = null;
@@ -46,19 +46,23 @@ if ($.isNode()) {
                 continue
             }
             authorCodeList = [
-                '916169990810470d895a6e693bf365fa',
+                'f7da85d18880459d9aaff5f0181a9220',
             ]
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-            // $.authorCode = authorCodeList[random(0, authorCodeList.length)]
-            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            authorCodeList.push(ownCode)
+            authorCodeList.push(ownCode)
+            authorCodeList.push(ownCode)
+            authorCodeList.push(ownCode)
+            $.authorCode = authorCodeList[random(0, authorCodeList.length)]
+            // $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`
-            $.activityId = 'f58043aea7184f6a8df07237e3271fc6'
+            $.activityId = 'ecaf4a23237e403896efdc9507a31ea2'
             $.activityShopId = '1000014486'
             $.activityUrl = `https://lzkjdz-isv.isvjcloud.com/pool/captain/${$.authorNum}?activityId=${$.activityId}&signUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
             await anjia();
-            await $.wait(4000)
+            // await $.wait(4000)
             if ($.bean > 0) {
                 message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
             }
@@ -91,29 +95,29 @@ async function anjia() {
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
-            console.log('去助力 -> ' + $.authorCode);
+            console.log('去助力 -> ' + $.ownCode);
             await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
-            await $.wait(2000)
+            await $.wait(500)
             await task('activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&signUuid=${encodeURIComponent($.authorCode)}`)
             if ($.activityContent) {
                 if ($.activityContent.canJoin) {
                     $.log("加入队伍成功，请等待队长瓜分京豆")
-                    await $.wait(2000)
+                    await $.wait(500)
                     await task('saveCandidate', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&signUuid=${encodeURIComponent($.authorCode)}&pinImg=${encodeURIComponent(`https://img10.360buyimg.com/imgzone/jfs/t1/21383/2/6633/3879/5c5138d8E0967ccf2/91da57c5e2166005.jpg`)}`)
                     $.log("加入会员")
                     if (!$.activityContent.openCard) {
                         $.log("加入会员")
-                        await $.wait(2000)
+                        await $.wait(500)
                         await getShopOpenCardInfo({ "venderId": "1000014486", "channel": 401 }, 1000014486)
                         await bindWithVender({ "venderId": "1000014486", "shopId": "1000014486", "bindByVerifyCodeFlag": 1, "registerExtend": {}, "writeChildFlag": 0, "activityId": 3282318, "channel": 401 }, 100000000000085)
                     }
-                    await $.wait(2000)
+                    await $.wait(500)
                     await task('activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&signUuid=${encodeURIComponent($.authorCode)}`, 0, 1)
-                    await $.wait(2000)
+                    await $.wait(500)
                     if ($.index === 1) {
                         if ($.activityContent.canCreate) {
                             $.log("创建队伍")
-                            await $.wait(2000)
+                            await $.wait(500)
                             await task('saveCaptain', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&pinImg=${encodeURIComponent(`https://img10.360buyimg.com/imgzone/jfs/t1/21383/2/6633/3879/5c5138d8E0967ccf2/91da57c5e2166005.jpg`)}`)
                         }
                     }
@@ -121,7 +125,7 @@ async function anjia() {
                     if ($.index === 1) {
                         $.log("创建队伍")
                         if ($.activityContent.canCreate) {
-                            await $.wait(2000)
+                            await $.wait(500)
                             await task('saveCaptain', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&pinImg=${encodeURIComponent(`https://img10.360buyimg.com/imgzone/jfs/t1/21383/2/6633/3879/5c5138d8E0967ccf2/91da57c5e2166005.jpg`)}`)
                         } else {
                             $.log("你已经是队长了")
@@ -131,7 +135,7 @@ async function anjia() {
                     } else {
                         $.log("无法加入队伍")
                     }
-                    await $.wait(2000)
+                    await $.wait(500)
                 }
             }
         } else {
