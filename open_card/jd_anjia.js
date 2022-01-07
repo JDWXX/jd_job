@@ -1,8 +1,3 @@
-/*
-欢迎关注
-https://t.me/aaron_scriptsG
-https://t.me/jdscrip
-*/
 const $ = new Env("安佳");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
