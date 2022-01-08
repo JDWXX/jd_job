@@ -1,4 +1,5 @@
 /*
+TG https://t.me/duckjobs
 https://lzkj-isv.isvjcloud.com/lzclient/12345/cjwx/common/entry.html?activityId=xxxx
 */
 const $ = new Env('超级无线店铺抽奖');
@@ -6,13 +7,15 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
 let activityIdList = [
-    "",
+    'd46ed50f87314fc6abf14c92b7cd0e9f',
+    'b043e87bf02443fb8c03bee18fe813a1',
+    'f65cec3bc63843a29a2a854ea4151ccc',
+    '369d17a4b1af468483f67bced345912e',
+    '434e78bdb78f43418233a6dfb677ef59',
+    'eeff2e447ff44b899f6c1f5f2aa216a2',
+    '60bc422d686b4d96942b0f63f38e1533',
 ]
 let lz_cookie = {}
-
-if (process.env.RUSH_LZCLIENT && process.env.RUSH_LZCLIENT != "") {
-    activityIdList = process.env.RUSH_LZCLIENT.split(',');
-}
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -33,7 +36,7 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    // activityIdList = await getActivityIdList('game.json')
+    // activityIdList = await getActivityIdList('https://raw.githubusercontent.com/FKPYW/dongge/master/code/gameType.json')
     for(let a in activityIdList){
         activityId = activityIdList[a];
         console.log("开起第 "+ a +" 个活动，活动id："+activityId)
@@ -60,7 +63,7 @@ if ($.isNode()) {
                 $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
                 $.activityId = activityId
                 $.activityUrl = `https://lzkj-isv.isvjcloud.com/lzclient/${$.activityId}/cjwx/common/entry.html?activityId=${$.activityId}&sid=&un_area=`
-                await pandaDraw();
+                await lzclient();
                 await $.wait(2000)
                 if ($.bean > 0) {
                     message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
@@ -84,32 +87,32 @@ if ($.isNode()) {
     })
 
 
-async function pandaDraw() {
+async function lzclient() {
     $.token = null;
     $.secretPin = null;
     $.venderId = null;
     await getFirstLZCK()
     await getToken();
     await task('wxCommonInfo/token', `activityId=${$.activityId}`, 1)
-    await $.wait(500)
+    await $.wait(1000)
     await task('wxCommonInfo/initActInfo', `activityId=${$.activityId}`, 1)
-    await $.wait(500)
+    await $.wait(1000)
     await task('customer/getSimpleActInfoVo', `activityId=${$.activityId}`, 1)
-    await $.wait(500)
+    await $.wait(1000)
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
             await task('common/accessLogWithAD', `venderId=${$.venderId}&code=${$.activityType}&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=`, 1);
-            await $.wait(500)
+            await $.wait(1000)
             await task('wxDrawActivity/activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`, 1);
-            await $.wait(500)
+            await $.wait(1000)
             await task('wxDrawActivity/getGiveContent', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}`, 1);
-            await $.wait(500)
+            await $.wait(1000)
             await task('wxActionCommon/followShop',`userId=${$.venderId}&buyerNick=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&activityType=${$.activityType}`,1);
             console.log(`抽奖`)
-            await $.wait(500)
+            await $.wait(1000)
             await task('wxDrawActivity/start',`activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`,1);
-            await $.wait(500)
+            await $.wait(1000)
         } else {
             $.log("没有成功获取到用户信息")
         }
@@ -323,7 +326,7 @@ function getActivityIdList(url) {
     return new Promise(resolve => {
         const options = {
             url: `${url}?${new Date()}`, "timeout": 10000, headers: {
-            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
             }
         };
         $.get(options, async (err, resp, data) => {
@@ -331,7 +334,7 @@ function getActivityIdList(url) {
                 if (err) {
                     $.log(err)
                 } else {
-                if (data) data = JSON.parse(data)
+                    if (data) data = JSON.parse(data)
                 }
             } catch (e) {
                 $.logErr(e, resp)
