@@ -1,16 +1,24 @@
 /*
-2022年年货节京享红包活动🧧
-ck1助力 作者
-其余助力ck1
-https://u.jd.com/SMIsByU
-跳转到app 可查看助力情况
-0 0,8,20,22 * * * gua_1111RedEnvelope.js
+/*
+年货节京享红包活动-火力值
+添加环境变量FLCODE3 如需自己返利，请填写该变量（https://u.jd.com/后面的英文）
+脚本兼容: Node.js
+============Quantumultx===============
+[task_local]
+#年货节京享红包活动-火力值
+0 0,2,12,20,21 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js, tag=年货节京享红包活动-火力值, enabled=true
+================Loon==============
+[Script]
+cron "0 0,2,12,20,21 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js,tag=年货节京享红包活动-火力值
+===============Surge=================
+年货节京享红包活动-火力值 = type=cron,cronexp="0 0,2,12,20,21 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js
+============小火箭=========
+年货节京享红包活动-火力值 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js, cronexpr="0 0,2,12,20,21 * * *", timeout=3600, enable=true
 */
-
 let rebateCodes = ''
 
-const $ = new Env('2022年年货节京享红包活动🧧');
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const $ = new Env('年货节京享红包活动-火力值');
+const jdCookieNode = $.isNode() ? require('./jdCookie10.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 const Faker = $.isNode() ? require('./sign_graphics_validate.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
@@ -45,7 +53,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
     if ($.isNode()) await notify.sendNotify($.name + '活动已结束', `请删除此脚本\n咱江湖再见`);
     return
   }
-  $.shareCode = 'SIIw5qi'
+  $.shareCode = 'SMIsByU'
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     if (cookie) {
@@ -101,11 +109,11 @@ async function run(){
       }
       s++
       if($.flag == 1){
-        await $.wait(parseInt(Math.random() * 5000 + 3000, 10))
+        await $.wait(parseInt(Math.random() * 2000 + 1000, 10))
       }
     }while ($.flag == 1 && s < 5)
     if($.index == 1 && t == 1){
-      await $.wait(parseInt(Math.random() * 2000 + 1000, 10))
+      await $.wait(parseInt(Math.random() * 1000 + 500, 10))
       await shareUnionCoupon()
     }
     if(resMsg){
@@ -164,7 +172,7 @@ function getCoupons(shareId = '',type = 1) {
               for(let i of res.data.groupInfo || []){
                 if(i.status == 2){
                   console.log(`助力满可以领取${i.info}元红包🧧`)
-                  await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
+                  await $.wait(parseInt(Math.random() * 2000 + 1000, 10))
                   await getCoupons('',2)
                 }
               }

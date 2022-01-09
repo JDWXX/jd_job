@@ -29,9 +29,11 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //自动抽奖 ，环境变量  JD_CITY_EXCHANGE
 let exchangeFlag = $.getdata('jdJxdExchange') || !!0;//是否开启自动抽奖，建议活动快结束开启，默认关闭
+let CCLXJZL = $.isNode() ? (process.env.CCLXJZL ? process.env.CCLXJZL : "") : $.getdata('CCLXJZL') ? $.getdata('CCLXJZL') : "";//城城领现金助力
+let CCLXJZLSL = $.isNode() ? (process.env.CCLXJZLSL ? process.env.CCLXJZLSL : 6) : $.getdata('CCLXJZLSL') ? $.getdata('CCLXJZLSL') : 6;//城城领现金助力前几名，默认 6 （当前三人助力满后，才会助力后面的）【当配置 CCLXJZL 后， 此配置会失效】
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
-
+console.log('\nQQ技术交流群 681030097\n')
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -41,12 +43,15 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-const author_codes = ['dUxbjwCpv8D4L17EBpfUh-M'].sort(() => 0.5 - Math.random())
+
+let author_codes = []
+if(CCLXJZL != ""){
+  author_codes = CCLXJZL.split("@")
+}
 const self_code = []
 let pool = []
 !(async () => {
-  // console.log('内部互助城城现在改为优先助力池子!(作者只吃第一个CK,其余内部!) 请查看群内频道通知!,5s后开始!')
-  // await $.wait(5000)
+  console.log(`指定账号助力 环境变量添加 CCLXJZL 值为你的助力码，多个助力码 @ 拼接（指定账号后将不读取助力码）`)
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
@@ -57,10 +62,37 @@ let pool = []
   } else {
     console.log(`脚本不会自动抽奖，建议活动快结束开启，默认关闭`)
   }
-  // if (process.env.CT_R != 'false') {
-  //   cookiesArr = cookiesArr.sort(() => 0.5 - Math.random())
-  //   console.log('CK顺序打乱!用来随机内部互助!,如需关闭CT_R为false')
-  // }
+  if(author_codes.length == 0){
+    console.log(`未添加助力码，将开始读取助力码`)
+    console.log(`读取前` + CCLXJZLSL + "名助力码")
+    for (let i = 0; i < CCLXJZLSL; i++) {
+      if (cookiesArr[i]) {
+        cookie = cookiesArr[i];
+        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+        $.index = i + 1;
+        $.isLogin = true;
+        $.nickName = '';
+        message = '';
+        await TotalBean();
+        console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+        if (!$.isLogin) {
+          $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+
+          if ($.isNode()) {
+            await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+          }
+          continue
+        }
+        await getInfo('',true);
+        await $.wait(1000)
+      }
+    }
+  }else{
+    self_code = author_codes
+  }
+  console.log(`=========最终将助力的助力码=========`)
+  console.log(self_code)
+  console.log(`=========最终将助力的助力码=========`)
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -80,7 +112,6 @@ let pool = []
         continue
       }
       await shareCodesFormat()
-      await getInfo('',true);
       for (let i = 0; i < $.newShareCodes.length; ++i) {
         console.log(`开始助力 【${$.newShareCodes[i]}】`)
         let res = await getInfo($.newShareCodes[i])
@@ -306,15 +337,7 @@ function shareCodesFormat() {
     //   console.log('非首个个帐号,优先向前助力')
     //   $.newShareCodes = [...new Set([...$.newShareCodes,...self_code,...author_codes, ...pool])]
     // }
-    if ($.index == 1) {
-      console.log('首个帐号,助力作者和池子')
-      $.newShareCodes = [...new Set([...author_codes,...pool,...$.newShareCodes])]
-    } else{
-      // console.log('非首个帐号,助力池子')
-      // $.newShareCodes = [...new Set([...$.newShareCodes,...pool])]
-      console.log('非首个个帐号,优先向前助力')
-      $.newShareCodes = [...new Set([...$.newShareCodes,...self_code,...author_codes])]
-    }
+    $.newShareCodes = [...new Set([...$.newShareCodes,...self_code,...author_codes])]
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })
@@ -337,15 +360,15 @@ function requireConfig() {
       }
     }
     console.log(`共${cookiesArr.length}个京东账号\n`);
-    $.shareCodesArr = [];
-    if ($.isNode()) {
-      Object.keys(shareCodes).forEach((item) => {
-        if (shareCodes[item]) {
-          $.shareCodesArr.push(shareCodes[item])
-        }
-      })
-    }
-    console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
+    // $.shareCodesArr = [];
+    // if ($.isNode()) {
+    //   Object.keys(shareCodes).forEach((item) => {
+    //     if (shareCodes[item]) {
+    //       $.shareCodesArr.push(shareCodes[item])
+    //     }
+    //   })
+    // }
+    // console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
     resolve()
   })
 }
