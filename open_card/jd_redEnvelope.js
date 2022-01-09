@@ -16,7 +16,7 @@ cron "0 0,2,12,20,21 * * *" script-path=https://raw.githubusercontent.com/KingRa
 京东领红包 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_redEnvelope.js, cronexpr="0 0,2,12,20,21 * * *", timeout=3600, enable=true
 */
 const $ = new Env('京东领红包');
-const jdCookieNode = $.isNode() ? require('./jdCookie10.js') : '';
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let flCode = ["SMIsByU"]
 flCode = flCode[Math.floor((Math.random() * flCode.length))]
 if ($.isNode() && process.env.FLCODE3) {

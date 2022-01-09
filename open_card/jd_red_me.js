@@ -18,7 +18,7 @@ cron "0 0,2,12,20,21 * * *" script-path=https://raw.githubusercontent.com/KingRa
 let rebateCodes = ''
 
 const $ = new Env('年货节京享红包活动-火力值');
-const jdCookieNode = $.isNode() ? require('./jdCookie10.js') : '';
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 const Faker = $.isNode() ? require('./sign_graphics_validate.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
