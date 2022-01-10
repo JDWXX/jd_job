@@ -53,9 +53,11 @@ let self_code = []
 let pool = []
 let CCLXJZDList = []
 !(async () => {
+  console.log(`\n================================================`)
   console.log(`指定助力码 环境变量添加 CCLXJZL 值为你的助力码，多个助力码 @ 拼接（指定账号后将不读取助力码）`)
   console.log(`指定账号助力 环境变量添加 CCLXJZD 默认值 第 1,2,3,4,5,6 个账号 `)
   console.log(`优先级 CCLXJZL > CCLXJZD `)
+  console.log(`================================================\n`)
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
