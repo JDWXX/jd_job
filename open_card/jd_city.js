@@ -29,8 +29,9 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //自动抽奖 ，环境变量  JD_CITY_EXCHANGE
 let exchangeFlag = $.getdata('jdJxdExchange') || !!0;//是否开启自动抽奖，建议活动快结束开启，默认关闭
+let CCLXJZD = $.isNode() ? (process.env.CCLXJZD ? process.env.CCLXJZD : "1,2,3,4,5,6") : $.getdata('CCLXJZD') ? $.getdata('CCLXJZD') : "1,2,3,4,5,6";//指定账号助力
 let CCLXJZL = $.isNode() ? (process.env.CCLXJZL ? process.env.CCLXJZL : "") : $.getdata('CCLXJZL') ? $.getdata('CCLXJZL') : "";//城城领现金助力
-let CCLXJZLSL = $.isNode() ? (process.env.CCLXJZLSL ? process.env.CCLXJZLSL : 6) : $.getdata('CCLXJZLSL') ? $.getdata('CCLXJZLSL') : 6;//城城领现金助力前几名，默认 6 （当前三人助力满后，才会助力后面的）【当配置 CCLXJZL 后， 此配置会失效】
+// let CCLXJZLSL = $.isNode() ? (process.env.CCLXJZLSL ? process.env.CCLXJZLSL : 6) : $.getdata('CCLXJZLSL') ? $.getdata('CCLXJZLSL') : 6;//城城领现金助力前几名，默认 6 （当前三人助力满后，才会助力后面的）【当配置 CCLXJZL 后， 此配置会失效】
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 console.log('\nQQ技术交流群 681030097\n')
@@ -45,13 +46,18 @@ if ($.isNode()) {
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 
 let author_codes = []
+
 if(CCLXJZL != ""){
   author_codes = CCLXJZL.split("@")
 }
-const self_code = []
+let self_code = []
 let pool = []
+let CCLXJZDList = []
 !(async () => {
-  console.log(`指定账号助力 环境变量添加 CCLXJZL 值为你的助力码，多个助力码 @ 拼接（指定账号后将不读取助力码）`)
+  console.log(`指定助力码 环境变量添加 CCLXJZL 值为你的助力码，多个助力码 @ 拼接（指定账号后将不读取助力码）`)
+  console.log(`指定账号助力 环境变量添加 CCLXJZD 默认值 第 1,2,3,4,5,6 个账号 `)
+  // console.log(`城城领现金助力前几名 环境变量添加 CCLXJZLSL 默认值 6 助力你前六账号 `)
+  console.log(`优先级 CCLXJZL > CCLXJZD `)
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
@@ -62,29 +68,34 @@ let pool = []
   } else {
     console.log(`脚本不会自动抽奖，建议活动快结束开启，默认关闭`)
   }
-  if(author_codes.length == 0){
+  if(CCLXJZL == ""){
     console.log(`未添加助力码，将开始读取助力码`)
-    console.log(`读取前` + CCLXJZLSL + "名助力码")
-    for (let i = 0; i < CCLXJZLSL; i++) {
-      if (cookiesArr[i]) {
-        cookie = cookiesArr[i];
-        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-        $.index = i + 1;
-        $.isLogin = true;
-        $.nickName = '';
-        message = '';
-        await TotalBean();
-        console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-        if (!$.isLogin) {
-          $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+    console.log(`读取` + CCLXJZD + "名助力码")
+    if(CCLXJZD != ""){
+      CCLXJZDList = CCLXJZD.split(",")
+    }
+    for (let i = 0; i < cookiesArr.length; i++) {
+      if(CCLXJZDList.includes((i + 1) + "")){
+        if (cookiesArr[i]) {
+          cookie = cookiesArr[i];
+          $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+          $.index = i + 1;
+          $.isLogin = true;
+          $.nickName = '';
+          message = '';
+          await TotalBean();
+          console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+          if (!$.isLogin) {
+            $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
 
-          if ($.isNode()) {
-            await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+            if ($.isNode()) {
+              await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+            }
+            continue
           }
-          continue
+          await getInfo('',true);
+          await $.wait(1000)
         }
-        await getInfo('',true);
-        await $.wait(1000)
       }
     }
   }else{
