@@ -51,6 +51,21 @@ const token = [
   //20220106
   "310EF6583A4F5BA7D66DE9A9755D704E",
 
+  //20220111
+  "B025BCECEAB3C2D671EB46CBD5718FD3",
+  "76A89C79D667498C4DA6082A522416DE",
+  "BD5F4DCBA36CB297FAE1175CBA5138C8",
+  "6DFF1DD1447E30B216C5FC2906EFC44C",
+  "87A7B886511ACD5A183C4221D9A035C2",
+  "BCCBF657F7A5BCD02B34403AF1420A5A",
+  "020702C2C96800D57EAB2FA017314A42",
+  "6A40E137F769E6857CE9912F0DC42460",
+  "C22CEFD33E8331E6859BEC93C2BDF537",
+  "D7AC12D450812687EF1382C7C03D629E",
+  "88C72E9A4F342606C7C98C601CCB3196",
+  "941BFE17EBA5FDA32D0AFD0119BDD0AC",
+  "F3959D0ED6769CF1FD960FD783D31AAC",
+
 ]
 
 
@@ -79,7 +94,7 @@ if ($.isNode()) {
 
   console.log(`********更新库【https://github.com/JDWXX/jd_job.git】*******`);
   console.log(`********新活动请在GitHub提 issue ***********************************`);
-  console.log(`********最新更新时间：【2022-01-07】 *************************`);
+  console.log(`********最新更新时间：【2022-01-11】 *************************`);
   console.log(`********签到奖励店铺群友贡献列表(本年度恭喜列表)*******************************`);
   console.log(`******* 星晴 **********************************************`);
   for (let i = 0; i < cookiesArr.length; i++) {
