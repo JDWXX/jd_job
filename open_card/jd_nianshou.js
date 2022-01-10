@@ -1,9 +1,14 @@
 /*
+脚本有问题，凑活用
 =================================Quantumultx=========================
 [task_local]
-#城城领现金
-0 0-23/5 * * * jd_zhanianshou.js, tag=城城领现金, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+#炸年兽
+0 2-23/5 * * * jd_zhanianshou.js, tag=炸年兽, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
  */
+if (process.env.ZNS != 'true') {
+    console.log('脚本默认不运行,请设置环境变量ZNS为true运行,可能黑号,运行前最少手动进去过一次')
+    return
+}
 const $ = new Env('炸年兽');
 
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -148,15 +153,19 @@ $.shareCodesArr = [];
                                 }
                                 break
                             case 21:
-                                for (var o = 0; o < task.brandMemberVos.length; o++) {
-                                    if (task.brandMemberVos[o].status == 1) {
-                                        console.log(`\n\n ${task.brandMemberVos[o].title}`)
-                                        memberUrl = task.brandMemberVos[o].memberUrl
-                                        memberUrl = transform(memberUrl)
-                                        await join(task.brandMemberVos[o].vendorIds, memberUrl.channel, memberUrl.shopId ? memberUrl.shopId : "")
-                                        await tigernian_collectScore(task.brandMemberVos[o].taskToken, task.taskId)
-                                    }
+                                if (process.env.FS_LEVEL != 'card') {
+                                    console.log('默认不开卡，设置FS_LEVEL为card开卡')
+                                }else{
+                                    for (var o = 0; o < task.brandMemberVos.length; o++) {
+                                        if (task.brandMemberVos[o].status == 1) {
+                                            console.log(`\n\n ${task.brandMemberVos[o].title}`)
+                                            memberUrl = task.brandMemberVos[o].memberUrl
+                                            memberUrl = transform(memberUrl)
+                                            await join(task.brandMemberVos[o].vendorIds, memberUrl.channel, memberUrl.shopId ? memberUrl.shopId : "")
+                                            await tigernian_collectScore(task.brandMemberVos[o].taskToken, task.taskId)
+                                        }
 
+                                    }
                                 }
                         }
 
@@ -241,7 +250,6 @@ function tigernian_sign() {
                         data = JSON.parse(data);
                         if (data.code === 0) {
                             if (data.data && data['data']['bizCode'] === 0) {
-
                                 console.log(`\n\n 签到成功`)
                                 resolve(true)
                             } else {
