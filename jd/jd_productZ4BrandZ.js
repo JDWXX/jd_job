@@ -80,6 +80,9 @@ if ($.isNode()) {
 })().catch((e) => {$.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')}).finally(() => {$.done();})
 
 async function main() {
+
+
+
     $.runFlag = false;
     $.activityInfo = {};
     await takeRequest('showSecondFloorPkInfo');
@@ -94,6 +97,11 @@ async function main() {
     $.encryptProjectId = $.activityInfo.activityBaseInfo.encryptProjectId;
     useInfo[$.UserName] = $.encryptProjectId;
     $.taskList = [];
+
+    //领取中奖
+    console.log("====领取中奖====\n")
+    await takeRequest('superBrandTaskLottery',{"source":"pk","activityId":$.activityId,"pre":"pre","teamName":$.teamName.toString()});
+
     await takeRequest('superBrandTaskList',{"source":"pk","activityId":$.activityId,"assistInfoFlag":1});
     if($.activityInfo.activityPkInfo.userTeamStatus === 0){
         console.log(`去加入战队,选择:${$.teamName}`);
