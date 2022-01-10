@@ -1,23 +1,18 @@
 /*
-/*
-年货节京享红包活动-火力值
-添加环境变量FLCODE3 如需自己返利，请填写该变量（https://u.jd.com/后面的英文）
 脚本兼容: Node.js
 ============Quantumultx===============
 [task_local]
-#年货节京享红包活动-火力值
-0 0,2,12,20,21 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js, tag=年货节京享红包活动-火力值, enabled=true
+#年货节京享红包活动
+59 59 1,11,19,23 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js, tag=年货节京享红包活动, enabled=true
 ================Loon==============
 [Script]
-cron "0 0,2,12,20,21 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js,tag=年货节京享红包活动-火力值
+cron "59 59 1,11,19,23 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js,tag=年货节京享红包活动
 ===============Surge=================
-年货节京享红包活动-火力值 = type=cron,cronexp="0 0,2,12,20,21 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js
+年货节京享红包活动 = type=cron,cronexp="59 59 1,11,19,23 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js
 ============小火箭=========
-年货节京享红包活动-火力值 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js, cronexpr="0 0,2,12,20,21 * * *", timeout=3600, enable=true
+年货节京享红包活动 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js, cronexpr="59 59 1,11,19,23 * * *", timeout=3600, enable=true
 */
-let rebateCodes = ''
-
-const $ = new Env('年货节京享红包活动-火力值');
+const $ = new Env('年货节京享红包活动');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 const Faker = $.isNode() ? require('./sign_graphics_validate.js') : '';
@@ -32,9 +27,7 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-rebateCodes = $.isNode() ? (process.env.gua_redEnvelope_rebateCode ? process.env.gua_redEnvelope_rebateCode : `${rebateCodes}`) : ($.getdata('gua_redEnvelope_rebateCode') ? $.getdata('gua_redEnvelope_rebateCode') : `${rebateCodes}`);
-
-rebateCode = ''
+rebateCode = 'SMIsByU'
 message = ''
 newCookie = ''
 resMsg = ''
@@ -144,12 +137,12 @@ function getCoupons(shareId = '',type = 1) {
           // console.log(data)
           let res = $.toObj(data,data);
           if(typeof res == 'object'){
-            if(res.msg) console.log(res.msg)
+            // if(res.msg) console.log(res.msg)
             if(res.msg.indexOf('上限') === -1 && res.msg.indexOf('登录') === -1){
               $.flag = 1
             }
             if(shareId && typeof res.data !== 'undefined' && typeof res.data.joinNum !== 'undefined'){
-              console.log(`当前${res.data.joinSuffix}:${res.data.joinNum}`)
+              // console.log(`当前${res.data.joinSuffix}:${res.data.joinNum}`)
             }
             if(res.code == 0 && res.data){
               let msg = ''
@@ -211,7 +204,7 @@ function shareUnionCoupon() {
           if(typeof res == 'object'){
             if(res.code == 0 && res.data && res.data.shareUrl){
               $.shareCode = res.data.shareUrl.match(/\?s=([^&]+)/) && res.data.shareUrl.match(/\?s=([^&]+)/)[1] || ''
-              console.log('分享码:'+$.shareCode)
+              // console.log('分享码:'+$.shareCode)
               if($.shareCode) console.log(`以下账号会助力【京东账号${$.index}】${$.nickName || $.UserName}`)
             }
           }else{
@@ -290,7 +283,7 @@ function setActivityCookie(resp){
     }
   }
 }
-
+let arr = ['Swup49Q']
 function getEid(arr) {
   return new Promise(resolve => {
     const options = {
@@ -325,13 +318,10 @@ function getEid(arr) {
 
 function getUA(){
   $.UA = `jdapp;iPhone;10.2.0;13.1.2;${randomString(40)};M/5.0;network/wifi;ADID/;model/iPhone8,1;addressid/2308460611;appBuild/167853;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;`
-  rebateCode = 'SMIsByU'
+  if(!rebateCode) rebateCode = 'SMIsByU'
   if($.index != 1){
-    let arr = [rebateCodes,'SMIsByU']
     rebateCode = arr[Math.floor(Math.random() * arr.length)] || rebateCode
-    if(!rebateCode) rebateCode = 'SMIsByU'
   }
-  console.log(rebateCode)
 }
 function randomString(e) {
   e = e || 32;
