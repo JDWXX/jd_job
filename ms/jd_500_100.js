@@ -5,14 +5,14 @@
 =================================Quantumultx=========================
 [task_local]
 #抢500-100券_中了群主回收
-10 59 21 * * * https://github.com/JDWXX/jd_job/blob/master/ms/jd_500_100.js, tag=抢500-100券_中了群主回收, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+10 59 9,21 * * * https://github.com/JDWXX/jd_job/blob/master/ms/jd_500_100.js, tag=抢500-100券_中了群主回收, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 =================================Loon===================================
 [Script]
-cron "10 59 21 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_500_100.js,tag=抢500-100券_中了群主回收
+cron "10 59 9,21 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_500_100.js,tag=抢500-100券_中了群主回收
 ===================================Surge================================
-抢500-100券_中了群主回收 = type=cron,cronexp="10 59 21 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_500_100.js
+抢500-100券_中了群主回收 = type=cron,cronexp="10 59 9,21 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_500_100.js
 ====================================小火箭=============================
-抢500-100券_中了群主回收 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_500_100.js, cronexpr="10 59 21 * * *", timeout=3600, enable=true
+抢500-100券_中了群主回收 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_500_100.js, cronexpr="10 59 9,21 * * *", timeout=3600, enable=true
  */
 const $ = new Env('抢500-100券_中了群主回收');
 const notify = $.isNode() ? require('./sendNotify') : '';
