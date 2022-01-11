@@ -96,7 +96,7 @@ async function opencard05() {
                     $.log("模拟上报访问记录")
                     for (let i = 0; i < $.openInfo.length; i++) {
                         await task('crm/pageVisit/insertCrmPageVisit', `venderId=${$.openInfo[i]['venderId']}&pageId=dz2109100010214101&elementId=${encodeURIComponent(`去开卡${i}`)}&pin=${encodeURIComponent($.secretPin)}`, 1)
-                        await $.wait(1000)
+                        await $.wait(3000)
                     }
                     $.log("开卡")
                     for (let c of $.openInfo) {
@@ -113,7 +113,7 @@ async function opencard05() {
                                 },
                                 c['venderId']
                             );
-                            await $.wait(1000);
+                            await $.wait(3000);
                         }
                     }
                 } else {
@@ -121,20 +121,20 @@ async function opencard05() {
                 }
                 await getFirstLZCK()
                 await task('dz/common/getSimpleActInfoVo', `activityId=${$.activityId}`, 1)
-                await $.wait(1000)
+                await $.wait(3000)
                 await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=SQ`, 1);
                 // await task('majorsuit/memberday/activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&pinImg=${encodeURIComponent($.pinImg)}&nick=${encodeURIComponent($.pin)}&cjyxPin=&cjhyPin=&shareUuid=${encodeURIComponent($.authorCode)}`)
                 await task("taskact/common/drawContent", `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`)
-                await $.wait(1000)
+                await $.wait(3000)
                 await task('majorsuit/memberday/initOpenCard', `activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&pin=${encodeURIComponent($.secretPin)}`)
                 $.log("抽奖\n");
                 for (let index = 0; index < $.score; index++) {
-                    await $.wait(1000)
+                    await $.wait(3000)
                     await getFirstLZCK()
                     await task('majorsuit/memberday/draw', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`)
                     
                 }
-                await $.wait(1000)
+                await $.wait(3000)
                 $.log("\n逛会场")
                 await task('majorsuit/memberday/saveTask', `activityId=${$.activityId}&actorUuid=${$.actorUuid}&shareUuid=${$.authorCode}&pin=${encodeURIComponent($.secretPin)}&taskType=12&taskValue=3&shareUuid=${$.authorCode}`)
             } else {
