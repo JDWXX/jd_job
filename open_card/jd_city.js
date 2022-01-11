@@ -184,7 +184,8 @@ function taskPostUrl(functionId,body) {
   }
 }
 function getInfo(inviteId, flag = false) {
-  let body = {"lbsCity":"","realLbsCity":"","inviteId":inviteId,"headImg":"","userName":""}
+  let body = {"lbsCity":"1","realLbsCity":"2953","inviteId":inviteId,"headImg":"","userName":"","taskChannel":"1","location":"","safeStr":""}
+  // let body = {"lbsCity":"","realLbsCity":"","inviteId":inviteId,"headImg":"","userName":""}
   return new Promise((resolve) => {
     $.post(taskPostUrl("city_getHomeDatav1",body), async (err, resp, data) => {
       // console.debug(data)
