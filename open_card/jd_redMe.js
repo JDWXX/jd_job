@@ -3,14 +3,14 @@
 ============Quantumultx===============
 [task_local]
 #年货节红包-火力值助力
-59 59 1,11,19,23 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js, tag=年货节红包-火力值助力, enabled=true
+0 0,8,10,20,22 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js, tag=年货节红包-火力值助力, enabled=true
 ================Loon==============
 [Script]
-cron "59 59 1,11,19,23 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js,tag=年货节红包-火力值助力
+cron "0 0,8,10,20,22 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js,tag=年货节红包-火力值助力
 ===============Surge=================
-年货节红包-火力值助力 = type=cron,cronexp="59 59 1,11,19,23 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js
+年货节红包-火力值助力 = type=cron,cronexp="0 0,8,10,20,22 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js
 ============小火箭=========
-年货节红包-火力值助力 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js, cronexpr="59 59 1,11,19,23 * * *", timeout=3600, enable=true
+年货节红包-火力值助力 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red_me.js, cronexpr="0 0,8,10,20,22 * * *", timeout=3600, enable=true
 */
 const $ = new Env('年货节红包');
 let rebateCodes = 'SLua6fE'
