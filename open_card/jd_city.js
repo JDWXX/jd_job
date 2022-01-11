@@ -197,8 +197,12 @@ function getInfo(inviteId, flag = false) {
           if (safeGet(data)) {
             // if (inviteId) $.log(`\n助力结果:\n${data}\n`)
             data = JSON.parse(data);
-            if (data.data && !data.data.result.userActBaseInfo.inviteId) {
+            if (!data.data || !data.data.result || !data.data.result.userActBaseInfo || !data.data.result.userActBaseInfo.inviteId) {
+              console.log(data.data.bizMsg);
+              return
+            } else if (data.data && !data.data.result.userActBaseInfo.inviteId) {
               console.log(`账号已黑，看不到邀请码`);
+              return
             } else {
               if (flag){
                 const code = data.data && data.data.result.userActBaseInfo.inviteId
