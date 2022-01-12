@@ -29,7 +29,7 @@ if ($.isNode()) {
         return;
     }
     $.teamName = "left"
-    for (let i = 0; i < 150; i++) {
+    for (let i = 0; i < cookiesArr.length; i++) {
         UA = `jdapp;iPhone;10.0.8;14.6;${randomWord(false,40,40)};network/wifi;JDEbook/openapp.jdreader;model/iPhone9,2;addressid/2214222493;appBuild/168841;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16E158;supportJDSHWK/1`;
         $.index = i + 1;
         $.cookie = cookiesArr[i];
@@ -56,7 +56,7 @@ if ($.isNode()) {
     if($.allInvite.length > 0 ){
         console.log(`\n开始脚本内互助\n`);
     }
-    // cookiesArr = getRandomArrayElements(cookiesArr,cookiesArr.length);
+    cookiesArr = getRandomArrayElements(cookiesArr,cookiesArr.length);
     for (let i = 0; i < cookiesArr.length; i++) {
         $.cookie = cookiesArr[i];
         $.canHelp = true;
