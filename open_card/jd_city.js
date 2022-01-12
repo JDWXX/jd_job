@@ -94,7 +94,7 @@ let CCLXJZDList = []
             continue
           }
           await getInfo('',true);
-          await $.wait(1000)
+          await $.wait(2000)
         }
       }
     }
@@ -157,7 +157,7 @@ let CCLXJZDList = []
       //     }
       //   }
       // }
-      await $.wait(1000)
+      await $.wait(2000)
     }
   }
 })()
