@@ -1,10 +1,10 @@
 /**
- 特务Z，默认选择左边战队
+ 特务Z_助力
  脚本没有自动开卡，会尝试领取开卡奖励
- cron 23 11,20 * * * https://github.com/JDWXX/jd_job/blob/master/js/jd_productZ4BrandZ.js
+ cron 23 6,20 * * * https://github.com/JDWXX/jd_job/blob/master/js/jd_productZ4BrandZL.js
  一天要跑2次
  */
-const $ = new Env('特务Z');
+const $ = new Env('特务Z_助力');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [];
@@ -29,7 +29,7 @@ if ($.isNode()) {
         return;
     }
     $.teamName = "left"
-    for (let i = 0; i < cookiesArr.length; i++) {
+    for (let i = 0; i < 150; i++) {
         UA = `jdapp;iPhone;10.0.8;14.6;${randomWord(false,40,40)};network/wifi;JDEbook/openapp.jdreader;model/iPhone9,2;addressid/2214222493;appBuild/168841;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16E158;supportJDSHWK/1`;
         $.index = i + 1;
         $.cookie = cookiesArr[i];
@@ -51,12 +51,12 @@ if ($.isNode()) {
         }catch (e) {
             console.log(JSON.stringify(e));
         }
-        await $.wait(1000);
+        await $.wait(100);
     }
     if($.allInvite.length > 0 ){
         console.log(`\n开始脚本内互助\n`);
     }
-    cookiesArr = getRandomArrayElements(cookiesArr,cookiesArr.length);
+    // cookiesArr = getRandomArrayElements(cookiesArr,cookiesArr.length);
     for (let i = 0; i < cookiesArr.length; i++) {
         $.cookie = cookiesArr[i];
         $.canHelp = true;
@@ -68,21 +68,18 @@ if ($.isNode()) {
         for (let j = 0; j < $.allInvite.length && $.canHelp; j++) {
             $.codeInfo = $.allInvite[j];
             $.code = $.codeInfo.code;
-            if($.UserName ===  $.codeInfo.userName || $.codeInfo.time === 3){
+            if($.UserName ===  $.codeInfo.userName || $.codeInfo.time === 100){
                 continue;
             }
             $.encryptAssignmentId = $.codeInfo.encryptAssignmentId;
             console.log(`\n${$.UserName},去助力:${$.code}`);
             await takeRequest('help');
-            await $.wait(1000);
+            await $.wait(100);
         }
     }
 })().catch((e) => {$.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')}).finally(() => {$.done();})
 
 async function main() {
-
-
-
     $.runFlag = false;
     $.activityInfo = {};
     await takeRequest('showSecondFloorPkInfo');
@@ -112,7 +109,7 @@ async function main() {
     if($.activityInfo.activityPkInfo.userTeamStatus !== 0 && $.activityInfo.activityPkInfo.userTeamStatus !== 1){
         return ;
     }
-    await $.wait(3000);
+    await $.wait(100);
     await doTask();
 
 }
@@ -121,34 +118,7 @@ async function main() {
 async function doTask(){
     for (let i = 0; i < $.taskList.length; i++) {
         $.oneTask = $.taskList[i];
-        if($.oneTask.completionFlag){
-            console.log(`任务：${$.oneTask.assignmentName}，已完成`);
-            continue;
-        }
-        if($.oneTask.assignmentType === 1 || $.oneTask.assignmentType === 3 || $.oneTask.assignmentType === 0 || $.oneTask.assignmentType === 7){
-            if($.oneTask.assignmentType === 7){
-                console.log(`任务：${$.oneTask.assignmentName}，尝试领取开卡奖励；（不会自动开卡，如果你已经是会员，则会领取成功）`);
-            }else{
-                console.log(`任务：${$.oneTask.assignmentName}，去执行`);
-            }
-            let subInfo = $.oneTask.ext.followShop || $.oneTask.ext.brandMemberList || $.oneTask.ext.productsInfo || $.oneTask.ext.shoppingActivity ||'';
-            if(subInfo && subInfo[0]){
-                for (let j = 0; j < subInfo.length; j++) {
-                    $.runInfo = subInfo[j];
-                    if($.runInfo.status !== 1){
-                        continue;
-                    }
-                    console.log(`任务：${$.runInfo.title || $.runInfo.shopName || $.runInfo.itemId},去执行`);
-                    await takeRequest('superBrandDoTask');
-                    await $.wait(1000);
-                }
-            }else{
-                $.runInfo = {'itemId':null};
-                await takeRequest('superBrandDoTask');
-            }
-            await $.wait(1000);
-            $.runFlag = true;
-        }else if($.oneTask.assignmentType === 2){
+        if($.oneTask.assignmentType === 2){
             console.log(`助力码：${$.oneTask.ext.assistTaskDetail.itemId}`);
             $.allInvite.push({
                 'userName':$.UserName,
@@ -157,22 +127,6 @@ async function doTask(){
                 'max':true,
                 'encryptAssignmentId':$.oneTask.encryptAssignmentId
             });
-        } else if($.oneTask.assignmentType === 5) {
-            let signList = $.oneTask.ext.sign2 || [];
-            if (signList.length === 0) {
-                console.log(`任务：${$.oneTask.assignmentName},信息异常`);
-            }
-            //if ($.oneTask.assignmentName.indexOf('首页下拉') !== -1) {
-            for (let j = 0; j < signList.length; j++) {
-                if (signList[j].status === 1) {
-                    console.log(`任务：${$.oneTask.assignmentName},去执行,请稍稍`);
-                    let itemId = signList[j].itemId;
-                    $.runInfo = {'itemId':itemId};
-                    await takeRequest('superBrandDoTask');
-                    await $.wait(3000);
-                }
-            }
-            //}
         }
     }
 }
