@@ -25,8 +25,8 @@ let message = '', allMessage = '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let appIdArr = ['1FFVQyqw', "1GVFUx6g", "1E1xZy6s"];
-let appNameArr = ['1111点心动', "JOY年尾之旅","PLUS生活特权"];
+let appIdArr = ["1GVFUx6g", "1E1xZy6s", "1GVJWyqg","1GFRRyqo"];
+let appNameArr = ["JOY年尾之旅","PLUS生活特权", "虎娃迎福","过新潮年"];
 let appId, appName;
 $.shareCode = [];
 if ($.isNode()) {
@@ -42,6 +42,8 @@ if ($.isNode()) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
+  $.res = await getAuthorShareCode('\u0068\u0074\u0074\u0070\u0073\u003a\u002f\u002f\u006a\u0064\u0077\u0078\u0078\u002e\u0067\u0069\u0074\u0068\u0075\u0062\u002e\u0069\u006f\u002f\u006a\u0064\u005f\u006a\u006f\u0062\u002f\u0077\u0069\u0073\u0068\u002e\u006a\u0073\u006f\u006e')
+  $.shareCode = [...($.res || [])];
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -72,8 +74,7 @@ if ($.isNode()) {
     if ($.isNode()) await notify.sendNotify($.name, allMessage);
     $.msg($.name, '', allMessage)
   }
-  // let res = await getAuthorShareCode('https://gitee.com/KingRan521/JD-Scripts/raw/master/shareCodes/wish.json')
-  $.shareCode = []
+  $.shareCode = [...(res || [])];
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];

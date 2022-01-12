@@ -184,7 +184,7 @@ function taskPostUrl(functionId,body) {
   }
 }
 function getInfo(inviteId, flag = false) {
-  let body = {"lbsCity":"1","realLbsCity":"2953","inviteId":inviteId,"headImg":"","userName":"","taskChannel":"1","location":"","safeStr":""}
+  let body = {"lbsCity":"","realLbsCity":"","inviteId":inviteId,"headImg":"","userName":"","taskChannel":"1","location":"","safeStr":""}
   // let body = {"lbsCity":"","realLbsCity":"","inviteId":inviteId,"headImg":"","userName":""}
   return new Promise((resolve) => {
     $.post(taskPostUrl("city_getHomeDatav1",body), async (err, resp, data) => {
@@ -300,28 +300,6 @@ function city_lotteryAward() {
         resolve();
       }
     })
-  })
-}
-function readShareCode(num=3) {
-  return new Promise(async resolve => {
-    $.get({url: `https://api.jdsharecode.xyz/api/city/${num}`, 'timeout': 10000}, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            data = JSON.parse(data);
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-    await $.wait(10000);
-    resolve()
   })
 }
 //格式化助力码
