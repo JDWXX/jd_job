@@ -86,7 +86,7 @@ let activityCookie =''
     $.activityId = "dz220106100001616201Union"
     $.shareUuid = "a5b41d3d93f04a9580a078771070a16a"
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/index/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
-    let shareUuidArr = [$.shareUuid,$.shareUuid,$.shareUuid,$.shareUuid,$.shareUuid,$.shareUuid,$.shareUuid,$.shareUuid,$.shareUuid,$.shareUuid,"a5b41d3d93f04a9580a078771070a16a"]
+    let shareUuidArr = ["a5b41d3d93f04a9580a078771070a16a"]
     let s = Math.floor((Math.random()*10))
     let n = 0
     if(s == 1) n = Math.floor((Math.random()*shareUuidArr.length))
@@ -244,10 +244,10 @@ async function run() {
             return
         }
         console.log($.actorUuid)
-        console.log(`当前助力:${$.shareUuid}`)
+        console.log(`当前助力:${$.actorUuid}`)
         if($.index == 1){
             $.shareUuid = $.actorUuid
-            console.log(`后面的号都会助力:${$.shareUuid}`)
+            console.log(`后面的号都会助力:${$.actorUuid}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
         if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
