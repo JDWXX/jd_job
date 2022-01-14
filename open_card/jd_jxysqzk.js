@@ -31,7 +31,10 @@ const JD_API_HOST = `https://m.jingxi.com`;
   if (res) {
     authorCode = res.sort(() => 0.5 - Math.random())
   }
-    for (let i = 0; i < ttysqzl; i++) {
+
+    console.log(`\n环境变量添加 ttysqzl 设置助力前几名，默认只助力第一名，满助力为30人 \n`);
+
+   for (let i = 0; i < ttysqzl; i++) {
     cookie = cookiesArr[i];
     if (cookie) {
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
