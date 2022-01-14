@@ -61,33 +61,39 @@ if ($.isNode()) {
 
   console.log('\n#######开始全部助力账号#######\n');
   console.log(inviteCodes);
+
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
     $.index = i + 1;
 
     if (!cookie) continue
-    $.tiaoguo = false
-    $.tiaoguock = false
-    for (let code of inviteCodes) {
-      if ($.UserName === code['user']) continue;
+    $.跳过助力 = false
+    $.跳过账号 = false
+    $.满了 = false
+    for (let j = 0; j < inviteCodes.length; j++) {
+      if ($.UserName === inviteCodes[j]['user']) continue;
       if ($.index === 1 && 2)
         break
-      await helpCoinDozer(code['packetId'])
-      console.log(`\n【${$.UserName}】去助力【${code['user']}】邀请码：${code['packetId']}`);
+      await helpCoinDozer(inviteCodes[j]['packetId'])
+      console.log(`\n【${$.UserName}】去助力【${inviteCodes[j]['user']}】邀请码：${inviteCodes[j]['packetId']}`);
       if (status == 1) {
-        inviteCodes.splice(inviteCodes.findIndex(item => item == code), 1);
+        inviteCodes.splice(inviteCodes.findIndex(item => item == inviteCodes[j]), 1);
         break
       }
-      await $.wait(1000)
-      if($.tiaoguo)
+      await $.wait(3000)
+      if($.跳过账号)
+        continue
+      if($.跳过助力)
         break
-      if($.tiaoguock)
+      if($.满了){
+        inviteCodes.splice(j-1,1);
         break
-      $.tiaoguo = false
-      $.tiaoguock = false
-      let res = await help(code['packetId'])}
-  }
+      }
+      $.跳过助力 = false
+      $.跳过账号 = false
+      let res = await help(inviteCodes[j]['packetId'])}
+    }
 
 })()
     .catch((e) => {
@@ -282,11 +288,13 @@ function help(packetId) {
           }
           if(data.success==false){
             if("帮砍机会已用完" == data.msg){
-              $.tiaoguo = true
+              $.跳过账号 = true
             }
             if("帮砍排队" == data.msg){
-              $.tiaoguock = true
-              $.tiaoguo = true
+              $.跳过助力 = true
+            }
+            if("已完成砍价" == data.msg){
+              $.满了 = true
             }
             console.log(data.msg)
           }
