@@ -6,7 +6,7 @@
 0 0 * * * http://47.101.146.160/scripts/jd_tyt.js, tag=搞基大神-推一推, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 */
 
-const $ = new Env('搞基大神-推一推');
+const $ = new Env('极速版五元无门槛优惠券 推一推');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -16,7 +16,7 @@ let cookiesArr = [], cookie = '', message;
 let status=''
 
 let inviteCodes = []
-let leng = 5 //助力前几名账号
+let leng = 30 //助力前几名账号
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -34,12 +34,6 @@ if ($.isNode()) {
   }
   console.log('\n入口 狗东极速版 赚金币 推一推\n');
   console.log('\n本脚本无任何内置助力\n如果你发现有那么就是别人二改加的\n一切与本人无关\n');
-  if (process.env.tytzl && process.env.tytzl != "") {
-    leng = process.env.tytzl;
-  }
-  if(cookiesArr.length < 5)
-    leng = 1
-  console.log('\n推一推助力前' + leng + '名账号 默认 如需修改 环境变量添加 tytzl 值 10，则前10账号会被助力\n');
   for (let i = 0; i < leng; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -73,6 +67,8 @@ if ($.isNode()) {
     $.index = i + 1;
 
     if (!cookie) continue
+    $.tiaoguo = false
+    $.tiaoguock = false
     for (let code of inviteCodes) {
       if ($.UserName === code['user']) continue;
       if ($.index === 1 && 2)
@@ -83,10 +79,15 @@ if ($.isNode()) {
         inviteCodes.splice(inviteCodes.findIndex(item => item == code), 1);
         break
       }
-      await $.wait(10000)
+      await $.wait(1000)
+      if($.tiaoguo)
+        break
+      if($.tiaoguock)
+        break
+      $.tiaoguo = false
+      $.tiaoguock = false
       let res = await help(code['packetId'])}
   }
-
 
 })()
     .catch((e) => {
@@ -96,7 +97,6 @@ if ($.isNode()) {
       $.done();
     })
 
-
 function info() {
   return new Promise((resolve) => {
 
@@ -104,7 +104,6 @@ function info() {
       url: `${JD_API_HOST}`,
       body:`functionId=initiateCoinDozer&body={"actId":"d5a8c7198ee54de093d2adb04089d3ec","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s"}&appid=megatron&client=ios&clientVersion=14.3&t=1636014459632&networkType=4g&eid=&fp=-1&frontendInitStatus=s&uuid=8888&osVersion=14.3&d_brand=&d_model=&agent=-1&pageClickKey=-1&screen=400*700&platform=3&lang=zh_CN`,
       headers: {
-
         "Cookie": cookie,
         "Origin": "https://pushgold.jd.com",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
@@ -149,11 +148,9 @@ function infos() {
       url: `${JD_API_HOST}`,
       body:`functionId=initiateCoinDozer&body={"actId":"d5a8c7198ee54de093d2adb04089d3ec","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s"}&appid=megatron&client=ios&clientVersion=14.3&t=1636014459632&networkType=4g&eid=&fp=-1&frontendInitStatus=s&uuid=8888&osVersion=14.3&d_brand=&d_model=&agent=-1&pageClickKey=-1&screen=400*700&platform=3&lang=zh_CN`,
       headers: {
-
         "Cookie": cookie,
         "Origin": "https://pushgold.jd.com",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
-
       }
     }
     $.post(nm, async (err, resp, data) => {
@@ -180,20 +177,16 @@ function infos() {
 }
 function coinDozerBackFlow() {
   return new Promise((resolve) => {
-
     const nm= {
       url: `${JD_API_HOST}`,
       body:`functionId=coinDozerBackFlow&body={"actId":"d5a8c7198ee54de093d2adb04089d3ec","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s"}&appid=megatron&client=ios&clientVersion=14.3&t=1636015617899&networkType=4g&eid=&fp=-1&frontendInitStatus=s&uuid=8888&osVersion=14.3&d_brand=&d_model=&agent=-1&pageClickKey=-1&screen=400*700&platform=3&lang=zh_CN`,
       headers: {
-
         "Cookie": cookie,
         "Origin": "https://pushgold.jd.com",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
-
       }
     }
     $.post(nm, async (err, resp, data) => {
-
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -207,7 +200,6 @@ function coinDozerBackFlow() {
           }else if(data.success==false){
             console.log(data.msg)}
         }
-
       } catch (e) {
         $.logErr(e, resp)
       } finally {
@@ -282,7 +274,6 @@ function help(packetId) {
             data = JSON.parse(data);
             if(data.success==true){
               console.log("帮砍：" + data.data.amount)
-
             }
           }
           else
@@ -290,7 +281,15 @@ function help(packetId) {
             status = 1
           }
           if(data.success==false){
-            console.log(data.msg)}
+            if("帮砍机会已用完" == data.msg){
+              $.tiaoguo = true
+            }
+            if("帮砍排队" == data.msg){
+              $.tiaoguock = true
+              $.tiaoguo = true
+            }
+            console.log(data.msg)
+          }
         }
 
       } catch (e) {
@@ -329,12 +328,10 @@ function getCoinDozerInfo() {
               console.log('叼毛：'+data.data.sponsorActivityInfo.initiatorNickname)
               console.log('邀请码：'+data.data.sponsorActivityInfo.packetId)
               console.log('推出：'+data.data.sponsorActivityInfo.dismantledAmount)
-
-              if (data.data && data.data.sponsorActivityInfo.packetId && inviteCodes.length === 0) {
+              if (data.data && data.data.sponsorActivityInfo.packetId && inviteCodes.length < leng) {
                 inviteCodes.push({
                   user: $.UserName,
                   packetId: data.data.sponsorActivityInfo.packetId
-
                 });
               }
             }else if(data.success==false){
