@@ -275,21 +275,21 @@ def boom():
         logger.info("Verification passed")
         logger.info("--------------------\n")
 
-
-def update():
-    up_ver = int(cloud_arg['update'])
-    if ver >= up_ver:
-        logger.info("当前脚本版本: " + str(ver))
-        logger.info("--------------------\n")
-    else:
-        logger.info("当前脚本版本: " + str(ver) + "新版本: " + str(up_ver))
-        logger.info("存在新版本, 请更新脚本后执行")
-        logger.info("--------------------\n")
-        text = '当前脚本版本: {0}新版本: {1}, 请更新脚本~!'.format(ver, up_ver)
-        try:
-            send('WSKEY转换', text)
-        except:
-            logger.info("通知发送失败")
+#
+# def update():
+#     up_ver = int(cloud_arg['update'])
+#     if ver >= up_ver:
+#         logger.info("当前脚本版本: " + str(ver))
+#         logger.info("--------------------\n")
+#     else:
+#         logger.info("当前脚本版本: " + str(ver) + "新版本: " + str(up_ver))
+#         logger.info("存在新版本, 请更新脚本后执行")
+#         logger.info("--------------------\n")
+#         text = '当前脚本版本: {0}新版本: {1}, 请更新脚本~!'.format(ver, up_ver)
+#         try:
+#             send('WSKEY转换', text)
+#         except:
+#             logger.info("通知发送失败")
         # sys.exit(0)
 
 
@@ -456,7 +456,7 @@ if __name__ == '__main__':
     s.headers.update({"Content-Type": "application/json;charset=UTF-8"})
     url_t = check_cloud()
     cloud_arg = cloud_info()
-    update()
+    # update()
     boom()
     ua = cloud_arg['User-Agent']
     sv, st, uuid, sign = get_sign()
