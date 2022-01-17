@@ -12,7 +12,7 @@ cron:30 4,18 10-28 1 *
 [task_local]
 #1.10～1.28 会员邀新赢万元年货大奖
 30 4,18 10-28 1 * jd_opencardL42.js, tag=1.10～1.28 会员邀新赢万元年货大奖, enabled=true
-*/dz2112100001448501
+*/
 
 const $ = new Env('1.10～1.28 会员邀新赢万元年货大奖');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
