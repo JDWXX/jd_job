@@ -14,7 +14,7 @@ export gua_nhjRed_rebatePin="pin1,pin2"
 */
 let rebateCodes = ''
 let rebatePin = ''
-const $ = new Env('年货节红包');
+const $ = new Env('年货节红包—火力值');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 CryptoScripts()
