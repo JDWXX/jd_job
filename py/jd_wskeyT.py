@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*
 '''
-cron: 0 0 0/8 * * * jd_wskey.py
+cron: 4,13,20 * * * jd_wskeyT.py
 new Env('wskey转换');
 '''
 
