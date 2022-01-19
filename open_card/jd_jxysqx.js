@@ -1,11 +1,10 @@
 /*
-#天天压岁钱-助力
-50 0,11,14,20 * * * jd_jxysqzk.js
+#天天压岁钱
+50 0,14,20 * * * jd_jxysqx.js
  */
-const $ = new Env('天天压岁钱-助力');
+const $ = new Env('天天压岁钱');
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let ttysqzl = process.env.ttysqzl ? Number(process.env.ttysqzl) : 1
 const notify = $.isNode() ? require('./sendNotify') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [],
@@ -29,14 +28,12 @@ const JD_API_HOST = `https://m.jingxi.com`;
         $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    console.log(`\n环境变量添加 ttysqzl 设置助力前几名，默认只助力第一名，满助力为30人\n`);
-
     //await getToken();
     cookiesArr = cookiesArr.map(ck => ck + `joyytoken=50084${joyToken};`)
     $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS
-
-    //获取助力
-    for (let i = 0; i < ttysqzl; i++) {
+    //做任务
+    console.log(`\n优先内部，剩余助力作者！！\n`)
+    for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -44,57 +41,38 @@ const JD_API_HOST = `https://m.jingxi.com`;
             $.isLogin = true;
             $.nickName = '';
             if (!$.isLogin) {
-                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
                 continue
             }
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+            //做任务
             await main()
             if (i != cookiesArr.length - 1) {
                 await $.wait(3000)
             }
         }
     }
-    // //做任务
-    // for (let i = 0; i < cookiesArr.length; i++) {
-    //     cookie = cookiesArr[i];
-    //     if (cookie) {
-    //         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-    //         $.index = i + 1;
-    //         $.isLogin = true;
-    //         $.nickName = '';
-    //         if (!$.isLogin) {
-    //             $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
-    //             continue
-    //         }
-    //         console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-    //         //做任务
-    //         await main()
-    //         if (i != cookiesArr.length - 1) {
-    //             await $.wait(3000)
-    //         }
-    //     }
-    // }
     // let res = await getAuthorShareCode('https://gitee.com/KingRan521/JD-Scripts/raw/master/shareCodes/ttysq2.json')
     // if (!res) {
     //     res = await getAuthorShareCode('https://gitee.com/KingRan521/JD-Scripts/raw/master/shareCodes/ttysq2.json')
     // }
-    // let res = []
-    // if (res) {
-    //     authorCode = res.sort(() => 0.5 - Math.random())
-    //     if (authorCode.length > 3) {
-    //         authorCode = authorCode.splice(0, 3)
-    //     }
-    //     authorCode = authorCode.map(entity => {
-    //         return {
-    //             "user": "author",
-    //             "code": entity.code,
-    //             "redId": entity.rpids[Math.floor((Math.random() * entity.rpids.length))],
-    //             "beHelp": 0,
-    //             "helpId": $.taskId
-    //         }
-    //     })
-    //     $.shareCoseList = [...$.shareCoseList, ...authorCode]
-    // }
+    let res = []
+    if (res) {
+        authorCode = res.sort(() => 0.5 - Math.random())
+        if (authorCode.length > 3) {
+            authorCode = authorCode.splice(0, 3)
+        }
+        authorCode = authorCode.map(entity => {
+            return {
+                "user": "author",
+                "code": entity.code,
+                "redId": entity.rpids[Math.floor((Math.random() * entity.rpids.length))],
+                "beHelp": 0,
+                "helpId": $.taskId
+            }
+        })
+        $.shareCoseList = [...$.shareCoseList, ...authorCode]
+    }
     console.log(`要助力的助力码${JSON.stringify($.shareCoseList.length)}个\n`)
     //助力任务
     for (let i = 0; i < cookiesArr.length; i++) {
