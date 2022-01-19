@@ -475,6 +475,7 @@ def check_cloud():
 
 if __name__ == '__main__':
     logger.info("\n--------------------\n")
+    logger.info("\n定时规则为每天 4,13,20 运行，如有不合适可自行更改\n")
     if "QL_PORT" in os.environ:
         try:
             port = int(os.environ['QL_PORT'])
