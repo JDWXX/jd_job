@@ -64,7 +64,7 @@ let activityCookie =''
   $.userId = '10299171'
   $.actId = '329e27c899d34933a13d0514eb3e_22012003'
   $.MixNicks = ''
-  $.inviteNick = 'jse2kYZTwEHHBmw2O3n/AsjNhNaYFy2HteErE6izlhTf9nrGY7gBkCdGU4C6z/xD'
+  $.inviteNick = 'OZWWyV+UF+4hIUxWAWXPsqnQSaK0OgzhoJLIa/XEluWWXc0uQ5WlWk8J2tBF2Jsj'
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     if (cookie) {
