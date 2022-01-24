@@ -145,7 +145,7 @@ async function run() {
     await takePostRequest('myAward');
     await takePostRequest('missionInviteList');
     console.log($.MixNick)
-    console.log(`当前助力:${$.inviteNick}`)
+    console.log(`当前助力:${$.MixNick}`)
     await $.wait(parseInt(Math.random() * 1000 + 3000, 10))
     if($.index % 5 == 0) console.log('休息1分钟，别被黑ip了\n可持续发展')
     if($.index % 5 == 0) await $.wait(parseInt(Math.random() * 500 + 5000, 10))

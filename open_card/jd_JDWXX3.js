@@ -110,8 +110,9 @@ async function run() {
         await takePostRequest('shopList');
         for(o of $.openList){
             $.missionType = 'openCard'
-            if(o.open != true && o.openCardUrl){
-                $.openCard = false
+            if(o.open != true){
+                console.log(o)
+                // $.openCard = false
                 $.joinVenderId = o.userId
                 await takePostRequest('mission');
                 await $.wait(parseInt(Math.random() * 3000 + 3000, 10))
@@ -154,11 +155,11 @@ async function run() {
         }
         await takePostRequest('myAward');
         await takePostRequest('missionInviteList');
-        console.log($.MixNick)
-        console.log(`当前助力:${$.inviteNick}`)
+        // console.log($.MixNick)
+        // console.log(`当前助力:${$.MixNick}`)
         if($.index == 1){
-            $.inviteNick = $.MixNick
-            console.log(`后面的号都会助力:${$.inviteNick}`)
+            // $.inviteNick = $.MixNick 没奖励了
+            // console.log(`后面的号都会助力:${$.MixNick}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
         if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
@@ -319,7 +320,7 @@ async function dealReturn(type, data) {
                                     $.hasCollectShop = res.data.missionCustomer.hasCollectShop || 0
                                 }
                             }else if(type == "shopList"){
-                                $.openList = res.data.cusShops || []
+                                $.openList = res.data.cusShops
                             }else if(type == "mission"){
                                 if(res.data.remark.indexOf('不是会员') > -1){
                                     $.openCard = true
@@ -471,7 +472,8 @@ function joinShop() {
         }
         $.get(options, async (err, resp, data) => {
             try {
-                // console.log(data)
+                console.log("=========")
+                console.log(data)
                 let res = $.toObj(data);
                 if(typeof res == 'object'){
                     if(res.success === true){

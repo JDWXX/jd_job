@@ -12,7 +12,7 @@
 let guaopencard_addSku = "false"
 let guaopencard = "false"
 let guaopenwait = "0"
-let guaopencard_draw = "0"
+let guaopencard_draw = "3"
 
 const $ = new Env('1.21~1.28 年货不打烊');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -70,7 +70,6 @@ let activityCookie =''
     return;
   }
   $.shareUuid = "78cc0d3d053f444a93e45486735ba0bc"
-
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     if (cookie) {
@@ -187,25 +186,23 @@ async function run() {
       await takePostRequest('activityContent');
     }
     console.log(`${$.score}值`)
-    if(guaopencard_draw+"" !== "0"){
-      $.runFalag = true
-      let count = parseInt($.score/100)
-      guaopencard_draw = parseInt(guaopencard_draw, 10)
-      if(count > guaopencard_draw) count = guaopencard_draw
-      console.log(`抽奖次数为:${count}`)
-      for(m=1;count--;m++){
-        console.log(`第${m}次抽奖`)
-        await takePostRequest('抽奖');
-        if($.runFalag == false) break
-        if(Number(count) <= 0) break
-        if(m >= 10){
-          console.log("抽奖太多次，多余的次数请再执行脚本")
-          break
-        }
-        await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
+    $.runFalag = true
+    let count = parseInt($.score/100)
+    guaopencard_draw = parseInt(guaopencard_draw, 10)
+    if(count > guaopencard_draw) count = guaopencard_draw
+    console.log(`抽奖次数为:${count}`)
+    for(m=1;count--;m++){
+      console.log(`第${m}次抽奖`)
+      await takePostRequest('抽奖');
+      if($.runFalag == false) break
+      if(Number(count) <= 0) break
+      if(m >= 10){
+        console.log("抽奖太多次，多余的次数请再执行脚本")
+        break
       }
-    }else console.log('如需抽奖请设置环境变量[guaopencard_draw108]为"3" 3为次数');
-    
+      await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
+    }
+
     await $.wait(parseInt(Math.random() * 1000 + 2000, 10))
     await takePostRequest('getDrawRecordHasCoupon');
     await takePostRequest('getShareRecord');
@@ -213,11 +210,11 @@ async function run() {
       console.log('此ip已被限制，请过10分钟后再执行脚本\n')
       return
     }
-    console.log($.actorUuid)
-    console.log(`当前助力:${$.shareUuid}`)
+    // console.log($.actorUuid)
+    // console.log(`当前助力:${$.actorUuid}`)
     if($.index == 1){
-      $.shareUuid = $.actorUuid
-      console.log(`后面的号都会助力:${$.shareUuid}`)
+      // $.shareUuid = $.actorUuid 没奖励了
+      // console.log(`后面的号都会助力:${$.actorUuid}`)
     }
     await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
     if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))

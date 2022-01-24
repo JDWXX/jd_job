@@ -209,12 +209,12 @@ async function run() {
         }else console.log('如需抽奖请设置环境变量[guaopencard_draw90]为"3" 3为次数');
         await takePostRequest('myAward');
         await takePostRequest('missionInviteList');
-        console.log($.MixNick)
-        console.log(`当前助力:${$.inviteNick}`)
-        if($.index == 1){
-            $.inviteNick = $.MixNick
-            console.log(`后面的号都会助力:${$.inviteNick}`)
-        }
+        // console.log($.MixNick)
+        // console.log(`当前助力:${$.inviteNick}`)
+        // if($.index == 1){
+        //     $.inviteNick = $.MixNick
+        //     console.log(`后面的号都会助力:${$.inviteNick}`)
+        // }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
         if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
         if(guaopenwait){

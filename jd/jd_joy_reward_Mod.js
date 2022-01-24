@@ -147,19 +147,17 @@ async function joyReward() {
 					}
 				} catch (e) {
 					llError = true;
+				}
+				if (!llError && saleInfoId) {
+					console.log('成功获取场次信息...');
+					break;
+				} else {
 					console.log('东哥搞事情，不给京豆ID，等待5秒后重新获取...');
 					await $.wait(5000);
 				}
-				if (llError) {
-					continue;
-				} else {
-					console.log('成功获取场次信息...');
-					break;
-				}
-
 			}
 		}
-		if (llError) {
+		if (llError || !saleInfoId) {
 			console.log('东哥说现在不给你兑换，死了这条心吧...');
 			return;
 		}
@@ -265,9 +263,7 @@ async function joyReward() {
 							if (!saleInfoId)
 								continue;
 							console.log(`开始兑换${rewardNum}京豆,时间 ${(new Date()).Format("yyyy-MM-dd hh:mm:ss | S")}`);
-							for (let i = 0; i < 10; i++) {
-								await exchange(saleInfoId, 'pet');
-							}
+							await exchange(saleInfoId, 'pet');
 							console.log(`结束兑换API后时间 ${(new Date()).Format("yyyy-MM-dd hh:mm:ss | S")}`);
 							if ($.exchangeRes && $.exchangeRes.success) {
 								if ($.exchangeRes.errorCode === 'buy_success') {

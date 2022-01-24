@@ -154,12 +154,12 @@ async function run() {
         await takePostRequest('myAward');
         await $.wait(parseInt(Math.random() * 1000 + 1000, 10))
         await takePostRequest('missionInviteList');
-        console.log($.MixNick)
-        console.log(`当前助力:${$.inviteNick}`)
-        if($.index == 1){
-            $.inviteNick = $.MixNick
-            console.log(`后面的号都会助力:${$.inviteNick}`)
-        }
+        // console.log($.MixNick)
+        // console.log(`当前助力:${$.inviteNick}`)
+        // if($.index == 1){
+        //     $.inviteNick = $.MixNick
+        //     console.log(`后面的号都会助力:${$.inviteNick}`)
+        // }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
         if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
         if(guaopenwait){
