@@ -185,7 +185,6 @@ def start():
     a = 1
     print("### 小年助力开始助力 ###")
     for ck in cookiesList:
-        print(f">>>>>>：{a}")
         inviteCode = inviteCodes[a]
         print(f"去助力>>>>>>：{inviteCode}")
         datas='h5st=20220125144048488%3B7663186115694256%3B47ab8%3Btk01wd9481cec41lMSszMHhkVlc2v91gXzZjNayGlpOUkp2chlDiR%2BFMVmBVoyiwPmEyFA0JaMkphW%2BD6fRrs2EOx4y6%3Bf649470c178e6e13c458d5631378bd1102590f513905207c6ef6dd40da731a34%3B3.1%3B1643092848488&functionId=pa_a_v1&body={"inviteCode":"'+inviteCode+'","uuid":"hQXrWCrmSsxxinfk","sv":"1609f615cd07ba0bdddeb6c388799ad7e31ed17b22f6c41ee312b9b7ea075643"}&client=wh5&clientVersion=1.0.0&appid=spring_h5&t=1643092848139'
