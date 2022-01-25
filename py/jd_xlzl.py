@@ -162,7 +162,7 @@ def start():
             'Connection': 'keep-alive',
             'Content-Length': '460',
             'Accept': 'application/json',
-            'User-Agent': 'jdapp;android;10.3.0;;;appBuild/91795;ef/1;ep/%7B%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22ts%22%3A1643095031825%2C%22ridx%22%3A-1%2C%22cipher%22%3A%7B%22sv%22%3A%22CJO%3D%22%2C%22ad%22%3A%22ZwY2CQOzENdwDwTrENumDK%3D%3D%22%2C%22od%22%3A%22CNZrZNPvYtc4DWS1DQOzDm%3D%3D%22%2C%22ov%22%3A%22CzK%3D%22%2C%22ud%22%3A%22ZwY2CQOzENdwDwTrENumDK%3D%3D%22%7D%2C%22ciphertype%22%3A5%2C%22version%22%3A%221.2.0%22%2C%22appname%22%3A%22com.jingdong.app.mall%22%7D;jdSupportDarkMode/0;Mozilla/5.0 (Linux; Android 11; M2102K1AC Build/RKQ1.201112.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/90.0.4430.210 Mobile Safari/537.36',
+            'User-Agent': UserAgent,
             'Content-Type': 'application/x-www-form-urlencoded',
             'Origin': 'https://h5static.m.jd.com',
             'X-Requested-With': 'com.jingdong.app.mall',
@@ -185,7 +185,7 @@ def start():
     a = 1
     print("### 小年助力开始助力 ###")
     for ck in cookiesList:
-        inviteCode = inviteCodes[a]
+        inviteCode = str(inviteCodes[a])
         print(f"去助力>>>>>>：{inviteCode}")
         datas='h5st=20220125144048488%3B7663186115694256%3B47ab8%3Btk01wd9481cec41lMSszMHhkVlc2v91gXzZjNayGlpOUkp2chlDiR%2BFMVmBVoyiwPmEyFA0JaMkphW%2BD6fRrs2EOx4y6%3Bf649470c178e6e13c458d5631378bd1102590f513905207c6ef6dd40da731a34%3B3.1%3B1643092848488&functionId=pa_a_v1&body={"inviteCode":"'+inviteCode+'","uuid":"hQXrWCrmSsxxinfk","sv":"1609f615cd07ba0bdddeb6c388799ad7e31ed17b22f6c41ee312b9b7ea075643"}&client=wh5&clientVersion=1.0.0&appid=spring_h5&t=1643092848139'
         print(f"账号：{userNameList[cookiesList.index(ck)]}")
@@ -195,7 +195,7 @@ def start():
             'Connection': 'keep-alive',
             'Content-Length': '460',
             'Accept': 'application/json',
-            'User-Agent': 'jdapp;android;10.3.0;;;appBuild/91795;ef/1;ep/%7B%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22ts%22%3A1643095031825%2C%22ridx%22%3A-1%2C%22cipher%22%3A%7B%22sv%22%3A%22CJO%3D%22%2C%22ad%22%3A%22ZwY2CQOzENdwDwTrENumDK%3D%3D%22%2C%22od%22%3A%22CNZrZNPvYtc4DWS1DQOzDm%3D%3D%22%2C%22ov%22%3A%22CzK%3D%22%2C%22ud%22%3A%22ZwY2CQOzENdwDwTrENumDK%3D%3D%22%7D%2C%22ciphertype%22%3A5%2C%22version%22%3A%221.2.0%22%2C%22appname%22%3A%22com.jingdong.app.mall%22%7D;jdSupportDarkMode/0;Mozilla/5.0 (Linux; Android 11; M2102K1AC Build/RKQ1.201112.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/90.0.4430.210 Mobile Safari/537.36',
+            'User-Agent': UserAgent,
             'Content-Type': 'application/x-www-form-urlencoded',
             'Origin': 'https://h5static.m.jd.com',
             'X-Requested-With': 'com.jingdong.app.mall',
@@ -211,8 +211,37 @@ def start():
             resp = requests.post(url=url, headers=header,data=datas, verify=False, timeout=30).json()
             # print(resp)
             print(resp['data']['bizMsg'])
-            if str(resp['data']['bizMsg']) == str("帮好友助力成功啦~"):
+            if str(resp['data']['bizMsg']) == str("好友人气太高 不需要助力啦~"):
                 a = a + 1
+                inviteCode = str(inviteCodes[a])
+                print(f"去助力>>>>>>：{inviteCode}")
+                datas='h5st=20220125144048488%3B7663186115694256%3B47ab8%3Btk01wd9481cec41lMSszMHhkVlc2v91gXzZjNayGlpOUkp2chlDiR%2BFMVmBVoyiwPmEyFA0JaMkphW%2BD6fRrs2EOx4y6%3Bf649470c178e6e13c458d5631378bd1102590f513905207c6ef6dd40da731a34%3B3.1%3B1643092848488&functionId=pa_a_v1&body={"inviteCode":"'+inviteCode+'","uuid":"hQXrWCrmSsxxinfk","sv":"1609f615cd07ba0bdddeb6c388799ad7e31ed17b22f6c41ee312b9b7ea075643"}&client=wh5&clientVersion=1.0.0&appid=spring_h5&t=1643092848139'
+                print(f"账号：{userNameList[cookiesList.index(ck)]}")
+                url = 'https://api-x.m.jd.com/'
+                header = {
+                    'Host': 'api-x.m.jd.com',
+                    'Connection': 'keep-alive',
+                    'Content-Length': '460',
+                    'Accept': 'application/json',
+                    'User-Agent': UserAgent,
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Origin': 'https://h5static.m.jd.com',
+                    'X-Requested-With': 'com.jingdong.app.mall',
+                    'Sec-Fetch-Site': 'same-site',
+                    'Sec-Fetch-Mode': 'cors',
+                    'Sec-Fetch-Dest': 'empty',
+                    'Referer': 'https://h5static.m.jd.com/',
+                    'Accept-Encoding': 'gzip, deflate',
+                    'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+                    'cookie': ck,
+                }
+                try:
+                    resp = requests.post(url=url, headers=header,data=datas, verify=False, timeout=30).json()
+                    # print(resp)
+                    print(resp['data']['bizMsg'])
+                except Exception as e:
+                    print(e)
+                    continue
             time.sleep(0.5)
         except Exception as e:
             print(e)
