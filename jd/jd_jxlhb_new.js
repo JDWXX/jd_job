@@ -34,7 +34,7 @@ if ($.isNode()) {
 }
 $.packetIdArr = [];
 // $.activeId = '489177';
-$.activeId = '525597';
+$.activeId = '526545';
 const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
 !(async () => {
     if (!cookiesArr[0]) {
@@ -48,7 +48,7 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
         '助力逻辑：先自己京东账号相互助力，如有剩余助力机会，则助力作者\n' +
         '温馨提示：如提示助力火爆，可尝试寻找京东客服')
     let res = '';
-    $.activeId = 525597;
+    $.activeId = 526545;
     $.authorMyShareIds = [];
     //开启红包,获取互助码
     for (let i = 0; i < cookiesArr.length; i++) {
