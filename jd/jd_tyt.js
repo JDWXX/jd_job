@@ -53,7 +53,7 @@ if ($.isNode()) {
     await info()
     await coinDozerBackFlow()
     await getCoinDozerInfo()
-    console.log('\n注意助力前三十个可助力的账号\n');
+    // console.log('\n注意助力前三十个可助力的账号\n');
     if (inviteCodes.length >= 30) {
       break
     }
