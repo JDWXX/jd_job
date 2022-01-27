@@ -164,8 +164,8 @@ async function run() {
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
         if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
 
-        if($.index % 3 == 0) console.log('休息1分钟，别被黑ip了\n可持续发展')
-        if($.index % 3 == 0) await $.wait(parseInt(Math.random() * 5000 + 60000, 10))
+        // if($.index % 3 == 0) console.log('休息1分钟，别被黑ip了\n可持续发展')
+        // if($.index % 3 == 0) await $.wait(parseInt(Math.random() * 5000 + 60000, 10))
 
     } catch (e) {
         console.log(e)
@@ -516,7 +516,7 @@ function getshopactivityId() {
         $.get(options, async (err, resp, data) => {
             try {
                 let res = $.toObj(data);
-                if(res.success == true){
+                if(res && res.success && res.success == true){
                     // console.log($.toStr(res.result))
                     console.log(`入会:${res.result.shopMemberCardInfo.venderCardName || ''}`)
                     $.shopactivityId = res.result.interestsRuleList && res.result.interestsRuleList[0] && res.result.interestsRuleList[0].interestsInfo && res.result.interestsRuleList[0].interestsInfo.activityId || ''

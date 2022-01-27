@@ -4,7 +4,7 @@ cron 0 12 * * * jd_cfd_fresh_exchange.js   整点好像不放库存  默认0点1
 更新时间：2021-11-19
 活动入口：微信京喜-我的-京喜财富岛
 变量  可选值  5 10 20 30 50 100 (默认100)
-export JD_CFD_FRESH_DDW_VIRHB="100"
+export JD_CFD_FRESH_DDW_VIRHB="20"
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
@@ -43,7 +43,7 @@ if ($.isNode()) {
     if (process.env.JD_CFD_FRESH_DDW_VIRHB ) {
         ddwVirHb = process.env.JD_CFD_FRESH_DDW_VIRHB
     }else {
-        ddwVirHb = "100"
+        ddwVirHb = "20"
     }
     if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 

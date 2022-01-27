@@ -83,57 +83,59 @@ let tasks = [], shareCodes = [], first = true;
 
 async function main() {
     tasks = await detail();
-    for (let i = 0; i < tasks.length; i++) {
-        let product_info_vos = []
-        let task_vos = tasks[i]
-        switch (i) {
-            case 0:
-                if (task_vos.status === '1')
-                    await do_task(task_vos.simple_record_info_vo.task_token, task_vos.task_id, task_vos.task_type)
-                continue
-            case 1:
-                // if ($.index === 0) {
-                await getShareCode(task_vos.assist_task_detail_vo.task_token)
-                await $.wait(1000)
-                // first = false
-                getAssist()
-                await $.wait(1000)
-                // } else {
-                console.log(`第${$.index}个账号${$.UserName}去助力第${Math.floor(($.index - 1) / 6) + 1}个账号。`)
-                doAssist()
-                await $.wait(1000)
-                // }
+    if(tasks){
+        for (let i = 0; i < tasks.length; i++) {
+            let product_info_vos = []
+            let task_vos = tasks[i]
+            switch (i) {
+                case 0:
+                    if (task_vos.status === '1')
+                        await do_task(task_vos.simple_record_info_vo.task_token, task_vos.task_id, task_vos.task_type)
+                    continue
+                case 1:
+                    // if ($.index === 0) {
+                    await getShareCode(task_vos.assist_task_detail_vo.task_token)
+                    await $.wait(1000)
+                    // first = false
+                    getAssist()
+                    await $.wait(1000)
+                    // } else {
+                    console.log(`第${$.index}个账号${$.UserName}去助力第${Math.floor(($.index - 1) / 6) + 1}个账号。`)
+                    doAssist()
+                    await $.wait(1000)
+                    // }
 
-                continue
-            case 2:
-                product_info_vos = task_vos['browse_shop_vo']
-                break
-            case 3:
-                product_info_vos = task_vos['shopping_activity_vos']
-                break
-            case 4:
-                product_info_vos = task_vos['brand_member_vos']
-                continue
-            case 5:
-                product_info_vos = task_vos['product_info_vos']
-                break
-            case 6:
-                product_info_vos = task_vos['shopping_activity_vos']
-                break
-            case 7:
-                product_info_vos = task_vos['follow_shop_vo']
-                break
-            default:
-                ""
-        }
-        let taskId = task_vos.task_id, taskType = task_vos.task_type;
-        for (let t of product_info_vos) {
-            if (t.status === '1') {
-                console.log(`开始任务：${task_vos.task_name}`)
-                let res = await do_task(t.task_token, taskId, taskType)
-                await $.wait(1000)
-                // if (res !== 200)
-                //   continue
+                    continue
+                case 2:
+                    product_info_vos = task_vos['browse_shop_vo']
+                    break
+                case 3:
+                    product_info_vos = task_vos['shopping_activity_vos']
+                    break
+                case 4:
+                    product_info_vos = task_vos['brand_member_vos']
+                    continue
+                case 5:
+                    product_info_vos = task_vos['product_info_vos']
+                    break
+                case 6:
+                    product_info_vos = task_vos['shopping_activity_vos']
+                    break
+                case 7:
+                    product_info_vos = task_vos['follow_shop_vo']
+                    break
+                default:
+                    ""
+            }
+            let taskId = task_vos.task_id, taskType = task_vos.task_type;
+            for (let t of product_info_vos) {
+                if (t.status === '1') {
+                    console.log(`开始任务：${task_vos.task_name}`)
+                    let res = await do_task(t.task_token, taskId, taskType)
+                    await $.wait(1000)
+                    // if (res !== 200)
+                    //   continue
+                }
             }
         }
     }
@@ -315,7 +317,7 @@ function getToken() {
                 } else {
                     data = JSON.parse(data);
                     $.token = data.body.access_token
-                    console.log($.token)
+                    // console.log($.token)
                 }
             } catch (e) {
                 $.logErr(e, resp)
@@ -436,7 +438,7 @@ function get_produce_coins() {
             try {
                 if (!err) {
                     data = JSON.parse(data)
-                    console.log("收币：", data)
+                    // console.log("收币：", data)
                     if (data.status === '0') {
                         let coins = parseInt(data.body.coins)
                         console.log(`收币成功：获得 ${coins}`)

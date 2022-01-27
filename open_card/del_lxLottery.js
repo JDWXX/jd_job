@@ -83,10 +83,13 @@ async function jdmodule() {
 
   await getinfo();
 console.log("开始抽奖");
+if($.chanceLeft && $.chanceLeft != null){
   for (let x = 0; x < $.chanceLeft; x++) {
     await join();
     await $.wait(1500)
   }
+}
+
 
 
 
@@ -139,11 +142,13 @@ function getinfo() {
           console.log(`${$.name} getinfo请求失败，请检查网路重试`)
         } else {
           data = JSON.parse(data);
-          $.chanceLeft = data.data.chanceLeft;
-          if (data.success == true) {
-            $.taskinfo = data.data.taskConfig
-          } else {
-            console.log(data.errorMessage);
+          if(data && data.data && data.data.chanceLeft){
+            $.chanceLeft = data.data.chanceLeft;
+            if (data.success == true) {
+              $.taskinfo = data.data.taskConfig
+            } else {
+              console.log(data.errorMessage);
+            }
           }
         }
       } catch (e) {

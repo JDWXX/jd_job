@@ -49,6 +49,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
 			"open-url": "https://bean.m.jd.com/bean/signIndex.action"
 		});
 	}
+	let jsl = false
 	for (let i = 0; i < cookiesArr.length; i++) {
 		if (cookiesArr[i]) {
 			cookie = cookiesArr[i];
@@ -82,6 +83,9 @@ Date.prototype.Format = function (fmt) { //author: meizz
 			$.validate = await zooFaker.injectToRequest();
 			console.log(`脚本开始请求时间 ${(new Date()).Format("yyyy-MM-dd hh:mm:ss | S")}`);
 			await joyReward();
+			if(jsl){
+				break
+			}
 		}
 	}
 	if ($.isNode() && allMessage && $.ctrTemp) {
@@ -158,6 +162,7 @@ async function joyReward() {
 			}
 		}
 		if (llError || !saleInfoId) {
+			jsl = true
 			console.log('东哥说现在不给你兑换，死了这条心吧...');
 			return;
 		}

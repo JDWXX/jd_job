@@ -217,10 +217,10 @@ async function run() {
         await takePostRequest('抽奖');
         if($.runFalag == false) break
         if(Number(count) <= 0) break
-        if(m >= 1){
-          console.log("抽奖太多次，多余的次数请再执行脚本")
-          break
-        }
+        // if(m >= 1){
+        //   console.log("抽奖太多次，多余的次数请再执行脚本")
+        //   break
+        // }
         await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
       }
     
@@ -239,8 +239,8 @@ async function run() {
     // }
     await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
     if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
-      if($.index % 3 == 0) console.log('休息1分钟，别被黑ip了\n可持续发展')
-      if($.index % 3 == 0) await $.wait(parseInt(Math.random() * 5000 + 60000, 10))
+      // if($.index % 3 == 0) console.log('休息1分钟，别被黑ip了\n可持续发展')
+      // if($.index % 3 == 0) await $.wait(parseInt(Math.random() * 5000 + 60000, 10))
   } catch (e) {
     console.log(e)
   }

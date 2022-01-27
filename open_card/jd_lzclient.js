@@ -154,7 +154,8 @@ function task(function_id, body, isCommon = 0) {
                                     // console.log($.activityContent)
                                     break;
                                 case 'wxDrawActivity/getGiveContent':
-                                    console.log("抽奖次数: "+data.data.day.giveTimes);
+                                    if(data.day && data.day.giveTimes)
+                                        console.log("抽奖次数: "+data.data.day.giveTimes);
                                     break;
                                 case 'wxActionCommon/followShop':
                                     console.log(data.data);
