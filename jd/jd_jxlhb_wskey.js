@@ -1,20 +1,20 @@
 /*
-京喜领88元红包
+京喜领88元红包-wskey版
 活动入口：京喜APP-我的-签到领红包-天天领红包
 助力逻辑：自己京东账号相互助力
 温馨提示：如提示助力火爆，可尝试寻找京东客服
 脚本兼容: Quantumult X, Surge, Loon, JSBox, Node.js
 ==============Quantumult X==============
 [task_local]
-#京喜领88元红包
-11 0,7 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_jxlhb.js, tag=京喜领88元红包, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+#京喜领88元红包-wskey版
+11 0,7 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_jxlhb.js, tag=京喜领88元红包-wskey版, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 ==============Loon==============
 [Script]
-cron "11 0,7 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_jxlhb.js,tag=京喜领88元红包
+cron "11 0,7 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_jxlhb.js,tag=京喜领88元红包-wskey版
 ================Surge===============
-京喜领88元红包 = type=cron,cronexp="11 0,7 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_jxlhb.js
+京喜领88元红包-wskey版 = type=cron,cronexp="11 0,7 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_jxlhb.js
 ===============小火箭==========
-京喜领88元红包 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_jxlhb.js, cronexpr="11 0,7 * * *", timeout=3600, enable=true
+京喜领88元红包-wskey版 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_jxlhb.js, cronexpr="11 0,7 * * *", timeout=3600, enable=true
  */
 const $ = new Env('京喜领88元红包-wskey版');
 const notify = $.isNode() ? require('./sendNotify') : {};
@@ -40,7 +40,7 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
     }
     await wskeyAdd();
     await $.wait(6000);
-    console.log('京喜领88元红包\n' +
+    console.log('京喜领88元红包-wskey版\n' +
         '活动入口：京喜APP-我的-签到领红包-天天领红包\n' +
         '温馨提示：如提示助力火爆，可尝试寻找京东客服')
     // let res = await getAuthorShareCode('https://gitee.com/KingRan521/JD-Scripts/blob/master/shareCodes/jxlhb.json')
