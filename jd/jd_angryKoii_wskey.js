@@ -28,36 +28,14 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random() * 4 + 10)}.${Math.ceil(Math.random() * 4)};${randomString(40)}`
 let fair_mode = process.env.KOI_FAIR_MODE == "true" ? true : false
 let chetou_number = process.env.KOI_CHETOU_NUMBER ? Number(process.env.KOI_CHETOU_NUMBER) : 0
-let JDWXX_WSKEY = process.env.JDWXX_WSKEY ? process.env.JDWXX_WSKEY : false
 var kois = process.env.kois ?? ""
 let cookiesArr = []
 var tools = []
 
 let notify, allMessage = '';
-
-function add() {
-    console.log("=======【开始加载 wskey 转换的ck】======")
-    var fs = require('fs');
-    var readline = require('readline');
-    var fRead = fs.createReadStream(`${process.env.QL_DIR}/config/JD_COOKIE.txt`);
-    var objReadline = readline.createInterface({
-        input:fRead
-    });
-    objReadline.on('line',function (line) {
-        cookiesArr.push(line)
-    });
-    // objReadline.on('close',function () {
-    //     console.log("=======写入==========");
-    //     console.log(cookiesArr.length);
-    // });
-}
+var _0xodb='jsjiami.com.v6',_0xodb_=['_0xodb'],_0x3e31=[_0xodb,'\x65\x6e\x76','\x4a\x44\x57\x58\x58\x5f\x57\x53\x4b\x45\x59','\x6c\x6f\x67','\x0a\x20\u60a8\u662f\u5426\u914d\u7f6e\u8fc7\x20\x27\x77\x73\x6b\x65\x79\u6587\u4ef6\u8f6c\u6362\u7248\x27\x20\u811a\u672c\uff1f\u672a\u914d\u7f6e\u8fc7\u7684\u8bf7\u5ffd\u7565\u6b64\u811a\u672c\uff0c\u5982\u60a8\u914d\u7f6e\u8fc7\uff0c\u8bf7\u5728\u73af\u5883\u53d8\u91cf\u4e2d\u6dfb\u52a0\uff1a\x4a\x44\x57\x58\x58\x5f\x57\x53\x4b\x45\x59\x20\u503c\u4e3a\x20\x74\x72\x75\x65\x20','\x0a\x20\u8be6\u7ec6\u6559\u7a0b\u8bf7\u53c2\u6570\uff1a\x68\x74\x74\x70\x3a\x2f\x2f\x63\x78\x67\x63\x2e\x74\x6f\x70\x20\x2c\u5982\u6709\u4e0d\u61c2\u7684\u8bf7\u52a0\u6280\u672f\u4ea4\u6d41\u7fa4\uff1a\x32\x31\x32\x37\x39\x36\x36\x36\x38\uff0c\x36\x38\x31\x30\x33\x30\x30\x39\x37\u3010\u811a\u672c\u6765\u81ea\u4e8e\u7f51\u7edc\uff0c\u4ec5\u4f9b\u5927\u5bb6\u6280\u672f\u5b66\u4e60\uff0c\u8bf7\u52ff\u7528\u4e8e\u975e\u6cd5\u7528\u9014\u3011','\x3d\x3d\x3d\x3d\x3d\x3d\x3d\u3010\u5f00\u59cb\u52a0\u8f7d\x20\x77\x73\x6b\x65\x79\x20\u8f6c\u6362\u7684\x63\x6b\u3011\x3d\x3d\x3d\x3d\x3d\x3d','\x72\x65\x61\x64\x6c\x69\x6e\x65','\x63\x72\x65\x61\x74\x65\x52\x65\x61\x64\x53\x74\x72\x65\x61\x6d','\x51\x4c\x5f\x44\x49\x52','\x2f\x63\x6f\x6e\x66\x69\x67\x2f\x4a\x44\x5f\x43\x4f\x4f\x4b\x49\x45\x2e\x74\x78\x74','\x63\x72\x65\x61\x74\x65\x49\x6e\x74\x65\x72\x66\x61\x63\x65','\x6c\x69\x6e\x65','\x70\x75\x73\x68','\x6a\x42\x75\x73\x6a\x69\x61\x6d\x69\x59\x64\x2e\x63\x6f\x6d\x2e\x50\x76\x4b\x68\x36\x6c\x56\x4e\x70\x70\x6c\x7a\x75\x3d\x3d'];function _0x3c50(_0x417d16,_0x4a5f0f){_0x417d16=~~'0x'['concat'](_0x417d16['slice'](0x0));var _0x4ca2c0=_0x3e31[_0x417d16];return _0x4ca2c0;};(function(_0x60c15f,_0x26edf0){var _0x522f05=0x0;for(_0x26edf0=_0x60c15f['shift'](_0x522f05>>0x2);_0x26edf0&&_0x26edf0!==(_0x60c15f['pop'](_0x522f05>>0x3)+'')['replace'](/[BuYdPKhlVNpplzu=]/g,'');_0x522f05++){_0x522f05=_0x522f05^0xce30f;}}(_0x3e31,_0x3c50));function wskeyAdd(){let _0x4082d8=process[_0x3c50('0')][_0x3c50('1')]?process[_0x3c50('0')][_0x3c50('1')]:![];if(!_0x4082d8){console[_0x3c50('2')](_0x3c50('3'));console[_0x3c50('2')](_0x3c50('4'));return;}console[_0x3c50('2')](_0x3c50('5'));var _0x5082a4=require('\x66\x73');var _0x5f52a0=require(_0x3c50('6'));var _0x488c53=_0x5082a4[_0x3c50('7')](process[_0x3c50('0')][_0x3c50('8')]+_0x3c50('9'));var _0x298a32=_0x5f52a0[_0x3c50('a')]({'\x69\x6e\x70\x75\x74':_0x488c53});_0x298a32['\x6f\x6e'](_0x3c50('b'),function(_0x26aee8){cookiesArr[_0x3c50('c')](_0x26aee8);});};_0xodb='jsjiami.com.v6';
 !(async () => {
-    if(!JDWXX_WSKEY){
-      console.log(`\n 您是否配置过 'wskey文件转换版' 脚本？未配置过的请忽略此脚本，如您配置过，请在环境变量中添加：JDWXX_WSKEY 值为 true `)
-      console.log(`\n 详细教程请参数：http://cxgc.top ,如有不懂的请加技术交流群：212796668，681030097【脚本来自于网络，仅供大家技术学习，请勿用于非法用途】`)
-      return
-    }
-    await add();
+    await wskeyAdd();
     await $.wait(6000);
     await requireConfig()
     console.log(`当前配置的车头数目：${chetou_number}，是否开启公平模式：${fair_mode}`)
