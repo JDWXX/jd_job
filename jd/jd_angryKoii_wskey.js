@@ -36,6 +36,7 @@ var tools = []
 let notify, allMessage = '';
 
 function add() {
+    console.log("=======【开始加载 wskey 转换的ck】======")
     var fs = require('fs');
     var readline = require('readline');
     var fRead = fs.createReadStream(`${process.env.QL_DIR}/config/JD_COOKIE.txt`);
@@ -54,6 +55,7 @@ function add() {
     if(!JDWXX_WSKEY){
       console.log(`\n 您是否配置过 'wskey文件转换版' 脚本？未配置过的请忽略此脚本，如您配置过，请在环境变量中添加：JDWXX_WSKEY 值为 true `)
       console.log(`\n 详细教程请参数：http://cxgc.top ,如有不懂的请加技术交流群：212796668，681030097【脚本来自于网络，仅供大家技术学习，请勿用于非法用途】`)
+      return
     }
     await add();
     await $.wait(6000);
