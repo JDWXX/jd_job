@@ -128,10 +128,8 @@ function list() {
 
 function listyqm(actIda) {
     return new Promise(async (resolve) => {
-
         let options = {
             url: `https://api.m.jd.com`,
-
             body: `functionId=initiateBargain&body={"actId":"${actIda}","headPortrait":"","nick":"","channel":"speed_app"}&appid=megatron&client=megatron&clientVersion=1.0.0`,
             headers: {
                 "Origin": "https://mfn.jd.com",
@@ -140,18 +138,11 @@ function listyqm(actIda) {
                 "Cookie": cookie,
             }
         }
-
         $.post(options, async (err, resp, data) => {
             try {
-
                 data = JSON.parse(data);
-
-
-
                 if(data.code == 0){
-
                     console.log('\n当前商品邀请码：'+data.data.packetId+"\n当前初始化砍价："+data.data.amount)
-
                 }
             } catch (e) {
                 $.logErr(e, resp);
