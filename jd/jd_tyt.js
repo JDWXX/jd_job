@@ -7,7 +7,7 @@
 0 1 * * * jd_tyt.js, tag=推一推, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 */
 
-const $ = new Env('极速版-推推赚大钱');//助力前三个可助力的账号
+const $ = new Env('极速版推-推赚大钱');//助力前三个可助力的账号
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -15,6 +15,7 @@ const JD_API_HOST = 'https://api.m.jd.com';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 let status = ''
+const tytzl = $.isNode() ? process.env.tytzl : 3;
 let inviteCodes = []
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -24,12 +25,14 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-
+let msg = ''
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
     return;
   }
+  console.log('\n入口→极速版→赚金币→推推赚大钱\n');
+  console.log('\n注意助力前三个可助力的账号\n');
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -49,12 +52,10 @@ if ($.isNode()) {
         continue
       }
     }
-    console.log('\n入口→极速版→赚金币→推推赚大钱\n');
     await info()
     await coinDozerBackFlow()
     await getCoinDozerInfo()
-    // console.log('\n注意助力前三十个可助力的账号\n');
-    if (inviteCodes.length >= 30) {
+    if (inviteCodes.length >= tytzl) {
       break
     }
   }
@@ -66,6 +67,7 @@ if ($.isNode()) {
     cookie = cookiesArr[i];
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
     if (!cookie) continue
+    msg = ''
     for (let j in inviteCodes) {
       $.ok = false
       if (inviteCodes[j]["ok"]) continue
@@ -76,8 +78,11 @@ if ($.isNode()) {
         inviteCodes[j]["ok"] = true
         continue
       }
-      await $.wait(10000)
+      await $.wait(7000)
       await help(inviteCodes[j]['packetId'])
+      if(msg === '帮砍机会已用完'){
+        break
+      }
       if ($.ok) {
         inviteCodes[j]["ok"] = true
         continue
@@ -159,8 +164,6 @@ function coinDozerBackFlow() {
             data = JSON.parse(data);
             if (data.success == true) {
               console.log('浏览任务完成再推一次')
-
-
             }
           } else if (data.success == false) {
             console.log(data.msg)
@@ -230,7 +233,6 @@ function help(packetId) {
       }
     }
     $.post(nm, async (err, resp, data) => {
-
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -240,7 +242,6 @@ function help(packetId) {
             data = JSON.parse(data);
             if (data.success == true) {
               console.log("帮砍：" + data.data.amount)
-
             }
           }
           else
@@ -252,6 +253,9 @@ function help(packetId) {
               $.ok = true
             }
             console.log(data.msg)
+            if(data.msg == '帮砍机会已用完'){
+              msg = data.msg
+            }
           }
         }
       } catch (e) {
@@ -276,7 +280,6 @@ function getCoinDozerInfo() {
       }
     }
     $.post(nm, async (err, resp, data) => {
-
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -285,7 +288,7 @@ function getCoinDozerInfo() {
           if (safeGet(data)) {
             data = JSON.parse(data);
             if (data.success == true && data?.data?.sponsorActivityInfo?.packetId) {
-              console.log('叼毛：' + data.data.sponsorActivityInfo.initiatorNickname)
+              console.log('用户：' + data.data.sponsorActivityInfo.initiatorNickname)
               console.log('邀请码：' + data.data.sponsorActivityInfo.packetId)
               console.log('推出：' + data.data.sponsorActivityInfo.dismantledAmount)
               if (data.data && data.data.sponsorActivityInfo.packetId) {
