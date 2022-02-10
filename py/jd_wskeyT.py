@@ -3,18 +3,14 @@
 cron: 15 2 * * * jd_wskeyT.py
 new Env('wskey转换');
 '''
-
 import socket
 import base64
-import http.client
 import json
 import os
 import sys
 import logging
 import time
-import urllib.parse
 import re
-import datetime
 
 if "WSKEY_DEBUG" in os.environ:
     logging.basicConfig(level=logging.DEBUG, format='%(message)s')
@@ -37,7 +33,7 @@ except Exception as err:
     logger.debug(str(err))
     logger.info("无推送文件")
 
-ver = 20202
+ver = 20203
 
 
 # 登录青龙 返回值 token
@@ -135,45 +131,14 @@ def check_ck(ck):
     else:
         pin = ck.split(";")[1]
     if "WSKEY_UPDATE_HOUR" in os.environ:
-        '''
-        # 试验性代码（根据返回的 Cookie 过期时间做更新）
-        # 我自己测试显示剩余 719 个小时（30 天）？
-        updateHour = 3
-        if os.environ["WSKEY_UPDATE_HOUR"].isdigit():
-            updateHour = int(os.environ["WSKEY_UPDATE_HOUR"])
-        expires = 0
-        searchObj = re.search(r'__time=([^;\s]+)', ck, re.M|re.I)
-        if searchObj:
-            expires = int(searchObj.group(1))
-        remainingTime = expires - time.time()
-        if remainingTime <= updateHour * 60 * 60:
-            logger.info(str(pin) + ";即将到期或已过期\n")
-            return False
-        else:
-            hour = int(remainingTime / 60 / 60)
-            minute = int((remainingTime % 3600) / 60)
-            # second = int(remainingTime % 60)
-            logger.info(str(pin) + ";未到期，{0}时{1}分后更新\n".format(hour, minute))
-            return True
-        '''
         updateHour = 23
         if os.environ["WSKEY_UPDATE_HOUR"].isdigit():
             updateHour = int(os.environ["WSKEY_UPDATE_HOUR"])
+        nowTime = time.time()
+        updatedAt = 0.0
         searchObj = re.search(r'__time=([^;\s]+)', ck, re.M|re.I)
         if searchObj:
             updatedAt = float(searchObj.group(1))
-            nowTime = time.time()
-        else:
-            updatedAt = 0.0
-            nowTime = time.mktime(datetime.datetime.utcnow().timetuple())
-            return_serch = serch_ck(pin)
-            if return_serch[0]:
-                try:
-                    updatedAt = time.mktime(time.strptime(return_serch[3], '%Y-%m-%dT%H:%M:%S.%fZ'))
-                except ValueError:
-                    updatedAt = time.mktime(time.strptime(return_serch[3], '%Y-%m-%dT%H:%M:%SZ'))
-                except:
-                    updatedAt = 0.0
         if nowTime - updatedAt >= (updateHour * 60 * 60) - (10 * 60):
             logger.info(str(pin) + ";即将到期或已过期\n")
             return False
@@ -197,25 +162,8 @@ def check_ck(ck):
             res = requests.get(url=url, headers=headers, verify=False, timeout=10)
         except Exception as err:
             logger.debug(str(err))
-            # logger.info("JD接口错误, 切换第二接口")
-            url = 'https://me-api.jd.com/user_new/info/GetJDUserInfoUnion'
-            headers = {
-                'Cookie': ck,
-                'user-agent': ua,
-                'Referer': 'https://home.m.jd.com/myJd/home.action'
-            }
-            res = requests.get(url=url, headers=headers, verify=False, timeout=30)
-            if res.status_code == 200:
-                code = int(json.loads(res.text)['retcode'])
-                if code == 0:
-                    logger.info(str(pin) + ";状态正常\n")
-                    return True
-                else:
-                    logger.info(str(pin) + ";状态失效\n")
-                    return False
-            else:
-                logger.info("JD接口错误码: " + str(res.status_code))
-                return False
+            logger.info("JD接口错误 请重试或者更换IP")
+            return False
         else:
             if res.status_code == 200:
                 code = int(json.loads(res.text)['retcode'])
@@ -253,19 +201,20 @@ def getToken(wskey):
         res = requests.post(url=url, params=params, headers=headers, data=data, verify=False, timeout=10)
         res_json = json.loads(res.text)
         tokenKey = res_json['tokenKey']
-        if tokenKey == 'xxx':
-            logger.info("getToken返回了无效Token：{0}\n".format(tokenKey))
-            return False, None
     except Exception as err:
-        logger.info("JD_WSKEY接口抛出错误, 请稍后尝试, 脚本退出")
-        logger.debug(str(err))
-        sys.exit(1)
+        logger.info("JD_WSKEY接口抛出错误 尝试重试 更换IP")
+        logger.info(str(err))
+        return False, wskey
     else:
         return appjmp(wskey, tokenKey)
 
 
 # 返回值 bool jd_ck
 def appjmp(wskey, tokenKey):
+    wskey = "pt_" + str(wskey.split(";")[0])
+    if tokenKey == 'xxx':
+        logger.info(str(wskey) + ";WsKey状态失效\n--------------------\n")
+        return False, wskey
     headers = {
         'User-Agent': ua,
         'accept': 'accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
@@ -278,36 +227,27 @@ def appjmp(wskey, tokenKey):
     url = 'https://un.m.jd.com/cgi-bin/app/appjmp'
     try:
         res = requests.get(url=url, headers=headers, params=params, verify=False, allow_redirects=False, timeout=20)
-        '''
-        pt_key = 'pt_key='
-        pt_pin = 'pt_pin='
-        expires = 0
-        for cookie in res.cookies:
-            if cookie.name == "pt_key":
-                expires = cookie.expires
-                pt_key += str(cookie.value)
-            if cookie.name == "pt_pin":
-                pt_pin += str(cookie.value)
-        jd_ck = str(pt_key) + '; ' + str(pt_pin) + '; __time=' + str(expires)
-        wskey = wskey.split(";")[0]
-        if expires <= 0 or 'fake' in pt_key:
-        '''
-        res_set = res.cookies.get_dict()
-        pt_key = 'pt_key=' + res_set['pt_key']
-        pt_pin = 'pt_pin=' + res_set['pt_pin']
-        jd_ck = str(pt_key) + '; ' + str(pt_pin) + '; __time=' + str(time.mktime())
-        wskey = wskey.split(";")[0]
-        if 'fake' in pt_key:
-            logger.info(str(wskey) + ";WsKey状态失效\n")
-            return False, jd_ck
-        else:
-            logger.info(str(wskey) + ";WsKey状态正常\n")
-            return True, jd_ck
     except Exception as err:
-        logger.info("JD接口转换失败, 默认WsKey失效\n")
-        logger.debug(str(err))
-        wskey = "pt_" + str(wskey.split(";")[0])
+        logger.info("JD_appjmp 接口错误 请重试或者更换IP\n")
+        logger.info(str(err))
         return False, wskey
+    else:
+        try:
+            res_set = res.cookies.get_dict()
+            pt_key = 'pt_key=' + res_set['pt_key']
+            pt_pin = 'pt_pin=' + res_set['pt_pin']
+            jd_ck = str(pt_key) + '; ' + str(pt_pin) + '; __time=' + str(time.time())
+        except Exception as err:
+            logger.info("JD_appjmp提取Cookie错误 请重试或者更换IP\n")
+            logger.info(str(err))
+            return False, wskey
+        else:
+            if 'fake' in pt_key:
+                logger.info(str(wskey) + ";WsKey状态失效\n")
+                return False, wskey
+            else:
+                logger.info(str(wskey) + ";WsKey状态正常\n")
+                return True, jd_ck
 
 
 def update():
@@ -342,50 +282,15 @@ def ql_check(port):
         return True
 
 
-# 返回值 bool, key, eid
-def serch_ck_old(pin):
-    if all('\u4e00' <= char <= '\u9fff' for char in pin):
-        pin1 = urllib.parse.quote(pin)
-        pin2 = pin1.replace('%', '%5C%25')
-        logger.info(str(pin) + "-->" + str(pin1))
-    else:
-        pin2 = pin.replace('%', '%5C%25')
-    # TMD 中文!
-    # url = "http://127.0.0.1:5700/api/envs?searchValue={0}".format(pin)
-    # res = json.loads(s.get(url, verify=False).text)
-    conn = http.client.HTTPConnection("127.0.0.1", port)
-    payload = ''
-    headers = {
-        'Authorization': 'Bearer ' + token
-    }
-    url = '/api/envs?searchValue={0}'.format(pin2)
-    conn.request("GET", url, payload, headers)
-    res = json.loads(conn.getresponse().read())
-    if len(res['data']) == 0:
-        logger.info(str(pin) + "检索失败\n")
-        return False, 1
-    elif len(res['data']) > 1:
-        logger.info(str(pin) + "存在重复, 取第一条, 请删除多余变量\n")
-        key = res['data'][0]['value']
-        eid = res['data'][0]['_id']
-        return True, key, eid
-    else:
-        logger.info(str(pin) + "检索成功\n")
-        key = res['data'][0]['value']
-        eid = res['data'][0]['_id']
-        return True, key, eid
-
-
 def serch_ck(pin):
     for i in range(len(envlist)):
+        if "name" not in envlist[i] or envlist[i]["name"] != "JD_COOKIE":
+            continue
         if pin in envlist[i]['value']:
             value = envlist[i]['value']
             id = envlist[i][ql_id]
-            updatedAt = "1970-01-01T12:00:00.0Z"
-            if "updatedAt" in envlist[i]:
-                updatedAt = envlist[i]['updatedAt']
             logger.info(str(pin) + "检索成功\n")
-            return True, value, id, updatedAt
+            return True, value, id
         else:
             continue
     logger.info(str(pin) + "检索失败\n")
@@ -405,20 +310,21 @@ def get_env():
         return data
 
 
-def get_version():
-    url = 'http://127.0.0.1:{0}/api/system'.format(port)
+def check_id():
+    url = 'http://127.0.0.1:{0}/api/envs'.format(port)
     try:
-        res = s.get(url)
-        version = str(json.loads(res.text)['data']['version'])
+        res = s.get(url).json()
     except Exception as err:
         logger.debug(str(err))
-        return 0
+        logger.info("\n青龙环境接口错误")
+        sys.exit(1)
     else:
-        logger.info("青龙面板版本: " + version)
-        if version > '2.10.13':
-            return 1
+        if '_id' in res['data'][0]:
+            logger.info("使用 _id 键值")
+            return '_id'
         else:
-            return 0
+            logger.info("使用 id 键值")
+            return 'id'
 
 
 def ql_update(e_id, n_ck):
@@ -538,7 +444,7 @@ if __name__ == '__main__':
     s = requests.session()
     s.headers.update({"authorization": "Bearer " + str(token)})
     s.headers.update({"Content-Type": "application/json;charset=UTF-8"})
-    ql_id = ['_id', 'id'][get_version()]
+    ql_id = check_id()
     url_t = check_cloud()
     cloud_arg = cloud_info()
     update()
@@ -554,11 +460,12 @@ if __name__ == '__main__':
             if return_serch[0]:  # bool: True 搜索到账号
                 jck = str(return_serch[1])  # 拿到 JD_COOKIE
                 if not check_ck(jck):  # bool: False 判定 JD_COOKIE 有效性
-                    tryCount = 10
+                    tryCount = 1
                     if "WSKEY_TRY_COUNT" in os.environ:
                         if os.environ["WSKEY_TRY_COUNT"].isdigit():
                             tryCount = int(os.environ["WSKEY_TRY_COUNT"])
-                    for count in range(1, tryCount):
+                    for count in range(tryCount):
+                        count += 1
                         return_ws = getToken(ws)  # 使用 WSKEY 请求获取 JD_COOKIE bool jd_ck
                         if return_ws[0]:
                             break

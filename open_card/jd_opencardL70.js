@@ -1,20 +1,20 @@
 /*
-1.25~1.30 联合开卡
+2.10~2.16 联合开卡
 新增开卡脚本，一次性脚本
 第一个账号助力作者 其他依次助力CK1
 第一个CK失效会退出脚本
 ————————————————
-入口：[ 1.25~1.30 联合开卡 (https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20220125/unitedCardNew20220125?actId=mdccccye6ty52yygi_220125)]
+入口：[ 2.10~2.16 联合开卡 (活动地址:https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20220210/unitedCardNew20220210?actId=b802b95813e14b41ae_22021001)]
 请求太频繁会被黑ip
 过10分钟再执行
 cron:40 0,15 26-30 1 *
 ============Quantumultx===============
 [task_local]
-#1.25~1.30 联合开卡
-40 0,15 26-30 1 * jd_opencardL64.js, tag=1.25~1.30 联合开卡, enabled=true
+#2.10~2.16 联合开卡
+40 0,15 26-30 1 * jd_opencardL70.js, tag=2.10~2.16 联合开卡, enabled=true
 */
 
-const $ = new Env('1.25~1.30 联合开卡');
+const $ = new Env('2.10~2.16 联合开卡');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
@@ -47,10 +47,10 @@ let activityCookie =''
     // return
     $.appkey = '51B59BB805903DA4CE513D29EC448375'
     $.userId = '10299171'
-    $.actId = 'mdccccye6ty52yygi_220125'
+    $.actId = 'b802b95813e14b41ae_22021001'
     $.MixNicks = ''
     $.inviteNick = '/nFlfyWPdMnTxK1/nf0Ssc7TwJCmNe8NFvhpI0XmJDULVU108+UxlHw7qoUuHA4F'
-    console.log(`活动地址:https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20220125/unitedCardNew20220125?actId=mdccccye6ty52yygi_220125`)
+    console.log(`活动地址:https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20220210/unitedCardNew20220210?actId=b802b95813e14b41ae_22021001`)
     console.log(`请自行测试有水无水。`)
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
@@ -162,11 +162,11 @@ async function run() {
         }
         await takePostRequest('myAward');
         await takePostRequest('missionInviteList');
-        console.log($.MixNick)
-        console.log(`当前助力:${$.inviteNick}`)
+        // console.log($.MixNick)
+        // console.log(`当前助力:${$.inviteNick}`)
         if($.index == 1){
-            $.inviteNick = $.MixNick
-            console.log(`后面的号都会助力:${$.inviteNick}`)
+            // $.inviteNick = $.MixNick 没水了 助力作者冲排名
+            console.log(`后面的号都会助力:${$.MixNick}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
     } catch (e) {
