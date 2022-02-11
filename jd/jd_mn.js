@@ -51,6 +51,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
             }
             authorCodeList = [
                 '682b7218660e48d09bb4083568eb96a7',
+                '20538129087a4ce9bade286288f256b9',
             ]
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);

@@ -49,10 +49,16 @@ if ($.isNode()) {
                 }
                 continue
             }
-            authorCodeList = ['f7da85d18880459d9aaff5f0181a9220','e74d11765ea54d238f85fc0518a2d768']
+            authorCodeList = ['b15d4606b55448e4800809f6e41034e6','cdd34e0e473a43129f0b95b24de8449f']
             $.bean = 0;
-            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
-            $.activityId = 'ecaf4a23237e403896efdc9507a31ea2'
+            if(ownCode){
+                authorCodeList.push(ownCode)
+                authorCodeList.push(ownCode)
+                authorCodeList.push(ownCode)
+            }
+            $.authorCode = authorCodeList[random(0, authorCodeList.length)]
+            // $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            $.activityId = '9222c59c4de14e039d124ba1d88d7004'
             $.activityShopId = '1000014486'
             $.randomNum = random(1000000, 9999999)
             $.activityUrl = `https://lzkjdz-isv.isvjcloud.com/pool/captain/${$.randomNum}?activityId=${$.activityId}&signUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
