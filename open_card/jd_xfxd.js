@@ -2,16 +2,17 @@
 /*
 京东-幸福小店
 cron 18 0 * * * jd_xfxd.js
-活动入口：京东APP->我的->会员店->天天领京豆->幸福小店
-TG频道：https://t.me/tom_210120
-*/
 
+活动入口：京东APP->我的->会员店->天天领京豆->幸福小店
+*/
 const $ = new Env('京东幸福小店');
 const jsname = '京东幸福小店'
 const logDebug = 0
 
 const notifyFlag = 1; //0为关闭通知，1为打开通知,默认为1
 const notify = $.isNode() ? require('./sendNotify') : '';
+const CryptoJS = require('crypto-js')
+
 let notifyStr = ''
 
 let httpResult //global buffer
@@ -34,6 +35,9 @@ class UserInfo {
         this.lkToken = ''
         this.save = ''
         this.nickname = str.match(/pt_pin=(.+?);/)[1]
+        this.version = '1.1.6'
+        this.env = 'jdApp'
+        this.channel = 'release'
     }
 
     async getToken() {
@@ -44,7 +48,7 @@ class UserInfo {
         await httpRequest('post',urlObject)
         let result = httpResult;
         if(!result) return
-        //console.log(result)
+        // console.log(result)
         if(result.success == true) {
             this.lkToken = result.data.lkToken
             console.log(`账号[${this.index}]获取到token`)
@@ -55,14 +59,15 @@ class UserInfo {
 
     async getSaveByToken() {
         let url = `https://jd-plusshop-7goyzspef1de45ca-1307535713.ap-shanghai.app.tcloudbase.com/main`
-        let body = `{"method":"save/getSaveByToken","data":{"lkToken":"${this.lkToken}"},"isPre":false}`
+        var body = `{"method":"save/getSaveByToken","data":{"lkToken":"${this.lkToken}"},"isPre":false, "version":"${this.version}", "channel":"${this.channel}", "env":"${this.env}"}`
+        body = JSON.stringify(sign(JSON.parse(body)))
         let urlObject = populateUrlObject(url,'https://jdhy.gamecatstudio.com',body)
         await httpRequest('post',urlObject)
         let result = httpResult;
         if(!result) return
-        //console.log(result)
+        // console.log(result)
         if(result.success == true) {
-            this.save = JSON.parse(result.data.save)
+            this.save = deserialize(result.data.save)
             if(!this.save) {
                 console.log(`账号[${this.index}]未获取到数据，此活动只对plus会员开放，请先手动进入游戏过新手引导`)
                 return
@@ -75,28 +80,41 @@ class UserInfo {
         }
     }
 
+
     async updateSave() {
+        // console.log(this.save)
         let url = `https://jd-plusshop-7goyzspef1de45ca-1307535713.ap-shanghai.app.tcloudbase.com/main`
-        this.save.items.data['101001003'] = 600000 + Math.floor(Math.random()*100000)
+		this.save.items.data['101001003'] = 700000 + Math.floor(Math.random()*100000)    //福源
+        this.save.level = 30  //等级
+        this.save.items.data['101002002'] = 20  + Math.floor(Math.random()*100000)              //道具快速收益
+        this.save.items.data['101002001'] = 9999                                              //加速道具
         this.save.beanRecord = {}
-        this.save.updateVersion += 1
-        let body = {
-            "data": JSON.stringify(this.save),
+        this.save.updateVersion += 2
+        var body = {
+            "data": serialize(JSON.stringify(this.save)),
             "isPre": false,
             "method": "save/updateSave",
-            "uid": this.uid
+            "uid": this.uid,
+            "channel": this.channel,
+            "env": this.env,
+            "version": this.version
         }
-        body = JSON.stringify(body)
+        body = JSON.stringify(sign(body))
+        // console.log(body)
         let urlObject = populateUrlObject(url,'https://jdhy.gamecatstudio.com',body)
         await httpRequest('post',urlObject)
         let result = httpResult;
         if(!result) return
-        //console.log(result)
+        // console.log(result)
     }
 
     async sendBean(id) {
         let url = `https://jd-plusshop-7goyzspef1de45ca-1307535713.ap-shanghai.app.tcloudbase.com/main`
-        let body = `{"uid":"${this.uid}","method":"lk/sendBean","data":{"lkToken":"${this.lkToken}","beanId":"${id}"},"isPre":false}`
+        var data = {"lkToken":this.lkToken,"beanId":id,"uid": this.uid};
+        data = callMainFunction(JSON.stringify(data));
+        var body = `{"uid":"${this.uid}","method":"lk/sendBean","data":"${data}","isPre":false,"encrypt":true,"version":"${this.version}","env":"${this.env}","channel":"${this.channel}"}`
+        //var body = `{"uid":"${this.uid}","method":"lk/sendBean","data":{"lkToken":"${this.lkToken}","beanId":"${id}","beanId":"${this.uid}"},"isPre":false,"encrypt":false,"version":"${this.version}","env":"${this.env}","channel":"${this.channel}"}`
+        body = JSON.stringify(sign(JSON.parse(body)))
         let urlObject = populateUrlObject(url,'https://jdhy.gamecatstudio.com',body)
         await httpRequest('post',urlObject)
         let result = httpResult;
@@ -119,6 +137,8 @@ class UserInfo {
         console.log('\n请先手动进游戏过了新手引导再跑脚本\n活动入口：京东APP->我的->会员店->天天领京豆->幸福小店\n目前应该每天只能换20豆和10豆两档了，如果兑换失败的，尝试换IP或者手动兑换吧')
 
         for(let user of userList) {
+
+            console.log(`\n=========== 开始账号 ${user.nickname} ===========`)
             console.log(`\n=========== 开始账号 ${user.nickname} ===========`)
 
             await user.getToken();
@@ -132,19 +152,21 @@ class UserInfo {
             await user.updateSave();
             await $.wait(1000);
 
-            for(let id=6; id>0; id--) {
+            for(let id=7; id>0; id--) {
                 await user.sendBean(id);
                 await $.wait(1000);
             }
         }
     }
 })()
-    .catch((e) => $.logErr(e))
-    .finally(() => $.done())
+.catch((e) => $.logErr(e))
+.finally(() => $.done())
 
 ///////////////////////////////////////////////////////////////////
 async function checkEnv() {
+
     if(userCookie) {
+
         let splitChar = '#'
         if(userCookie.indexOf('\n') > -1) splitChar = '\n'
         if(userCookie.indexOf('@') > -1) splitChar = '@'
@@ -190,7 +212,58 @@ async function pushDear(str) {
     let retStr = result.content.result==false ? '失败' : '成功'
     console.log(`\n========== PushDear 通知发送${retStr} ==========\n`)
 }
+
+
 ////////////////////////////////////////////////////////////////////
+
+function sign(e) {
+    e.t = aesEncrypt(String(Date.now()), 'doe0fkeisjauisof', 's5ff8w9s6ff9e658');
+    e.s = aesEncrypt(e.t + e.uid + e.version + e.channel + e.env, 'doe0fkeisjauisof', 's5ff8w9s6ff9e658');
+    return e;
+}
+
+function callMainFunction(n) {
+    return aesEncrypt(n, "slf9soelfia8fuuw", "ss4f8ee5f6a9ss5f")
+}
+
+function serialize (t) {
+    return t = aesEncrypt(t, "sk42jufeer78sif8", "s58er345638sgrhj")
+}
+
+function deserialize (t) {
+    try {
+        t.startsWith("{") && t.endsWith("}") || (t = aesDecrypt(t, "sk42jufeer78sif8", "s58er345638sgrhj"));
+        var n = JSON.parse(t);
+        return n
+    } catch (e) {
+        console.log(e)
+    }
+    return null
+}
+
+
+function aesEncrypt (e, t, n) {
+    var r = CryptoJS.enc.Utf8.parse(t)
+        , i = CryptoJS.enc.Utf8.parse(n);
+    return CryptoJS.AES.encrypt(e, r, {
+        iv: i,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    }).toString(CryptoJS.format.Hex)
+}
+
+function aesDecrypt(e, t, n) {
+    var r = CryptoJS.enc.Utf8.parse(t)
+        , i = CryptoJS.enc.Utf8.parse(n)
+        , a = CryptoJS.enc.Hex.parse(e)
+        , o = CryptoJS.enc.Base64.stringify(a);
+    return CryptoJS.AES.decrypt(o, r, {
+        iv: i,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    }).toString(CryptoJS.enc.Utf8)
+}
+
 function populateUrlObject(url,origin,body=''){
     let host = (url.split('//')[1]).split('/')[0]
     let urlObject = {
@@ -201,13 +274,13 @@ function populateUrlObject(url,origin,body=''){
             'Accept-Encoding' : 'gzip, deflate, br',
             'Connection' : 'keep-alive',
             'Accept' : '*/*',
-            'User-Agent' : 'jdapp;iPhone;10.3.4;;;M/5.0;appBuild/167945;jdSupportDarkMode/0;ef/1;ep/%7B%22ciphertype%22%3A5%2C%22cipher%22%3A%7B%22ud%22%3A%22DWPsCWTuYzVvENOyENvvZwYzDzc2YJDtZNS5EWZwDzrwCJZrDNS5CK%3D%3D%22%2C%22sv%22%3A%22CJUkCK%3D%3D%22%2C%22iad%22%3A%22ENY1EUU2DJYjHOPQGI00GzDOBJrQG0SjGJu3CtHMDUU0CJY0%22%7D%2C%22ts%22%3A1643203257%2C%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22version%22%3A%221.0.3%22%2C%22appname%22%3A%22com.360buy.jdmobile%22%2C%22ridx%22%3A-1%7D;Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;',
-            'Referer' : origin,
-            'Accept-Language' : 'zh-CN,zh-Hans;q=0.9',
-        },
-    }
-    if(body) urlObject.body = body
-    return urlObject;
+'User-Agent' : 'jdapp;iPhone;10.3.4;;;M/5.0;appBuild/167945;jdSupportDarkMode/0;ef/1;ep/%7B%22ciphertype%22%3A5%2C%22cipher%22%3A%7B%22ud%22%3A%22DWPsCWTuYzVvENOyENvvZwYzDzc2YJDtZNS5EWZwDzrwCJZrDNS5CK%3D%3D%22%2C%22sv%22%3A%22CJUkCK%3D%3D%22%2C%22iad%22%3A%22ENY1EUU2DJYjHOPQGI00GzDOBJrQG0SjGJu3CtHMDUU0CJY0%22%7D%2C%22ts%22%3A1643203257%2C%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22version%22%3A%221.0.3%22%2C%22appname%22%3A%22com.360buy.jdmobile%22%2C%22ridx%22%3A-1%7D;Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;',
+    'Referer' : origin,
+    'Accept-Language' : 'zh-CN,zh-Hans;q=0.9',
+},
+}
+if(body) urlObject.body = body
+return urlObject;
 }
 
 async function httpRequest(method,url) {
