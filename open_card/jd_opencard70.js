@@ -7,11 +7,11 @@
 入口：[ 2.10~2.16 联合开卡 (活动地址:https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20220210/unitedCardNew20220210?actId=b802b95813e14b41ae_22021001)]
 请求太频繁会被黑ip
 过10分钟再执行
-cron:40 0,15 26-30 1 *
+cron:0 15 11,17,20 * * *
 ============Quantumultx===============
 [task_local]
 #2.10~2.16 联合开卡
-40 0,15 26-30 1 * jd_opencardL70.js, tag=2.10~2.16 联合开卡, enabled=true
+0 15 11,17,20 * * * jd_opencardL70.js, tag=2.10~2.16 联合开卡, enabled=true
 */
 
 const $ = new Env('2.10~2.16 联合开卡');
