@@ -1,14 +1,11 @@
 /*
-2022新春快乐 击鼓助力
+2022欢度元宵 邀人助力
 账号内互助
-每人2次助力机会 助力满需要5次
-cron:15 10,22 1-14 2 *
-15 10,22 1-14 2 *  https://raw.githubusercontent.com/smiek2121/scripts/master/gua_HappyNewYear_Shares.js
-
+每人3次助力机会 助力满需要5次
+cron:15 14,22 15 2 *
+15 14,22 15 2 *  https://raw.githubusercontent.com/KingRan/JDJB/main/jd_HappyNewYear_Share.js
 */
-
-
-const $ = new Env('2022新春快乐 击鼓助力');
+const $ = new Env('2022欢度元宵 邀人助力');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 CryptoScripts()
@@ -31,7 +28,7 @@ resMsg = ''
 $.endFlag = false
 let shareCodeArr = {}
 $.runArr = {}
-const activeEndTime = '2022/02/15 00:00:00+08:00';//活动结束时间
+const activeEndTime = '2022/02/16 00:00:00+08:00';//活动结束时间
 let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000;
 let timeH = $.time('H')
 !(async () => {
@@ -125,8 +122,8 @@ function getCoupons(code = '') {
         let h5st = h5stSign(body) || 'undefined'
         let message = ''
         let opts = {
-            url: `https://api-x.m.jd.com/client.action`,
-            body: `h5st=${h5st}&functionId=party_rt_assist&body=${$.toStr(body,body)}&client=wh5&clientVersion=1.0.0&appid=o2_act&t=${time}`,
+            url: `https://api-x.m.jd.com/`,
+            body: `h5st=${h5st}&functionId=party_yx_assist&body=${$.toStr(body,body)}&client=wh5&clientVersion=1.0.0&appid=spring_h5&t=${time}`,
             headers: {
                 "Accept": "application/json",
                 "Accept-Language": "zh-cn",
@@ -159,8 +156,8 @@ function showCoupon() {
     return new Promise(resolve => {
         let body = {"showAssistorsSwitch":true}
         let opts = {
-            url: `https://api-x.m.jd.com/client.action`,
-            body: `functionId=party_rt_inviteWindow&body=${$.toStr(body,body)}&client=wh5&clientVersion=1.0.0&appid=o2_act`,
+            url: `https://api-x.m.jd.com/`,
+            body: `functionId=party_yx_inviteWindow&body=${$.toStr(body,body)}&client=wh5&clientVersion=1.0.0&appid=spring_h5`,
             headers: {
                 "Accept": "application/json",
                 "Accept-Language": "zh-cn",
@@ -193,7 +190,7 @@ function showCoupon() {
                                 }
                             }else if(res.data.bizMsg){
                                 console.log(res.data.bizMsg)
-                                if([-2002].includes(res.data.bizCode)){
+                                if([-2001].includes(res.data.bizCode)){
                                     $.endFlag = true
                                 }
                             }
