@@ -168,7 +168,6 @@ async function GetCollect() {
             newShareCodes.push($.farmInfo.farmUserPro.shareCode)
         } else {
             console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}互助码】\n数据异常,使用作者的互助码:94f3ba0769b04c94bbfca26139108702`);
-            newShareCodes.push("94f3ba0769b04c94bbfca26139108702");
         }
     } catch (e) {
         $.logErr(e);
