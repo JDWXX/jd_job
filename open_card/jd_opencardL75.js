@@ -1,20 +1,20 @@
 /*
-1.15~1.25 联合开卡
+2.18~2.23 联合开卡
 新增开卡脚本，一次性脚本
 第一个账号助力作者 其他依次助力CK1
 第一个CK失效会退出脚本
 ————————————————
-入口：[ 1.15~1.25 联合开卡 (https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew2022011502/unitedCardNew2022011502?actId=ed19a355a96649ff8e2af691aa_22011502)]
+入口：[ 2.18~2.23 联合开卡]
 请求太频繁会被黑ip
 过10分钟再执行
-cron:6 11 15-25 1 *
+cron:35 0,14 18-23 2 *
 ============Quantumultx===============
 [task_local]
-#1.15~1.25 联合开卡
-6 11 15-25 1 * jd_opencardL55.js, tag=1.15~1.25 联合开卡, enabled=true
+#2.18~2.23 联合开卡
+35 0,14 18-23 2 * jd_opencardL75.js, tag=2.18~2.23 联合开卡, enabled=true
 */
 
-const $ = new Env('1.15~1.25 联合开卡');
+const $ = new Env('2.18~2.23 联合开卡');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
@@ -47,10 +47,10 @@ let activityCookie =''
     // return
     $.appkey = '51B59BB805903DA4CE513D29EC448375'
     $.userId = '10299171'
-    $.actId = 'ed19a355a96649ff8e2af691aa_22011502'
+    $.actId = 'dd01d7abe65a4bac83967e94968_220218'
     $.MixNicks = ''
     $.inviteNick = '/nFlfyWPdMnTxK1/nf0Ssc7TwJCmNe8NFvhpI0XmJDULVU108+UxlHw7qoUuHA4F'
-    console.log(`活动地址:https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew2022011502/unitedCardNew2022011502?actId=ed19a355a96649ff8e2af691aa_22011502`)
+    console.log(`活动地址:`)
     console.log(`请自行测试有水无水。`)
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
@@ -162,16 +162,13 @@ async function run() {
         }
         await takePostRequest('myAward');
         await takePostRequest('missionInviteList');
-        // console.log($.MixNick)
-        // console.log(`当前助力:${$.MixNick}`)
+        console.log($.MixNick)
+        console.log(`当前助力:${$.inviteNick}`)
         if($.index == 1){
-            // $.inviteNick = $.MixNick 没奖励了
-            // console.log(`后面的号都会助力:${$.inviteNick}`)
+            $.inviteNick = $.MixNick
+            console.log(`后面的号都会助力:${$.inviteNick}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
-        if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
-        if($.index % 3 == 0) console.log('休息1分钟，别被黑ip了\n可持续发展')
-        if($.index % 3 == 0) await $.wait(parseInt(Math.random() * 5000 + 60000, 10))
     } catch (e) {
         console.log(e)
     }
