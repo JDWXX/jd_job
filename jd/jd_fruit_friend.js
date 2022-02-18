@@ -22,13 +22,11 @@ cron "10 5,17 * * *" script-path=jd_fruit_friend.js,tag=东东农场好友删减
 const $ = new Env('东东农场好友删减奖励');
 let cookiesArr = [], cookie = '', isBox = false, notify,allMessage = '';
 let newShareCodes=[];
-let message = '', subTitle = '', option = {}, isFruitFinished = false;
-const retainWater = $.isNode() ? (process.env.retainWater ? process.env.retainWater : 100) : ($.getdata('retainWater') ? $.getdata('retainWater') : 100);//保留水滴大于多少g,默认100g;
+let message = '', subTitle = '', option = {};
+const retainWater = $.isNode() ? (process.env.retainWater ? process.env.retainWater : 100) : ($.getdata('retainWater') ? $.getdata('retainWater') : 100);
 let jdNotify = false;//是否关闭通知，false打开通知推送，true关闭通知推送
 let jdFruitBeanCard = false;//农场使用水滴换豆卡(如果出现限时活动时100g水换20豆,此时比浇水划算,推荐换豆),true表示换豆(不浇水),false表示不换豆(继续浇水),脚本默认是浇水
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html%22%20%7D`;
-let NowHour = new Date().getHours();
 let llhelp=true;
 !(async () => {
     await requireConfig();
@@ -101,7 +99,7 @@ async function jdFruit() {
     try {
         await initForFarm();
         await getAwardInviteFriend();//删除好友与接受邀请成为别人的好友
-        if ($.farmInfo.farmUserPro) {
+        if ($.farmInfo && $.farmInfo.farmUserPro) {
             message = `删除好友与接受好友邀请已完成`;
         } else {
             console.log(`初始化农场数据异常, 请登录京东 app查看农场功能是否正常`);
@@ -167,7 +165,8 @@ async function GetCollect() {
             console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}互助码】${$.farmInfo.farmUserPro.shareCode}`);
             newShareCodes.push($.farmInfo.farmUserPro.shareCode)
         } else {
-            console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}互助码】\n数据异常,使用作者的互助码:94f3ba0769b04c94bbfca26139108702`);
+            console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}互助码】\n数据异常,使用作者的互助码:c375f5806c5a406ca238dc4e5410f009`);
+            newShareCodes.push("c375f5806c5a406ca238dc4e5410f009");
         }
     } catch (e) {
         $.logErr(e);
