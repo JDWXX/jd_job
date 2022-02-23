@@ -1,20 +1,26 @@
 /*
-2.15~2.21 联合开卡
+2.23~2.28 联合开卡
 新增开卡脚本，一次性脚本
+
 第一个账号助力作者 其他依次助力CK1
 第一个CK失效会退出脚本
+
 ————————————————
-入口：[ 2.15~2.21 联合开卡 ]
+入口：[ 2.23~2.28 联合开卡 ]
+
 请求太频繁会被黑ip
 过10分钟再执行
-cron:50 0,12 15-21 2 *
+
+
+cron:51 0,19 23-28 2 *
 ============Quantumultx===============
 [task_local]
-#2.15~2.21 联合开卡
-50 0,12 15-21 2 * jd_opencardL74.js, tag=2.15~2.21 联合开卡, enabled=true
+#2.23~2.28 联合开卡
+51 0,19 23-28 2 * jd_opencardL81.js, tag=2.23~2.28 联合开卡, enabled=true
+
 */
 
-const $ = new Env('2.15~2.21 联合开卡');
+const $ = new Env('2.23~2.28 联合开卡');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
@@ -47,10 +53,11 @@ let activityCookie =''
     // return
     $.appkey = '51B59BB805903DA4CE513D29EC448375'
     $.userId = '10299171'
-    $.actId = 'b134063c47974580a18d208412_22021501'
+    $.actId = 'b2135158a2c84d309ccc2a_220223'
     $.MixNicks = ''
     $.inviteNick = '/nFlfyWPdMnTxK1/nf0Ssc7TwJCmNe8NFvhpI0XmJDULVU108+UxlHw7qoUuHA4F'
-    console.log(`请自行测试有水无水。`)
+    console.log(`活动地址:`)
+    // authorCodeList = [$.inviteNick,"OZWWyV+UF+4hIUxWAWXPsqnQSaK0OgzhoJLIa/XEluWWXc0uQ5WlWk8J2tBF2Jsj"]
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
@@ -162,17 +169,19 @@ async function run() {
         await takePostRequest('myAward');
         await takePostRequest('missionInviteList');
         console.log($.MixNick)
-        console.log(`当前助力:${$.inviteNick}`)
+        console.log(`当前助力:${$.MixNicks}`)
         if($.index == 1){
-            $.inviteNick = $.MixNick
-            console.log(`后面的号都会助力:${$.inviteNick}`)
+            $.MixNicks = $.MixNick
+            console.log(`后面的号都会助力:${$.MixNicks}`)
         }
+        authorCodeList.push($.MixNicks)
+        $.inviteNick = authorCodeList[random(0, authorCodeList.length)]
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
     } catch (e) {
         console.log(e)
     }
 }
-
+function random(min, max) {return Math.floor(Math.random() * (max - min)) + min;}
 async function takePostRequest(type) {
     if($.outFlag) return
     let domain = 'https://jinggengjcq-isv.isvjcloud.com';
