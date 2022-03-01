@@ -163,10 +163,10 @@ async function run() {
         await takePostRequest('myAward');
         await takePostRequest('missionInviteList');
         console.log($.MixNick)
-        console.log(`当前助力:${$.inviteNick}`)
+        console.log(`当前助力:${$.inviteNic}`)
         if($.index == 1){
-            $.inviteNick = $.MixNick
-            console.log(`后面的号都会助力:${$.inviteNick}`)
+            $.inviteNic = $.MixNick
+            console.log(`后面的号都会助力:${$.inviteNic}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
     } catch (e) {
