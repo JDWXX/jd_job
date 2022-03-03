@@ -47,7 +47,7 @@ let activityCookie =''
     }
     $.activityId = "dz3eb0e16893aa4f7a91d103a6db0b"
     authorCodeList = [
-        '5b669154f51e46ef93e5536c6367d89f',
+        '5b669154f51e46ef93e5536c6367d89f'
     ]
     $.shareUuid = authorCodeList[Math.floor((Math.random() * authorCodeList.length))]
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/bigname/memberday/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
@@ -191,6 +191,10 @@ async function run() {
 }
 
 async function takePostRequest(type) {
+    authorCodeList = [
+        "aff2ad76cc5b4ead9378ca60b5de8347","16532e8d6e3b497a938038579cff715c","7d5b76eeba8b4d79a7174619f3988d7e","eb00f2f73cb14f7d88450282f34c1873","bcfdbf01024742bcb9557ca2896d1f3f"
+    ]
+    $.shareUuid = authorCodeList[Math.floor((Math.random() * authorCodeList.length))]
     if($.outFlag) return
     let domain = 'https://lzdz1-isv.isvjcloud.com';
     let body = ``;
