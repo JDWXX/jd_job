@@ -99,8 +99,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
   $.activityId = "uniongame20220303molpd624p"
   $.shareUuid = "99ea2028defa48d89f2da3cccf3b9ef8"
   console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
-  let shareUuidArr = [$.shareUuid]
-  // let shareUuidArr = [$.shareUuid,"23d4e9f6ec134372961af3071d21f9b6"]
+  let shareUuidArr = [$.shareUuid,"99ea2028defa48d89f2da3cccf3b9ef8","020057f38e8f49629930c1b3254059f5"]
   let s = Math.floor((Math.random()*10))
   let n = 0
   if(s == 1) n = Math.floor((Math.random()*shareUuidArr.length))
