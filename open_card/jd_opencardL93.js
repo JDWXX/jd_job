@@ -11,7 +11,7 @@ cron:30 10,18 1-15 3 *
 */
 
 const $ = new Env('3.4-3.10 大牌联合女神节我宠你');
-const jdCookieNode = $.isNode() ? require('./jdCookie2.js') : '';
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [],
     cookie = '';
