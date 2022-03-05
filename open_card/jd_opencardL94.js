@@ -9,7 +9,6 @@ cron:30 10,18 1-15 3 *
 #3.5-3.18  大牌联合-94
 30 10,18 1-15 3 * jd_opencardL94.js, tag=3.5-3.18  大牌联合-94, enabled=true
 */
-
 const $ = new Env('3.5-3.18  大牌联合-94');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
