@@ -15,7 +15,6 @@ cron "0 55 * * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/ms/j
 全品类优惠券5减2 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_jdjsb_10_4.js, cronexpr="0 55 * * * *", timeout=3600, enable=true
  */
 const $ = new Env('全品类优惠券5减2');
-console.log("\n活动地址 https://u.jd.com/BCJekXm\n")
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const fetch = require('node-fetch')

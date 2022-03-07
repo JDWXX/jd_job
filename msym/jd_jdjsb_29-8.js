@@ -1,21 +1,20 @@
 /*
-全品类优惠券10减4
+全品类优惠券29减8
 自动预约茅台 执行时间大家自己改下
 脚本兼容: QuantumultX, Surge,Loon, JSBox, Node.js
 =================================Quantumultx=========================
 [task_local]
-#全品类优惠券10减4
-0 55 * * * * https://github.com/JDWXX/jd_job/blob/master/ms/jd_jdjsb_10_4.js, tag=全品类优惠券10减4, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+#全品类优惠券29减8
+0 55 * * * * https://github.com/JDWXX/jd_job/blob/master/ms/jd_jdjsb_10_4.js, tag=全品类优惠券29减8, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 =================================Loon===================================
 [Script]
-cron "0 55 * * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_jdjsb_10_4.js,tag=全品类优惠券10减4
+cron "0 55 * * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_jdjsb_10_4.js,tag=全品类优惠券29减8
 ===================================Surge================================
-全品类优惠券10减4 = type=cron,cronexp="0 55 * * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_jdjsb_10_4.js
+全品类优惠券29减8 = type=cron,cronexp="0 55 * * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_jdjsb_10_4.js
 ====================================小火箭=============================
-全品类优惠券10减4 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_jdjsb_10_4.js, cronexpr="0 55 * * * *", timeout=3600, enable=true
+全品类优惠券29减8 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_jdjsb_10_4.js, cronexpr="0 55 * * * *", timeout=3600, enable=true
  */
-const $ = new Env('全品类优惠券10减4');
-console.log("\n活动地址 https://u.jd.com/BCJekXm\n")
+const $ = new Env('全品类优惠券29减8');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const fetch = require('node-fetch')
@@ -146,8 +145,8 @@ function sleep(timeout) {
                 continue
             }
             try {
-                let activityId = 'F922BBE3F2239AD921A7360D331C1010_bingo'
-                let key = '9F77A904F38D9D2EA7968850FE8E4CF8408EF50BCE7C6FF518E48C3F1453D4DDDE2267491E3A0134A4B3422E11261222_bingo,roleId=F922BBE3F2239AD921A7360D331C1010_bingo,strengthenKey=19F512DCD8EE34ABE9C4FB4A92C2F42A01B287B27F5B68E70E7CC11BBE843EA0_bingo'
+                let activityId = '20E136F5EB78E9D323CEA65000B08718_bingo'
+                let key = '6102ED3D9BC7C8DFF14D1A36FFA89602070B138DF76D200B6FA411359FBAD50B1FD83787E7C9BEF8843A4631ADF6C792_bingo,roleId=20E136F5EB78E9D323CEA65000B08718_bingo,strengthenKey=19F512DCD8EE34ABE9C4FB4A92C2F42A65327F2097264F7157C058E713F98BE4_bingo'
                 fetch("http://api.m.jd.com/client.action?functionId=newBabelAwardCollection&body={\"activityId\":\"" + activityId + "\",\"from\":\"H5node\",\"scene\":\"1\",\"args\":" +
                     "\"key=" + key + "\",\"mitemAddrId\":\"\",\"geo\":{\"lng\":\"\",\"lat\":\"\"}}&client=wh5&clientVersion=1.0.0", {
                     "headers": {
@@ -168,10 +167,10 @@ function sleep(timeout) {
                     "method": "GET"
                 }).then(res => res.json())
                     .then(json => {
-                        console.log("全品类优惠券10减4")
+                        console.log("全品类优惠券29减8")
                         console.log(json)
                         if(json.subCodeMsg.indexOf("领取成功！") != -1)
-                            msgs += "账号:【" + $.UserName + "】 全品类优惠券10减4 " + json.subCodeMsg + "\n";
+                            msgs += "账号:【" + $.UserName + "】 全品类优惠券29减8 " + json.subCodeMsg + "\n";
                     });
             }catch (e){
 
@@ -179,7 +178,7 @@ function sleep(timeout) {
         }
     }
     if(msgs != ""){
-        notify.sendNotify("全品类优惠券10减4", msgs);
+        notify.sendNotify("全品类优惠券29减8", msgs);
     }
 
 
