@@ -32,6 +32,7 @@ var kois = process.env.kois ?? ""
 let cookiesArr = []
 let scriptsLogArr = []
 let log_i = 0
+let log_j = 0
 var tools = []
 
 let notify, allMessage = '';
@@ -392,7 +393,11 @@ async function helpThisUser(help, tool) {
         num += Math.floor(Math.random() * 10);
     }
     body={"redPacketId": help.redPacketId,"followShop": 0,"random": scriptsLogArr[log_i].substring(10,18),"log": scriptsLogArr[log_i].substring(27,scriptsLogArr[log_i].length-1),"sceneid":"JLHBhPageh5"}
-    log_i ++
+    log_j ++
+    if(log_j >= 10){
+        log_j = 0
+        log_i ++
+    }
     if(log_i == scriptsLogArr.length)
         log_i = 0
     // 实际发起请求
