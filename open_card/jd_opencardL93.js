@@ -56,11 +56,11 @@ let activityCookie =''
             if($.outFlag || $.activityEnd) break
         }
     }
-    if($.outFlag) {
-        let msg = '此ip已被限制，请过10分钟后再执行脚本'
-        $.msg($.name, ``, `${msg}`);
-        if ($.isNode()) await notify.sendNotify(`${$.name}`, `${msg}`);
-    }
+    // if($.outFlag) {
+    //     let msg = '此ip已被限制，请过10分钟后再执行脚本'
+    //     $.msg($.name, ``, `${msg}`);
+    //     if ($.isNode()) await notify.sendNotify(`${$.name}`, `${msg}`);
+    // }
 })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
@@ -135,57 +135,57 @@ async function run() {
             console.log('已全部开卡')
         }
 
-        $.log("关注: " + $.followShop)
-        if(!$.followShop && !$.outFlag){
-            flag = true
-            await takePostRequest('followShop');
-            await $.wait(parseInt(Math.random() * 2000 + 3000, 10))
-        }
+        // $.log("关注: " + $.followShop)
+        // if(!$.followShop && !$.outFlag){
+        //     flag = true
+        //     await takePostRequest('followShop');
+        //     await $.wait(parseInt(Math.random() * 2000 + 3000, 10))
+        // }
 
         $.yaoqing = false
         await takePostRequest('邀请');
         if($.yaoqing){
             await takePostRequest('助力');
         }
-        $.log("加购: " + $.addCart)
-        if(!$.addCart && !$.outFlag){
-            flag = true
-            let goodsArr = []
-            await takePostRequest('addCart');
-            await $.wait(parseInt(Math.random() * 2000 + 4000, 10))
-        }
+        // $.log("加购: " + $.addCart)
+        // if(!$.addCart && !$.outFlag){
+        //     flag = true
+        //     let goodsArr = []
+        //     await takePostRequest('addCart');
+        //     await $.wait(parseInt(Math.random() * 2000 + 4000, 10))
+        // }
         if(flag){
             await takePostRequest('activityContent');
         }
         $.runFalag = true
-        let count = parseInt($.score/100)
-        console.log(`抽奖次数为:${count}`)
-        for(m=1;count--;m++){
-            console.log(`第${m}次抽奖`)
-            await takePostRequest('抽奖');
-            if($.runFalag == false) break
-            if(Number(count) <= 0) break
-            if(m >= 10){
-                console.log("抽奖太多次，多余的次数请再执行脚本")
-                break
-            }
-            await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
-        }
+        // let count = parseInt($.score/100)
+        // console.log(`抽奖次数为:${count}`)
+        // for(m=1;count--;m++){
+        //     console.log(`第${m}次抽奖`)
+        //     await takePostRequest('抽奖');
+        //     if($.runFalag == false) break
+        //     if(Number(count) <= 0) break
+        //     if(m >= 10){
+        //         console.log("抽奖太多次，多余的次数请再执行脚本")
+        //         break
+        //     }
+        //     await $.wait(parseInt(Math.random() * 2000 + 1000, 10))
+        // }
 
-        await $.wait(parseInt(Math.random() * 1000 + 2000, 10))
+        await $.wait(parseInt(Math.random() * 1000 + 1000, 10))
         await takePostRequest('getDrawRecordHasCoupon');
         await takePostRequest('getShareRecord');
-        if($.outFlag){
-            console.log('此ip已被限制，请过10分钟后再执行脚本\n')
-            return
-        }
+        // if($.outFlag){
+        //     console.log('此ip已被限制，请过10分钟后再执行脚本\n')
+        //     return
+        // }
         console.log($.actorUuids)
         console.log(`当前助力:${$.shareUuid}`)
         if($.index == 1){
             $.actorUuids = $.actorUuid
             console.log(`后面的号都会助力:${$.actorUuids}`)
         }
-        await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
+        await $.wait(parseInt(Math.random() * 1000 + 2000, 10))
     } catch (e) {
         console.log(e)
     }
