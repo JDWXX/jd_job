@@ -30,15 +30,18 @@ let fair_mode = process.env.KOI_FAIR_MODE == "true" ? true : false
 let chetou_number = process.env.KOI_CHETOU_NUMBER ? Number(process.env.KOI_CHETOU_NUMBER) : 0
 var kois = process.env.kois ?? ""
 let cookiesArr = []
+let scriptsLogArr = []
+let log_i = 0
 var tools = []
 
 let notify, allMessage = '';
 
 !(async () => {
     await requireConfig()
-
+    console.log(`\n 锦鲤红包助力log需要手动抓取 \n`)
+    console.log(`\n 拿你小号口令助力抓包,搜关键字 jinli_h5assist 查看请求文本里，再通过URL转码（推荐 https://tool.chinaz.com/tools/urlencode.aspx）拿到对应参数,青龙环境变量里添加 logs \n`)
+    console.log(`\n 示例: logs 值 "random":"75831714","log":"1646396568418~1jD94......太长省略...Qwt9i"\n`)
     console.log(`当前配置的车头数目：${chetou_number}，是否开启公平模式：${fair_mode}`)
-
     console.log("开始获取用于助力的账号列表")
     for (let i in cookiesArr) {
         // 将用于助力的账号加入列表
@@ -109,7 +112,6 @@ let notify, allMessage = '';
                     }
 
                     console.debug(`尝试用 ${tool.id} 账号助力 ${help.id} 账号，用于互助的账号剩余 ${tools.length}`)
-
                     await helpThisUser(help, tool)
                     if (!tool.assisted) {
                         // 如果没有助力成功，则放入互助列表头部
@@ -244,7 +246,7 @@ async function getHelpInfoForCk(cookieIndex, cookie) {
         case 20002://已达拆红包数量限制
             console.debug("已领取今天全部红包，将跳过")
             break;
-        case 10002://活动正在进行，火爆号
+        case 10003://活动正在进行，火爆号
             console.debug(`h5activityIndex 被风控，变成黑号了, data=${JSON.stringify(data)}`)
             break;
         case 20001://红包活动正在进行，可拆
@@ -389,15 +391,12 @@ async function helpThisUser(help, tool) {
     for (var i = 0; i < 6; i++) {
         num += Math.floor(Math.random() * 10);
     }
-
+    body={"redPacketId": help.redPacketId,"followShop": 0,"random": scriptsLogArr[log_i].substring(10,18),"log": scriptsLogArr[log_i].substring(27,scriptsLogArr[log_i].length-1),"sceneid":"JLHBhPageh5"}
+    log_i ++
+    if(log_i == scriptsLogArr.length)
+        log_i = 0
     // 实际发起请求
-    await requestApi('jinli_h5assist', tool.cookie, {
-        "redPacketId": help.redPacketId,
-        "followShop": 0,
-        "random": num,
-        "log": "42588613~8,~0iuxyee",
-        "sceneid": "JLHBhPageh5"
-    }).then(function (data) {
+    await requestApi('jinli_h5assist', tool.cookie, body).then(function (data) {
         let desc = data?.data?.result?.statusDesc
         if (desc) {
             if (desc.indexOf("助力成功") != -1) {
@@ -449,18 +448,26 @@ async function requireConfig() {
     return new Promise(resolve => {
         notify = $.isNode() ? require('./sendNotify') : '';
         const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+        const scriptsLog = $.isNode() ? require('./ql_jlhb_log.js') : '';
         if ($.isNode()) {
             Object.keys(jdCookieNode).forEach((item) => {
                 if (jdCookieNode[item]) {
                     cookiesArr.push(jdCookieNode[item])
                 }
             })
+            Object.keys(scriptsLog).forEach((item) => {
+                if (scriptsLog[item]) {
+                    scriptsLogArr.push(scriptsLog[item])
+                }
+            })
+
             if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
             };
         } else {
             cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
         }
         console.log(`共${cookiesArr.length}个京东账号\n`)
+        console.log(`共${scriptsLogArr.length}个助力logn`)
         resolve()
     })
 }

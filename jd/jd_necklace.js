@@ -40,9 +40,6 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  // console.log(`\n通知：[非法请求] 可以等5分钟左右再次执行脚本\n`);
-  console.log(`\n脚本失效 [非法请求]\n`);
-  return
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -101,6 +98,7 @@ async function doTask() {
   for (let item of $.taskConfigVos) {
     if (item.taskStage === 0) {
       console.log(`【${item.taskName}】 任务未领取,开始领取此任务`);
+      console.log(item.id)
       let res = await necklace_startTask(item.id);
       if(res && res.rtn_code == 0){
         console.log(`【${item.taskName}】 任务领取成功,开始完成此任务`);
@@ -120,10 +118,12 @@ async function doTask() {
   }
 }
 async function receiveBubbles() {
+  console.log($.bubbles)
   for (let item of $.bubbles) {
     console.log(`\n开始领取点点券`);
+    console.log(item.id)
     await necklace_chargeScores(item.id)
-    await $.wait(2000)
+    await $.wait(5000)
   }
 }
 async function sign() {
@@ -353,6 +353,7 @@ function necklace_homePage() {
   return new Promise(resolve => {
     $.post(taskPostUrl('necklace_homePage'), async (err, resp, data) => {
       try {
+        // console.log(data)
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)

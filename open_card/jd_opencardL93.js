@@ -179,11 +179,11 @@ async function run() {
             console.log('此ip已被限制，请过10分钟后再执行脚本\n')
             return
         }
-        console.log($.actorUuid)
+        console.log($.actorUuids)
         console.log(`当前助力:${$.shareUuid}`)
         if($.index == 1){
-            $.shareUuid = $.actorUuid
-            console.log(`后面的号都会助力:${$.shareUuid}`)
+            $.actorUuids = $.actorUuid
+            console.log(`后面的号都会助力:${$.actorUuids}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
     } catch (e) {

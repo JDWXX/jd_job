@@ -59,6 +59,7 @@ let msg = ''
       break
     }
   }
+  console.log(inviteCodes);
   console.log('\n#######开始助力前三个可助力的账号#######\n');
   cookiesArr.sort(function () {
     return .5 - Math.random();
@@ -78,7 +79,7 @@ let msg = ''
         inviteCodes[j]["ok"] = true
         continue
       }
-      await $.wait(7000)
+      await $.wait(5000)
       await help(inviteCodes[j]['packetId'])
       if(msg === '帮砍机会已用完'){
         break
