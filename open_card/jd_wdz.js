@@ -10,7 +10,7 @@
  * @returns {Promise<unknown>}
  * 7 7 7 7 7 jd_team60.js
  */
-console.log("默认 ，如需修改环境变量中添加 jd_zdjr_activityId 值为活动的 activityId ")
+console.log("默认 9f3f956e1ffb404ab08e59a256d959cc ，如需修改环境变量中添加 jd_zdjr_activityId 值为活动的 activityId ")
 
 function openCardActivity(activityId, activityUrl, pin, num, againUserIndex) {
     return new Promise((resolve) => {
