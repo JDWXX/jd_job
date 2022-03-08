@@ -1,4 +1,5 @@
 /*
+
 个护女神节
 一次性脚本
 入口：https://prodev.m.jd.com/mall/active/2xkw8NY53wVwSqw3CMtAmanw9y5X/index.html
@@ -6,15 +7,20 @@
 [task_local]
 #个护女神节
 35 10 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_opencardL85.js, tag=个护女神节, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+
 ================Loon==============
 [Script]
 cron "35 10 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_opencardL85.js,tag=个护女神节
+
 ===============Surge=================
 个护女神节 = type=cron,cronexp="35 10 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_opencardL85.js
+
 ============小火箭=========
 个护女神节 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_opencardL85.js, cronexpr="35 10 * * *", timeout=3600, enable=true
+
+
 */
-const $ = new Env('个护女神节');
+const $ = new Env('3.8个护女神节');
 const Faker=require('./sign_graphics_validate.js')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -53,7 +59,7 @@ message = ""
     if(message){
         $.msg($.name, ``, `${message}\n获得到的京豆不一定到账`);
         if ($.isNode()){
-            await notify.sendNotify(`${$.name}`, `${message}\n获得到的京豆不一定到账`);
+            //await notify.sendNotify(`${$.name}`, `${message}\n获得到的京豆不一定到账`);
         }
     }
 })()
@@ -70,8 +76,8 @@ async function run() {
             return
         }
         let config = [
-            {configCode:'1c099a15608f48dc905af5befaa623d9',configName:'个护女神节'},
-
+            {configCode:'21d1986169cf49cf8caee4f0616f6d76',configName:'个护女神节'},
+            {configCode:'f7e00cba17fb461ab7204f06a688f957',configName:'食品女神价到'},
         ]
         for(let i in config){
             $.hotFlag = false
