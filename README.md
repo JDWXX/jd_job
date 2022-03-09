@@ -1,4 +1,11 @@
 
+# 阿里云服务器返佣 10元
+## 活动价格：￥35.00/年起
+## 原价：￥1417.00/年
+## 下单金额大于等于 35元 返利 10元，私信发我 阿里云用户昵称、收款二维码，活动截止日期：2022-03-31
+#### [https://www.aliyun.com/minisite/goods?taskPkg=2022cgj&pkgSid=295179&userCode=31csnowy](https://www.aliyun.com/minisite/goods?taskPkg=2022cgj&pkgSid=295179&userCode=31csnowy)
+
+
 # [完整使用教程](http://cxgc.top/)
 
 ## 最近网上传出《京豆打赏》等一些搞别人号的软件，希望大家有点底线，别为了几块钱把自己送进去，这种一抓一个准
@@ -49,9 +56,6 @@ ql repo https://hub.fastgit.org/JDWXX/ql_all.git "" "Backup|index|HT.*|sendNotif
 ![image](https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a406456-63ac-413b-b1f6-27a6eed5945e/baf96b0a-3764-4d81-b47f-bdcc3c553c96.png)
 ### 2群 681030097
 ![image](https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a406456-63ac-413b-b1f6-27a6eed5945e/98838c66-1a67-4c86-b52b-702742d7412a.png)
-
-## 超低价阿里云服务器
-#### [https://www.aliyun.com/activity/ambassador/share-gift/goods?taskCode=xfyh2107&recordId=764770&userCode=31csnowy](https://www.aliyun.com/activity/ambassador/share-gift/goods?taskCode=xfyh2107&recordId=764770&userCode=31csnowy)
 
 ## 腾讯云服务器
 #### [http://url.cn/5Z0ZWGI](http://url.cn/5Z0ZWGI)
