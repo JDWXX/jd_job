@@ -58,7 +58,7 @@ if ($.isNode()) {
             }
             $.authorCode = authorCodeList[random(0, authorCodeList.length)]
             // $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
-            $.activityId = '9222c59c4de14e039d124ba1d88d7004'
+            $.activityId = '85bd87e3bda047d78155139bcd8cb55b'
             $.activityShopId = '1000014486'
             $.randomNum = random(1000000, 9999999)
             $.activityUrl = `https://lzkjdz-isv.isvjcloud.com/pool/captain/${$.randomNum}?activityId=${$.activityId}&signUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
