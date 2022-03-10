@@ -689,7 +689,7 @@ function getshopactivityId() {
         $.get(options, async (err, resp, data) => {
             try {
                 let res = $.toObj(data);
-                if(res.success == true){
+                if(res && res.success == true){
                     // console.log($.toStr(res.result))
                     console.log(`入会:${res.result.shopMemberCardInfo.venderCardName || ''}`)
                     $.shopactivityId = res.result.interestsRuleList && res.result.interestsRuleList[0] && res.result.interestsRuleList[0].interestsInfo && res.result.interestsRuleList[0].interestsInfo.activityId || ''
