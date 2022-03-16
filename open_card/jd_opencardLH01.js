@@ -12,11 +12,11 @@
 过10分钟再执行
 
 
-cron:50 0,13 24-31,1-14 1,2 *
+cron:0 0 0/6 * * *
 ============Quantumultx===============
 [task_local]
 #3.12~3.18 联合开卡
-50 0,13 24-31,1-14 1,2 * jd_opencardL62.js, tag=3.12~3.18 联合开卡, enabled=true
+0 0 0/6 * * * jd_opencardL62.js, tag=3.12~3.18 联合开卡, enabled=true
 
 */
 
