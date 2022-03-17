@@ -22,6 +22,9 @@ cron "4 2,14 * * *" jd_try_dl.js, tag:京东试用
 
  */
 const $ = new Env('京东试用_携趣代理')
+console.log('\n 使用前一定要先安装下面二个所需依赖 ')
+console.log('\n docker exec -it QL bash -c "npm install superagent-proxy" ')
+console.log('\n docker exec -it QL bash -c "yarn add superagent" ')
 const URL = 'https://api.m.jd.com/client.action'
 let trialActivityIdList = []
 let trialActivityTitleList = []
