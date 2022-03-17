@@ -1,13 +1,23 @@
 /*
- * 如需运行请自行添加环境变量：JD_TRY，值填 true 即可运行
+ * 如需运行脚本必须开启代理
+ * 1.注册携趣代理：https://www.xiequ.cn/index.html?2f4ff690
+ * 2.获取携趣代理所需参数：http://cxgc.top/archives/xiequdaili
+ * 3.开启携趣代理 添加环境变量：xiequ，值填 True
+ * 4.携趣用户名 添加环境变量：proxyU，值填 第二步骤里获取
+ * 5.携趣密码 添加环境变量：proxyP，值填 第二步骤里获取
+ * 6.携趣IP提取地址 添加环境变量：ipUrl，值填 第二步骤里获取
+ * 安装下面二个所需依赖
+ * docker exec -it QL bash -c "npm install superagent-proxy"
+ * docker exec -it QL bash -c "yarn add superagent"
+ *
  * 脚本兼容: Node.js
  * X1a0He留
  * 脚本是否耗时只看args_xh.maxLength的大小
  * 上一作者说了每天最多300个商店，总上限为500个，jd_unsubscribe.js我已更新为批量取关版
  * 请提前取关至少250个商店确保京东试用脚本正常运行
  *
- * @Address: https://github.com/X1a0He/jd_scripts_fixed/blob/main/jd_try_xh.js
- * @LastEditors: X1a0He
+ * @Address: https://github.com/JDWXX/jd_job/blob/master/jd/jd_try_dl.js
+ * @LastEditors: JDWXX
  参考环境变量配置如下：
 export JD_TRY="true"
 export JD_TRY_PLOG="true" #是否打印输出到日志
