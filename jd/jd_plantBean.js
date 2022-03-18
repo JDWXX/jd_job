@@ -454,6 +454,7 @@ function showMsg() {
 }
 // ================================================此处是API=================================
 //每轮种豆活动获取结束后,自动收取京豆
+//每轮种豆活动获取结束后,自动收取京豆
 async function getReward() {
   const body = {
     "roundId": lastRoundId
@@ -490,7 +491,7 @@ async function collectUserNutr(paradiseUuid) {
   $.stealFriendRes = await request(functionId, body);
 }
 async function receiveNutrients() {
-  $.receiveNutrientsRes = await request('receiveNutrients', {"roundId": currentRoundId, "monitor_refer": "plant_receiveNutrients"})
+  $.receiveNutrientsRes = await request('receiveNutrients', { "roundId": currentRoundId, "monitor_refer": "plant_receiveNutrients" })
   // console.log(`定时领取营养液结果:${JSON.stringify($.receiveNutrientsRes)}`)
 }
 async function plantEggDoLottery() {
@@ -502,7 +503,7 @@ async function egg() {
 }
 async function productTaskList() {
   let functionId = arguments.callee.name.toString();
-  $.productTaskList = await requestGet(functionId, {"monitor_refer": "plant_productTaskList"});
+  $.productTaskList = await requestGet(functionId, { "monitor_refer": "plant_productTaskList" });
 }
 async function plantChannelTaskList() {
   let functionId = arguments.callee.name.toString();
@@ -511,7 +512,7 @@ async function plantChannelTaskList() {
 }
 async function shopTaskList() {
   let functionId = arguments.callee.name.toString();
-  $.shopTaskListRes = await requestGet(functionId, {"monitor_refer": "plant_receiveNutrients"});
+  $.shopTaskListRes = await requestGet(functionId, { "monitor_refer": "plant_receiveNutrients" });
   // console.log('$.shopTaskListRes', $.shopTaskListRes)
 }
 async function receiveNutrientsTask(awardType) {
@@ -523,7 +524,7 @@ async function receiveNutrientsTask(awardType) {
   $.receiveNutrientsTaskRes = await requestGet(functionId, body);
 }
 async function plantShareSupportList() {
-  $.shareSupportList = await requestGet('plantShareSupportList', {"roundId": ""});
+  $.shareSupportList = await requestGet('plantShareSupportList', { "roundId": "" });
   if ($.shareSupportList && $.shareSupportList.code === '0') {
     const { data } = $.shareSupportList;
     //当日北京时间0点时间戳
@@ -554,7 +555,7 @@ async function helpShare(plantUuid) {
   console.log(`助力结果的code:${$.helpResult && $.helpResult.code}`);
 }
 async function plantBeanIndex() {
-  $.plantBeanIndexResult = await request('plantBeanIndex');//plantBeanIndexBody
+  $.plantBeanIndexResult = await request('plantBeanIndex'); //plantBeanIndexBody
 }
 
 function shareCodesFormatJDWXX() {
@@ -625,6 +626,7 @@ function requireConfig() {
     resolve()
   })
 }
+
 function requestGet(function_id, body = {}) {
   if (!body.version) {
     body["version"] = "9.0.0.1";
@@ -663,6 +665,7 @@ function requestGet(function_id, body = {}) {
     })
   })
 }
+
 function TotalBean() {
   return new Promise(async resolve => {
     const options = {
@@ -708,7 +711,8 @@ function TotalBean() {
     })
   })
 }
-function request(function_id, body = {}){
+
+function request(function_id, body = {}) {
   return new Promise(async resolve => {
     await $.wait(2000);
     $.post(taskUrl(function_id, body), (err, resp, data) => {
@@ -728,6 +732,7 @@ function request(function_id, body = {}){
     })
   })
 }
+
 function taskUrl(function_id, body) {
   body["version"] = "9.2.4.0";
   body["monitor_source"] = "plant_app_plant_index";
@@ -748,12 +753,14 @@ function taskUrl(function_id, body) {
     timeout: 10000,
   }
 }
+
 function getParam(url, name) {
   const reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i")
   const r = url.match(reg)
   if (r != null) return unescape(r[2]);
   return null;
 }
+
 function jsonParse(str) {
   if (typeof str == "string") {
     try {
