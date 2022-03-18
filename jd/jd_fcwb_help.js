@@ -58,7 +58,7 @@ let curRound = 1
     console.log("\n活动入口：极速版-》我的-》发财挖宝"+"\n请务必先手动进入活动后随意点击方块后执行脚本"+"\n若点击方块获得0.01红包即活动黑了。"+"\n没助力是因为验证h5st，自行抓包替换");
     let res = [];
 
-    try{res = await getAuthorShareCode('https://gitee.com/KingRan521/JD-Scripts/raw/master/shareCodes/fcwb.json');}catch (e) {}
+    try{res = await getAuthorShareCode('https://jdwxx.github.io/jd_job/fcwb.json');}catch (e) {}
     if(!res){res = [];}
 
     if(res.length > 0){
