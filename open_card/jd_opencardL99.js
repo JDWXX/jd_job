@@ -71,7 +71,7 @@ if ($.isNode()) {
             $.bean = 0;
             $.ADID = getUUID("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", 1);
             $.UUID = getUUID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            $.authorCode = authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`;
             $.randomCode = random(1000000, 9999999);
             $.activityId = "dz1a8e2d544da69c0cfc0ef18187ba";
@@ -190,6 +190,8 @@ function task(function_id, body, isCommon = 0, own = 0) {
                                         $.log(`开启【${data.data.activityName}】活动`);
                                         if ($.index === 1) {
                                             ownCode = data.data.actorUuid;
+                                            authorCodeList.push(data.data.actorUuid)
+                                            authorCodeList.push(data.data.actorUuid)
                                             console.log(ownCode);
                                         }
                                         $.actorUuid = data.data.actorUuid;
