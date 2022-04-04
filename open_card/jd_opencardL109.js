@@ -55,10 +55,6 @@ let authorCodeList = []
     $.shareUuid = "621bb36a1ff943868f043b4848b5293b"
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
     let shareUuidArr = ["621bb36a1ff943868f043b4848b5293b"]
-    let s = Math.floor((Math.random()*3))
-    let n = 0
-    n = Math.floor((Math.random()*shareUuidArr.length))
-    $.shareUuid = shareUuidArr[n] ? shareUuidArr[n] : $.shareUuid
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
@@ -68,6 +64,10 @@ let authorCodeList = []
             $.bean = 0
             $.hotFlag = false
             $.nickName = '';
+            let s = Math.floor((Math.random()*3))
+            let n = 0
+            n = Math.floor((Math.random()*shareUuidArr.length))
+            $.shareUuid = shareUuidArr[n] ? shareUuidArr[n] : $.shareUuid
             console.log(`\n\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             await getUA()
             await run();
@@ -235,10 +235,11 @@ async function run() {
             return
         }
         console.log($.actorUuid)
-        console.log(`当前助力:${$.shareUuid}`)
+        console.log(`当前助力:${$.shareUuids}`)
         if($.index == 1){
-            $.shareUuid = $.actorUuid
-            console.log(`后面的号都会助力:${$.shareUuid}`)
+            $.shareUuids = $.actorUuid
+            shareUuidArr.post($.actorUuid)
+            console.log(`后面的号都会助力:${$.shareUuids}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
         if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))

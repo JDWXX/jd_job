@@ -53,10 +53,6 @@ let shareUuidArr = []
     $.shareUuid = "9e50428250d74f46b687b4fde19400e6"
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/mar2022/miFenJie/activity/563603?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
     let shareUuidArr = ["9e50428250d74f46b687b4fde19400e6"]
-    let s = Math.floor((Math.random()*3))
-    let n = 0
-    n = Math.floor((Math.random()*shareUuidArr.length))
-    $.shareUuid = shareUuidArr[n] ? shareUuidArr[n] : $.shareUuid
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
@@ -67,6 +63,10 @@ let shareUuidArr = []
             $.hotFlag = false
             $.nickName = '';
             console.log(`\n\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+            let s = Math.floor((Math.random()*3))
+            let n = 0
+            n = Math.floor((Math.random()*shareUuidArr.length))
+            $.shareUuid = shareUuidArr[n] ? shareUuidArr[n] : $.shareUuid
             await getUA()
             await run();
             if(i == 0 && !$.actorUuid) break
@@ -188,10 +188,11 @@ async function run() {
         await takePostRequest('getDrawRecordHasCoupon');
         await takePostRequest('getShareRecord');
         console.log($.actorUuid)
-        console.log(`当前助力:${$.shareUuid}`)
+        console.log(`当前助力:${$.shareUuids}`)
         if($.index == 1){
-            $.shareUuid = $.actorUuid
-            console.log(`后面的号都会助力:${$.shareUuid}`)
+            $.shareUuids = $.actorUuid
+            shareUuidArr.push($.actorUuid)
+            console.log(`后面的号都会助力:${$.shareUuids}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
         if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))

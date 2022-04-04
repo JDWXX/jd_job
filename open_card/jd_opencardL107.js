@@ -44,6 +44,9 @@ if ($.isNode()) {
         $.msg($.name, "【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取", "https://bean.m.jd.com/bean/signIndex.action", { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
+    authorCodeList = [
+        '29f695134d9d406488f6725045d1547a',
+    ];
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -65,11 +68,8 @@ if ($.isNode()) {
             $.bean = 0;
             $.ADID = getUUID("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", 1);
             $.UUID = getUUID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-            authorCodeList = [
-                '29f695134d9d406488f6725045d1547a',
-            ];
-            // $.authorCode = authorCodeList[random(0, authorCodeList.length)];
-            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            $.authorCode = authorCodeList[random(0, authorCodeList.length)];
+            // $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`;
             $.randomCode = random(1000000, 9999999);
             $.activityId = "dzf14101834564a0b1336646135829";
@@ -197,6 +197,7 @@ function task(function_id, body, isCommon = 0, own = 0) {
                                         $.log("-------------------");
                                         if ($.index === 1) {
                                             ownCode = data.data.actorUuid;
+                                            authorCodeList.push(data.data.actorUuid)
                                             console.log(ownCode);
                                         }
                                         $.actorUuid = data.data.actorUuid;
