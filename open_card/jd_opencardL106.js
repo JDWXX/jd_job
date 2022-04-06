@@ -194,11 +194,8 @@ function task(function_id, body, isCommon = 0, own = 0) {
                                 case "april/springUnion/activityContent":
                                     if (!data.data.hasEnd) {
                                         $.log(`开启【${data.data.activityName}】活动`);
-                                        $.log("-------------------");
                                         if ($.index === 1) {
                                             ownCode = data.data.actorUuid;
-                                            authorCodeList.push(data.data.actorUuid)
-                                            console.log(ownCode);
                                         }
                                         $.actorUuid = data.data.actorUuid;
                                     } else {

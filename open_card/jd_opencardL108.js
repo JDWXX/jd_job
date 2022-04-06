@@ -191,7 +191,6 @@ async function run() {
         console.log(`当前助力:${$.shareUuids}`)
         if($.index == 1){
             $.shareUuids = $.actorUuid
-            shareUuidArr.push($.actorUuid)
             console.log(`后面的号都会助力:${$.shareUuids}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
