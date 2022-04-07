@@ -1,18 +1,17 @@
 /*
 小米京东自营旗舰店1000元券
-自动预约茅台 执行时间大家自己改下
 脚本兼容: QuantumultX, Surge,Loon, JSBox, Node.js
 =================================Quantumultx=========================
 [task_local]
 #小米京东自营旗舰店1000元券
-0 55 9,19 * * * https://github.com/JDWXX/jd_job/blob/master/ms/jd_jdjsb_10_4.js, tag=小米京东自营旗舰店1000元券, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+0 55 9,19 * * * https://github.com/JDWXX/jd_job/blob/master/ms/jd_yhq_xm1000.js, tag=小米京东自营旗舰店1000元券, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 =================================Loon===================================
 [Script]
-cron "0 55 9,19 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_jdjsb_10_4.js,tag=小米京东自营旗舰店1000元券
+cron "0 55 9,19 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_yhq_xm1000.js,tag=小米京东自营旗舰店1000元券
 ===================================Surge================================
-小米京东自营旗舰店1000元券 = type=cron,cronexp="0 55 9,19 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_jdjsb_10_4.js
+小米京东自营旗舰店1000元券 = type=cron,cronexp="0 55 9,19 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_yhq_xm1000.js
 ====================================小火箭=============================
-小米京东自营旗舰店1000元券 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_jdjsb_10_4.js, cronexpr="0 55 9,19 * * *", timeout=3600, enable=true
+小米京东自营旗舰店1000元券 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_yhq_xm1000.js, cronexpr="0 55 9,19 * * *", timeout=3600, enable=true
  */
 const $ = new Env('小米京东自营旗舰店1000元券');
 const notify = $.isNode() ? require('./sendNotify') : '';
