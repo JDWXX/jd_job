@@ -51,8 +51,8 @@ if ($.isNode()) {
             authorCodeList = [
                 '976c7f6f04504aa2b6d561b23d38de18',
             ];
-            // $.authorCode = authorCodeList[random(0, authorCodeList.length)];
-            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            $.authorCode = authorCodeList[random(0, authorCodeList.length)];
+            // $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`;
             $.randomCode = random(1000000, 9999999);
             $.activityId = "dz40c5c3a14fd59a0c47466d63f0c7";
@@ -91,7 +91,7 @@ async function member() {
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
-            console.log("去助力 -> " + $.authorCode);
+            console.log("去助力 -> " + ownCode);
             await taskaccessLog("common/accessLogWithAD", `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
             await $.wait(1000);
             await task("wxActionCommon/getUserInfo", `pin=${encodeURIComponent($.secretPin)}`, 1);
@@ -125,7 +125,6 @@ async function member() {
             }
             await $.wait(1000);
             await task("april/springUnion2/initOpenCard", `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}`);
-            console.log("去助力 -> " + $.authorCode);
             // await task("linkgame/assist/status", `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&shareUuid=${$.authorCode}`);
             // await task("linkgame/assist", `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&shareUuid=${$.authorCode}`);
             // await task('linkgame/help/list', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}`)
