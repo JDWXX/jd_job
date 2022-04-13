@@ -195,10 +195,10 @@ async function run() {
             return
         }
         console.log($.actorUuid)
-        console.log(`当前助力:${$.shareUuid}`)
+        console.log(`当前助力:${$.shareUuids}`)
         if($.index == 1){
-            $.shareUuid = $.actorUuid
-            console.log(`后面的号都会助力:${$.shareUuid}`)
+            $.shareUuids = $.actorUuid
+            console.log(`后面的号都会助力:${$.shareUuids}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
         if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
@@ -213,6 +213,7 @@ async function run() {
 
 async function takePostRequest(type) {
     if($.outFlag) return
+    $.shareUuid = "96210452a56d4b21a0e679f5f202248f"
     let domain = 'https://lzdz1-isv.isvjcloud.com';
     let body = ``;
     let method = 'POST'
