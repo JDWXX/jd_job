@@ -44,7 +44,7 @@ message = ""
             $.prize = 0
             $.Hb = 0
             $.drawresult = "";
-            $.linkid = "YhCkrVusBVa_O2K-7xE6hA"
+            $.linkid = "WMDf1PTHmh8MYBpD97sieQ"
             $.message = `【京东账号${$.index}】${$.UserName}\n`
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             if (!$.isLogin) {
@@ -111,7 +111,6 @@ function check() {
                             console.log("马上就好")
                             resolve(0)
                         } else {
-                            console.log("等你🐎呢")
                             resolve(data.data.leftTime)
                         }
                         console.log("查询成功 剩余时间：" + time + "min")
