@@ -8,7 +8,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], cookie = '', message = '', linkId = 'yMVR-_QKRd2Mq27xguJG-w', fflLinkId = 'YhCkrVusBVa_O2K-7xE6hA';
+let cookiesArr = [], cookie = '', message = '', linkId = 'u_2EYfsxu0skdtZ6gbRjBQ', fflLinkId = 'WMDf1PTHmh8MYBpD97sieQ';
 const money = $.isNode() ? (process.env.BIGWINNER_MONEY ? process.env.BIGWINNER_MONEY * 1 : 0.3) : ($.getdata("BIGWINNER_MONEY") ? $.getdata("BIGWINNER_MONEY") * 1 : 0.3)
 	const JD_API_HOST = 'https://api.m.jd.com/api';
 if ($.isNode()) {
