@@ -21,7 +21,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [];
-let linkId = 'YhCkrVusBVa_O2K-7xE6hA';
+let linkId = 'WMDf1PTHmh8MYBpD97sieQ';
 //#设置大于指定红包金额提现
 //默认大于0.3提现   需要调整添加参数  export JD_RED_PACKET_VAL=0.5 自用0.5 一般到手0.64大于0.64容易没
 let redPacketVal = 0.3;
