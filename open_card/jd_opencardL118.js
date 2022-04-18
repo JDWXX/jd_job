@@ -206,10 +206,10 @@ async function run() {
       return
     }
     console.log($.actorUuid)
-    console.log(`当前助力:${$.shareUuid}`)
+    console.log(`当前助力:${$.shareUuids}`)
     if($.index == 1){
-      $.shareUuid = $.actorUuid
-      console.log(`后面的号都会助力:${$.shareUuid}`)
+      $.shareUuids = $.actorUuid
+      console.log(`后面的号都会助力:${$.shareUuids}`)
     }
     await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
       if($.index % 3 == 0) console.log('休息一下，别被黑ip了\n可持续发展')
