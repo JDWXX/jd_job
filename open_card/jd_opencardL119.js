@@ -60,8 +60,6 @@ let activityCookie =''
     let n = 0
     n = Math.floor((Math.random()*shareUuidArr.length))
     $.shareUuid = shareUuidArr[n] ? shareUuidArr[n] : $.shareUuid
-
-
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
@@ -71,6 +69,7 @@ let activityCookie =''
             $.bean = 0
             $.hotFlag = false
             $.nickName = '';
+            $.shareUuid = "bd05afe3324c4b3d92621b3869049bf7"
             console.log(`\n\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             await getUA()
             await run();
