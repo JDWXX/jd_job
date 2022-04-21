@@ -52,7 +52,7 @@ if ($.isNode()) {
                 '5d6d553e6da44a6ba553a1e2e6816027',
             ];
             // $.authorCode = authorCodeList[random(0, authorCodeList.length)];
-            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            $.authorCode = authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`;
             $.randomCode = random(1000000, 9999999);
             $.activityId = "dzlhkkc99b60200kk081f1bc4bacd1";
