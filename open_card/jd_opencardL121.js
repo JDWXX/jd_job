@@ -1,7 +1,7 @@
 /*
 大牌联合 春夏约惠
 */
-const $ = new Env("大牌联合 春夏约惠");
+const $ = new Env("4.19~4.26 大牌联合 春夏约惠");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const notify = $.isNode() ? require("./sendNotify") : "";
 let cookiesArr = [], cookie = "", message = "";
@@ -58,6 +58,7 @@ if ($.isNode()) {
             $.activityId = "dzlhkkc99b60200kk081f1bc4bacd1";
             $.activityShopId = "1000003691";
             $.activityUrl = `https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=undefined&lng=00.000000&lat=00.000000&sid=&un_area=`;
+            console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=${$.activityId}&shareUuid=${$.authorCode}`)
             await member();
             await $.wait(1000);
             if ($.bean > 0) {
