@@ -1,5 +1,5 @@
 /*
-4.29~5.13 五五购物节 礼献母爱
+5.16~5.23 情暖五月 以爱之名
 新增开卡脚本，一次性脚本
 
 
@@ -7,7 +7,7 @@
 第一个CK失效会退出脚本
 
 
-入口：[ 4.29~5.13 五五购物节 礼献母爱]
+入口：[ 5.16~5.23 情暖五月 以爱之名]
 
 请求太频繁会被黑ip
 过10分钟再执行
@@ -15,12 +15,12 @@
 cron:50 1,12 30,1-13 4,5 *
 ============Quantumultx===============
 [task_local]
-#4.29~5.13 五五购物节 礼献母爱
-50 1,12 30,1-13 4,5 * jd_opencardL126.js, tag=4.29~5.13 五五购物节 礼献母爱, enabled=true
+#5.16~5.23 情暖五月 以爱之名
+50 1,12 30,1-13 4,5 * jd_opencardL126.js, tag=5.16~5.23 情暖五月 以爱之名, enabled=true
 
 */
 
-const $ = new Env('4.29~5.13 五五购物节 礼献母爱')
+const $ = new Env('5.16~5.23 情暖五月 以爱之名')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
@@ -50,16 +50,14 @@ let activityCookie =''
         });
         return;
     }
-    $.activityId = "dzlhkk97014d5b972ca1a6870b88da"
-    $.shareUuid = "19c2ea8f93514a24835814b4a39f75fc"
+    $.activityId = "dzlhkk17e740478a664c23f2c5580a"
+    $.shareUuid = "3e5c5a69e12343c4bc82fcc8d1ac75e0"
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
-    let shareUuidArr = ["19c2ea8f93514a24835814b4a39f75fc"]
+    let shareUuidArr = ["3e5c5a69e12343c4bc82fcc8d1ac75e0"]
     let s = Math.floor((Math.random()*3))
     let n = 0
     n = Math.floor((Math.random()*shareUuidArr.length))
     $.shareUuid = shareUuidArr[n] ? shareUuidArr[n] : $.shareUuid
-
-
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
@@ -600,7 +598,7 @@ async function dealReturn(type, data) {
             case '助力':
                 // console.log(data)
                 if(typeof res == 'object'){
-                    if(res.data.status == 200){
+                    if(res.data && res.data.status && res.data.status == 200){
                         if(type == '助力'){
                             console.log('助力成功')
                         }else{
