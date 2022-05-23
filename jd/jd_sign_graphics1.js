@@ -1,23 +1,9 @@
 /* 
-京东签到翻牌
-by:小手冰凉 tg:@chianPLA
+cron 10 8 * * * jd_sign_graphics.js
 只支持nodejs环境
-需要安装依赖 
+需要安装依赖
 npm i png-js 或者 npm i png-js -S
-============Quantumultx===============
-[task_local]
-#京东签到翻牌
-10 8 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_sign_graphics1.js, tag=京东签到翻牌, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxcfd.png, enabled=true
 
-================Loon==============
-[Script]
-cron "10 8 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_sign_graphics1.js,tag=京东签到翻牌
-
-===============Surge=================
-京东签到翻牌 = type=cron,cronexp="10 8 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_sign_graphics1.js
-
-============小火箭=========
-京东签到翻牌 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_sign_graphics1.js, cronexpr="10 8 * * *", timeout=3600, enable=true
 */
 
 const Faker = require('./sign_graphics_validate.js')
@@ -43,9 +29,9 @@ let successNum = 0
 let errorNum = 0
 let JD_API_HOST = 'https://sendbeans.jd.com'
 const turnTableId = [
-  // { "name": "美妆-1", "id": 815, "shopid": 887726, "url": "https://sendbeans.jd.com/jump/index/" },
-  // { "name": "美妆-2", "id": 1162, "shopid": 56178, "url": "https://sendbeans.jd.com/jump/index/" },
-  { "name": "美妆-3", "id": 1082, "shopid": 1000004123, "url": "https://sendbeans.jd.com/jump/index/" },
+  { "name": "翻牌", "id": 1082, "shopid": 1000004123, "url": "https://sendbeans.jd.com/jump/index/" },
+  { "name": "翻牌", "id": 1338, "shopid": 1000085823, "url": "https://sendbeans.jd.com/jump/index/" },
+  { "name": "翻牌", "id": 1419, "shopid": 1000007205, "url": "https://sendbeans.jd.com/jump/index/" },
 ]
 
 !(async () => {
@@ -67,6 +53,7 @@ const turnTableId = [
       $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
       getUA()
       await signRun()
+      await $.wait(8000)
       const UTC8 = new Date().getTime() + new Date().getTimezoneOffset() * 60000 + 28800000;
       $.beanSignTime = new Date(UTC8).toLocaleString('zh', { hour12: false });
       let msg = `【京东账号${$.index}】${$.nickName || $.UserName}\n【签到时间】:  ${$.beanSignTime}\n【签到概览】:  成功${successNum}个, 失败${errorNum}个\n${beanNum > 0 && "【签到奖励】:  " + beanNum + "京豆" || ""}\n`
@@ -76,12 +63,12 @@ const turnTableId = [
   }
   // await showMsg();
 })()
-  .catch((e) => {
-    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-  })
-  .finally(() => {
-    $.done();
-  })
+    .catch((e) => {
+      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    })
+    .finally(() => {
+      $.done();
+    })
 
 async function showMsg() {
   $.msg($.name, `【签到数量】:  ${turnTableId.length}个\n` + subTitle + message);
