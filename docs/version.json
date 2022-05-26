@@ -1,8 +1,8 @@
 {
-  "version": 2.0,
-  "now_url": "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a406456-63ac-413b-b1f6-27a6eed5945e/b5cc8bf1-7a4c-4156-b8ce-fd7ac13aa17e.apk",
+  "version": 2.1,
+  "now_url": "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a406456-63ac-413b-b1f6-27a6eed5945e/a0966c97-528b-4acb-9a32-106eb0e45653.apk",
   "silent": 0,
-  "force": 1,
+  "force": 0,
   "net_check": 1,
-  "note": "【1】京东优惠券查询 【2】从服务器获取最新活动地址 【3】生活服务涵盖：餐饮、充值、购物、出行、等热门活动 【4】支持更新到指定面板 "
+  "note": "【1】京东优惠券查询 【2】从服务器获取最新活动地址 【3】生活服务涵盖：餐饮、充值、购物、出行、等热门活动 【4】支持更新到指定面板 【5】多参数更新到指定面板 "
 }

@@ -1,21 +1,34 @@
 
-# 阿里云服务器返佣 10元
-## 活动价格：￥35.00/年起
-## 原价：￥1417.00/年
-## 下单金额大于等于 35元 返利 10元，私信发我 阿里云用户昵称、收款二维码，活动截止日期：2022-03-31
-#### [https://www.aliyun.com/minisite/goods?taskPkg=2022cgj&pkgSid=295179&userCode=31csnowy](https://www.aliyun.com/minisite/goods?taskPkg=2022cgj&pkgSid=295179&userCode=31csnowy)
-
-
-# [完整使用教程](http://cxgc.top/)
-
-## 最近网上传出《京豆打赏》等一些搞别人号的软件，希望大家有点底线，别为了几块钱把自己送进去，这种一抓一个准
-## 前几天什么直播的，个别一些TG群别乱喷，我不玩TG，拉我库的人干的一些事情和我有什么关系？麻烦喷子们长点脑子
 ## 库里的脚本也来源别的库收集的，我拉代码的时候也尽量检查了一遍，有些代码加密了，但没法保证代码安全，还望大家自己注意点，脚本本意是为了给大家节省时间，希望卡商们别搞的太大给东哥留点家底
 
-# 所有非京东的脚本都从新库拉取
+
+### 获取 ck工具 【JDWXX】
+
+##### 下载地址
+
 ```
-【JDWXX-非京东任务汇总】
+https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a406456-63ac-413b-b1f6-27a6eed5945e/a0966c97-528b-4acb-9a32-106eb0e45653.apk
 ```
+
+### ----------------------------------------------------------------------------
+
+#### 【JDWXX-京东任务】
+
+##### 命令
+```
+ql repo https://github.com/JDWXX/jd_job.git "jd_|jx_|gua_|jddj_|getJDCookie" "activity|backUp" "^jd[^_]|USER|function|utils|ZooFaker_Necklace.js|JDJRValidator|sign_graphics_validate|ql|send"
+```
+
+##### 定时规则
+
+```
+0 0 1,10,15 * * *
+```
+
+### ----------------------------------------------------------------------------
+
+##### 【JDWXX-非京东任务汇总】
+
 ##### 命令
 
 ```
