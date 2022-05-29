@@ -25,8 +25,8 @@ let message = '', allMessage = '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let appIdArr = ['1EFdRwqyF','1EFZWxKqP','1FFVQyqw','1EFRQwA','1EFRWxKuG', '1E1xZy6s'];
-let appNameArr = ['春尚','新品来袭','1111点心动','疯狂砸金蛋','许愿抽好礼', 'PLUS生活特权'];
+let appIdArr = ["1EFNUwqeO",'1EFNVyqeH','1FFVQyqw','1EFRWxKuG', '1E1xZy6s'];
+let appNameArr = ['互动抽豪礼','京东电器','1111点心动','许愿抽好礼', 'PLUS生活特权'];
 let appId, appName;
 $.shareCode = [];
 if ($.isNode()) {
@@ -43,7 +43,8 @@ if ($.isNode()) {
     return;
   }
   $.res = await getAuthorShareCode('\u0068\u0074\u0074\u0070\u0073\u003a\u002f\u002f\u006a\u0064\u0077\u0078\u0078\u002e\u0067\u0069\u0074\u0068\u0075\u0062\u002e\u0069\u006f\u002f\u006a\u0064\u005f\u006a\u006f\u0062\u002f\u0077\u0069\u0073\u0068\u002e\u006a\u0073\u006f\u006e')
-  $.shareCode = [...($.res || [])];
+  // $.shareCode = [...($.res || [])];
+  $.shareCode = [];
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];

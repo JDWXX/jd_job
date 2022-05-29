@@ -1,16 +1,22 @@
 /*
 [task_local]
-#520美妆抽奖机活动
-31 23 15-20/2 5 * jd_520mzcj.js, tag=520美妆抽奖机活动, enabled=true
+#joy抽奖机通用
+0 0,10 * * * jd_lottery.js, tag=joy抽奖机通用, enabled=true
+
+//变量：export JD_Lottery="id" 多个使用  @  连接
  */
-const $ = new Env('520美妆抽奖机活动');
+const $ = new Env('joy抽奖机通用');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
-$.configCode = "6ebb625682204acb9244404a23e4759d";
+let llnothing=true;
+let lottery = '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
+if (process.env.JD_Lottery && process.env.JD_Lottery != "") {
+    lottery = process.env.JD_Lottery.split('@');
+}
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -21,9 +27,12 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 !(async () => {
-    console.log('入口下拉：https://u.jd.com/EI0kDKk')
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
+        return;
+    }
+    if (!lottery) {
+        console.log("\n衰仔你好，衰仔你好！！！\n你不填写变量 JD_Lottery，\n是不是玩我呢！\n我很生气，拒接执行o(╥﹏╥)o");
         return;
     }
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -43,8 +52,13 @@ if ($.isNode()) {
                 }
                 continue
             }
-            await jdmodule();
-            //await showMsg();
+            for (let j = 0; j < lottery.length; j++) {
+                $.configCode = lottery[j]
+                console.log(`抽奖机ID就位: ${$.configCode}，准备开始薅豆`);
+                await getUA()
+                await jdmodule();
+                //await showMsg();
+            }
         }
     }
 })()
@@ -87,11 +101,9 @@ async function run() {
                 continue;
             }
             if (vo.taskName == '每日签到') {
-                if(vo.taskItem && vo.taskType && vo.taskItem.itemId && vo.id){
-                    // console.log(`开始做${vo.taskName}:${vo.taskItem.itemName}`);
-                    await doTask(vo.taskType, vo.taskItem.itemId, vo.id);
-                    await getReward(vo.taskType, vo.taskItem.itemId, vo.id);
-                }
+                console.log(`开始做${vo.taskName}:${vo.taskItem.itemName}`);
+                await doTask(vo.taskType, vo.taskItem.itemId, vo.id);
+                await getReward(vo.taskType, vo.taskItem.itemId, vo.id);
             }
             if (vo.taskType == 3) {
                 console.log(`开始做${vo.taskName}:${vo.taskItem.itemName}`);
@@ -130,7 +142,7 @@ function getinfo() {
                 "Referer": "https://prodev.m.jd.com/mall/active/2Rkjx8aT5eKaQnUzn8dwcR6jNanj/index.html",
                 "origin": "https://prodev.m.jd.com",
                 'X-Requested-With': 'com.jingdong.app.mall',
-                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                "User-Agent": $.UA,
                 'accept-language': 'zh-Hans-CN;q=1',
                 'cookie': cookie
             },
@@ -169,7 +181,7 @@ function join() {
                 "Referer": "https://prodev.m.jd.com/mall/active/2Rkjx8aT5eKaQnUzn8dwcR6jNanj/index.html",
                 "origin": "https://prodev.m.jd.com",
                 'X-Requested-With': 'com.jingdong.app.mall',
-                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                "User-Agent": $.UA,
                 'accept-language': 'zh-Hans-CN;q=1',
                 'cookie': cookie
             },
@@ -258,7 +270,7 @@ function getinfo2(url2) {
                 'accept': '*/*',
                 'content-type': 'application/x-www-form-urlencoded',
                 'referer': '',
-                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                "User-Agent": $.UA,
                 'accept-language': 'zh-Hans-CN;q=1',
                 'cookie': cookie
             },
@@ -292,7 +304,7 @@ function taskPostUrl(function_id, body = {}) {
             "Referer": "https://prodev.m.jd.com/mall/active/2Rkjx8aT5eKaQnUzn8dwcR6jNanj/index.html",
             "origin": "https://prodev.m.jd.com",
             "Cookie": cookie,
-            "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            "User-Agent": $.UA,
         }
     }
 }
@@ -319,7 +331,16 @@ function jsonParse(str) {
         }
     }
 }
-
+async function getUA(){
+    $.UA = `jdapp;iPhone;10.1.4;13.1.2;${randomString(40)};network/wifi;model/iPhone8,1;addressid/2308460611;appBuild/167814;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`
+}
+function randomString(e) {
+    e = e || 32;
+    let t = "abcdef0123456789", a = t.length, n = "";
+    for (i = 0; i < e; i++)
+        n += t.charAt(Math.floor(Math.random() * a));
+    return n
+}
 function randomWord(randomFlag, min, max) {
     var str = "",
         range = min,
