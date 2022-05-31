@@ -2,6 +2,7 @@
 618红包锁佣
 京粉可能会被封，用不用看自己
 京粉转链：https://u.jd.com/JChlwbu
+rebatePin 填 分享码，可不填，默认助力前五 如果小于五个号 只助力第一个
 如需自己吃返利，rebateCodes 请填写该变量（https://u.jd.com/后面的英文）
 已支持IOS双京东账号, Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, 小火箭，JSBox, Node.js
@@ -23,7 +24,7 @@ cron "0 0 0,12,19,20 * * *" script-path=https://raw.githubusercontent.com/Aaron-
 const $ = new Env('618红包锁佣');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let rebateCodes = 'JChlwbu'
-let rebatePin = ''
+let rebatePin = '' //分享码 默认助力前五 如果小于五个号 只助力第一个
 CryptoScripts()
 $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
 //IOS等用户直接用NobyDa的jd cookie
@@ -89,7 +90,7 @@ let timeH = $.time('H')
                     if(s === 'flag' || s === 'updateTime') continue
                     if($.shareCodeArr[s]) n++
                 }
-                if($.endFlag || n >= 2) break
+                if($.endFlag || n >= (cookiesArr.length > 5 ? 5 : 1)) break
             }
         }
     }catch(e){
@@ -104,9 +105,9 @@ let timeH = $.time('H')
                     if(s === 'flag' || s === 'updateTime') continue
                     if($.shareCodeArr[s]) n++
                 }
-                if(n >= 2) break
+                if(n >= (cookiesArr.length > 5 ? 5 : 1)) break
                 $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-                if(n >= 2 && rebatePinArr.length > 0 && $.rebatePinArr[$.UserName]) continue
+                if(n >= (cookiesArr.length > 5 ? 5 : 1) && rebatePinArr.length > 0 && $.rebatePinArr[$.UserName]) continue
                 $.index = i + 1;
                 await getUA()
                 await run(1);
@@ -156,7 +157,7 @@ async function run(type = 0){
         let t = 0
         do{
             const flCodeArr = ["Jw9vOPv","JI9Tv0s","JI9BVON","JI9nW0I","Jw9YYhk","JChlwbu"];//鸡蛋不要放在一个篮子里
-            for (let i = 0; i < 5; i++) {//相同概率
+            for (let i = 0; i < 10; i++) {
                 flCodeArr.push(rebateCodes)
             }
             rebateCode = flCodeArr[Math.floor((Math.random() * flCodeArr.length))]
@@ -314,7 +315,7 @@ function showCoupon(shareId = '') {
     let msg = true
     return new Promise(resolve => {
         let opts = {
-            url: `https://api.m.jd.com/api?functionId=showCoupon&appid=u&_=${Date.now()}&loginType=2&body={%22actId%22:%22${$.actId}%22,%22unionActId%22:%2231137%22,%22unpl%22:%22%22,%22platform%22:4,%22unionShareId%22:%22%22,%22uiUpdateTime%22:1641456650000,%22d%22:%22${rebateCode}%22,%22eid%22:%22${$.eid}%22}&client=apple&clientVersion=8.3.6`,
+            url: `https://api.m.jd.com/api?functionId=showCoupon&appid=u&_=${Date.now()}&loginType=2&body={%22actId%22:%22${$.actId}%22,%22unionActId%22:%2231142%22,%22unpl%22:%22%22,%22platform%22:4,%22unionShareId%22:%22%22,%22uiUpdateTime%22:1641456650000,%22d%22:%22${rebateCode}%22,%22eid%22:%22${$.eid}%22}&client=apple&clientVersion=8.3.6`,
             headers: {
                 "Accept-Language": "zh-cn",
                 "Accept-Encoding": "gzip, deflate, br",
@@ -368,7 +369,7 @@ function shareUnionCoupon() {
     $.shareCodeArr[$.UserName] = ''
     return new Promise(resolve => {
         let opts = {
-            url: `https://api.m.jd.com/api?functionId=shareUnionCoupon&appid=u&_=${Date.now()}&loginType=2&body={%22unionActId%22:%2231137%22,%22actId%22:%22${$.actId}%22,%22platform%22:4,%22unionShareId%22:%22${$.shareCode}%22,%22d%22:%22${rebateCode}%22,%22supportPic%22:2,%22supportLuckyCode%22:0,%22eid%22:%22${$.eid}%22}&client=apple&clientVersion=8.3.6`,
+            url: `https://api.m.jd.com/api?functionId=shareUnionCoupon&appid=u&_=${Date.now()}&loginType=2&body={%22unionActId%22:%2231142%22,%22actId%22:%22${$.actId}%22,%22platform%22:4,%22unionShareId%22:%22${$.shareCode}%22,%22d%22:%22${rebateCode}%22,%22supportPic%22:2,%22supportLuckyCode%22:0,%22eid%22:%22${$.eid}%22}&client=apple&clientVersion=8.3.6`,
             headers: {
                 "Accept-Language": "zh-cn",
                 "Accept-Encoding": "gzip, deflate, br",
