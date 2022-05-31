@@ -156,8 +156,8 @@ async function run(type = 0){
         let s = 0
         let t = 0
         do{
-            const flCodeArr = ["Jw9vOPv","JI9Tv0s","JI9BVON","JI9nW0I","Jw9YYhk","JChlwbu"];//鸡蛋不要放在一个篮子里
-            for (let i = 0; i < 10; i++) {
+            const flCodeArr = ["JI9Tv0s","Jw9YYhk","JChlwbu"];//鸡蛋不要放在一个篮子里
+            for (let i = 0; i < 7; i++) {
                 flCodeArr.push(rebateCodes)
             }
             rebateCode = flCodeArr[Math.floor((Math.random() * flCodeArr.length))]
