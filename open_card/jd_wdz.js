@@ -7,21 +7,15 @@
  pin 用户名
  num 跑多少ck
  againUserIndex 需要重新跑的ck
-
  如果查询活动剩余瓜分为0，请务必手动停止脚本。否则会一直运行，因为 需要重新跑的ck 会一直重复跑。
-
  修改文件最下方： d2e7d12554aa4cbead58f5280ac5c9c2 是微定制的的代码 pt_pin 是你账号的值  60 是人数
-
  配置文件或者环境变量中添加变量：## 微定制组队瓜分-jd_wdzgf.js
  //export jd_wdz_activityId=""
  //export jd_wdz_activityUrl="https://cjhydz-isv.isvjcloud.com"
-
  指定PIN变量：（京东用户名）
  //export jd_wdz_pin="pin值"
-
  指定跑多少人变量：
  //export jd_wdz_num="60"
-
  cron:1 1 1 1 *
  ============Quantumultx===============
  [task_local]
@@ -95,7 +89,13 @@ function openCardActivity(activityId, activityUrl, pin, num, againUserIndex) {
                     $.isLogin = true;
                     $.nickName = "";
 
-                    console.log("\n******开始【京东账号" + $.index + "】" + ($.nickName || $.UserName) + "*********\n");
+                    console.log(
+                        "\n******开始【京东账号" +
+                        $.index +
+                        "】" +
+                        ($.nickName || $.UserName) +
+                        "*********\n"
+                    );
                     await jrzd();
                     if ($.end) {
                         break;
@@ -804,11 +804,12 @@ function Env(t, e) { "undefined" != typeof process && JSON.stringify(process.env
 
 
 // 修改下方的 7051ebbb5d6f44a4a081ab5b738ee470 是微定制的的代码 pt_pin 是你账号的值  60 是人数
+
 (async () => {
     await openCardActivity(
-        "daee1647b031423aae51d935cf25f216",
+        "8278b9c81b384316b468ab1420ea1111",
         "https://cjhydz-isv.isvjcloud.com",
-        "",
+        "pt_pin",
         60,
         []
     );
