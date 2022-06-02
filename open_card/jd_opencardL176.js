@@ -41,9 +41,7 @@ if ($.isNode()) {
     }
     console.log("入口:https://lzdz1-isv.isvjcloud.com/dingzhi/may/brandUnion/activity?activityId=dz96fb80e34caa9b51b95b0836967f");
     authorCodeList = [
-        'e682badd53284eb08ea1bb2356dc7b68',
-        'c77f35c3c7bb4b7fa0e95af26e16b91c',
-        '034df84ea6d842f19056d27a628a61d7',
+        'e87b0177d41040bc8c17ff939289d4c5',
     ]
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -66,12 +64,6 @@ if ($.isNode()) {
             $.bean = 0;
             $.ADID = getUUID("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", 1);
             $.UUID = getUUID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-            // authorCodeList = [
-            //   '9589e4f46f3e49218315f90c1a5fbec1',
-            //   'a7c93bf26ea245a186426fedef7d0739',
-            //   '4bd1f2cb22d14e13b8203467048fd2f4',
-            // ];
-            // $.authorCode = authorCodeList[random(0, authorCodeList.length)];
             $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`;
             $.randomCode = random(1000000, 9999999);
