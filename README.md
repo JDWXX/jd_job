@@ -70,9 +70,8 @@ ql repo https://hub.fastgit.org/JDWXX/ql_all.git "" "Backup|index|HT.*|sendNotif
 ### 2群 681030097
 ![image](https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a406456-63ac-413b-b1f6-27a6eed5945e/98838c66-1a67-4c86-b52b-702742d7412a.png)
 
-## 腾讯云服务器
-#### [http://url.cn/5Z0ZWGI](http://url.cn/5Z0ZWGI)
-#### [备用购买地址](https://cloud.tencent.com/act/pro/starlake?fromSource=gwzcw.3788702.3788702.3788702&utm_medium=cpc&utm_id=gwzcw.3788702.3788702.3788702&cps_key=13c854d3ec192824956cc079f600753f)
+## 腾讯云服务器 45元/1年
+#### [【腾讯云】618采购季来袭！爆款云服务器18元起，参与活动享多重好礼](https://cloud.tencent.com/act/cps/redirect?redirect=2260&cps_key=13c854d3ec192824956cc079f600753f&from=console)
 
 # 拉取仓库
 ##### 名称
