@@ -76,54 +76,54 @@ let timeH = $.time('H')
         $.shareCodeArr["flag"] = true
         getShare = true
     }
-    try{
-        for (let i = 0; i < cookiesArr.length && getShare; i++) {
-            cookie = cookiesArr[i];
-            if (cookie) {
-                $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-                if(rebatePinArr.length > 0 && rebatePinArr.indexOf($.UserName) == -1) continue
-                $.index = i + 1;
-                await getUA()
-                await run(1);
-                let n = 0
-                for(let s in $.shareCodeArr || {}){
-                    if(s === 'flag' || s === 'updateTime') continue
-                    if($.shareCodeArr[s]) n++
-                }
-                if($.endFlag || n >= (cookiesArr.length > 5 ? 5 : 1)) break
-            }
-        }
-    }catch(e){
-        console.log(e)
-    }
-    try{
-        for (let i = 0; i < cookiesArr.length && getShare; i++) {
-            cookie = cookiesArr[i];
-            if (cookie) {
-                let n = 0
-                for(let s in $.shareCodeArr || {}){
-                    if(s === 'flag' || s === 'updateTime') continue
-                    if($.shareCodeArr[s]) n++
-                }
-                if(n >= (cookiesArr.length > 5 ? 5 : 1)) break
-                $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-                if(n >= (cookiesArr.length > 5 ? 5 : 1) && rebatePinArr.length > 0 && $.rebatePinArr[$.UserName]) continue
-                $.index = i + 1;
-                await getUA()
-                await run(1);
-                if($.endFlag) break
-            }
-        }
-    }catch(e){
-        console.log(e)
-    }
-    if(Object.getOwnPropertyNames($.shareCodeArr).length > 0 && $.shareCodeArr["updateTime"] != pinUpdateTime) $.setdata($.shareCodeArr,'gua_JDnhjRed')
-    if(Object.getOwnPropertyNames($.shareCodeArr).length > 0){
-        for(let s in $.shareCodeArr || {}){
-            if(s === 'flag' || s === 'updateTime') continue
-            if($.shareCodeArr[s]) shareCodeArr[s] = $.shareCodeArr[s]
-        }
-    }
+    // try{
+    //     for (let i = 0; i < cookiesArr.length && getShare; i++) {
+    //         cookie = cookiesArr[i];
+    //         if (cookie) {
+    //             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+    //             if(rebatePinArr.length > 0 && rebatePinArr.indexOf($.UserName) == -1) continue
+    //             $.index = i + 1;
+    //             await getUA()
+    //             await run(1);
+    //             let n = 0
+    //             for(let s in $.shareCodeArr || {}){
+    //                 if(s === 'flag' || s === 'updateTime') continue
+    //                 if($.shareCodeArr[s]) n++
+    //             }
+    //             if($.endFlag || n >= (cookiesArr.length > 5 ? 5 : 1)) break
+    //         }
+    //     }
+    // }catch(e){
+    //     console.log(e)
+    // }
+    // try{
+    //     for (let i = 0; i < cookiesArr.length && getShare; i++) {
+    //         cookie = cookiesArr[i];
+    //         if (cookie) {
+    //             let n = 0
+    //             for(let s in $.shareCodeArr || {}){
+    //                 if(s === 'flag' || s === 'updateTime') continue
+    //                 if($.shareCodeArr[s]) n++
+    //             }
+    //             if(n >= (cookiesArr.length > 5 ? 5 : 1)) break
+    //             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+    //             if(n >= (cookiesArr.length > 5 ? 5 : 1) && rebatePinArr.length > 0 && $.rebatePinArr[$.UserName]) continue
+    //             $.index = i + 1;
+    //             await getUA()
+    //             await run(1);
+    //             if($.endFlag) break
+    //         }
+    //     }
+    // }catch(e){
+    //     console.log(e)
+    // }
+    // if(Object.getOwnPropertyNames($.shareCodeArr).length > 0 && $.shareCodeArr["updateTime"] != pinUpdateTime) $.setdata($.shareCodeArr,'gua_JDnhjRed')
+    // if(Object.getOwnPropertyNames($.shareCodeArr).length > 0){
+    //     for(let s in $.shareCodeArr || {}){
+    //         if(s === 'flag' || s === 'updateTime') continue
+    //         if($.shareCodeArr[s]) shareCodeArr[s] = $.shareCodeArr[s]
+    //     }
+    // }
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if($.endFlag) break
@@ -156,7 +156,7 @@ async function run(type = 0){
         let s = 0
         let t = 0
         do{
-            const flCodeArr = ["JI9Tv0s","Jw9YYhk","JChlwbu"];//鸡蛋不要放在一个篮子里
+            const flCodeArr = ["NLd9fGM","Jw9YYhk","JChlwbu"];//鸡蛋不要放在一个篮子里
             for (let i = 0; i < 7; i++) {
                 flCodeArr.push(rebateCodes)
             }
