@@ -163,10 +163,7 @@ async function run() {
             }
         }else{
             console.log('已全部开卡')
-            if($.index >= 12) {
-                await $.wait(parseInt(Math.random() * 2000 + 5000, 10))
-                return
-            }
+            return
         }
 
         $.log("关注: " + $.followShop)

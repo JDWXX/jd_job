@@ -161,6 +161,7 @@ async function run() {
             await takePostRequest('activityContent');
         }else{
             console.log('已全部开卡')
+            return
         }
         if($.openCardScore1 == 1 && !$.outFlag){
             $.startDraw = 1

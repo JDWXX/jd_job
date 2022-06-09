@@ -159,6 +159,7 @@ async function run() {
             }
         }else{
             console.log('已全部开卡')
+            return
         }
 
         /*    console.log(`${$.score}值`)
