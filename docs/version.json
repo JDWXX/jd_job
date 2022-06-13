@@ -1,8 +1,8 @@
 {
-  "version": 2.3,
-  "now_url": "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a406456-63ac-413b-b1f6-27a6eed5945e/6de7711b-f3f7-41ab-9744-6ac8f28a0fdc.apk",
+  "version": 2.4,
+  "now_url": "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a406456-63ac-413b-b1f6-27a6eed5945e/2fda7921-5661-4400-a09b-5a428e21b122.apk",
   "silent": 0,
-  "force": 0,
+  "force": 1,
   "net_check": 1,
-  "note": "查询快手"
+  "note": "详情页查询今日京豆、昨日京豆"
 }
