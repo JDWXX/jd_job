@@ -1,8 +1,8 @@
 {
   "version": 2.4,
-  "now_url": "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a406456-63ac-413b-b1f6-27a6eed5945e/2fda7921-5661-4400-a09b-5a428e21b122.apk",
+  "now_url": "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a31945b-22cb-4446-83cb-b078e22c7b51/e8bc629b-2e95-47f6-9a46-f0de6f9638a7.apk",
   "silent": 0,
-  "force": 1,
+  "force": 0,
   "net_check": 1,
-  "note": "详情页查询今日京豆、昨日京豆"
+  "note": "支持执行活动 东东农场"
 }
