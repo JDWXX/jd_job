@@ -208,55 +208,55 @@ async function run() {
             }
         }
 
-        $.log("关注: " + $.followShop)
-        if(!$.followShop && !$.outFlag){
-            flag = true
-            await takePostRequest('followShop');
-        }
-        $.log("关注频道: " + $.followPeony)
-        if(!$.followPeony && !$.outFlag){
-            flag = true
-            await takePostRequest('followPeony');
-        }
-        $.log("加购: " + $.followSku)
-        if(!$.followSku && !$.outFlag){
-            if(guaopencard_addSku+"" == "true"){
-                flag = true
-                let goodsArr = []
-                if(cleanCart){
-                    goodsArr = await cleanCart.clean(cookie,'https://jd.smiek.tk/jdcleancatr_21102717','')
-                }
-                await takePostRequest('addSku');
-                await $.wait(parseInt(Math.random() * 2000 + 5000, 10))
-                if(cleanCart && goodsArr !== false){
-                    // await $.wait(parseInt(Math.random() * 1000 + 4000, 10))
-                    await cleanCart.clean(cookie,'https://jd.smiek.tk/jdcleancatr_21102717',goodsArr || [ ])
-                }
-            }else{
-                console.log('如需加购请设置环境变量[guaopencard_addSku121]为"true"');
-            }
-        }
-        if(flag){
-            await takePostRequest('activityContent');
-        }
-        console.log(`${$.score}值`)
-        if(guaopencard_draw+"" !== "0" && $.joinShopStatus){
-            $.runFalag = true
-            let count = parseInt($.score/1)
-            guaopencard_draw = parseInt(guaopencard_draw, 10)
-            if(count > guaopencard_draw) count = guaopencard_draw
-            console.log(`抽奖次数为:${count}`)
-            for(m=1;count--;m++){
-                console.log(`第${m}次抽奖`)
-                await takePostRequest('抽奖');
-                if($.runFalag == false) break
-                if(Number(count) <= 0) break
-                if(m >= 10){
-                    console.log("抽奖太多次，多余的次数请再执行脚本")
-                    break
-                }
-            }
-        }else console.log('如需抽奖请设置环境变量[guaopencard_draw121]为"3" 3为次数');
+        // $.log("关注: " + $.followShop)
+        // if(!$.followShop && !$.outFlag){
+        //     flag = true
+        //     await takePostRequest('followShop');
+        // }
+        // $.log("关注频道: " + $.followPeony)
+        // if(!$.followPeony && !$.outFlag){
+        //     flag = true
+        //     await takePostRequest('followPeony');
+        // }
+        // $.log("加购: " + $.followSku)
+        // if(!$.followSku && !$.outFlag){
+        //     if(guaopencard_addSku+"" == "true"){
+        //         flag = true
+        //         let goodsArr = []
+        //         if(cleanCart){
+        //             goodsArr = await cleanCart.clean(cookie,'https://jd.smiek.tk/jdcleancatr_21102717','')
+        //         }
+        //         await takePostRequest('addSku');
+        //         await $.wait(parseInt(Math.random() * 2000 + 5000, 10))
+        //         if(cleanCart && goodsArr !== false){
+        //             // await $.wait(parseInt(Math.random() * 1000 + 4000, 10))
+        //             await cleanCart.clean(cookie,'https://jd.smiek.tk/jdcleancatr_21102717',goodsArr || [ ])
+        //         }
+        //     }else{
+        //         console.log('如需加购请设置环境变量[guaopencard_addSku121]为"true"');
+        //     }
+        // }
+        // if(flag){
+        //     await takePostRequest('activityContent');
+        // }
+        // console.log(`${$.score}值`)
+        // if(guaopencard_draw+"" !== "0" && $.joinShopStatus){
+        //     $.runFalag = true
+        //     let count = parseInt($.score/1)
+        //     guaopencard_draw = parseInt(guaopencard_draw, 10)
+        //     if(count > guaopencard_draw) count = guaopencard_draw
+        //     console.log(`抽奖次数为:${count}`)
+        //     for(m=1;count--;m++){
+        //         console.log(`第${m}次抽奖`)
+        //         await takePostRequest('抽奖');
+        //         if($.runFalag == false) break
+        //         if(Number(count) <= 0) break
+        //         if(m >= 10){
+        //             console.log("抽奖太多次，多余的次数请再执行脚本")
+        //             break
+        //         }
+        //     }
+        // }else console.log('如需抽奖请设置环境变量[guaopencard_draw121]为"3" 3为次数');
 
         await $.wait(parseInt(Math.random() * 1000 + 2000, 10))
         await takePostRequest('getDrawRecordHasCoupon');
@@ -266,21 +266,21 @@ async function run() {
             return
         }
         console.log($.actorUuid)
-        console.log(`当前助力:${$.shareUuid}`)
+        console.log(`当前助力:${$.shareUuids}`)
         if($.index == 1){
-            $.shareUuid = $.actorUuid
-            console.log(`后面的号都会助力:${$.shareUuid}`)
+            $.shareUuids = $.actorUuid
+            console.log(`后面的号都会助力:${$.shareUuids}`)
         }
-        await $.wait(parseInt(Math.random() * 2000 + 5000, 10))
-        if(guaopenwait){
-            if($.index != cookiesArr.length){
-                console.log(`等待${guaopenwait}秒`)
-                await $.wait(parseInt(guaopenwait, 10) * 1000)
-            }
-        }else{
-            if($.index % 3 == 0) console.log('休息1分钟，别被黑ip了\n可持续发展')
-            if($.index % 3 == 0) await $.wait(parseInt(Math.random() * 5000 + 60000, 10))
-        }
+        // await $.wait(parseInt(Math.random() * 2000 + 5000, 10))
+        // if(guaopenwait){
+        //     if($.index != cookiesArr.length){
+        //         console.log(`等待${guaopenwait}秒`)
+        //         await $.wait(parseInt(guaopenwait, 10) * 1000)
+        //     }
+        // }else{
+        //     if($.index % 3 == 0) console.log('休息1分钟，别被黑ip了\n可持续发展')
+        //     if($.index % 3 == 0) await $.wait(parseInt(Math.random() * 5000 + 60000, 10))
+        // }
     } catch (e) {
         console.log(e)
     }

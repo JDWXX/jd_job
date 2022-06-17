@@ -11,11 +11,11 @@
 请求太频繁会被黑ip
 过10分钟再执行
 
-cron:20 0 23-31,1-20 5,6 *
+cron:20 3,6 23-31,1-20 5,6 *
 ============Quantumultx===============
 [task_local]
 #6.8-6.18 大牌联合 好物焕新季
-20 0 23-31,1-20 5,6 * jd_opencardL155.js, tag=6.8-6.18 大牌联合 好物焕新季, enabled=true
+20 3,6 23-31,1-20 5,6 * * jd_opencardL155.js, tag=6.8-6.18 大牌联合 好物焕新季, enabled=true
 
 */
 
@@ -108,7 +108,7 @@ async function member() {
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
-            console.log("去助力 -> " + $.ownCode);
+            // console.log("去助力 -> " + $.ownCode);
             await taskaccessLog("common/accessLogWithAD", `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=FLP`, 1);
             // await task("wxActionCommon/getUserInfo", `pin=${encodeURIComponent($.secretPin)}`, 1);
             if ($.index === 1) {
@@ -191,9 +191,9 @@ function task(function_id, body, isCommon = 0, own = 0) {
                                         $.log(`开启【${data.data.activity["name"]}】活动`);
                                         $.log("-------------------");
                                         if ($.index === 1) {
-                                            ownCode = data.data.actor["actorUuid"];
-                                            authorCodeList.push(ownCode)
-                                            console.log(ownCode);
+                                            // ownCode = data.data.actor["actorUuid"];
+                                            // authorCodeList.push(ownCode)
+                                            // console.log(ownCode);
                                         }
                                         $.actorUuid = data.data.actor["actorUuid"];
                                     } else {
