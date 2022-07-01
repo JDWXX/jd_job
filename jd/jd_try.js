@@ -136,7 +136,7 @@ let args_xh = {
      * 例如是18件，将会进行第三次获取，直到过滤完毕后为20件才会停止，不建议设置太大
      * 可设置环境变量：JD_TRY_MAXLENGTH
      * */
-	maxLength: process.env.JD_TRY_MAXLENGTH * 1 || 100,
+	maxLength: process.env.JD_TRY_MAXLENGTH * 1 || 10,
 	/*
      * 过滤种草官类试用，某些试用商品是专属官专属，考虑到部分账号不是种草官账号
      * 例如A商品是种草官专属试用商品，下面设置为true，而你又不是种草官账号，那A商品将不会被添加到待提交试用组
@@ -593,14 +593,21 @@ function taskurl_xh(appid, functionId, body = JSON.stringify({})) {
 	return {
 		"url": `${URL}?appid=${appid}&functionId=${functionId}&clientVersion=10.3.4&client=wh5&body=${encodeURIComponent(body)}`,
 		'headers': {
-			'Cookie': `${$.cookie} __jda=1.1.1.1.1.1;`,
-			'user-agent': 'jdapp;iPhone;10.1.2;15.0;ff2caa92a8529e4788a34b3d8d4df66d9573f499;network/wifi;model/iPhone13,4;addressid/2074196292;appBuild/167802;jdSupportDarkMode/1;Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1',
-			'Referer': 'https://prodev.m.jd.com/',
-			'origin': 'https://prodev.m.jd.com/',
-			'Accept': 'application/json,text/plain,*/*',
-			'Accept-Encoding': 'gzip, deflate, br',
-			'Accept-Language': 'zh-cn',
+			'Cookie': $.cookie + ` __jda=122270672.16554852190191694200528.1655485219.1656670301.1656672488.41;`,
+			'Host': 'api.m.jd.com',
+			'Connection': 'keep-alive',
+			'Content-Length': '422',
+			'Accept': 'application/json, text/plain, */*',
+			'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
 			'Content-Type': 'application/x-www-form-urlencoded',
+			'Origin': 'https://prodev.m.jd.com',
+			'X-Requested-With': 'com.jingdong.app.mall',
+			'Sec-Fetch-Site': 'same-site',
+			'Sec-Fetch-Mode': 'cors',
+			'Sec-Fetch-Dest': 'empty',
+			'Referer': 'https://prodev.m.jd.com/',
+			'Accept-Encoding': 'gzip, deflate, br',
+			'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7'
 		},
 	}
 
@@ -638,14 +645,21 @@ function totalBean() {
 		const options = {
 			"url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,
 			"headers": {
-				"Accept": "application/json,text/plain, */*",
-				"Content-Type": "application/x-www-form-urlencoded",
-				"Accept-Encoding": "gzip, deflate, br",
-				"Accept-Language": "zh-cn",
-				"Connection": "keep-alive",
-				"Cookie": $.cookie,
-				"Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-				"User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
+				'Cookie': $.cookie + ` __jda=122270672.16554852190191694200528.1655485219.1656670301.1656672488.41;`,
+				'Host': 'api.m.jd.com',
+				'Connection': 'keep-alive',
+				'Content-Length': '422',
+				'Accept': 'application/json, text/plain, */*',
+				'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+				'Content-Type': 'application/x-www-form-urlencoded',
+				'Origin': 'https://prodev.m.jd.com',
+				'X-Requested-With': 'com.jingdong.app.mall',
+				'Sec-Fetch-Site': 'same-site',
+				'Sec-Fetch-Mode': 'cors',
+				'Sec-Fetch-Dest': 'empty',
+				'Referer': 'https://prodev.m.jd.com/',
+				'Accept-Encoding': 'gzip, deflate, br',
+				'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7'
 			},
 			"timeout": 10000,
 		}
