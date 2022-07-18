@@ -95,7 +95,7 @@ let args_xh = {
      * 可设置环境变量：JD_TRY_TABID，用@进行分隔
      * 默认为 1 到 10
      * */
-	tabId: process.env.JD_TRY_TABID && process.env.JD_TRY_TABID.split('@').map(Number) || [15, 5, 3, 4, 6, 8, 7, 9, 2, 10, 11, 12, 103, 104, 5, 13, 14, 16],
+	tabId: process.env.JD_TRY_TABID && process.env.JD_TRY_TABID.split('@').map(Number) || [104, 3, 4, 5, 6, 7, 8, 9, 10],
 	/*
      * 试用商品标题过滤，黑名单，当标题存在关键词时，则不加入试用组
      * 当白名单和黑名单共存时，黑名单会自动失效，优先匹配白名单，匹配完白名单后不会再匹配黑名单，望周知
@@ -129,7 +129,7 @@ let args_xh = {
      * 可设置环境变量：JD_TRY_APPLYINTERVAL
      * 默认为3000，也就是3秒
      * */
-	applyInterval: process.env.JD_TRY_APPLYINTERVAL * 1 || 5000,
+	applyInterval: process.env.JD_TRY_APPLYINTERVAL * 1 || 30000,
 	/*
      * 商品数组的最大长度，通俗来说就是即将申请的商品队列长度
      * 例如设置为20，当第一次获取后获得12件，过滤后剩下5件，将会进行第二次获取，过滤后加上第一次剩余件数
@@ -144,7 +144,7 @@ let args_xh = {
      * 例如B商品是种草官专属试用商品，下面设置为true，即使你是种草官账号，A商品也不会被添加到待提交试用组
      * 可设置环境变量：JD_TRY_PASSZC，默认为true
      * */
-	passZhongCao: process.env.JD_TRY_PASSZC === 'true' || true,
+	passZhongCao: process.env.JD_TRY_PASSZC === 'false' || true,
 	/*
      * 是否打印输出到日志，考虑到如果试用组长度过大，例如100以上，如果每个商品检测都打印一遍，日志长度会非常长
      * 打印的优点：清晰知道每个商品为什么会被过滤，哪个商品被添加到了待提交试用组
@@ -193,7 +193,7 @@ let args_xh = {
 				$.index = i + 1;
 				$.isLogin = true;
 				$.nickName = '';
-				await totalBean();
+				//await totalBean();
 				console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
 				$.except = false;
 				if(args_xh.except.includes($.UserName)){
@@ -213,6 +213,8 @@ let args_xh = {
 				$.nowTabIdIndex = 0;
 				$.nowPage = 1;
 				$.nowItem = 1;
+
+
 				if (!args_xh.unified) {
 					trialActivityIdList = []
 					trialActivityTitleList = []
@@ -232,10 +234,10 @@ let args_xh = {
 					} else {
 						await try_feedsList(args_xh.tabId[$.nowTabIdIndex], $.nowPage)  //获取对应tabId的试用页面
 					}
-					if(trialActivityIdList.length < args_xh.maxLength){
-						console.log(`间隔等待中，请等待 3 秒\n`)
-						await $.wait(3000);
+					if(trialActivityIdList.length < args_xh.maxLength){;
 					}
+					console.log(`间隔等待中，请等待 12000 秒\n`)
+					await $.wait(12000)
 				}
 				if ($.isForbidden === false && $.isLimit === false) {
 					console.log(`稍后将执行试用申请，请等待 2 秒\n`)
@@ -247,7 +249,7 @@ let args_xh = {
 						}
 						await try_apply(trialActivityTitleList[i], trialActivityIdList[i])
 						//console.log(`间隔等待中，请等待 ${args_xh.applyInterval} ms\n`)
-						const waitTime = generateRandomInteger(5000, 8000);
+						const waitTime = generateRandomInteger(5000, 12000);
 						console.log(`随机等待${waitTime}ms后继续`);
 						await $.wait(waitTime);
 					}
@@ -552,7 +554,7 @@ function try_MyTrials(page, selected) {
 				'origin': 'https://prodev.m.jd.com',
 				'User-Agent': 'jdapp;iPhone;10.3.4;;;M/5.0;appBuild/167945;jdSupportDarkMode/1;;;Mozilla/5.0 (iPhone; CPU iPhone OS 15_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;',
 				'referer': 'https://prodev.m.jd.com/',
-				'cookie': `${$.cookie} __jda=1.1.1.1.1.1;`
+				'cookie': `${$.cookie} __jda=122270672.16554852190191694200528.1655485219.1656670301.1656672488.41;`
 			},
 		}
 		$.post(options, (err, resp, data) => {
@@ -593,21 +595,14 @@ function taskurl_xh(appid, functionId, body = JSON.stringify({})) {
 	return {
 		"url": `${URL}?appid=${appid}&functionId=${functionId}&clientVersion=10.3.4&client=wh5&body=${encodeURIComponent(body)}`,
 		'headers': {
-			'Cookie': $.cookie + ` __jda=122270672.16554852190191694200528.1655485219.1656670301.1656672488.41;`,
-			'Host': 'api.m.jd.com',
-			'Connection': 'keep-alive',
-			'Content-Length': '422',
-			'Accept': 'application/json, text/plain, */*',
-			'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-			'Content-Type': 'application/x-www-form-urlencoded',
-			'Origin': 'https://prodev.m.jd.com',
-			'X-Requested-With': 'com.jingdong.app.mall',
-			'Sec-Fetch-Site': 'same-site',
-			'Sec-Fetch-Mode': 'cors',
-			'Sec-Fetch-Dest': 'empty',
+			'Cookie': `${$.cookie} __jda=122270672.16554852190191694200528.1655485219.1656670301.1656672488.41;`,
+			'user-agent': 'jdapp;iPhone;10.1.2;15.0;ff2caa92a8529e4788a34b3d8d4df66d9573f499;network/wifi;model/iPhone13,4;addressid/2074196292;appBuild/167802;jdSupportDarkMode/1;Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1',
 			'Referer': 'https://prodev.m.jd.com/',
+			'origin': 'https://prodev.m.jd.com/',
+			'Accept': 'application/json,text/plain,*/*',
 			'Accept-Encoding': 'gzip, deflate, br',
-			'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7'
+			'Accept-Language': 'zh-cn',
+			'Content-Type': 'application/x-www-form-urlencoded',
 		},
 	}
 
@@ -645,21 +640,14 @@ function totalBean() {
 		const options = {
 			"url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,
 			"headers": {
-				'Cookie': $.cookie + ` __jda=122270672.16554852190191694200528.1655485219.1656670301.1656672488.41;`,
-				'Host': 'api.m.jd.com',
-				'Connection': 'keep-alive',
-				'Content-Length': '422',
-				'Accept': 'application/json, text/plain, */*',
-				'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'Origin': 'https://prodev.m.jd.com',
-				'X-Requested-With': 'com.jingdong.app.mall',
-				'Sec-Fetch-Site': 'same-site',
-				'Sec-Fetch-Mode': 'cors',
-				'Sec-Fetch-Dest': 'empty',
-				'Referer': 'https://prodev.m.jd.com/',
-				'Accept-Encoding': 'gzip, deflate, br',
-				'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7'
+				"Accept": "application/json,text/plain, */*",
+				"Content-Type": "application/x-www-form-urlencoded",
+				"Accept-Encoding": "gzip, deflate, br",
+				"Accept-Language": "zh-cn",
+				"Connection": "keep-alive",
+				"Cookie": $.cookie,
+				"Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
+				"User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
 			},
 			"timeout": 10000,
 		}
