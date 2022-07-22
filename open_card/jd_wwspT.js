@@ -5,14 +5,14 @@
 =================================Quantumultx=========================
 [task_local]
 #汪汪赛跑提现
-57 59 23 * * * https://github.com/JDWXX/jd_job/blob/master/ms/jd_wwspTx.js, tag=汪汪赛跑提现, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+0 55 23 * * * https://github.com/JDWXX/jd_job/blob/master/ms/jd_wwspTx.js, tag=汪汪赛跑提现, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 =================================Loon===================================
 [Script]
-cron "57 59 23 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_wwspTx.js,tag=汪汪赛跑提现
+cron "0 55 23 * * *" script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_wwspTx.js,tag=汪汪赛跑提现
 ===================================Surge================================
-汪汪赛跑提现 = type=cron,cronexp="57 59 23 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_wwspTx.js
+汪汪赛跑提现 = type=cron,cronexp="0 55 23 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_wwspTx.js
 ====================================小火箭=============================
-汪汪赛跑提现 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_wwspTx.js, cronexpr="57 59 23 * * *", timeout=3600, enable=true
+汪汪赛跑提现 = type=cron,script-path=https://github.com/JDWXX/jd_job/blob/master/ms/jd_wwspTx.js, cronexpr="0 55 23 * * *", timeout=3600, enable=true
  */
 const $ = new Env('汪汪赛跑提现');
 const notify = $.isNode() ? require('./sendNotify') : '';
