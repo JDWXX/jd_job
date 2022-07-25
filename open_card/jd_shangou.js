@@ -40,16 +40,16 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         continue
       }
       await shangou();
-	  await $.wait(1000)
+      await $.wait(1000)
     }
   }
 })()
-  .catch((e) => {
-    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-  })
-  .finally(() => {
-    $.done();
-  })
+    .catch((e) => {
+      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    })
+    .finally(() => {
+      $.done();
+    })
 
 
 
@@ -61,14 +61,14 @@ async function shangou() {
           console.log(`${JSON.stringify(err)}`)
           console.log(`API请求失败，请检查网路重试`)
         } else {
-             data = JSON.parse(data)
-             if (data.subCode == 0){
-               console.log(data.msg)
-               console.log(data.rewardsInfo?.successRewards[3][0]?.quantity+'豆'||'空气')
-            }else{
-              console.log(data.msg)
-            }
-          } 
+          data = JSON.parse(data)
+          if (data.subCode == 0){
+            console.log(data.msg)
+            console.log(data.rewardsInfo?.successRewards[3][0]?.quantity||'空气')
+          }else{
+            console.log(data.msg)
+          }
+        }
       } catch (e) {
         $.logErr(e, resp)
       } finally {
@@ -114,7 +114,7 @@ function TotalBean() {
           if (data) {
             data = JSON.parse(data);
             if (data['retcode'] === 1001) {
-              $.isLogin = false; 
+              $.isLogin = false;
               return;
             }
             if (data['retcode'] === 0 && data.data && data.data.hasOwnProperty("userInfo")) {
