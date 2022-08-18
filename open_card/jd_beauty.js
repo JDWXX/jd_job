@@ -1,25 +1,27 @@
 /*
 美丽研究院
-更新时间:2021-05-08
+修复+尽量优化为同步执行,减少并发,说不定就减小黑号概率了呢?
+https://raw.githubusercontent.com/aTenb/jdOpenSharePicker/master/jd_beautyStudy.js
+更新时间:2021-12-03
+来源 Dylan
 活动入口：京东app首页-美妆馆-底部中间按钮
-只支持Node.js支持N个京东账号
-脚本兼容: Node.js
-cron "0 1 7,12,19 * * *" jd_beauty.js
+定时自定义，集中访问可能炸
  */
 const $ = new Env('美丽研究院');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const WebSocket = require('ws');
-//const WebSocket = $.isNode() ? require('websocket').w3cwebsocket: SockJS;
-let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
-const randomCount = $.isNode() ? 20 : 5;
+const UA = process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)
 $.accountCheck = true;
 $.init = false;
-// const bean = 1; //兑换多少豆，默认是500
-//IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], cookie = '', message, helpInfo, ADD_CART = false;
-
+let cookiesArr = [], cookie = '', message;
+function oc(fn, defaultVal) {
+  try {
+    return fn()
+  } catch (e) {
+    return undefined
+  }
+}
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -47,7 +49,8 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
       $.isLogin = true;
       $.nickName = '';
       message = '';
-      await TotalBean();
+      $.token = '';
+      //await TotalBean();
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/`, {"open-url": "https://bean.m.jd.com/"});
@@ -59,7 +62,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
       }
       await accountCheck();
       while (!$.hasDone) {
-        await $.wait(1000)
+        await $.wait(3000)
       }
       if ($.accountCheck) {
         await jdBeauty();
@@ -81,23 +84,27 @@ async function accountCheck() {
   $.hasDone = false;
   console.log(`***检测账号是否黑号***`);
   await getIsvToken()
+  await $.wait(10000)
   await getIsvToken2()
+  await $.wait(10000)
   await getToken()
+  await $.wait(10000)
   if (!$.token) {
     console.log(`\n\n提示：请尝试换服务器ip或者设置"xinruimz-isv.isvjcloud.com"域名直连，或者自定义UA再次尝试(环境变量JD_USER_AGENT)\n\n`)
-    process.exit(0);
+    $.accountCheck = false;
     return
   }
   let client = new WebSocket(`wss://xinruimz-isv.isvjcloud.com/wss/?token=${$.token}`, null, {
     headers: {
-      'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.0.2;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        'user-agent': UA,
     }
   });
   client.onopen = async () => {
     console.log(`美容研究院服务器连接成功`);
     client.send('{"msg":{"type":"action","args":{"source":1},"action":"_init_"}}');
-    await $.wait(1000);
+    await $.wait(10000);
     client.send(`{"msg":{"type":"action","args":{"source":1},"action":"get_user"}}`);
+    await $.wait(10000);
   };
   client.onmessage = async function (e) {
     if (e.data !== 'pong' && e.data && safeGet(e.data)) {
@@ -119,25 +126,16 @@ async function accountCheck() {
     }
     client.onclose = (e) => {
       $.hasDone = true;
-      // console.log(client.readyState);
-      console.log('服务器连接关闭');
+      console.log('服务器连接关闭\n');
     };
-    await $.wait(1000);
   }
 }
 
 async function jdBeauty() {
   $.hasDone = false
-  // await getIsvToken()
-  // await getIsvToken2()
-  // await getToken()
-  // if (!$.token) {
-  //   console.log(`\n\n提示：请尝试换服务器ip或者设置"xinruimz-isv.isvjcloud.com"域名直连，或者自定义UA再次尝试(环境变量JD_USER_AGENT)\n\n`)
-  //   return
-  // }
   await mr()
   while (!$.hasDone) {
-    await $.wait(1000)
+    await $.wait(10000)
   }
   await showMsg();
 }
@@ -145,66 +143,72 @@ async function jdBeauty() {
 async function mr() {
   $.coins = 0
   let positionList = ['b1', 'h1', 's1', 'b2', 'h2', 's2']
+  let positionList2 = ['b2', 'h2', 's2']
   $.tokens = []
   $.pos = []
   $.helpInfo = []
   $.needs = []
   let client = new WebSocket(`wss://xinruimz-isv.isvjcloud.com/wss/?token=${$.token}`,null,{
     headers:{
-      'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.0.2;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        'user-agent': UA,
     }
   })
   console.log(`wss://xinruimz-isv.isvjcloud.com/wss/?token=${$.token}`)
   client.onopen = async () => {
     console.log(`美容研究院服务器连接成功`);
     client.send('{"msg":{"type":"action","args":{"source":1},"action":"_init_"}}');
+    await $.wait(10000);
     client.send(`{"msg":{"type":"action","args":{"source":"meizhuangguandibudaohang"},"action":"stats"}}`)
+    await $.wait(10000);
     while (!$.init) {
       client.send(`ping`)
-      await $.wait(1000)
+      await $.wait(10000);
     }
-    console.log('helpInfo', helpInfo);
+    console.log(`\n========生产任务相关========\n`)
     for (let help of helpInfo) {
       client.send(help);
     }
-    await $.wait(1000)
-    client.send(`{"msg":{"type":"action","args":{},"action":"shop_products"}}`)
-    // 获得可生产的原料列表
+    await $.wait(3000)
     client.send(`{"msg":{"type":"action","args":{},"action":"get_produce_material"}}`)
-    await $.wait(1000)
+    await $.wait(10000);
     // 获得正在生产的商品信息
     client.send('{"msg":{"type":"action","args":{},"action":"product_producing"}}')
-    await $.wait(1000)
+    await $.wait(10000);
     // 获得库存
     client.send(`{"msg":{"type":"action","args":{},"action":"get_package"}}`)
     // 获得可生成的商品列表
     client.send(`{"msg":{"type":"action","args":{"page":1,"num":10},"action":"product_lists"}}`)
-    await $.wait(1000)
-
-    // 获得原料生产列表
-    console.log(`========原料生产信息========`)
+    await $.wait(10000);
+   // 获得原料生产列表
     for (let pos of positionList) {
-      client.send(`{"msg":{"type":"action","args":{"position":"${pos}"},"action":"produce_position_info_v2"}}`)
-      // await $.wait(500)
+        client.send(`{"msg":{"type":"action","args":{"position":"${pos}"},"action":"produce_position_info_v2"}}`)
+        await $.wait(10000);
     }
-
-    // 获得任务
-    // client.send(`{"msg":{"type":"action","args":{},"action":"get_task"}}`)
-    // 获取个人信息
-    client.send(`{"msg":{"type":"action","args":{"source":1},"action":"get_user"}}`)
-    await $.wait(1000)
-    // 获得福利中心
-    client.send(`{"msg":{"type":"action","args":{},"action":"get_benefit"}}`)
-    client.send(`{"msg":{"type":"action","args":{},"action":"collect_coins"}}`);
+    console.log(`\n========日常任务相关========`)
+    client.send(`{"msg":{"type":"action","args":{},"action":"check_up"}}`)
+    await $.wait(20000);
+    if($.check_up){
+      //收集
+      client.send(`{"msg":{"type":"action","args":{},"action":"collect_coins"}}`);
+      await $.wait(20000);
+      //兑换
+      client.send(`{"msg":{"type":"action","args":{},"action":"get_benefit"}}`)
+      await $.wait(50000);
+      //最后做时间最久的日常任务
+      client.send(`{"msg":{"type":"action","args":{},"action":"shop_products"}}`)
+      await $.wait(10000);
+    }
   };
-
   client.onclose = () => {
     console.log(`本次运行获得美妆币${$.coins}`)
     console.log('服务器连接关闭');
     $.init = true;
     $.hasDone = true;
     for (let i = 0; i < $.pos.length && i < $.tokens.length; ++i) {
-      $.helpInfo.push(`{"msg":{"type":"action","args":{"inviter_id":"${$.userInfo.id}","position":"${$.pos[i]}","token":"${$.tokens[i]}"},"action":"employee"}}`)
+      client.send(`{"msg":{"type":"action","args":{"inviter_id":"${$.userInfo.id}"},"action":"employee_get_user"}}`);
+      $.helpInfo.push(`{"msg":{"type":"action","args":{"inviter_id":"${$.userInfo.id}","position":"${$.pos[i]}","token":"${$.tokens[i]}"},"action":"employee_v2"}}`)
+      client.send(`{"msg":{"type":"action","args":{"inviter_id":"${$.userInfo.id}","position":"${$.pos[i]}"},"action":"employee_speed_v2"}}`);
+      client.send(`{"msg":{"action":"write","type":"action","args":{"action_type":3,"channel":2,"source_app":2}}}`);
     }
   };
   client.onmessage = async function (e) {
@@ -219,7 +223,9 @@ async function mr() {
             // 去签到
             console.log(`去做签到任务`)
             client.send(`{"msg":{"type":"action","args":{},"action":"sign_in"}}`)
+            await $.wait(10000);
             client.send(`{"msg":{"action":"write","type":"action","args":{"action_type":1,"channel":2,"source_app":2}}}`)
+            await $.wait(10000);
           }
           break
         case "get_user":
@@ -229,59 +235,71 @@ async function mr() {
             console.log(`去做新手任务`)
             for (let i = $.userInfo.step; i < 15; ++i) {
               client.send(`{"msg":{"type":"action","args":{},"action":"newcomer_update"}}`)
-              await $.wait(500)
+              await $.wait(10000);
             }
           } else
             $.init = true;
           $.level = $.userInfo.level;
           console.log(`当前美妆币${$.total}，用户等级${$.level}`);
           break;
+        case "check_up":
+          //获得当前任务状态
+          $.taskState = vo.data
+          console.log($.taskState)
+          $.check_up = true
+          // 6-9点签到
+          //for (let check_up of vo.data.check_up) {
+           // if (check_up['receive_status'] !== 1) {
+           //   console.log(`去领取第${check_up.times}次签到奖励`)
+           //   client.send(`{"msg":{"type":"action","args":{"check_up_id":${check_up.id}},"action":"check_up_receive"}}`)
+           // } else {
+           //   console.log(`第${check_up.times}次签到奖励已领取`)
+           // }
+         // }
+          break
         case "shop_products":
           let count = $.taskState.shop_view.length;
-          if (count < 5) console.log(`去做关注店铺任务`);
-          for (let i = 0; i < vo.data.shops.length && count < 5; ++i) {
+          if (count < $.taskState.daily_shop_follow_times) console.log(`\n去做关注店铺任务\n`);
+          for (let i = 0; i < vo.data.shops.length && count < $.taskState.daily_shop_follow_times; ++i) {
             const shop = vo.data.shops[i];
             if (!$.taskState.shop_view.includes(shop.id)) {
               count++;
-              console.log(`去做关注店铺【${shop.name}】`);
+              console.log(`\n去做关注店铺【${shop.name}】`);
               client.send(`{"msg":{"type":"action","args":{"shop_id":${shop.id}},"action":"shop_view"}}`);
+              await $.wait(5000);
               client.send(`{"msg":{"action":"write","type":"action","args":{"action_type":6,"channel":2,"source_app":2,"vender":"${shop.vender_id}"}}}`);
+              await $.wait(5000);
             }
-            await $.wait(1000);
+            await $.wait(10000);
           }
           count = $.taskState.product_adds.length;
-          if (count < 5 && ADD_CART) console.log(`去做浏览并加购任务`)
-          for (let i = 0; i < vo.data.products.length && count < 5 && ADD_CART; ++i) {
+          if (count < $.taskState.daily_product_add_times && process.env.FS_LEVEL) console.log(`\n去做浏览并加购任务\n`)
+          for (let i = 0; i < vo.data.products.length && count < $.taskState.daily_product_add_times && process.env.FS_LEVEL; ++i) {
             const product = vo.data.products[i];
             if (!$.taskState.product_adds.includes(product.id)) {
               count++;
-              console.log(`去加购商品【${product.name}】`);
+              console.log(`\n去加购商品【${product.name}】`);
               client.send(`{"msg":{"type":"action","args":{"add_product_id":${product.id}},"action":"add_product_view"}}`);
+              await $.wait(5000);
               client.send(`{"msg":{"action":"write","type":"action","args":{"action_type":9,"channel":2,"source_app":2,"vender":"${product.id}"}}}`);
+              await $.wait(5000);
               client.send(`{"msg":{"action":"write","type":"action","args":{"action_type":5,"channel":2,"source_app":2,"vender":"${product.id}"}}}`);
+              await $.wait(5000);
             }
-            await $.wait(1000)
+            await $.wait(10000);
           }
-          for (let i = $.taskState.meetingplace_view; i < $.taskState.mettingplace_count; ++i) {
-            console.log(`去做第${i + 1}次浏览会场任务`)
-            client.send(`{"msg":{"type":"action","args":{"source":1},"action":"meetingplace_view"}}`)
-            await $.wait(2000)
+          if ($.taskState.meetingplace_view.length <= vo.data.meetingplaces.length) {
+            for (let vc of vo.data.meetingplaces) {
+              console.log(`去做第${vc.name}浏览会场任务`)
+              client.send(`{"msg":{"type":"action","args":{"source":1,"meetingplace_id":${vc.id}},"action":"meetingplace_view"}}`)
+              await $.wait(2500)
+            }
           }
+
           if ($.taskState.today_answered === 0) {
             console.log(`去做每日问答任务`)
             client.send(`{"msg":{"type":"action","args":{"source":1},"action":"get_question"}}`)
-          }
-          break
-        case "check_up":
-          $.taskState = vo.data
-          // 6-9点签到
-          for (let check_up of vo.data.check_up) {
-            if (check_up['receive_status'] !== 1) {
-              console.log(`去领取第${check_up.times}次签到奖励`)
-              client.send(`{"msg":{"type":"action","args":{"check_up_id":${check_up.id}},"action":"check_up_receive"}}`)
-            } else {
-              console.log(`第${check_up.times}次签到奖励已领取`)
-            }
+            await $.wait(10000);
           }
           break
         case 'newcomer_update':
@@ -300,8 +318,8 @@ async function mr() {
             const ques = questions[i]
             commit[`${ques.id}`] = parseInt(ques.answers)
           }
-          await $.wait(5000)
           client.send(`{"msg":{"type":"action","args":{"commit":${JSON.stringify(commit)},"correct":${questions.length}},"action":"submit_answer"}}`)
+          await $.wait(10000);
           break
         case 'complete_task':
         case 'action':
@@ -319,17 +337,19 @@ async function mr() {
           }
           break
         case "produce_position_info_v2":
-          // console.log(`${Boolean(vo?.data)};${vo?.data?.material_name !== ''}`);
+          // console.log(`${Boolean(oc(() => vo.data))};${oc(() => vo.data.material_name) !== ''}`);
           if (vo.data && vo.data.material_name !== '') {
-            console.log(`【${vo?.data?.position}】上正在生产【${vo?.data?.material_name}】，可收取 ${vo.data.produce_num} 份`)
+            console.log(`【${oc(() => vo.data.position)}】上正在生产【${oc(() => vo.data.material_name)}】，可收取 ${vo.data.produce_num} 份`)
             if (new Date().getTime() > vo.data.procedure.end_at) {
-              console.log(`去收取${vo?.data?.material_name}`)
-              client.send(`{"msg":{"type":"action","args":{"position":"${vo?.data?.position}","replace_material":false},"action":"material_fetch_v2"}}`)
+              console.log(`去收取${oc(() => vo.data.material_name)}`)
+              client.send(`{"msg":{"type":"action","args":{"position":"${oc(() => vo.data.position)}","replace_material":false},"action":"material_fetch_v2"}}`)
+              await $.wait(5000);
               client.send(`{"msg":{"type":"action","args":{},"action":"to_employee"}}`)
-              $.pos.push(vo?.data?.position)
+              await $.wait(5000);
+              $.pos.push(oc(() => vo.data.position))
             }
           } else {
-            if (vo?.data && vo.data.valid_electric > 0) {
+            if (oc(() => vo.data) && vo.data.valid_electric > 0) {
               console.log(`【${vo.data.position}】上尚未开始生产`)
               let ma
               console.log(`$.needs:${JSON.stringify($.needs)}`);
@@ -344,11 +364,13 @@ async function mr() {
               if (ma) {
                 console.log(`去生产${ma.name}`)
                 client.send(`{"msg":{"type":"action","args":{"position":"${vo.data.position}","material_id":${ma.id}},"action":"material_produce_v2"}}`)
+                await $.wait(5000);
               } else {
-                ma = $.material.base[1]['items'][positionList.indexOf(vo.data.position)]
+                ma = $.material.base[1]['items'][positionList2.indexOf(vo.data.position)]
                 if (ma) {
                   console.log(`else去生产${ma.name}`)
                   client.send(`{"msg":{"type":"action","args":{"position":"${vo.data.position}","material_id":${ma.id}},"action":"material_produce_v2"}}`)
+                  await $.wait(5000);
                 }
               }
             }
@@ -358,9 +380,14 @@ async function mr() {
           }
           break
         case "material_produce_v2":
-          console.log(`【${vo?.data?.position}】上开始生产${vo?.data?.material_name}`)
+          console.log(`【${oc(() => vo.data.position)}】上开始生产${oc(() => vo.data.material_name)}`)
           client.send(`{"msg":{"type":"action","args":{},"action":"to_employee"}}`)
-          $.pos.push(vo.data.position)
+          await $.wait(5000);
+          if(oc(() => vo.data.position)){
+            $.pos.push(vo.data.position)
+          }else{
+            console.log(`not exist:${oc(() => vo.data)}`)
+          }
           break
         case "material_fetch_v2":
           if (vo.code === '200' || vo.code === 200) {
@@ -385,7 +412,7 @@ async function mr() {
         case "product_lists":
           let need_material = []
           if (vo.code === '200' || vo.code === 200) {
-            $.products = vo.data.filter(vo=>vo.level===$.level)
+            $.products = vo.data.filter(vo=>vo.level===$.level-1)
             console.log(`========可生产商品信息========`)
             for (let product of $.products) {
               let num = Infinity
@@ -403,7 +430,7 @@ async function mr() {
                 } else {
                   if(need_material.findIndex(vo=>vo.id===material.material.id)===-1)
                     need_material.push(material.material)
-                  console.log(`need_material:${JSON.stringify(need_material)}`);
+                  //console.log(`need_material:${JSON.stringify(need_material)}`);
                   msg += `(没有库存)`
                   num = -1000
                 }
@@ -414,7 +441,8 @@ async function mr() {
                 console.log(`【${product.name}】可生产份数大于0，去生产`)
                 //product_produce 产品研发里的生产
                 client.send(`{"msg":{"type":"action","args":{"product_id":${product.id},"amount":${num}},"action":"product_produce"}}`)
-                await $.wait(500)
+                client.send(`{"msg":{"type":"action","args":{"product_id":${product.id},"amount":${num}},"action":"once_completion"}}`)
+                await $.wait(10000);
               } else {
                 console.log(msg)
                 console.log(`【${product.name}】原料不足，无法生产`)
@@ -426,7 +454,7 @@ async function mr() {
           } else {
             console.log(`生产信息获取失败，错误信息：${vo.msg}`)
           }
-          // await $.wait(2000);
+          // await $.wait(5000);
           // client.close();
           break
         case "product_produce":
@@ -446,11 +474,11 @@ async function mr() {
           }
           break
         case "product_producing":
-          // console.log('product_producing', vo);
           if (vo.code === '200' || vo.code === 200) {
             for (let product of vo.data) {
               if (product.num === product.produce_num) {
                 client.send(`{"msg":{"type":"action","args":{"log_id":${product.id}},"action":"new_product_fetch"}}`)
+                await $.wait(5000);
               } else {
                 console.log(`产品【${product.product.id}】未生产完成，无法收取`)
               }
@@ -466,53 +494,58 @@ async function mr() {
             console.log(`收取产品失败，错误信息${vo.msg}`)
           }
           break
-        case "get_task":
-          console.log(`当前任务【${vo.data.describe}】，需要【${vo.data.product.name}】${vo.data.package_stock}/${vo.data.num}份`)
-          if (vo.data.package_stock >= vo.data.num) {
-            console.log(`满足任务要求，去完成任务`)
-            client.send(`{"msg":{"type":"action","args":{"task_id":${vo.data.id}},"action":"complete_task"}}`)
-          }
-          break
+        // case "get_task":
+        //   console.log(`当前任务【${vo.data.describe}】，需要【${vo.data.product.name}】${vo.data.package_stock}/${vo.data.num}份`)
+        //   if (vo.data.package_stock >= vo.data.num) {
+        //     console.log(`满足任务要求，去完成任务`)
+        //     client.send(`{"msg":{"type":"action","args":{"task_id":${vo.data.id}},"action":"complete_task"}}`)
+        //   }
+        //   break
         case 'get_benefit':
           for (let benefit of vo.data) {
             if (benefit.type === 1) { //type 1 是京豆
-              console.log(`benefit:${JSON.stringify(benefit)}`);
-              if(benefit.description === "1 京豆" &&   //500颗京豆打包兑换
-                  parseInt(benefit.day_exchange_count) < 10 &&
-                  $.total > benefit.coins){
-                for (let i = benefit.day_exchange_count; i < 10; i++){
-                  // console.log(`开始兑换`)
+              //console.log(`benefit:${JSON.stringify(benefit)}`);
+              if(benefit.description === "1 京豆" && parseInt(benefit.day_exchange_count) < 5 && $.total > benefit.coins){
+                $timenum = parseInt($.total / benefit.coins);
+                if ($timenum > 5) $timenum = 5;
+                console.log(`\n可兑换${$timenum}次京豆:`)
+                for (let i = 0; i < $timenum; i++){
                   client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`);
-                  await $.wait(1000);
+                  await $.wait(5000)
+                  client.send(`{"msg":{"type":"action","args":{"source":1},"action":"get_user"}}`)
+                  await $.wait(5000);
                 }
               }
-              console.log(`物品【${benefit.description}】需要${benefit.coins}美妆币，库存${benefit.stock}份`)
-              if (parseInt(benefit.setting.beans_count) === bean && //兑换多少豆 bean500就500豆
-                $.total > benefit.coins &&
-                parseInt(benefit.day_exchange_count) < benefit.day_limit) {
-                console.log(`满足条件，去兑换`)
-                client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`)
-                await $.wait(1000)
-              }
+              // console.log(`物品【${benefit.description}】需要${benefit.coins}美妆币，库存${benefit.stock}份`)
+              // if (parseInt(benefit.setting.beans_count) === bean && //兑换多少豆 bean500就500豆
+              //   $.total > benefit.coins &&
+              //   parseInt(benefit.day_exchange_count) < benefit.day_limit) {
+              //   console.log(`满足条件，去兑换`)
+              //   client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`)
+              //   await $.wait(10000)
+              // }
             }
           }
           break
         case "to_exchange":
-          if (vo?.data) {
-            console.log(`兑换${vo?.data?.coins/-100}京豆成功;${JSON.stringify(vo)}`)
-          } else {
-            console.log(`兑换京豆失败：${JSON.stringify(vo)}`)
+          if(oc(() => vo.data.coins)){
+            console.log(`兑换${vo.data.coins/-10000}京豆成功`)
+          }else{
+            console.log(`兑换京豆失败`)
           }
           break
         case "get_produce_material":
-          console.log('get_produce_material', vo?.msg);
           $.material = vo.data
           break
-        case "to_employee":
-          console.log(`雇佣助力码【${vo.data.token}】`)
-          $.tokens.push(vo.data.token)
-          break
-        case "employee":
+        //case "to_employee":
+         // console.log(`雇佣助力码【${oc(() => vo.data.token)}】`)
+         // if(oc(() => vo.data.token)){
+         //   $.tokens.push(vo.data.token)
+         // }else{
+         //   console.log(`not exist:${oc(() => vo.data)}`)
+         // }
+         // break
+        case "employee_v2":
           console.log(`${vo.msg}`)
           break
       }
@@ -527,8 +560,7 @@ function getIsvToken() {
     headers: {
       'Host': 'api.m.jd.com',
       'accept': '*/*',
-      'user-agent': 'JD4iPhone/167490 (iPhone; iOS 14.2; Scale/3.00)',
-      'accept-language': 'zh-Hans-JP;q=1, en-JP;q=0.9, zh-Hant-TW;q=0.8, ja-JP;q=0.7, en-US;q=0.6',
+      'user-agent': UA,
       'content-type': 'application/x-www-form-urlencoded',
       'Cookie': cookie
     }
@@ -555,19 +587,25 @@ function getIsvToken() {
   })
 }
 
-function getIsvToken2() {
+async function getIsvToken2() {
+  for (let i=0; i<3; i++){
+  var body = await getSignfromDY('isvObfuscator',{"id":"","url":"https://xinruimz-isv.isvjcloud.com"})
+  if(body) break;
+  await $.wait(5000)
+  } 
   let config = {
     url: 'https://api.m.jd.com/client.action?functionId=isvObfuscator',
-    body: 'body=%7B%22url%22%3A%22https%3A%5C/%5C/xinruimz-isv.isvjcloud.com%22%2C%22id%22%3A%22%22%7D&build=167490&client=apple&clientVersion=9.3.2&openudid=53f4d9c70c1c81f1c8769d2fe2fef0190a3f60d2&osVersion=14.2&partner=apple&rfs=0000&scope=01&sign=6eb3237cff376c07a11c1e185761d073&st=1610161927336&sv=102&uuid=hjudwgohxzVu96krv/T6Hg%3D%3D',
+    body: body,
     headers: {
       'Host': 'api.m.jd.com',
       'accept': '*/*',
-      'user-agent': 'JD4iPhone/167490 (iPhone; iOS 14.2; Scale/3.00)',
-      'accept-language': 'zh-Hans-JP;q=1, en-JP;q=0.9, zh-Hant-TW;q=0.8, ja-JP;q=0.7, en-US;q=0.6',
-      'content-type': 'application/x-www-form-urlencoded',
+      'user-agent': UA,
+      //'accept-language': 'zh-Hans-JP;q=1, en-JP;q=0.9, zh-Hant-TW;q=0.8, ja-JP;q=0.7, en-US;q=0.6',
+      //'content-type': 'application/x-www-form-urlencoded',
       'Cookie': cookie
     }
   }
+
   return new Promise(resolve => {
     $.post(config, async (err, resp, data) => {
       try {
@@ -589,11 +627,48 @@ function getIsvToken2() {
     })
   })
 }
-
+function getSignfromDY(functionId, body) {	
+var strsign = '';
+let data = `functionId=${functionId}&body=${encodeURIComponent(JSON.stringify(body))}`
+  return new Promise((resolve) => {
+      let opt = {
+          url: "https://jd.nbplay.xyz/dylan/getsign",
+          body: data,
+      headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+      }
+      ,timeout: 30000
+      }
+      $.post(opt, async(err, resp, data) => {
+          try {
+            if (data){
+              data = JSON.parse(data);
+      if (data && data.code == 0) {
+                  console.log("连接DY服务成功" );
+                  if (data.data){
+                      strsign = data.data || '';
+        }
+                  if (strsign != ''){
+                      resolve(strsign);
+        }
+                  else
+                      console.log("签名获取失败,换个时间再试.");
+              } else {
+                  console.log(data.msg);
+              }
+            }else{console.log('连接连接DY服务失败，重试。。。')}	
+          }catch (e) {
+              $.logErr(e, resp);
+          }finally {
+      resolve(strsign);
+    }
+      })
+  })
+}
 function getToken() {
   let config = {
     url: 'https://xinruimz-isv.isvjcloud.com/api/auth',
-    body: JSON.stringify({"token":$.token2,"source":"01"}),
+    body: JSON.stringify({"token":$.token2,"source":"01","channel":"meizhuangguandibudaohang"}),
     headers: {
       'Host': 'xinruimz-isv.isvjcloud.com',
       'Accept': 'application/x.jd-school-island.v1+json',
@@ -601,10 +676,10 @@ function getToken() {
       'Accept-Language': 'zh-cn',
       'Content-Type': 'application/json;charset=utf-8',
       'Origin': 'https://xinruimz-isv.isvjcloud.com',
-      'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.0.2;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      'user-agent': UA,
       'Referer': 'https://xinruimz-isv.isvjcloud.com/logined_jd/',
       'Authorization': 'Bearer undefined',
-      'Cookie': `IsvToken=${$.isvToken};`
+      'Cookie': `IsvToken=${$.token2};`
     }
   }
   return new Promise(resolve => {
@@ -617,7 +692,7 @@ function getToken() {
           if (safeGet(data)) {
             data = JSON.parse(data);
             $.token = data.access_token
-            console.log(`【$.token】 ${$.token}`)
+            console.log(`$.token ${$.token}`)
           }
         }
       } catch (e) {
@@ -649,8 +724,8 @@ function TotalBean() {
         "Connection": "keep-alive",
         "Cookie": cookie,
         "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.0.2;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-      }
+        'user-agent': UA,
+        }
     }
     $.post(options, (err, resp, data) => {
       try {
