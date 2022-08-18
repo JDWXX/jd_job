@@ -1,388 +1,366 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+import json
+import random
+import re
+import threading
+import time
+import requests
+import datetime
+
 '''
-cron: 35 15 * * *
-new Env('发财挖宝');
-活动入口: 京东极速版>我的>发财挖宝
-脚本功能为: 挖宝，提现，没有助力功能! 
-当血量剩余 1 时停止挖宝，领取奖励并提现
+版本 v11.0.5
+======================app Cookie 配置===========================
+必须用appck 如  pin=xxxxx;wskey=xxxxxxxxx;
 '''
-import os,json,random,time,re,string,functools,asyncio
-import sys
-sys.path.append('../../tmp')
-print('\n运行本脚本之前请手动进入游戏点击一个方块\n')
-print('\n挖的如果都是0.01红包就是黑了，别挣扎了！\n')
-print('\n默认自动领取奖励，关闭请在代码383行加上#号注释即可\n')
-try:
-    import requests
-except Exception as e:
-    print(str(e) + "\n缺少requests模块, 请执行命令：pip3 install requests\n")
-requests.packages.urllib3.disable_warnings()
+mycookies = [
+    '',
+]
+'''
+======================app Cookie 配置===========================
+'''
+
+'''
+======================sign接口配置===========================
+忒星平台登陆账号 不是用户昵称
+'''
+name = ""
+'''
+忒星平台个人中心获取的token
+teixing.com 个人中心 赞助0天的那个 就可以获得token
+'''
+token = ''
+'''
+======================sign接口配置===========================
+'''
 
 
-linkId="pTTvJeSTrpthgk9ASBVGsw"
+'''
+======================请求参数配置===========================
+警告 警告 警告 警告 警告 警告 警告 警告 警告 警告 警告 警告 警告 警告 警告 警告
+app版本 v11.0.4 安卓
+以下参数必须完全从抓包中获取
+如不匹配 会抱歉
+一机一码一号
+不能多号 容易抱歉
+多号请用多个设备抓包 多开py
+警告 警告 警告 警告 警告 警告 警告 警告 警告 警告 警告 警告 警告 警告 警告 警告
+'''
+'''
+在抓包的请求url中获取 如  oaid=12345& 那么就是12345
+'''
+oaid = ""
+'''
+在抓包的请求url中获取  如 ep=中的uuid数据  如"uuid":"xxxxxxxxxxxxxxxxxxxxxxxxxxx=="
+'''
+uuid = ""
+'''
+在抓包的请求url中获取  如 eid=xxxxxx
+'''
+eid = ""
+'''
+在抓包的请求头中获取  如 whwswswws=JD01214xxxxxx
+或 在cookie中获取
+或 在请求参数里的shshshfpb字段获取 都一样
+'''
+whwswswws = ""
+
+'''
+======================请求参数配置===========================
+'''
+
+'''
+抢卷时间10 14 18 22 24
+范围 1 - 24
+24是0点场
+'''
+actionTimes = [10, 14, 18, 22, 24]
+
+range_n = 10  # 链接个数
+range_sleep = 0.2  # 间隔时间
+delay_time = 0.5    #循环判断时间间隔
 
 
-# 获取pin
-cookie_findall=re.compile(r'pt_pin=(.+?);')
-def get_pin(cookie):
-    try:
-        return cookie_findall.findall(cookie)[0]
-    except:
-        print('ck格式不正确，请检查')
 
-# 读取环境变量
-def get_env(env):
-    try:
-        if env in os.environ:
-            a=os.environ[env]
-        elif '/ql' in os.path.abspath(os.path.dirname(__file__)):
-            try:
-                a=v4_env(env,'/ql/config/config.sh')
-            except:
-                a=eval(env)
-        elif '/jd' in os.path.abspath(os.path.dirname(__file__)):
-            try:
-                a=v4_env(env,'/jd/config/config.sh')
-            except:
-                a=eval(env)
+def get_sign_api(functionId, body, cookie):
+    sign_api = 'http://a1f56we1f2sad2f15f.mumian.xyz/getsign'
+
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    }
+    data = {
+        'name': name,
+        'token': token,
+        'functionId': functionId,
+        'body': json.dumps(body),
+        'cookie': cookie,
+        "uuid": uuid,
+        "whwswswws": whwswswws,
+        "oaid": oaid,
+        "eid": eid,
+    }
+    res = requests.post(url=sign_api, headers=headers, data=data, timeout=30).json()
+    if res['code'] == 0:
+        return res
+    else:
+        printf(res['msg'])
+        return -1
+
+
+def randomString(e, flag=False):
+    t = "0123456789abcdef"
+    if flag: t = t.upper()
+    n = [random.choice(t) for _ in range(e)]
+    return ''.join(n)
+
+
+def getCcFeedInfo(cookie, index):
+    body = {
+        "categoryId": 118,
+        "childActivityUrl": "openapp.jdmobile://virtual?params={\"category\":\"jump\",\"des\":\"couponCenter\"}",
+        "eid": eid,
+        "globalLat": "",
+        "globalLng": "",
+        "lat": "",
+        "lng": "",
+        "monitorRefer": "appClient",
+        "monitorSource": "ccfeed_android_index_feed",
+        "pageClickKey": "Coupons_GetCenter",
+        "pageNum": 1,
+        "pageSize": 20,
+        "shshshfpb": whwswswws
+    }
+    res = get_sign_api('getCcFeedInfo', body, cookie)
+    if res == -1:
+        return -1
+    else:
+        url = res['url']
+        headers = json.loads(json.dumps(res['headers']))
+        data = json.loads(json.dumps(res['data']))
+        res = requests.post(url=url, headers=headers, data=data, timeout=30).json()
+        # print(res)
+        if res['code'] == '0':
+            for coupon in res['result']['couponList']:
+                if coupon['title'] != None and '每周可领一次' in coupon['title']:
+                    receiveKey = coupon['receiveKey']
+                    printf(f'账号{index + 1}：获取receiveKey成功')
+                    return receiveKey
+            printf(f'账号{index + 1}：没有找到59-20券的receiveKey')
+            return -1
         else:
-            a=eval(env)
-    except:
-        a=''
-    return a
+            printf(f'账号{index + 1}：获取59-20券的receiveKey失败')
+            return -1
 
-# v4
-def v4_env(env,paths):
-    b=re.compile(r'(?:export )?'+env+r' ?= ?[\"\'](.*?)[\"\']', re.I)
-    with open(paths, 'r') as f:
-        for line in f.readlines():
-            try:
-                c=b.match(line).group(1)
+
+def get_receiveNecklaceCoupon_sign(receiveKey, cookie):
+    body = {"channel": "领券中心",
+            "childActivityUrl": "openapp.jdmobile://virtual?params={\"category\":\"jump\",\"des\":\"couponCenter\"}",
+            "couponSource": "manual",
+            "couponSourceDetail": None,
+            "eid": eid,
+            "extend": receiveKey,
+            "lat": "",
+            "lng": "",
+            "pageClickKey": "Coupons_GetCenter",
+            "rcType": "4",
+            "riskFlag": 1,
+            "shshshfpb": whwswswws,
+            "source": "couponCenter_app",
+            "subChannel": "feeds流"
+            }
+    res = get_sign_api('receiveNecklaceCoupon', body, cookie)
+    if res == -1:
+        return -1
+    else:
+        url = res['url']
+        headers = json.loads(json.dumps(res['headers']))
+        data = json.loads(json.dumps(res['data']))
+        return [url, data, headers]
+
+
+def receiveNecklaceCoupon(url, body, headers, index):
+    res = requests.post(url=url, headers=headers, data=body, timeout=30).json()
+    try:
+        if res['code'] == '0' and res['msg'] == '响应成功':
+            printf(f"账号{index + 1}：{res['result']['desc']}")
+        else:
+            printf(res)
+    except Exception as e:
+        printf(str(e))
+        pass
+
+
+def getLoactionHource():
+    hources = datetime.datetime.now().strftime('%H')
+    if hources[0] == '0':
+        return hources[1:len(hources)]
+    return hources
+
+def getLocationMinute():
+    return datetime.datetime.now().strftime('%M')
+
+def getLocationSecond():
+    return datetime.datetime.now().strftime('%S')
+
+
+def use_thread(cookie, index):
+    if receiveKeys[index] != -1:
+        printf(f'账号{index + 1}：正在生成{range_n * 2}条抢券链接')
+        tasks = list()
+        s = 0
+        while s < range_n:
+            res = get_receiveNecklaceCoupon_sign(receiveKeys[index], cookie)
+            if res != -1:
+                url = res[0]
+                body = res[1]
+                headers = res[2]
+
+                tasks.append(threading.Thread(target=receiveNecklaceCoupon, args=(url, body, headers, index)))
+                tasks.append(threading.Thread(target=receiveNecklaceCoupon, args=(url, body, headers, index)))
+                s = s + 1
+        printf(f'账号{index + 1}：{range_n * 2}条抢券链接生成完毕，等待抢券')
+        while True:
+            hources = getLoactionHource()
+            minute = getLocationMinute()
+            second = getLocationSecond()
+            time.sleep(delay_time)
+            printf(f'等待抢卷中...')
+            isTask = False
+            for startItem in actionTimes:
+                if str(startItem - 1) == hources and minute == '59' and second == '58':
+                    for task in tasks:
+                        task.start()
+                        time.sleep(range_sleep)
+                    for task in tasks:
+                        task.join()
+                    isTask = True
+                    break
+            if isTask:
                 break
-            except:
-                pass
-    return c
+
+def use_threadByZero(cookie, index):
+    if receiveKeys[index] != -1:
+        printf(f'账号{index + 1}：正在生成{range_n * 2}条抢券链接')
+        tasks = list()
+        s = 0
+        while s < range_n:
+            res = get_receiveNecklaceCoupon_sign(receiveKeys[index], cookie)
+            if res != -1:
+                url = res[0]
+                body = res[1]
+                headers = res[2]
+
+                tasks.append(threading.Thread(target=receiveNecklaceCoupon, args=(url, body, headers, index)))
+                tasks.append(threading.Thread(target=receiveNecklaceCoupon, args=(url, body, headers, index)))
+                s = s + 1
+        printf(f'账号{index + 1}：{range_n * 2}条抢券链接生成完毕，等待抢券')
+        for task in tasks:
+            task.start()
+            time.sleep(range_sleep)
+        for task in tasks:
+            task.join()
 
 
-# 随机ua
-def ua():
-    sys.path.append(os.path.abspath('.'))
-    try:
-        from jdEnv import USER_AGENTS as a
-    except:
-        a='jdpingou;android;5.5.0;11;network/wifi;model/M2102K1C;appBuild/18299;partner/lcjx11;session/110;pap/JA2019_3111789;brand/Xiaomi;Mozilla/5.0 (Linux; Android 11; M2102K1C Build/RKQ1.201112.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/92.0.4515.159 Mobile Safari/537.36'
-    return a
+def getSmailHources(hources):
+    tmp = {}
+    for item in actionTimes:
+        if item <= int(hources):
+            continue
+        tmp[str(item)] = (item - int(hources))
 
-# 13位时间戳
-def gettimestamp():
-    return str(int(time.time() * 1000))
+    tmpKey = 999999
+    for key in tmp.keys():
+        if tmp[key] < tmpKey:
+            tmpKey = tmp[key]
 
-## 获取cooie
-class Judge_env(object):
-    def main_run(self):
-        if '/jd' in os.path.abspath(os.path.dirname(__file__)):
-            cookie_list=self.v4_cookie()
-        else:
-            cookie_list=os.environ["JD_COOKIE"].split('&')       # 获取cookie_list的合集
-        if len(cookie_list)<1:
-            print('请填写环境变量JD_COOKIE\n')
-        return cookie_list
-
-    def v4_cookie(self):
-        a=[]
-        b=re.compile(r'Cookie'+'.*?=\"(.*?)\"', re.I)
-        with open('/jd/config/config.sh', 'r') as f:
-            for line in f.readlines():
-                try:
-                    regular=b.match(line).group(1)
-                    a.append(regular)
-                except:
-                    pass
-        return a
-cookie_list=Judge_env().main_run()
+    for key in tmp.keys():
+        if tmp[key] == tmpKey:
+            return key
 
 
-def taskGetUrl(functionId, body, cookie):
-    url=f'https://api.m.jd.com/?functionId={functionId}&body={json.dumps(body)}&t={gettimestamp()}&appid=activities_platform&client=H5&clientVersion=1.0.0'
-    headers={
-        'Cookie': cookie,
-        'Host': 'api.m.jd.com',
-        'Connection': 'keep-alive',
-        'origin': 'https://bnzf.jd.com',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'accept': 'application/json, text/plain, */*',
-        "User-Agent": ua(),
-        'Accept-Language': 'zh-cn',
-        'Accept-Encoding': 'gzip, deflate, br',
-    }
-    for n in range(3):
-        try:
-            res=requests.get(url,headers=headers, timeout=10).json()
-            return res
-        except:
-            if n==2:
-                print('API请求失败，请检查网路重试❗\n')
+def printf(content):
+    hources = getLoactionHource()
+    minute = getLocationMinute()
+    second = getLocationSecond()
+    print(f'{hources}:{minute}:{second} {content}')
 
-
-            # 剩余血量
-def xueliang(cookie):
-    body={"linkId":linkId}
-    res=taskGetUrl("happyDigHome", body, cookie)
-    if not res:
-        return
-    if res['code']==0:
-        if res['success']:
-            curRound=res['data']['curRound']                        # 未知
-            blood=res['data']['blood']                              # 剩余血量
-            return blood
-
-def jinge(cookie,i):
-    body={"linkId":linkId}
-    res=taskGetUrl("happyDigHome", body, cookie)
-    if not res:
-        return
-    if res['code']==0:
-        if res['success']:
-            curRound=res['data']['curRound']                        # 未知
-            blood=res['data']['blood']                              # 剩余血量
-            roundList=res['data']['roundList']                      # 3个总池子
-            roundList_n=roundList[0]
-            redAmount=roundList_n['redAmount']                  # 当前池已得京东红包
-            cashAmount=roundList_n['cashAmount']                # 当前池已得微信红包
-
-            return [blood,redAmount,cashAmount]
-
-        # 页面数据
-def happyDigHome(cookie):
-    body={"linkId":linkId}
-    res=taskGetUrl("happyDigHome", body, cookie)
-    if not res:
-        return
-    if res['code']==0:
-        if res['success']:
-            curRound=res['data']['curRound']                        # 未知
-            incep_blood=res['data']['blood']                              # 剩余血量
-            roundList=res['data']['roundList']                      # 3个总池子
-            for e,roundList_n in enumerate(roundList):                           # 迭代每个池子
-                roundid=roundList_n['round']                        # 池序号
-                state=roundList_n['state']
-                rows=roundList_n['rows']                            # 池规模，rows*rows
-                redAmount=roundList_n['redAmount']                  # 当前池已得京东红包
-                cashAmount=roundList_n['cashAmount']                # 当前池已得微信红包
-                leftAmount=roundList_n['leftAmount']                # 剩余红包？
-                chunks=roundList_n['chunks']                        # 当前池详情list
-
-                a=jinge(cookie,roundid)
-                print(f'当前池序号为 {roundid} \n当前池规模为 {rows}*{rows}')
-                print(f'剩余血量 {a[0]}')
-                print(f'当前池已得京东红包 {a[2]}\n当前池已得微信红包 {a[1]}\n')
-                _blood=xueliang(cookie)
-                if _blood>1  or incep_blood>=21:
-                    happyDigDo(cookie,roundid,0,0)
-                    if e==0 or e==1:
-                        roundid_n=4
-                    else:
-                        roundid_n=5
-                    for n in range(roundid_n):
-                        for i in range(roundid_n):
-                            _blood=xueliang(cookie)
-                            if _blood>1  or incep_blood>=21:
-                                print(f'当前血量为 {_blood} 健康，继续挖宝')
-                                print(f'本次挖取坐标为 ({n},{i})')
-                                happyDigDo(cookie,roundid,n,i)
-                            else:
-                                a=jinge(cookie,roundid)
-                                print(f'当前血量为 {_blood} 不健康，结束该池挖宝')
-                                print(f'当前池已得京东红包 {a[2]}\n当前池已得微信红包 {a[1]}\n')
-                                break
-        else:
-            print(f'获取数据失败\n{res}\n')
-    else:
-        print(f'获取数据失败\n{res}\n')
-
-
-# 玩一玩
-def apDoTask(cookie):
-    print('开始 玩一玩')
-    body={"linkId":linkId,"taskType":"BROWSE_CHANNEL","taskId":454,"channel":4,"itemId":"https%3A%2F%2Fsignfree.jd.com%2F%3FactivityId%3DPiuLvM8vamONsWzC0wqBGQ","checkVersion":False}
-    res=taskGetUrl('apDoTask', body, cookie)
-    if not res:
-        return
-    try:
-        if res['success']:
-            print('任务完成，获得血量 1\n')
-        else:
-            print(f"{res['errMsg']}\n")
-    except:
-        print(f"错误\n{res}\n")
-
-
-# 挖宝
-def happyDigDo(cookie,roundid,rowIdx,colIdx):
-    body={"round":roundid,"rowIdx":rowIdx,"colIdx":colIdx,"linkId":linkId}
-    res=taskGetUrl("happyDigDo", body, cookie)
-    if not res:
-        return
-    if res['code']==0:
-        if res['success']:
-            typeid=res['data']['chunk']['type']
-            if typeid==2:
-                print(f"挖到京东红包 {res['data']['chunk']['value']}\n")
-            elif typeid==3:
-                print(f"挖到微信红包 {res['data']['chunk']['value']}\n")
-            elif typeid==4:
-                print(f"挖到炸弹\n")
-            elif typeid==1:
-                print(f"挖到优惠券\n")
-            else:
-                print(f'挖到外星物品\n')
-        else:
-            print(f'挖取失败\n{res}\n')
-    else:
-        print(f'挖取失败\n{res}\n')
-
-# # 助力码
-def inviteCode(cookie):
-    global inviteCode_1_list,inviteCode_2_list
-    body={"linkId":linkId}
-    res=taskGetUrl("happyDigHome", body, cookie)
-    if not res:
-        return
-    try:
-        if res['success']:
-            print(f"账号{get_pin(cookie)}助力码为{res['data']['inviteCode']}")
-            inviteCode_1_list.append(res['data']['inviteCode'])
-            print(f"账号{get_pin(cookie)}助力码为{res['data']['markedPin']}")
-            inviteCode_2_list.append(res['data']['markedPin'])
-        else:
-            print('快去买买买吧')
-    except:
-        print(f"错误\n{res}\n")
-
-# # 助力
-def happyDigHelp(cookie,fcwbinviter,fcwbinviteCode):
-    print(f"账号 {get_pin(cookie)} 去助力{fcwbinviteCode}")
-    xueliang(cookie)
-    body={"linkId":linkId,"inviter":fcwbinviter,"inviteCode":fcwbinviteCode}
-    res=taskGetUrl("happyDigHelp", body, cookie)
-    if res['success']:
-        print('助力成功')
-    else:
-        print(res['errMsg'])
-
-# 领取奖励
-def happyDigExchange(cookie):
-    for n in range(0,4):
-        xueliang(cookie)
-
-        print('开始领取奖励')
-        body={"round":n,"linkId":linkId}
-        res=taskGetUrl("happyDigExchange", body, cookie)
-        if not res:
-            return
-        if res['code']==0:
-            if res['success']:
-                try:
-                    print(f"领取到微信红包 {res['data']['wxValue']}")
-                except:
-                    pass
-                try:
-                    print(f"领取到京东红包 {res['data']['redValue']}\n")
-                except:
-                    print('')
-            else:
-                print(res['errMsg']+'\n')
-        else:
-            print(res['errMsg']+'\n')
-
-
-
-# 微信现金id
-def spring_reward_list(cookie):
-    happyDigExchange(cookie)
-    xueliang(cookie)
-
-    body={"linkId":linkId,"pageNum":1,"pageSize":6}
-    res=taskGetUrl("spring_reward_list", body, cookie)
-
-    if res['code']==0:
-        if res['success']:
-            items=res['data']['items']
-            for _items in items:
-                amount=_items['amount']         # 金额
-                prizeDesc=_items['prizeDesc']   # 金额备注
-                amountid=_items['id']           # 金额id
-                poolBaseId=_items['poolBaseId']
-                prizeGroupId=_items['prizeGroupId']
-                prizeBaseId=_items['prizeBaseId']
-                if '红包' not in prizeDesc:
-                    print('尝试微信提现')
-                    time.sleep(3.2)
-                    wecat(cookie,amountid,poolBaseId,prizeGroupId,prizeBaseId)
-        else:
-            print(f'获取数据失败\n{res}\n')
-    else:
-        print(f'获取数据失败\n{res}\n')
-
-    # 微信提现
-def wecat(cookie,amountid,poolBaseId,prizeGroupId,prizeBaseId):
-    xueliang(cookie)
-
-    url='https://api.m.jd.com'
-    headers={
-        'Cookie': cookie,
-        'Host': 'api.m.jd.com',
-        'Connection': 'keep-alive',
-        'origin': 'https://bnzf.jd.com',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        "User-Agent": ua(),
-        'Accept-Language': 'zh-cn',
-        'Accept-Encoding': 'gzip, deflate, br',
-    }
-    body={"businessSource":"happyDiggerH5Cash","base":{"id":amountid,"business":"happyDigger","poolBaseId":poolBaseId,"prizeGroupId":prizeGroupId,"prizeBaseId":prizeBaseId,"prizeType":4},"linkId":linkId}
-    data=f"functionId=apCashWithDraw&body={json.dumps(body)}&t=1635596380119&appid=activities_platform&client=H5&clientVersion=1.0.0"
-    for n in range(3):
-        try:
-            res=requests.post(url,headers=headers,data=data,timeout=10).json()
-            break
-        except:
-            if n==2:
-                print('API请求失败，请检查网路重试❗\n')
-    try:
-        if res['code']==0:
-            if res['success']:
-                print(res['data']['message']+'\n')
-    except:
-        print(res)
-        print('')
-
-
-def main():
-    print('🔔发财挖宝，开始！\n')
-
-    print('获取助力码\n')
-    global inviteCode_1_list,inviteCode_2_list
-    inviteCode_1_list=list()
-    inviteCode_2_list=list()
-    for cookie in cookie_list:
-       inviteCode(cookie)
-
-    print('互助\n')
-    inviteCode_2_list=inviteCode_2_list[:2]
-    for e,fcwbinviter in enumerate(inviteCode_2_list):
-        fcwbinviteCode=inviteCode_1_list[e]
-        for cookie in cookie_list:
-            happyDigHelp(cookie,fcwbinviter,fcwbinviteCode)
-
-    print(f'====================共{len(cookie_list)}京东个账号Cookie=========\n')
-
-    for e,cookie in enumerate(cookie_list,start=1):
-        print(f'******开始【账号 {e}】 {get_pin(cookie)} *********\n')
-        apDoTask(cookie)
-        happyDigHome(cookie)
-        spring_reward_list(cookie)
-
-
+'''
+23点之前打开 0点场使用之前获取的key
+23点之后打开 时时获取key 抢卷
+'''
 if __name__ == '__main__':
-    main()
+
+    printf(f'59-20准备...')
+    printf(f'正在获取59-20券key')
+
+    if getLoactionHource() == '23':
+        while True:
+            isExec = False
+            hources = getLoactionHource()
+            minute = getLocationMinute()
+            second = getLocationSecond()
+            printf(f'等待{getSmailHources(hources)}点场次开始...')
+            for startItem in actionTimes:
+                if str(startItem - 1) == hources and minute == '59' and second == '58':
+
+                    range_n = 1
+                    receiveKeys = []
+                    for i in range(len(mycookies)):
+                        while True:
+                            receiveKey = getCcFeedInfo(mycookies[i], i)
+                            if receiveKey != -1:
+                                receiveKeys.append(receiveKey)
+                                break
+
+                    threads = []
+                    for i in range(len(mycookies)):
+                        threads.append(
+                            threading.Thread(target=use_threadByZero, args=(mycookies[i], i))
+                        )
+                    for t in threads:
+                        t.start()
+                    for t in threads:
+                        t.join()
+                    isExec = True
+                    break
+            if isExec:
+                break
+            time.sleep(delay_time)
+
+    receiveKeys = []
+    for i in range(len(mycookies)):
+        while True:
+            receiveKey = getCcFeedInfo(mycookies[i], i)
+            if receiveKey != -1:
+                receiveKeys.append(receiveKey)
+                break
+
+    for i in range(len(mycookies)):
+        printf(f'开始测试{i+1}个账号...')
+        res = get_receiveNecklaceCoupon_sign(receiveKeys[i], mycookies[i])
+        if res != -1:
+            url = res[0]
+            body = res[1]
+            headers = res[2]
+            receiveNecklaceCoupon(url, body, headers, i)
+        else:
+            printf(f"测试失败，生成链接异常")
+
+    if len(receiveKeys) != 0:
+        while True:
+            hources = getLoactionHource()
+            minute = getLocationMinute()
+            second = getLocationSecond()
+            printf(f'等待{getSmailHources(hources)}点场次开始...')
+            for startItem in actionTimes:
+                if str(startItem - 1) == hources and minute == '59' and second == '50':
+                    threads = []
+                    for i in range(len(mycookies)):
+                        threads.append(
+                            threading.Thread(target=use_thread, args=(mycookies[i], i))
+                        )
+                    for t in threads:
+                        t.start()
+                    for t in threads:
+                        t.join()
+            time.sleep(delay_time)
+    else:
+        printf(f"没有获取任何key，请检查账号")
