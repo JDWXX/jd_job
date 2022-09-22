@@ -73,16 +73,16 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
     }
   }
 })()
-  .catch((e) => {
-    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-  })
-  .finally(() => {
-    $.done();
-  })
+    .catch((e) => {
+      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    })
+    .finally(() => {
+      $.done();
+    })
 
 async function accountCheck() {
   $.hasDone = false;
-  console.log(`***检测账号是否黑号***`);
+  //console.log(`***检测账号是否黑号***`);
   await getIsvToken()
   await $.wait(10000)
   await getIsvToken2()
@@ -96,7 +96,7 @@ async function accountCheck() {
   }
   let client = new WebSocket(`wss://xinruimz-isv.isvjcloud.com/wss/?token=${$.token}`, null, {
     headers: {
-        'user-agent': UA,
+      'user-agent': UA,
     }
   });
   client.onopen = async () => {
@@ -150,7 +150,7 @@ async function mr() {
   $.needs = []
   let client = new WebSocket(`wss://xinruimz-isv.isvjcloud.com/wss/?token=${$.token}`,null,{
     headers:{
-        'user-agent': UA,
+      'user-agent': UA,
     }
   })
   console.log(`wss://xinruimz-isv.isvjcloud.com/wss/?token=${$.token}`)
@@ -179,10 +179,10 @@ async function mr() {
     // 获得可生成的商品列表
     client.send(`{"msg":{"type":"action","args":{"page":1,"num":10},"action":"product_lists"}}`)
     await $.wait(10000);
-   // 获得原料生产列表
+    // 获得原料生产列表
     for (let pos of positionList) {
-        client.send(`{"msg":{"type":"action","args":{"position":"${pos}"},"action":"produce_position_info_v2"}}`)
-        await $.wait(10000);
+      client.send(`{"msg":{"type":"action","args":{"position":"${pos}"},"action":"produce_position_info_v2"}}`)
+      await $.wait(10000);
     }
     console.log(`\n========日常任务相关========`)
     client.send(`{"msg":{"type":"action","args":{},"action":"check_up"}}`)
@@ -249,13 +249,13 @@ async function mr() {
           $.check_up = true
           // 6-9点签到
           //for (let check_up of vo.data.check_up) {
-           // if (check_up['receive_status'] !== 1) {
-           //   console.log(`去领取第${check_up.times}次签到奖励`)
-           //   client.send(`{"msg":{"type":"action","args":{"check_up_id":${check_up.id}},"action":"check_up_receive"}}`)
-           // } else {
-           //   console.log(`第${check_up.times}次签到奖励已领取`)
-           // }
-         // }
+          // if (check_up['receive_status'] !== 1) {
+          //   console.log(`去领取第${check_up.times}次签到奖励`)
+          //   client.send(`{"msg":{"type":"action","args":{"check_up_id":${check_up.id}},"action":"check_up_receive"}}`)
+          // } else {
+          //   console.log(`第${check_up.times}次签到奖励已领取`)
+          // }
+          // }
           break
         case "shop_products":
           let count = $.taskState.shop_view.length;
@@ -494,13 +494,13 @@ async function mr() {
             console.log(`收取产品失败，错误信息${vo.msg}`)
           }
           break
-        // case "get_task":
-        //   console.log(`当前任务【${vo.data.describe}】，需要【${vo.data.product.name}】${vo.data.package_stock}/${vo.data.num}份`)
-        //   if (vo.data.package_stock >= vo.data.num) {
-        //     console.log(`满足任务要求，去完成任务`)
-        //     client.send(`{"msg":{"type":"action","args":{"task_id":${vo.data.id}},"action":"complete_task"}}`)
-        //   }
-        //   break
+          // case "get_task":
+          //   console.log(`当前任务【${vo.data.describe}】，需要【${vo.data.product.name}】${vo.data.package_stock}/${vo.data.num}份`)
+          //   if (vo.data.package_stock >= vo.data.num) {
+          //     console.log(`满足任务要求，去完成任务`)
+          //     client.send(`{"msg":{"type":"action","args":{"task_id":${vo.data.id}},"action":"complete_task"}}`)
+          //   }
+          //   break
         case 'get_benefit':
           for (let benefit of vo.data) {
             if (benefit.type === 1) { //type 1 是京豆
@@ -537,14 +537,14 @@ async function mr() {
         case "get_produce_material":
           $.material = vo.data
           break
-        //case "to_employee":
-         // console.log(`雇佣助力码【${oc(() => vo.data.token)}】`)
-         // if(oc(() => vo.data.token)){
-         //   $.tokens.push(vo.data.token)
-         // }else{
-         //   console.log(`not exist:${oc(() => vo.data)}`)
-         // }
-         // break
+          //case "to_employee":
+          // console.log(`雇佣助力码【${oc(() => vo.data.token)}】`)
+          // if(oc(() => vo.data.token)){
+          //   $.tokens.push(vo.data.token)
+          // }else{
+          //   console.log(`not exist:${oc(() => vo.data)}`)
+          // }
+          // break
         case "employee_v2":
           console.log(`${vo.msg}`)
           break
@@ -575,7 +575,7 @@ function getIsvToken() {
           if (safeGet(data)) {
             data = JSON.parse(data);
             $.isvToken = data['tokenKey'];
-            console.log(`isvToken:${$.isvToken}`);
+            //console.log(`isvToken:${$.isvToken}`);
           }
         }
       } catch (e) {
@@ -589,13 +589,13 @@ function getIsvToken() {
 
 async function getIsvToken2() {
   for (let i=0; i<3; i++){
-  var body = await getSignfromDY('isvObfuscator',{"id":"","url":"https://xinruimz-isv.isvjcloud.com"})
-  if(body) break;
-  await $.wait(5000)
-  } 
+    var body = await getSignfromDY('isvObfuscator',{"id":"","url":"https://xinruimz-isv.isvjcloud.com"})
+    if(body) break;
+    await $.wait(5000)
+  }
   let config = {
     url: 'https://api.m.jd.com/client.action?functionId=isvObfuscator',
-    body: body,
+    body: `${$.Signz}`,
     headers: {
       'Host': 'api.m.jd.com',
       'accept': '*/*',
@@ -616,7 +616,7 @@ async function getIsvToken2() {
           if (safeGet(data)) {
             data = JSON.parse(data);
             $.token2 = data['token']
-            console.log(`token2:${$.token2}`);
+            //console.log(`token2:${$.token2}`);
           }
         }
       } catch (e) {
@@ -627,44 +627,32 @@ async function getIsvToken2() {
     })
   })
 }
-function getSignfromDY(functionId, body) {	
-var strsign = '';
-let data = `functionId=${functionId}&body=${encodeURIComponent(JSON.stringify(body))}`
-  return new Promise((resolve) => {
-      let opt = {
-          url: "https://jd.nbplay.xyz/dylan/getsign",
-          body: data,
-      headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-      }
-      ,timeout: 30000
-      }
-      $.post(opt, async(err, resp, data) => {
-          try {
-            if (data){
-              data = JSON.parse(data);
-      if (data && data.code == 0) {
-                  console.log("连接DY服务成功" );
-                  if (data.data){
-                      strsign = data.data || '';
+function getSignfromDY(functionId, body) {
+  let data={'fn':functionId,'body':JSON.stringify(body)};
+  let optionsions={'url':'https://api.nolanstore.top/sign','body':JSON.stringify(data),'headers':{"Content-Type": "application/json"},'timeout':30000};
+  return new Promise(async resolve=>{
+    $.post(optionsions,(err,resp,data)=>{
+      try{
+        if(err){
+          console.log(''+JSON.stringify(err));
+          console.log($.name+' getSign API请求失败，请检查网路重试');
+        }else{
+          data=JSON.parse(data);
+          if((typeof data==='object')&&data&&data.body){
+            $.Signz=data.body ||'';
+          } else {
+            console.log('获取服务失败~~');
+          }
         }
-                  if (strsign != ''){
-                      resolve(strsign);
-        }
-                  else
-                      console.log("签名获取失败,换个时间再试.");
-              } else {
-                  console.log(data.msg);
-              }
-            }else{console.log('连接连接DY服务失败，重试。。。')}	
-          }catch (e) {
-              $.logErr(e, resp);
-          }finally {
-      resolve(strsign);
-    }
-      })
-  })
-}
+      }catch(e){
+        $.logErr(e,resp);
+      }
+      finally{
+        resolve(data);
+      }
+    });
+  });
+};
 function getToken() {
   let config = {
     url: 'https://xinruimz-isv.isvjcloud.com/api/auth',
@@ -692,7 +680,7 @@ function getToken() {
           if (safeGet(data)) {
             data = JSON.parse(data);
             $.token = data.access_token
-            console.log(`$.token ${$.token}`)
+            //console.log(`$.token ${$.token}`)
           }
         }
       } catch (e) {
@@ -725,7 +713,7 @@ function TotalBean() {
         "Cookie": cookie,
         "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
         'user-agent': UA,
-        }
+      }
     }
     $.post(options, (err, resp, data) => {
       try {
