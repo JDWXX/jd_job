@@ -96,8 +96,9 @@ ql repo https://hub.fastgit.org/JDWXX/jd_job.git "jd_|jx_|gua_|jddj_|getJDCookie
 ```
 
 # 使用文档
-
-[教程](http://cxgc.top/)
+## 部分脚本说明
+### 京东极速版任务 JDWXX_jd_job_jd_speed_signfaker.js 修改任务
+### 由 【task JDWXX_jd_job_jd_speed_signfaker.js】 改成 【task JDWXX_jd_job_jd_speed_signfaker.js conc JD_COOKIE】 可以一次性跑全部号，防止号跑不完
 
 ## 助力教程
 
