@@ -1,9 +1,24 @@
-
 /*
-5 20 * * * jd_cxxbZlM.js
-*/
+穿行寻宝-膨胀获取助力码
+by：JDWXX
+已支持IOS双京东账号,Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
+[task_local]
+#穿行寻宝-膨胀获取助力码
+5 20 * * *  https://github.com/JDWXX/jd_job.git, tag=穿行寻宝-膨胀获取助力码, enabled=true
 
-const $ = new Env('穿行寻宝膨胀获取助力码');
+================Loon==============
+[Script]
+cron "5 20 * * * " script-path=https://github.com/JDWXX/jd_job.git,tag=穿行寻宝-膨胀获取助力码
+
+===============Surge=================
+穿行寻宝-膨胀获取助力码 = type=cron,cronexp="5 20 * * * ",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job.git
+
+============小火箭=========
+穿行寻宝-膨胀获取助力码 = type=cron,script-path=https://github.com/JDWXX/jd_job.git, cronexpr="5 20 * * * ", timeout=3600, enable=true
+ */
+const $ = new Env('穿行寻宝-膨胀获取助力码');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [], cookie = '', message;
 
@@ -118,7 +133,6 @@ function travel_gethelp(){
 
 function taskPostUrl(functionId, body) {
     return {
-        //functionId=tigernian_getHomeData&body={}&client=wh5&clientVersion=1.0.0
         url: `${JD_API_HOST}`,
         body: `functionId=${functionId}&body=${escape(JSON.stringify(body))}&client=m&clientVersion=-1&appid=signed_wh5`,
         headers: {
