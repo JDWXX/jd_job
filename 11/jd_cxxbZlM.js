@@ -21,7 +21,6 @@ cron "5 20 * * * " script-path=https://github.com/JDWXX/jd_job.git,tag=穿行寻
 const $ = new Env('穿行寻宝-膨胀获取助力码');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [], cookie = '', message;
-
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -30,7 +29,6 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-
 $.inviteId  = [];
 !(async () => {
     if (!cookiesArr[0]) {
