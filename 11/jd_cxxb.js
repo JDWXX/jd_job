@@ -1,3 +1,23 @@
+/*
+穿行寻宝
+by：JDWXX
+已支持IOS双京东账号,Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
+[task_local]
+#穿行寻宝
+27 1,8,14 * * * https://github.com/JDWXX/jd_job.git, tag=穿行寻宝, enabled=true
+
+================Loon==============
+[Script]
+cron "27 1,8,14 * * *" script-path=https://github.com/JDWXX/jd_job.git,tag=穿行寻宝
+
+===============Surge=================
+穿行寻宝 = type=cron,cronexp="27 1,8,14 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job.git
+
+============小火箭=========
+穿行寻宝 = type=cron,script-path=https://github.com/JDWXX/jd_job.git, cronexpr="27 1,8,14 * * *", timeout=3600, enable=true
+ */
 const CryptoJS = require("crypto-js");
 const $ = new Env('穿行寻宝');
 const notify = $.isNode() ? require('./sendNotify') : '';
