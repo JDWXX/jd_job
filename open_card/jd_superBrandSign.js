@@ -1,24 +1,16 @@
 /*
-特物Z
-抄自 @yangtingxiao 抽奖机脚本
-活动入口：
-更新地址：https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_superBrand.js
-已支持IOS双京东账号, Node.js支持N个京东账号
-脚本兼容: QuantumultX, Surge, Loon, 小火箭，JSBox, Node.js
-============Quantumultx===============
-[task_local]
-#特物Z_签到
-30 6 1-19 6 * https://raw.githubusercontent.com/Wenmoux/scripts/wen/jd/jd_superBrand.js, tag=特物Z, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
-
+特物Z_签到抽奖
+APP首页下拉
+5 8,16 * * * jd_superBrandSign.js
  */
-const $ = new Env('特物Z_签到');
+const $ = new Env('特物Z_签到抽奖');
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
 if ($.isNode()) {
-    Object.keys(jdCookieNode).forEach((item) => { cookiesArr.push(jdCookieNode[item]) })
+    Object.keys(jdCookieNode).forEach((item) => { cookiesArr.push(jdCookieNode[item])})
     if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => { };
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
@@ -65,7 +57,7 @@ if ($.isNode()) {
                     console.log("今日已签到");
                 }
             }
-            await getid("showSecondFloorSignInfo", "sign")
+            await getid("showSecondFloorSignInfo", "sign")           
             if ($.callNumber >= 300) {
                 await superBrandTaskLottery("sign", $.encryptProjectId, 'D2bsHLsAAPxoUhfKtHU3TvMpWrw')
             }
