@@ -1,5 +1,5 @@
 /*
-双十一红包锁佣
+双十一红包
 京粉可能会被封，用不用看自己
 京粉转链：https://u.jd.com/kKmbzrz
 rebatePin 填 分享码，可不填，默认助力前五 如果小于五个号 只助力第一个
@@ -8,20 +8,20 @@ rebatePin 填 分享码，可不填，默认助力前五 如果小于五个号 �
 脚本兼容: QuantumultX, Surge, Loon, 小火箭，JSBox, Node.js
 ============Quantumultx===============
 [task_local]
-#双十一红包锁佣
-0 0 0,12,19,20 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, tag=双十一红包锁佣, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_bean_home.png, enabled=true
+#双十一红包
+0 0 0,12,19,20 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, tag=双十一红包, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_bean_home.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "0 0 0,12,19,20 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, tag=双十一红包锁佣
+cron "0 0 0,12,19,20 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, tag=双十一红包
 
 ===============Surge=================
-双十一红包锁佣 = type=cron,cronexp="0 0 0,12,19,20 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js
+双十一红包 = type=cron,cronexp="0 0 0,12,19,20 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js
 
 ============小火箭=========
-双十一红包锁佣 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, cronexpr="0 0 0,12,19,20 * * *", timeout=3600, enable=true
+双十一红包 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, cronexpr="0 0 0,12,19,20 * * *", timeout=3600, enable=true
  */
-const $ = new Env('双十一红包锁佣');
+const $ = new Env('双十一红包');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let rebateCodes = 'kKmbzrz'
 let rebatePin = '' //分享码 默认助力前五 如果小于五个号 只助力第一个
