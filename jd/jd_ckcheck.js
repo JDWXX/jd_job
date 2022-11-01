@@ -1,10 +1,20 @@
 /*
-#柠檬CK检测
+京东CK检测
+不会用加群：212796668、681030097
+脚本兼容: QuantumultX, Surge,Loon, JSBox, Node.js
+=================================Quantumultx=========================
 [task_local]
-#柠檬CK检测
- 0 1/60 * * * https://github.com/JDWXX/jd_job/blob/master/jd/jd_sqdyj.js, tag=柠檬CK检测, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
-*/
-const $ = new Env('柠檬CK检测');
+#京东CK检测
+30 * * * * https://github.com/JDWXX/jd_job.git, tag=京东CK检测, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+=================================Loon===================================
+[Script]
+cron "30 * * * *" script-path=https://github.com/JDWXX/jd_job.git,tag=京东CK检测
+===================================Surge================================
+京东CK检测 = type=cron,cronexp="30 * * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job.git
+====================================小火箭=============================
+京东CK检测 = type=cron,script-path=https://github.com/JDWXX/jd_job.git, cronexpr="30 * * * *", timeout=3600, enable=true
+ */
+const $ = new Env('京东CK检测');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
