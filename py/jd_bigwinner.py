@@ -168,6 +168,17 @@ class Userinfo :#line:40:class Userinfo:
                         O0O0O0OO0000O0OOO .need_help =True #line:171:self.need_help = True
                         logger .info (f"最高可邀请[{need_invite}]人,目前已邀请[{O0O0O0OO0000O0OOO.invite_success}]人,还需邀请[{int(need_invite) - int(O0O0O0OO0000O0OOO.invite_success)}]人")#line:173:f"最高可邀请[{need_invite}]人,目前已邀请[{self.invite_success}]人,还需邀请[{int(need_invite) - int(self.invite_success)}]人")
                     else :#line:174:else:
+                        O0O0O0OO0000O0OOO.reward (invite_taskId)
+                        O0O0O0OO0000O0OOO.reward (invite_taskId)
+                        O0O0O0OO0000O0OOO.reward (invite_taskId)
+                        O0O0O0OO0000O0OOO.reward (invite_taskId)
+                        O0O0O0OO0000O0OOO.reward (invite_taskId)
+                        O0O0O0OO0000O0OOO.reward (invite_taskId)
+                        O0O0O0OO0000O0OOO.reward (invite_taskId)
+                        O0O0O0OO0000O0OOO.reward (invite_taskId)
+                        O0O0O0OO0000O0OOO.reward (invite_taskId)
+                        O0O0O0OO0000O0OOO.reward (invite_taskId)
+                        O0O0O0OO0000O0OOO.reward (invite_taskId)
                         logger .info (f"最高可邀请[{need_invite}]人,目前已邀请[{O0O0O0OO0000O0OOO.invite_success}]人,助力已满，换号")#line:175:logger.info(f"最高可邀请[{need_invite}]人,目前已邀请[{self.invite_success}]人,助力已满，换号")
                 O0O0O0OO0000O0OOO .task_list .append ({"status":O0OOOOO0OOO0OO00O ,"taskName":O000OO0OOO0O0OO00 ,"taskId":O0O0O000O0O0OO00O ,"configTargetTimes":O00OO00O0OOOO0O0O })#line:184:)
                 O0OO0O0O0OOO00O00 .append (f"{OO0000O00000O0000} : {O000OO0OOO0O0OO00} -- {OOOO0000000OO0OO0}个营业币 -- {O0OOOOO0OOO0OO00O.replace('1', '未完成').replace('2', '已完成')}")#line:186:f"{taskid} : {taskName} -- {reward}个营业币 -- {status.replace('1', '未完成').replace('2', '已完成')}")
@@ -183,14 +194,6 @@ class Userinfo :#line:40:class Userinfo:
             logger .info (f"车头账户[{O00O0OOO000OO0000.name}]：{O00OOO0O000O0OO00['msg']}")#line:199:logger.info(f"车头账户[{self.name}]：{res['msg']}")
     def do_task (O0O0OO000O0O00O0O ):#line:201:def do_task(self):
         for O00000OOOO0O0000O in O0O0OO000O0O00O0O .task_list :#line:202:for task in self.task_list:
-            logger .info (f"做任务------------")
-            logger .info (f"appCode去做[{appCode}]")
-            logger .info (f"activeId[{activeId}]")
-            logger .info (f"sha[{O0O0OO000O0O00O0O.sha}]")
-            logger .info (f"去做[{O00000OOOO0O0000O ['status']}]")
-            logger .info (f"去做[{O00000OOOO0O0000O ['taskName']}]")
-            logger .info (f"去做[{O00000OOOO0O0000O ['taskId']}]")
-            logger .info (f"做任务------------")
             if O00000OOOO0O0000O ['taskName']in task_fn and O00000OOOO0O0000O ['status']!="2":#line:203:if task['taskName'] in task_fn and task['status'] != "2":
                 logger .info (f"车头账户[{O0O0OO000O0O00O0O.name}]：去做[{O00000OOOO0O0000O['taskName']}]")#line:204:logger.info(f"车头账户[{self.name}]：去做[{task['taskName']}]")
                 O0O0OO000O0O00O0O .reward (O00000OOOO0O0000O ['taskId'])#line:205:self.reward(task['taskId'])
