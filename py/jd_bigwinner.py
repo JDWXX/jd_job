@@ -99,6 +99,17 @@ class Userinfo :#line:40:class Userinfo:
                     logger .info (f"工具人账户[{OOO0OO0000OOOOOO0.user_index}][{OOO0OO0000OOOOOO0.name}]：助力成功，当前助力成功{O0OOO0O000OOO0O00.invite_success}次")#line:106:logger.info(f"工具人账户[{cookie.user_index}][{cookie.name}]：助力成功，当前助力成功{self.invite_success}次")
                 if O0OOO0O000OOO0O00 .invite_success >=need_invite :#line:108:if self.invite_success >= need_invite:
                     logger .info (f"车头账户[{O0OOO0O000OOO0O00.name}]：助力已满")#line:109:logger.info(f"车头账户[{self.name}]：助力已满")
+                    O0OOO0O000OOO0O00.reward (invite_taskId)
+                    O0OOO0O000OOO0O00.reward (invite_taskId)
+                    O0OOO0O000OOO0O00.reward (invite_taskId)
+                    O0OOO0O000OOO0O00.reward (invite_taskId)
+                    O0OOO0O000OOO0O00.reward (invite_taskId)
+                    O0OOO0O000OOO0O00.reward (invite_taskId)
+                    O0OOO0O000OOO0O00.reward (invite_taskId)
+                    O0OOO0O000OOO0O00.reward (invite_taskId)
+                    O0OOO0O000OOO0O00.reward (invite_taskId)
+                    O0OOO0O000OOO0O00.reward (invite_taskId)
+                    O0OOO0O000OOO0O00.reward (invite_taskId)
                     return O0OOO0O000OOO0O00 .exchange_query ()#line:110:return self.exchange_query()
                 Userinfo .index +=1 #line:111:Userinfo.index += 1
         else :#line:114:else:
@@ -172,6 +183,14 @@ class Userinfo :#line:40:class Userinfo:
             logger .info (f"车头账户[{O00O0OOO000OO0000.name}]：{O00OOO0O000O0OO00['msg']}")#line:199:logger.info(f"车头账户[{self.name}]：{res['msg']}")
     def do_task (O0O0OO000O0O00O0O ):#line:201:def do_task(self):
         for O00000OOOO0O0000O in O0O0OO000O0O00O0O .task_list :#line:202:for task in self.task_list:
+            logger .info (f"做任务------------")
+            logger .info (f"appCode去做[{appCode}]")
+            logger .info (f"activeId[{activeId}]")
+            logger .info (f"sha[{O0O0OO000O0O00O0O.sha}]")
+            logger .info (f"去做[{O00000OOOO0O0000O ['status']}]")
+            logger .info (f"去做[{O00000OOOO0O0000O ['taskName']}]")
+            logger .info (f"去做[{O00000OOOO0O0000O ['taskId']}]")
+            logger .info (f"做任务------------")
             if O00000OOOO0O0000O ['taskName']in task_fn and O00000OOOO0O0000O ['status']!="2":#line:203:if task['taskName'] in task_fn and task['status'] != "2":
                 logger .info (f"车头账户[{O0O0OO000O0O00O0O.name}]：去做[{O00000OOOO0O0000O['taskName']}]")#line:204:logger.info(f"车头账户[{self.name}]：去做[{task['taskName']}]")
                 O0O0OO000O0O00O0O .reward (O00000OOOO0O0000O ['taskId'])#line:205:self.reward(task['taskId'])
