@@ -25,8 +25,8 @@ let message = '', allMessage = '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let appIdArr = [];
-let appNameArr = [];
+let appIdArr = ["1FVRZxKiD"];
+let appNameArr = ["超级大转盘"];
 let appId, appName;
 $.shareCode = [];
 if ($.isNode()) {
@@ -42,10 +42,10 @@ if ($.isNode()) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-	if(appIdArr.length <= 0) {
-		console.log(`\n暂无活动~\n`);
-		return;
-	}
+  if(appIdArr.length <= 0) {
+    console.log(`\n暂无活动~\n`);
+    return;
+  }
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -64,12 +64,13 @@ if ($.isNode()) {
         }
         continue
       }
-			
+
       for (let j = 0; j < appIdArr.length; j++) {
         appId = appIdArr[j]
         appName = appNameArr[j]
         console.log(`\n开始第${j + 1}个活动：${appName}\n`)
         await jd_wish();
+        await $.wait(2000)
       }
     }
   }
@@ -118,7 +119,9 @@ if ($.isNode()) {
     })
 async function jd_wish() {
   try {
+    $.hasEnd = false;
     await healthyDay_getHomeData();
+    if($.hasEnd) return;
     await $.wait(2000)
 
     let getHomeDataRes = (await healthyDay_getHomeData(false)).data.result.userInfo
@@ -134,6 +137,10 @@ async function jd_wish() {
     $.canLottery = true
     for (let j = 0; j < forNum && $.canLottery; j++) {
       await interact_template_getLotteryResult()
+      if (j == 9 && $.canLottery) {
+        console.log('抽太多次了，下次再继续吧！');
+        break
+      }
       await $.wait(2000)
     }
 
@@ -154,95 +161,108 @@ async function healthyDay_getHomeData(type = true) {
           if (safeGet(data)) {
             data = JSON.parse(data);
             // console.log(data);
-            if (type) {
-              for (let key of Object.keys(data.data.result.hotTaskVos).reverse()) {
-                let vo = data.data.result.hotTaskVos[key]
-                if (vo.status !== 2) {
-                  if (vo.taskType === 13 || vo.taskType === 12) {
-                    console.log(`点击热区`)
-                    await harmony_collectScore({ "appId": appId, "taskToken": vo.simpleRecordInfoVo.taskToken, "taskId": vo.taskId, "actionType": "0" }, vo.taskType)
-                  } else {
-                  console.log(`【${vo.taskName}】已完成\n`)
-                }
-				}	
-				}						
-              for (let key of Object.keys(data.data.result.taskVos).reverse()) {
-                let vo = data.data.result.taskVos[key]
-                if (vo.status !== 2) {
-                  if (vo.taskType === 13 || vo.taskType === 12) {
-                    console.log(`签到`)
-                    await harmony_collectScore({ "appId": appId, "taskToken": vo.simpleRecordInfoVo.taskToken, "taskId": vo.taskId, "actionType": "0" }, vo.taskType)
-                  } else if (vo.taskType === 1) {
-                    for (let key of Object.keys(vo.followShopVo)) {
-                      let followShopVo = vo.followShopVo[key]
-                      if (followShopVo.status !== 2) {
-                        console.log(`【${followShopVo.shopName}】${vo.subTitleName}`)
-                        await harmony_collectScore({ "appId": appId, "taskToken": followShopVo.taskToken, "taskId": vo.taskId, "actionType": "0" })
-                      }
-                    }
-                  } else if (vo.taskType === 5) {
-                    for (let key of Object.keys(vo.browseShopVo)) {
-                      let browseShopVo = vo.browseShopVo[key]
-                      if (browseShopVo.status !== 2) {
-                        console.log(`【${browseShopVo.skuName}】${vo.subTitleName}`)
-                        await harmony_collectScore({ "appId": appId, "taskToken": browseShopVo.taskToken, "taskId": vo.taskId, "actionType": "0" })
-                      }
-                    }
-                  } else if (vo.taskType === 15) {
-                    for (let key of Object.keys(vo.productInfoVos)) {
-                      let productInfoVos = vo.productInfoVos[key]
-                      if (productInfoVos.status !== 2) {
-                        console.log(`【${productInfoVos.skuName}】${vo.subTitleName}`)
-                        await harmony_collectScore({ "appId": appId, "taskToken": productInfoVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
-                      }
-                    }
-                  } else if (vo.taskType === 3) {
-					for (let key of Object.keys(vo.shoppingActivityVos)) {
-                      let shoppingActivityVos = vo.shoppingActivityVos[key]
-                      if (shoppingActivityVos.status !== 2) {
-                        console.log(`【${vo.subTitleName}】`)
-                        await harmony_collectScore({ "appId": appId, "taskToken": shoppingActivityVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
-                      }
-                    }
-                  } else if (vo.taskType === 8) {
-                    for (let key of Object.keys(vo.productInfoVos)) {
-                      let productInfoVos = vo.productInfoVos[key]
-                      if (productInfoVos.status !== 2) {
-                        console.log(`【${productInfoVos.skuName}】${vo.subTitleName}`)
-                        await harmony_collectScore({ "appId": appId, "taskToken": productInfoVos.taskToken, "taskId": vo.taskId, "actionType": "1" })
-                        await $.wait(vo.waitDuration * 1000)
-                        await harmony_collectScore({ "appId": appId, "taskToken": productInfoVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
-                      }
-                    }
-                  } else if (vo.taskType === 27 && vo.taskId === 18) {
-                    console.log(`【${vo.subTitleName}】`)
-                    await harmony_collectScore({ "appId": appId, "taskToken": vo.productInfoVos[0].taskToken, "taskId": vo.taskId, "actionType": "0" })
-                  } else if (vo.taskType === 9 || vo.taskType === 26) {
-                    for (let key of Object.keys(vo.shoppingActivityVos)) {
-                      let shoppingActivityVos = vo.shoppingActivityVos[key]
-                      if (shoppingActivityVos.status !== 2) {
-                        console.log(`【${shoppingActivityVos.title}】${vo.subTitleName}`)
-                        if (vo.taskType === 9) {
-                          await harmony_collectScore({ "appId": appId, "taskToken": shoppingActivityVos.taskToken, "taskId": vo.taskId, "actionType": "1" })
-                          await $.wait(vo.waitDuration * 1000)
-                        }
-                        await harmony_collectScore({ "appId": appId, "taskToken": shoppingActivityVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
-                      }
-                    }
-                  } else if (vo.taskType === 14) {
-                    console.log(`【京东账号${$.index}（${$.UserName}）的${appName}好友互助码】${vo.assistTaskDetailVo.taskToken}\n`)
-                    if (vo.times !== vo.maxTimes) {
-                      $.shareCode.push({
-                        "code": vo.assistTaskDetailVo.taskToken,
-                        "appId": appId,
-                        "use": $.UserName
-                      })
+            if(data.data.bizCode === 0) {
+              if (type) {
+                for (let key of Object.keys(data.data.result.hotTaskVos).reverse()) {
+                  let vo = data.data.result.hotTaskVos[key]
+                  if (vo.status !== 2) {
+                    if (vo.taskType === 13 || vo.taskType === 12) {
+                      console.log(`点击热区`)
+                      await harmony_collectScore({ "appId": appId, "taskToken": vo.simpleRecordInfoVo.taskToken, "taskId": vo.taskId, "actionType": "0" }, vo.taskType)
+                      await $.wait(1000)
+                    } else {
+                      console.log(`【${vo.taskName}】已完成\n`)
                     }
                   }
-                } else {
-                  console.log(`【${vo.taskName}】已完成\n`)
+                }
+                for (let key of Object.keys(data.data.result.taskVos).reverse()) {
+                  let vo = data.data.result.taskVos[key]
+                  if (vo.status !== 2) {
+                    if (vo.taskType === 13 || vo.taskType === 12) {
+                      console.log(`签到`)
+                      await harmony_collectScore({ "appId": appId, "taskToken": vo.simpleRecordInfoVo.taskToken, "taskId": vo.taskId, "actionType": "0" }, vo.taskType)
+                      await $.wait(1000)
+                    } else if (vo.taskType === 1) {
+                      for (let key of Object.keys(vo.followShopVo)) {
+                        let followShopVo = vo.followShopVo[key]
+                        if (followShopVo.status !== 2) {
+                          console.log(`【${followShopVo.shopName}】${vo.subTitleName}`)
+                          await harmony_collectScore({ "appId": appId, "taskToken": followShopVo.taskToken, "taskId": vo.taskId, "actionType": "0" })
+                          await $.wait(1000)
+                        }
+                      }
+                    } else if (vo.taskType === 5) {
+                      for (let key of Object.keys(vo.browseShopVo)) {
+                        let browseShopVo = vo.browseShopVo[key]
+                        if (browseShopVo.status !== 2) {
+                          console.log(`【${browseShopVo.skuName}】${vo.subTitleName}`)
+                          await harmony_collectScore({ "appId": appId, "taskToken": browseShopVo.taskToken, "taskId": vo.taskId, "actionType": "0" })
+                          await $.wait(1000)
+                        }
+                      }
+                    } else if (vo.taskType === 15) {
+                      for (let key of Object.keys(vo.productInfoVos)) {
+                        let productInfoVos = vo.productInfoVos[key]
+                        if (productInfoVos.status !== 2) {
+                          console.log(`【${productInfoVos.skuName}】${vo.subTitleName}`)
+                          await harmony_collectScore({ "appId": appId, "taskToken": productInfoVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
+                          await $.wait(1000)
+                        }
+                      }
+                    } else if (vo.taskType === 3) {
+                      for (let key of Object.keys(vo.shoppingActivityVos)) {
+                        let shoppingActivityVos = vo.shoppingActivityVos[key]
+                        if (shoppingActivityVos.status !== 2) {
+                          console.log(`【${vo.subTitleName}】`)
+                          await harmony_collectScore({ "appId": appId, "taskToken": shoppingActivityVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
+                          await $.wait(1000)
+                        }
+                      }
+                    } else if (vo.taskType === 8) {
+                      for (let key of Object.keys(vo.productInfoVos)) {
+                        let productInfoVos = vo.productInfoVos[key]
+                        if (productInfoVos.status !== 2) {
+                          console.log(`【${productInfoVos.skuName}】${vo.subTitleName}`)
+                          await harmony_collectScore({ "appId": appId, "taskToken": productInfoVos.taskToken, "taskId": vo.taskId, "actionType": "1" })
+                          await $.wait(vo.waitDuration * 1000)
+                          await harmony_collectScore({ "appId": appId, "taskToken": productInfoVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
+                          await $.wait(1000)
+                        }
+                      }
+                    } else if (vo.taskType === 27 && vo.taskId === 18) {
+                      console.log(`【${vo.subTitleName}】`)
+                      await harmony_collectScore({ "appId": appId, "taskToken": vo.productInfoVos[0].taskToken, "taskId": vo.taskId, "actionType": "0" })
+                    } else if (vo.taskType === 9 || vo.taskType === 26) {
+                      for (let key of Object.keys(vo.shoppingActivityVos)) {
+                        let shoppingActivityVos = vo.shoppingActivityVos[key]
+                        if (shoppingActivityVos.status !== 2) {
+                          console.log(`【${shoppingActivityVos.title}】${vo.subTitleName}`)
+                          if (vo.taskType === 9) {
+                            await harmony_collectScore({ "appId": appId, "taskToken": shoppingActivityVos.taskToken, "taskId": vo.taskId, "actionType": "1" })
+                            await $.wait(vo.waitDuration * 1000)
+                          }
+                          await harmony_collectScore({ "appId": appId, "taskToken": shoppingActivityVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
+                          await $.wait(1000)
+                        }
+                      }
+                    } else if (vo.taskType === 14) {
+                      console.log(`【京东账号${$.index}（${$.UserName}）的${appName}好友互助码】${vo.assistTaskDetailVo.taskToken}\n`)
+                      if (vo.times !== vo.maxTimes) {
+                        $.shareCode.push({
+                          "code": vo.assistTaskDetailVo.taskToken,
+                          "appId": appId,
+                          "use": $.UserName
+                        })
+                      }
+                    }
+                  } else {
+                    console.log(`【${vo.taskName}】已完成\n`)
+                  }
                 }
               }
+            } else {
+              console.log(`黑号，火爆了\n`)
+              $.hasEnd = true;
             }
           }
         }
