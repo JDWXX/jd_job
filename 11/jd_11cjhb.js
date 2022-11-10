@@ -5,14 +5,14 @@
 =================================Quantumultx=========================
 [task_local]
 #双十一终极红包
-55 21 * * * https://github.com/JDWXX/jd_job.git, tag=双十一终极红包, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+10 20 * * * https://github.com/JDWXX/jd_job.git, tag=双十一终极红包, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 =================================Loon===================================
 [Script]
-cron "55 21 * * *" script-path=https://github.com/JDWXX/jd_job.git,tag=双十一终极红包
+cron "10 20 * * *" script-path=https://github.com/JDWXX/jd_job.git,tag=双十一终极红包
 ===================================Surge================================
-双十一终极红包 = type=cron,cronexp="55 21 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job.git
+双十一终极红包 = type=cron,cronexp="10 20 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job.git
 ====================================小火箭=============================
-双十一终极红包 = type=cron,script-path=https://github.com/JDWXX/jd_job.git, cronexpr="55 21 * * *", timeout=3600, enable=true
+双十一终极红包 = type=cron,script-path=https://github.com/JDWXX/jd_job.git, cronexpr="10 20 * * *", timeout=3600, enable=true
  */
 const $ = new Env('双十一终极红包');
 const notify = $.isNode() ? require('./sendNotify') : '';
