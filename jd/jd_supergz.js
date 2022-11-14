@@ -1,6 +1,6 @@
 /*
 一次性脚本
-6 19,22 * * * jd_supergz.js, tag=频道关注
+6 8 * * * jd_supergz.js, tag=频道关注
  */
 
 const $ = new Env('频道关注');
@@ -59,7 +59,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 function userFollow2() {
     return new Promise(resolve => {
         $.post({
-            url: `https://api.m.jd.com//client.action?functionId=userFollow&clientVersion=11.0.4&build=97896&client=android&partner=huaweiharmony&oaid=00000000-0000-0000-0000-000000000000&eid=eidAd69181222cs4MWVC/eR5RsO89YqZeAaldjFlRH62V0jXxkgTJezaoCaopXfEm/34XlFi8vQ1yY0m3jtt3JRMsOp5LiEj5SyNkfAY9/fVqqC52Wpw&sdkVersion=29&lang=zh_CN&harmonyOs=1&networkType=UNKNOWN&uts=0f31TVRjBSvcbdoYSja94x65%2BAJUVL6o4HGJQgA%2F2Yq2GsasrtYO6GuXZbI%2BPGipBDKmF6e7kDHdBQnNwLqpAHex42b96xdaO%2FLwgdFZajJlb5xuQOn8YJxV7QIPcCAbbDpDbZqfZ0ISkAKCnyvEduvJr%2Fq42gqGztD0vIZInR6gMZjq6k%2FVlexuOfWi5fnaxHmGfLCMteJWrdP6CykJTA%3D%3D&uemps=0-0&ext=%7B%22prstate%22%3A%220%22%2C%22pvcStu%22%3A%221%22%7D&ef=1&ep=%7B%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22ts%22%3A1662184450556%2C%22ridx%22%3A-1%2C%22cipher%22%3A%7B%22area%22%3A%22CJdpCJG0CV8nDNG1XzGnEJum%22%2C%22d_model%22%3A%22V0naBUPECNK%3D%22%2C%22wifiBssid%22%3A%22dW5hbw93bq%3D%3D%22%2C%22osVersion%22%3A%22CJK%3D%22%2C%22d_brand%22%3A%22IPVLV0VT%22%2C%22screen%22%3A%22CtS3DyenCNqm%22%2C%22uuid%22%3A%22DJUmZWDrDwS0DtdtYJHwCm%3D%3D%22%2C%22aid%22%3A%22DJUmZWDrDwS0DtdtYJHwCm%3D%3D%22%2C%22openudid%22%3A%22DJUmZWDrDwS0DtdtYJHwCm%3D%3D%22%7D%2C%22ciphertype%22%3A5%2C%22version%22%3A%221.2.0%22%2C%22appname%22%3A%22com.jingdong.app.mall%22%7D&st=1662187517154&sign=15d9931eb2255cac92faad891dc50401&sv=121`,
+            url: `https://api.m.jd.com//client.action?functionId=userFollow&avifSupport=1&body=%7B%22businessId%22%3A%221%22%2C%22type%22%3A%221%22%2C%22themeId%22%3A%22276%22%2C%22uuid%22%3A%22%22%7D&build=168210&client=apple&clientVersion=11.1.4&d_brand=apple&d_model=iPhone8%2C2&ef=1&eid=eidI994b812123s1PRhmb/36RNW2uQJarJ271z0YZ%2Bv4APcrj75ymDe%2B0Z6%2BnTWSLykYTnpR8p/NwxporPY8JdbEwVIoH6%2BtJTHm/uL08tuO6g10hmNP&ep=%7B%22ciphertype%22%3A5%2C%22cipher%22%3A%7B%22screen%22%3A%22CJS0CseyCtK4%22%2C%22osVersion%22%3A%22CJGkEK%3D%3D%22%2C%22openudid%22%3A%22ZWY5YtTvYwVsCzY4DWYnY2VtDNU0ZtVwCNU2EQTtZtY1DtTuDtu4Dm%3D%3D%22%2C%22area%22%3A%22DP81CNu1CP81CNu1D18m%22%2C%22uuid%22%3A%22aQf1ZRdxb2r4ovZ1EJZhcxYlVNZSZz09%22%7D%2C%22ts%22%3A1668304068%2C%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22version%22%3A%221.0.3%22%2C%22appname%22%3A%22com.360buy.jdmobile%22%2C%22ridx%22%3A-1%7D&ext=%7B%22prstate%22%3A%220%22%2C%22pvcStu%22%3A%221%22%7D&isBackground=N&joycious=127&lang=zh_CN&networkType=wifi&networklibtype=JDNetworkBaseAF&partner=apple&rfs=0000&scope=01&sign=77b4a0ffc4547fcec9ae7d8b173e28b9&st=1668304108764&sv=111&uemps=0-0&uts=0f31TVRjBSsqndu4/jgUPz6uymy50MQJBVHeEQpVPVaACI52LjwwK7NzBm1TrLgHzTfMu63%2Bkq2%2BDqQ%2Bhw6Yc/VFw5az56oDAdMImMRkRbTj6LZCh1cB53RDbOymHfXUmOHV03m5mncJEiFV0SuPUX/wyY2OgDMkMsdThcycWNu2cXGnPSYJzNODw3bUV8yGgGXvxH078XxSeVpKR/eRyg%3D%3D`,
             body: 'body=%7B%22businessId%22%3A%221%22%2C%22themeId%22%3A%22858%22%2C%22type%22%3A%221%22%7D&',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
