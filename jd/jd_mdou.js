@@ -1,8 +1,10 @@
 /*
 // https://h5.m.jd.com/rn/42yjy8na6pFsq1cx9MJQ5aTgu3kX/index.html
+
 入口：APP首页-领京豆-升级赚京豆
 cron:21 9 * * *
 21 9 * * * https://raw.githubusercontent.com/smiek2121/scripts/master/gua_MMdou.js, tag=MM领京豆, enabled=true
+
 */
 
 const $ = new Env('MM领京豆');
@@ -65,7 +67,7 @@ async function run() {
   try{
     $.taskList = [];
     await takePostRequest('beanTaskList')
-    await takePostRequest('morningGetBean')
+    // await takePostRequest('morningGetBean')
     console.log(`做任务\n`);
     if($.viewAppHome && $.viewAppHome.takenTask == false){
       $.IconDoTaskFlag = 0
