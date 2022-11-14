@@ -1,8 +1,6 @@
 /*
-cron "5 11 7,22 *  * *" jd_priceProtect_Mod.js, tag:京东价格保护通知版
+cron "0 13 22 * * *" jd_priceProtect_Mod.js, tag:京东价格保护通知版
  */
-//版权归原作者，我只是加上了通知方便提醒朋友.
-
 const $ = new Env('京东价格保护通知版');
 let jsdom = require("jsdom");
 const {

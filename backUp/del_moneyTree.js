@@ -63,7 +63,7 @@ let userInfo = null, taskInfo = [], message = '', subTitle = '', fruitTotal = 0;
             }
             message = '';
             subTitle = '';
-            await jd_moneyTree();
+            await del_moneyTree();
         }
     }
     if (allMsg) {
@@ -81,7 +81,7 @@ let userInfo = null, taskInfo = [], message = '', subTitle = '', fruitTotal = 0;
         $.done();
     })
 
-async function jd_moneyTree() {
+async function del_moneyTree() {
     try {
         const userRes = await user_info();
         if (!userRes || !userRes.realName) return
