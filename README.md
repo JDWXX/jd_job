@@ -2,6 +2,16 @@
 docker exec -it QL bash -c "npm install nodemailer"
 docker exec -it QL bash -c "npm install node-fetch --save"
 
+# 加密脚本【无法保证ck安全】
+## 如需执行加密代码 更改拉库指令如下
+```
+ql repo https://github.com/JDWXX/jd_job.git "jd_|jx_|gua_|jddj_|getJDCookie" "activity|backUp" "^jd[^_]|USER|function|utils|ZooFaker_Necklace.js|JDJRValidator|sign_graphics_validate|ql|send"
+```
+## 如需过滤加密代码 更改拉库指令如下
+```
+ql repo https://github.com/JDWXX/jd_job.git "jd_|jx_|gua_|jddj_|getJDCookie" "activity|backUp|jm" "^jd[^_]|USER|function|utils|ZooFaker_Necklace.js|JDJRValidator|sign_graphics_validate|ql|send"
+```
+
 ## 库里的脚本也来源别的库收集的，我拉代码的时候也尽量检查了一遍，有些代码加密了，但没法保证代码安全，还望大家自己注意点，脚本本意是为了给大家节省时间，希望卡商们别搞的太大给东哥留点家底
 
 
@@ -19,7 +29,7 @@ https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a406456-63ac-413b-b1f6-27a6eed5945e/a0
 
 ##### 命令
 ```
-ql repo https://github.com/JDWXX/jd_job.git "jd_|jx_|gua_|jddj_|getJDCookie" "activity|backUp" "^jd[^_]|USER|function|utils|ZooFaker_Necklace.js|JDJRValidator|sign_graphics_validate|ql|send"
+ql repo https://github.com/JDWXX/jd_job.git "jd_|jx_|gua_|jddj_|getJDCookie" "activity|backUp|jm" "^jd[^_]|USER|function|utils|ZooFaker_Necklace.js|JDJRValidator|sign_graphics_validate|ql|send"
 ```
 
 ##### 定时规则

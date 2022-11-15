@@ -35,8 +35,8 @@ cron:
  https://raw.githubusercontent.com/smiek2121/scripts/master/gua_opencard259.js, tag=11.3~11.13 11.11大牌联合 狂欢嗨购, enabled=true
 
 */
-let guaopencard_addSku = 'false' // 加购
-let guaopencard = 'false' // 执行
+let guaopencard_addSku = 'true' // 加购
+let guaopencard = 'true' // 执行
 let guaopenwait = 0 // 等待（秒）
 let guaopencard_draw = 0 // 抽奖次数
 let whitelist = '' // 白名单 用&隔开 pin值(填中文
@@ -51,7 +51,6 @@ let cleanCart = ''
 CryptoScripts()
 $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS
 //IOS等用户直接用NobyDa的jd cookie
-
 let cookiesArr = [],
 cookie = ''
 if ($.isNode()) {
