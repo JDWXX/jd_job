@@ -1,8 +1,23 @@
-
-/**
+/*
+短视频点赞抽奖
  活动入口
  https://prodev.m.jd.com/mall/active/4JVvmjx2XwTx7cB64eAFPds1xCox/index.html
- 6 8,10,12 * * * jd_prodev_subject.js
+已支持IOS双京东账号,Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
+[task_local]
+#短视频点赞抽奖
+6 8,10,12 * * * https://github.com/JDWXX/jd_job.git, tag=短视频点赞抽奖, enabled=true
+
+================Loon==============
+[Script]
+cron "6 8,10,12 * * *" script-path=https://github.com/JDWXX/jd_job.git,tag=短视频点赞抽奖
+
+===============Surge=================
+短视频点赞抽奖 = type=cron,cronexp="6 8,10,12 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job.git
+
+============小火箭=========
+短视频点赞抽奖 = type=cron,script-path=https://github.com/JDWXX/jd_job.git, cronexpr="6 8,10,12 * * *", timeout=3600, enable=true
  */
 const $ = new Env('短视频点赞抽奖');
 const notify = $.isNode() ? require('./sendNotify') : '';
