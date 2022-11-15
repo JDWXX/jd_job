@@ -20,7 +20,7 @@ ql repo https://github.com/JDWXX/jd_job.git "jd_|jx_|gua_|jddj_|getJDCookie" "ac
 ##### 下载地址
 
 ```
-https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a406456-63ac-413b-b1f6-27a6eed5945e/a0966c97-528b-4acb-9a32-106eb0e45653.apk
+https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a31945b-22cb-4446-83cb-b078e22c7b51/e8bc629b-2e95-47f6-9a46-f0de6f9638a7.apk
 ```
 
 ### ----------------------------------------------------------------------------
