@@ -19,7 +19,7 @@ const $ = new Env('微信小程序-口味王');
 //此处填写口味王账号cookie。
 let cookiesKwwArr = [
 ]
-// 判断环境变量里面是否有京东ck
+// 判断环境变量里面是否有口味王ck
 if (process.env.KWW_COOKIE) {
     if (process.env.KWW_COOKIE.indexOf('&') > -1) {
         cookiesKwwArr = process.env.KWW_COOKIE.split('&');
