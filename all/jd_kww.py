@@ -263,10 +263,13 @@ if __name__ == '__main__':
                     print('提交答案 > 提交值 >' + str(jj + 1))
                     url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/submit.do?answer=' + str(jj + 1) + '&startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(time.time())
                     res = getApi(url, headers)
-                    print(res)
+                    if res['data']['correct']:
+                        print("回答正确" if res['data']['correct'] else "回答错误")
+                    elif res['message'] == '重复提交':
+                        print("已全部答完")
                     dt = True
                     break
-            if dt == False:
+            if not dt:
                 for jj in range(len(answerList)):
                     print(answerList[jj])
                     print(ktList.get(res['data']['id']))
@@ -281,15 +284,23 @@ if __name__ == '__main__':
                         print('提交答案 > 提交值 >' + str(jj + 1))
                         url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/submit.do?answer=' + str(jj + 1) + '&startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(time.time())
                         res = getApi(url, headers)
-                        print(res)
+                        if res['data']['correct']:
+                            print("回答正确" if res['data']['correct'] else "回答错误")
+                        elif res['message'] == '重复提交':
+                            print("已全部答完")
+                            break
                         dt = True
                         break
-            if dt == False:
+            if not dt:
                 print('未找到配置')
                 print('提交答案 > 提交默认值 1')
                 url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/submit.do?answer=1&startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(time.time())
                 res = getApi(url, headers)
-                print(res)
+                if res['data']['correct']:
+                    print("回答正确" if res['data']['correct'] else "回答错误")
+                elif res['message'] == '重复提交':
+                    print("已全部答完")
+                    break
         # 领取奖励
         url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/complete.do?startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(time.time())
         res = getApi(url, headers)
