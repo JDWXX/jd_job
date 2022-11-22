@@ -3,7 +3,6 @@
 cron: 0 30 0 * * *
 new Env('微信小程序-口味王');
 """
-import json
 import time
 import os
 
@@ -16,12 +15,12 @@ except Exception as e:
 版本 v1.0.1
 ====================== Cookie 配置===========================
 '''
-mycookies = []
-try:
-    mycookies = os.environ["KWW_COOKIE"].split("&")
-except:
-    print("【提示】请先获取微信小程序[口味王]cookie,环境变量添加 KWW_COOKIE ,如有不懂加群：212796668、681030097、743744614")
-    exit(3)
+mycookies = ['2481918423299039']
+# try:
+#     mycookies = os.environ["KWW_COOKIE"].split("&")
+# except:
+#     print("【提示】请先获取微信小程序[口味王]cookie,环境变量添加 KWW_COOKIE ,如有不懂加群：212796668、681030097、743744614")
+#     exit(3)
 '''
 #1|“口味王”是槟榔行业领先品牌吗？——正确
 #2|“口味王”槟榔曾冠名过《这！就是灌篮3》吗？——正确
@@ -250,6 +249,11 @@ if __name__ == '__main__':
             'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=setNewsReadTaskFlag&formName=addForm&memberId=' +
             mycookies[i] + '&userCname=JDWXX&articleTitle=undefined', headers)
         print("阅读日期：" + jf['rows'][0])
+        print("【收青果】")
+        jf = getApi(
+            'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=activeTaskFlag&formName=editForm&memberId=' +
+            mycookies[i] + '&userCname=JDWXX', headers)
+        print("收青果日期：" + jf['rows'][0])
         print("【答题任务】")
         url = 'https://member.kwwblcj.com/member/api/info/?userKeys=v1.0&pageName=loginFreePlugin&formName=searchForm&uid=' + \
               mycookies[
