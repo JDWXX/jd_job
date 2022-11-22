@@ -249,7 +249,7 @@ if __name__ == '__main__':
             print("今日已答题")
             continue
         i = 1
-        while i < 5:
+        while i < 6:
             i += 1
             url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/getQuestion.do?startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(time.time())
             res = getApi(url, headers)
