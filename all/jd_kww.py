@@ -3,9 +3,10 @@
 cron: 0 30 0 * * *
 new Env('微信小程序-口味王');
 """
-
+import json
 import time
 import os
+
 try:
     import requests
 except Exception as e:
@@ -15,17 +16,19 @@ except Exception as e:
 版本 v1.0.1
 ====================== Cookie 配置===========================
 '''
-mycookies = [
-]
-try:
-    mycookies = os.environ["KWW_COOKIE"].split("&")
-except:
-    print("【提示】请先获取微信小程序[口味王]cookie,环境变量添加 KWW_COOKIE ,如有不懂加群：212796668、681030097、743744614")
-    exit(3)
+mycookies = ['0121654319575242'
+             ]
+# try:
+#     mycookies = os.environ["KWW_COOKIE"].split("&")
+# except:
+#     print("【提示】请先获取微信小程序[口味王]cookie,环境变量添加 KWW_COOKIE ,如有不懂加群：212796668、681030097、743744614")
+#     exit(3)
 '''
+#1|“口味王”是槟榔行业领先品牌吗？——正确
 #2|“口味王”槟榔曾冠名过《这！就是灌篮3》吗？——正确
 #3|“口味王”槟榔曾赞助过综艺《这！就是街舞4》吗？——正确
 #4|“口味王”是槟榔行业领导品牌；——正确
+#5|“以下哪些场景使用“口味王”槟榔可以秒回状态？——以上都是 '开车犯困||上网冲浪||熬夜加班||以上都是',
 #6|口味王已连续4年举办“我要上大学”公益活动？——正确
 #7|游戏上分时，使用“口味王”槟榔可以秒回状态？——正确
 #8|开车犯困的时候，使用“口味王”槟榔可以秒回状态？——正确
@@ -34,6 +37,7 @@ except:
 #11|“口味王”槟榔曾赞助过电视剧《鬼吹灯之云南虫谷》吗？——正确
 #12|“口味王”槟榔曾赞助过电视剧《将夜2》吗？——正确
 #13|“口味王”槟榔曾赞助过电视剧《鬼吹灯之龙岭迷窟》吗？——正确
+#14|“口味王“槟榔曾赞助过电视剧《怒晴湘西》吗？——正确
 #15|“口味王”槟榔曾赞助过电视剧《巡回检察组》吗？——正确
 #16|“口味王”槟榔曾赞助《欢乐喜剧人5》吗？——正确
 #17|2019年“口味王”冠名虎牙英雄联盟S9全球总决赛直播吗？——正确
@@ -44,6 +48,8 @@ except:
 #22|“和成天下”槟榔是全国高端销量领先的槟榔品牌吗？——正确
 #23|10包高端槟榔，有几包是“和成天下”？——7 4,5,6,7
 #24|10包高端槟榔，有7包是“和成天下”对吗？——正确
+#25|“和成天下”采用的是哪个地方的槟榔果生产而成？——中国海南 中国台湾||印度尼西亚||中国海南||菲律宾
+#26|“和成天下”槟榔采用的是海南槟榔果制作而成的吗？——正确
 #27|“和成天下”槟榔生产需要多少道工艺？——22道
 #28|“和成天下”槟榔生产需要22道工艺？——正确
 #30|为什么“和成天下”坚持使用海南槟榔果生产？——以上都是 "海南槟榔果汁多肉厚","海南槟榔果果形匀称","海南槟榔果更耐嚼","以上都是"
@@ -83,100 +89,106 @@ except:
 #72|槟榔果一般在什么时间采摘？——8~10月 8~10月,11~1月,2~4月,5~7月
 ====================== 题库 ===========================
 '''
-ktList = {'1':'',#题目未知
-             '2':'正确',
-             '3':'正确',
-             '4':'正确',
-             '5':'',#
-             '6':'正确',
-             '7':'正确',
-             '8':'正确',
-             '9':'正确',
-             '10':'正确',
-             '11':'正确',
-             '12':'正确',
-             '13':'正确',
-             '14':'',#
-             '15':'正确',
-             '16':'正确',
-             '17':'正确',
-             '18':'正确',
-             '19':'正确',
-             '20':'全国销量领先',
-             '21':'以上全是',
-             '22':'正确',
-             '23':'7',
-             '24':'正确',
-             '25':'',#
-             '26':'',#
-             '27':'22道',
-             '28':'正确',
-             '29':'',#
-             '30':'以上都是',
-             '31':'正确',
-             '32':'100%',
-             '33':'高端槟榔',
-             '34':'正确',
-             '35':'正确',
-             '36':'正确',
-             '37':'',#
-             '38':'海南嫩青果',
-             '39':'嫩青果',
-             '40':'',#
-             '41':'海南',
-             '42':'正确',
-             '43':'全国高端销量领先',
-             '44':'以上都是',
-             '45':'中国海南',
-             '46':'槟榔、椰子、橡胶',
-             '47':'',#
-             '48':'正确',
-             '49':'',#
-             '50':'槟榔',
-             '51':'槟榔',
-             '52':'以上都是',
-             '53':'槟榔',
-             '54':'',#
-             '55':'槟榔树',
-             '56':'以上都是',
-             '57':'马来西亚',
-             '58':'',#
-             '59':'槟榔之乡',
-             '60':'以上都是',
-             '61':'正确',
-             '62':'正确',
-             '63':'正确',
-             '64':'',#
-             '65':'槟榔',
-             '66':'槟榔树',
-             '67':'《采槟榔》',
-             '68':'槟榔树',
-             '69':'',#
-             '70':'公元前10,000年',
-             '71':'槟榔树',
-             '72':'8~10月'
-             }
 
+ktList = {'1': '正确',
+          '2': '正确',
+          '3': '正确',
+          '4': '正确',
+          '5': '以上都是',
+          '6': '正确',
+          '7': '正确',
+          '8': '正确',
+          '9': '正确',
+          '10': '正确',
+          '11': '正确',
+          '12': '正确',
+          '13': '正确',
+          '14': '正确',
+          '15': '正确',
+          '16': '正确',
+          '17': '正确',
+          '18': '正确',
+          '19': '正确',
+          '20': '全国销量领先',
+          '21': '以上全是',
+          '22': '正确',
+          '23': '7',
+          '24': '正确',
+          '25': '中国海南',
+          '26': '正确',
+          '27': '22道',
+          '28': '正确',
+          '29': '',  # 题目未知
+          '30': '以上都是',
+          '31': '正确',
+          '32': '100%',
+          '33': '高端槟榔',
+          '34': '正确',
+          '35': '正确',
+          '36': '正确',
+          '37': '',  #
+          '38': '海南嫩青果',
+          '39': '嫩青果',
+          '40': '',  #
+          '41': '海南',
+          '42': '正确',
+          '43': '全国高端销量领先',
+          '44': '以上都是',
+          '45': '中国海南',
+          '46': '槟榔、椰子、橡胶',
+          '47': '',  #
+          '48': '正确',
+          '49': '',  #
+          '50': '槟榔',
+          '51': '槟榔',
+          '52': '以上都是',
+          '53': '槟榔',
+          '54': '',  #
+          '55': '槟榔树',
+          '56': '以上都是',
+          '57': '马来西亚',
+          '58': '',  #
+          '59': '槟榔之乡',
+          '60': '以上都是',
+          '61': '正确',
+          '62': '正确',
+          '63': '正确',
+          '64': '',  #
+          '65': '槟榔',
+          '66': '槟榔树',
+          '67': '《采槟榔》',
+          '68': '槟榔树',
+          '69': '',  #
+          '70': '公元前10,000年',
+          '71': '槟榔树',
+          '72': '8~10月'
+          }
 
 '''
 ====================== 请求 ===========================
 '''
-def getApiBody(url, body):
+
+
+def getApiBody(url, json):
     headers = {
         'Content-Type': 'application/json',
     }
-    return requests.get(url=url,body=body, headers=headers, timeout=300).json()
+    return requests.post(url=url, headers=headers, json=json, timeout=300).json()
+
 
 def getApi(url, headers):
     return requests.get(url=url, headers=headers, timeout=300).json()
 
+
 def getApiR(url, headers):
     return requests.get(url=url, headers=headers, allow_redirects=False, timeout=300)
+
 
 if __name__ == '__main__':
     for i in range(len(mycookies)):
         print("用户【" + mycookies[i] + "】")
-        url = 'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=select-member-score&formName=searchForm&memberId=' + mycookies[i]
+        url = 'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=select-member-score&formName=searchForm&memberId=' + \
+              mycookies[i]
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -185,46 +197,65 @@ if __name__ == '__main__':
         if int(res['rows'][0]) >= 888:
             print("积分大于 888 分，请去微信公众号【口味王】兑换红包")
         print("【每日签到】")
-        res = getApi('https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=selectSignInfo&formName=searchForm&memberId=' + mycookies[i], headers)
+        res = getApi(
+            'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=selectSignInfo&formName=searchForm&memberId=' +
+            mycookies[i], headers)
+        print(res)
         propList = res['rows']['data']
         for prop in range(len(propList)):
             if propList[prop]['flag'] == "1":
-                print(propList[prop]['formulaDesc'] + " " + ("未签到" if propList[prop]['flag'] == "0" else  "已签到") + "  签到奖励 " + propList[prop]['paramNo'])
-                if propList[prop]['flag'] == "0":
-                    body = {
+                print(propList[prop]['formulaDesc'] + " " + (
+                    "未签到" if propList[prop]['flag'] == "0" else "已签到") + "签到奖励 " + propList[prop]['paramNo'])
+            if propList[prop]['flag'] == "0":
+                json = {
                     "pageName": "AddSignSvmInfo",
-                                "formName": "addForm",
+                    "formName": "addForm",
                     'orderNo': propList[prop]['orderNo'],
                     'paramNo': propList[prop]['paramNo'],
                     'cateId': propList[prop]['cateId'],
-                    'memberId': mycookies[i] ,
-                    'memberName': "JDWXX" ,
-                    }
-                    jf = getApiBody('https://member.kwwblcj.com/member/api/submit/?userKeys=v1.0', body)
-                    print(jf['msg'])
-                    break
+                    'memberId': mycookies[i],
+                    'memberName': "JDWXX",
+                }
+                jf = getApiBody('https://member.kwwblcj.com/member/api/submit/?userKeys=v1.0', json)
+                print(jf['msg'])
+                break
         print("【任务】")
-        res = getApi('https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=select-task-list&formName=searchForm&memberId=' + mycookies[i],headers)
+        res = getApi(
+            'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=select-task-list&formName=searchForm&memberId=' +
+            mycookies[i], headers)
         propList = res['rows']
         for prop in range(len(propList)):
-            print(propList[prop]['taskTitle'] + "  " + "奖励积分:" +propList[prop]['rewardScore'] + " ->  " + ("待完成" if propList[prop]['complete'] == '0' else "已完成"))
+            print(propList[prop]['taskTitle'] + "  " + "奖励积分:" + propList[prop]['rewardScore'] + " ->  " + (
+                "待完成" if propList[prop]['complete'] == '0' else "已完成"))
             if propList[prop]['taskTitle'] == "开启签到提醒" and propList[prop]['complete'] == "0":
                 print("【开启签到提醒】")
-                jf = getApi('https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=setOpenSignTaskFlag&formName=addForm&memberId=' + mycookies[i] + '&userCname=JDWXX&openId=o_V6_5Yo3mET81MVAQw4yYebL3zE', headers)
+                jf = getApi(
+                    'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=setOpenSignTaskFlag&formName=addForm&memberId=' +
+                    mycookies[i] + '&userCname=JDWXX&openId=o_V6_5Yo3mET81MVAQw4yYebL3zE', headers)
                 print('完成' if jf['rows'][0] == 'T' else '失败，去手动完成任务')
-                jf = getApi('https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=setOpenSignTaskFlag&formName=addForm&memberId=' + mycookies[i] + '&userCname=JDWXX&openId=0', headers)
-                print('完成' if jf['rows'][0] == 'T' else'失败，去手动完成任务')
+                jf = getApi(
+                    'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=setOpenSignTaskFlag&formName=addForm&memberId=' +
+                    mycookies[i] + '&userCname=JDWXX&openId=0', headers)
+                print('完成' if jf['rows'][0] == 'T' else '失败，去手动完成任务')
             if propList[prop]['taskTitle'] == "订阅活动通知" and propList[prop]['complete'] == "0":
                 print("【订阅活动通知】")
-                jf = getApi('https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=setOpenSubscribeTaskFlag&formName=addForm&memberId=' + mycookies[i] + '&userCname=JDWXX&openId=o_V6_5Yo3mET81MVAQw4yYebL3zE', headers)
+                jf = getApi(
+                    'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=setOpenSubscribeTaskFlag&formName=addForm&memberId=' +
+                    mycookies[i] + '&userCname=JDWXX&openId=o_V6_5Yo3mET81MVAQw4yYebL3zE', headers)
                 print('完成' if jf['rows'][0] == 'T' else '失败，去手动完成任务')
-                jf = getApi('https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=setOpenSubscribeTaskFlag&formName=addForm&memberId=' + mycookies[i] +'&userCname=JDWXX&openId=0', headers)
+                jf = getApi(
+                    'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=setOpenSubscribeTaskFlag&formName=addForm&memberId=' +
+                    mycookies[i] + '&userCname=JDWXX&openId=0', headers)
                 print('完成' if jf['rows'][0] == 'T' else '失败，去手动完成任务')
         print("【每日阅读】")
-        jf = getApi('https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=setNewsReadTaskFlag&formName=addForm&memberId=' + mycookies[i] + '&userCname=JDWXX&articleTitle=undefined', headers)
+        jf = getApi(
+            'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=setNewsReadTaskFlag&formName=addForm&memberId=' +
+            mycookies[i] + '&userCname=JDWXX&articleTitle=undefined', headers)
         print("阅读日期：" + jf['rows'][0])
         print("【答题任务】")
-        url = 'https://member.kwwblcj.com/member/api/info/?userKeys=v1.0&pageName=loginFreePlugin&formName=searchForm&uid=' + mycookies[i] +'&levelCode=K1&redirect=https%3A%2F%2F89420.activity-20.m.duiba.com.cn%2Fprojectx%2Fp129446ea%2Findex.html%3FappID%3D89420'
+        url = 'https://member.kwwblcj.com/member/api/info/?userKeys=v1.0&pageName=loginFreePlugin&formName=searchForm&uid=' + \
+              mycookies[
+                  i] + '&levelCode=K1&redirect=https%3A%2F%2F89420.activity-20.m.duiba.com.cn%2Fprojectx%2Fp129446ea%2Findex.html%3FappID%3D89420'
         res = getApi(url, headers)
         cookie = getApiR(res['result'], headers).headers.get('Set-Cookie')
         cookieList = cookie.split(";")
@@ -239,11 +270,13 @@ if __name__ == '__main__':
             if cookieList[ii].find('_ac') != -1:
                 cookie__ac = cookieList[ii]
         Cookie = cookie_wdata4 + ";" + cookie_w_ts + ";" + cookie__ac
-        Cookie = Cookie.replace("HttpOnly,","")
+        Cookie = Cookie.replace("HttpOnly,", "")
         headers = {
             'Cookie': Cookie,
         }
-        res = getApi('https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/start.do?user_type=0&is_from_share=1&_t=' + str(time.time()), headers)
+        res = getApi(
+            'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/start.do?user_type=0&is_from_share=1&_t=' + str(
+                time.time()), headers)
         startId = str(res['data'])
         if startId == 'None':
             print("今日已答题")
@@ -251,7 +284,8 @@ if __name__ == '__main__':
         i = 1
         while i < 6:
             i += 1
-            url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/getQuestion.do?startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(time.time())
+            url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/getQuestion.do?startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(
+                time.time())
             res = getApi(url, headers)
             print("题目ID：" + res['data']['id'] + " > " + res['data']['content'])
             answerList = res['data']['answerList']
@@ -261,7 +295,8 @@ if __name__ == '__main__':
                 if answerList[jj].find(ktList.get(res['data']['id'])) != -1:
                     print('找到答案 >' + ktList.get(res['data']['id']))
                     print('提交答案 > 提交值 >' + str(jj + 1))
-                    url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/submit.do?answer=' + str(jj + 1) + '&startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(time.time())
+                    url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/submit.do?answer=' + str(
+                        jj + 1) + '&startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(time.time())
                     res = getApi(url, headers)
                     if res['data']['correct']:
                         print("回答正确" if res['data']['correct'] else "回答错误")
@@ -282,7 +317,8 @@ if __name__ == '__main__':
                             or answerList[jj].find("领先") != -1:
                         print('未找到答案 找到默认配置规则')
                         print('提交答案 > 提交值 >' + str(jj + 1))
-                        url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/submit.do?answer=' + str(jj + 1) + '&startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(time.time())
+                        url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/submit.do?answer=' + str(
+                            jj + 1) + '&startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(time.time())
                         res = getApi(url, headers)
                         if res['data']['correct']:
                             print("回答正确" if res['data']['correct'] else "回答错误")
@@ -294,7 +330,8 @@ if __name__ == '__main__':
             if not dt:
                 print('未找到配置')
                 print('提交答案 > 提交默认值 1')
-                url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/submit.do?answer=1&startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(time.time())
+                url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/submit.do?answer=1&startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(
+                    time.time())
                 res = getApi(url, headers)
                 if res['data']['correct']:
                     print("回答正确" if res['data']['correct'] else "回答错误")
@@ -302,8 +339,8 @@ if __name__ == '__main__':
                     print("已全部答完")
                     break
         # 领取奖励
-        url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/complete.do?startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(time.time())
+        url = 'https://89420.activity-20.m.duiba.com.cn/projectx/p129446ea/answer/complete.do?startId=' + startId + '&user_type=0&is_from_share=1&_t=' + str(
+            time.time())
         res = getApi(url, headers)
+        print("领取答题奖励")
         print(res)
-
-
