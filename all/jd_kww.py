@@ -16,13 +16,12 @@ except Exception as e:
 版本 v1.0.1
 ====================== Cookie 配置===========================
 '''
-mycookies = ['0121654319575242'
-             ]
-# try:
-#     mycookies = os.environ["KWW_COOKIE"].split("&")
-# except:
-#     print("【提示】请先获取微信小程序[口味王]cookie,环境变量添加 KWW_COOKIE ,如有不懂加群：212796668、681030097、743744614")
-#     exit(3)
+mycookies = []
+try:
+    mycookies = os.environ["KWW_COOKIE"].split("&")
+except:
+    print("【提示】请先获取微信小程序[口味王]cookie,环境变量添加 KWW_COOKIE ,如有不懂加群：212796668、681030097、743744614")
+    exit(3)
 '''
 #1|“口味王”是槟榔行业领先品牌吗？——正确
 #2|“口味王”槟榔曾冠名过《这！就是灌篮3》吗？——正确
@@ -200,7 +199,6 @@ if __name__ == '__main__':
         res = getApi(
             'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=selectSignInfo&formName=searchForm&memberId=' +
             mycookies[i], headers)
-        print(res)
         propList = res['rows']['data']
         for prop in range(len(propList)):
             if propList[prop]['flag'] == "1":
