@@ -201,6 +201,7 @@ if __name__ == '__main__':
         }
         res = getApi(url, headers)
         print("积分剩余 : " + str(res['rows'][0]))
+        addJf = int(res['rows'][0])
         if int(res['rows'][0]) >= 888:
             print("积分大于 888 分，请去微信公众号【口味王】兑换红包")
         print("【每日签到】")
@@ -355,3 +356,7 @@ if __name__ == '__main__':
         res = getApi(url, headers)
         print("领取答题奖励")
         print(res)
+        url = 'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=select-member-score&formName=searchForm&memberId=' + \
+              mycookies[i]
+        res = getApi(url, headers)
+        print("本次运行获取积分：" + str(int(res['rows'][0]) - addJf))
