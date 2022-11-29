@@ -352,36 +352,9 @@ def getCookie(url):
 if __name__ == '__main__':
     for i in range(len(mycookies)):
         print("用户【" + mycookies[i] + "】")
-        url = 'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=select-member-score&formName=searchForm&memberId=' + \
-              mycookies[i]
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
-        res = getApi(url, headers)
-        print("积分剩余 : " + str(res['rows'][0]))
-        addJf = int(res['rows'][0])
-        print("【每日签到】")
-        res = getApi(
-            'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=selectSignInfo&formName=searchForm&memberId=' +
-            mycookies[i], headers)
-        propList = res['rows']['data']
-        for prop in range(len(propList)):
-            if propList[prop]['flag'] == "1":
-                print(propList[prop]['formulaDesc'] + " " + (
-                    "未签到" if propList[prop]['flag'] == "0" else "已签到") + "签到奖励 " + propList[prop]['paramNo'])
-            if propList[prop]['flag'] == "0":
-                json = {
-                    "pageName": "AddSignSvmInfo",
-                    "formName": "addForm",
-                    'orderNo': propList[prop]['orderNo'],
-                    'paramNo': propList[prop]['paramNo'],
-                    'cateId': propList[prop]['cateId'],
-                    'memberId': mycookies[i],
-                    'memberName': "JDWXX",
-                }
-                jf = getApiBody('https://member.kwwblcj.com/member/api/submit/?userKeys=v1.0', json)
-                print(jf['msg'])
-                break
         print("【答题任务】")
         url = 'https://member.kwwblcj.com/member/api/info/?userKeys=v1.0&pageName=loginFreePlugin&formName=searchForm&uid=' + \
               mycookies[
@@ -445,8 +418,7 @@ if __name__ == '__main__':
             'Content-Type': 'application/x-www-form-urlencoded',
         }
         res = getApi(url, headers)
-        print("本次运行获取积分：" + str(int(res['rows'][0]) - addJf))
-    print("\n\n")
+    print("\n")
     for i in range(len(mycookies)):
         print("用户【" + mycookies[i] + "】")
         url = 'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=select-member-score&formName=searchForm&memberId=' + \
