@@ -412,12 +412,6 @@ if __name__ == '__main__':
             time.time())
         res = getApi(url, headers)
         print("领取答题奖励")
-        url = 'https://member.kwwblcj.com/member/api/list/?userKeys=v1.0&pageName=select-member-score&formName=searchForm&memberId=' + \
-              mycookies[i]
-        headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
-        res = getApi(url, headers)
     print("\n")
     for i in range(len(mycookies)):
         print("用户【" + mycookies[i] + "】")
