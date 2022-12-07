@@ -4,7 +4,9 @@
  依赖：依赖需要： silly-datetime      cheerio      node-jsencrypt
  依赖安装方式: 高级青龙面包可以直接添加，
              低级的在Linux里安装 例如：当容器名称为"QL"  docker exec -it QL bash -c "npm install silly-datetime"
- 抓包：开着抓包软件打开小程序，抓包链接里面的memberId https://member.kwwblcj.com/member/api/info/?userKeys=v1.0&pageName=member-info-index-search&formName=searchForm&kwwMember.memberId=xxxx
+ 抓包工具下载：https://jdwxx.github.io/jd_job/lib/kwwCK_V1.3.exe
+ 抓包工具使用方式：1.打开上面下载的抓包工具 2.电脑微信打开口味王小程序 3.授权登录口味王小程序
+ 或开着抓包软件打开小程序，抓包链接里面的memberId https://member.kwwblcj.com/member/api/info/?userKeys=v1.0&pageName=member-info-index-search&formName=searchForm&kwwMember.memberId=xxxx
  变量格式：export KWW_COOKIE='xxxx&xxxx2'  多个账号用 @ 或 & 或者 换行 分割
  足球竞猜：kwwJingcaiMethod="max"  max 热门 min 冷门
  定时：一天一次
