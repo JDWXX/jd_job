@@ -1,7 +1,7 @@
 {
   "version": 2.6,
   "now_url": "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a406456-63ac-413b-b1f6-27a6eed5945e/3bdaae0b-1fd6-4726-a2b5-f64140aebeb6.apk",
-  "silent": 1,
+  "silent": 0,
   "force": 1,
   "net_check": 1,
   "note": "修复登录失败"
