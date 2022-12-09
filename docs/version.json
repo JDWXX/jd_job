@@ -1,8 +1,8 @@
 {
-  "version": 2.5,
+  "version": 2.6,
   "now_url": "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a406456-63ac-413b-b1f6-27a6eed5945e/3bdaae0b-1fd6-4726-a2b5-f64140aebeb6.apk",
-  "silent": 0,
-  "force": 0,
+  "silent": 1,
+  "force": 1,
   "net_check": 1,
   "note": "支持执行活动 东东农场"
 }
