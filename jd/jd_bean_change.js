@@ -85,13 +85,13 @@ if ($.isNode()) {
 		WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE;
 	}
 	/* if(process.env.BEANCHANGE_ExJxBeans=="true"){
-		if (time >= 17){
-			console.log(`检测到设定了临期京豆转换喜豆...`);
-			doExJxBeans = process.env.BEANCHANGE_ExJxBeans;
-		} else{
-			console.log(`检测到设定了临期京豆转换喜豆,但时间未到17点后，暂不执行转换...`);
-		}
-	} */
+        if (time >= 17){
+            console.log(`检测到设定了临期京豆转换喜豆...`);
+            doExJxBeans = process.env.BEANCHANGE_ExJxBeans;
+        } else{
+            console.log(`检测到设定了临期京豆转换喜豆,但时间未到17点后，暂不执行转换...`);
+        }
+    } */
 }
 if(WP_APP_TOKEN_ONE)
 	console.log(`检测到已配置Wxpusher的Token，启用一对一推送...`);
@@ -404,7 +404,7 @@ if(DisableIndex!=-1){
 				getDdFactoryInfo(), // 京东工厂
 				jdCash(), //领现金
 				GetJxBeaninfo(), //喜豆查询
-				GetPigPetInfo(), //金融养猪
+				// GetPigPetInfo(), //金融养猪
 				GetJoyRuninginfo(), //汪汪赛跑
 				CheckEcard(), //E卡查询
 				queryScores()
@@ -1206,28 +1206,28 @@ async function jdCash() {
 		return;
 	let functionId = "cash_homePage";
 	/* let body = {};
-	console.log(`正在获取领现金任务签名...`);
-	isSignError = false;
-	let sign = await getSign(functionId, body);
-		if (isSignError) {
-			console.log(`领现金任务签名获取失败,等待2秒后再次尝试...`)
-			await $.wait(2 * 1000);
-			isSignError = false;
-			sign =await getSign(functionId, body);
-		}
-		if (isSignError) {
-			console.log(`领现金任务签名获取失败,等待2秒后再次尝试...`)
-			await $.wait(2 * 1000);
-			isSignError = false;
-			sign = await getSign(functionId, body);
-		}
-		if (!isSignError) {
-			console.log(`领现金任务签名获取成功...`)
-		} else {
-			console.log(`领现金任务签名获取失败...`)
-			$.jdCash = 0;
-			return
-		} */
+    console.log(`正在获取领现金任务签名...`);
+    isSignError = false;
+    let sign = await getSign(functionId, body);
+        if (isSignError) {
+            console.log(`领现金任务签名获取失败,等待2秒后再次尝试...`)
+            await $.wait(2 * 1000);
+            isSignError = false;
+            sign =await getSign(functionId, body);
+        }
+        if (isSignError) {
+            console.log(`领现金任务签名获取失败,等待2秒后再次尝试...`)
+            await $.wait(2 * 1000);
+            isSignError = false;
+            sign = await getSign(functionId, body);
+        }
+        if (!isSignError) {
+            console.log(`领现金任务签名获取成功...`)
+        } else {
+            console.log(`领现金任务签名获取失败...`)
+            $.jdCash = 0;
+            return
+        } */
 	let sign = `body=%7B%7D&build=167968&client=apple&clientVersion=10.4.0&d_brand=apple&d_model=iPhone13%2C3&ef=1&eid=eidI25488122a6s9Uqq6qodtQx6rgQhFlHkaE1KqvCRbzRnPZgP/93P%2BzfeY8nyrCw1FMzlQ1pE4X9JdmFEYKWdd1VxutadX0iJ6xedL%2BVBrSHCeDGV1&ep=%7B%22ciphertype%22%3A5%2C%22cipher%22%3A%7B%22screen%22%3A%22CJO3CMeyDJCy%22%2C%22osVersion%22%3A%22CJUkDK%3D%3D%22%2C%22openudid%22%3A%22CJSmCWU0DNYnYtS0DtGmCJY0YJcmDwCmYJC0DNHwZNc5ZQU2DJc3Zq%3D%3D%22%2C%22area%22%3A%22CJZpCJCmC180ENcnCv80ENc1EK%3D%3D%22%2C%22uuid%22%3A%22aQf1ZRdxb2r4ovZ1EJZhcxYlVNZSZz09%22%7D%2C%22ts%22%3A1648428189%2C%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22version%22%3A%221.0.3%22%2C%22appname%22%3A%22com.360buy.jdmobile%22%2C%22ridx%22%3A-1%7D&ext=%7B%22prstate%22%3A%220%22%2C%22pvcStu%22%3A%221%22%7D&isBackground=N&joycious=104&lang=zh_CN&networkType=3g&networklibtype=JDNetworkBaseAF&partner=apple&rfs=0000&scope=11&sign=98c0ea91318ef1313786d86d832f1d4d&st=1648428208392&sv=101&uemps=0-0&uts=0f31TVRjBSv7E8yLFU2g86XnPdLdKKyuazYDek9RnAdkKCbH50GbhlCSab3I2jwM04d75h5qDPiLMTl0I3dvlb3OFGnqX9NrfHUwDOpTEaxACTwWl6n//EOFSpqtKDhg%2BvlR1wAh0RSZ3J87iAf36Ce6nonmQvQAva7GoJM9Nbtdah0dgzXboUL2m5YqrJ1hWoxhCecLcrUWWbHTyAY3Rw%3D%3D`
 	return new Promise((resolve) => {
 		$.post(apptaskUrl(functionId, sign), async (err, resp, data) => {
@@ -2588,55 +2588,55 @@ async function jxbean() {
 }
 
 function GetJoyRuninginfo() {
-	if (!EnableJoyRun)
-		return;
-
-	const headers = {
-		"Accept": "application/json, text/plain, */*",
-		"Accept-Encoding": "gzip, deflate, br",
-		"Accept-Language": "zh-CN,zh-Hans;q=0.9",
-		"Connection": "keep-alive",
-		"Content-Length": "376",
-		"Content-Type": "application/x-www-form-urlencoded",
-		"Cookie": cookie,
-		"Host": "api.m.jd.com",
-		"Origin": "https://h5platform.jd.com",
-		"Referer": "https://h5platform.jd.com/",
-		"User-Agent": `jdpingou;iPhone;4.13.0;14.4.2;${randomString(40)};network/wifi;model/iPhone10,2;appBuild/100609;ADID/00000000-0000-0000-0000-000000000000;supportApplePay/1;hasUPPay/0;pushNoticeIsOpen/1;hasOCPay/0;supportBestPay/0;session/${Math.random * 98 + 1};pap/JA2019_3111789;brand/apple;supportJDSHWK/1;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148`
-	}
-	var DateToday = new Date();
-	const body = {
-		'linkId': 'L-sOanK_5RJCz7I314FpnQ',
-		'isFromJoyPark':true,
-		'joyLinkId':'LsQNxL7iWDlXUs6cFl-AAg'
-	};
-	const options = {
-		url: `https://api.m.jd.com/?functionId=runningPageHome&body=${encodeURIComponent(JSON.stringify(body))}&t=${DateToday.getTime()}&appid=activities_platform&client=ios&clientVersion=3.9.2`,
-		headers,
-	}
-	return new Promise(resolve => {
-		$.get(options, (err, resp, data) => {
-			try {
-				if (err) {
-					console.log(`${JSON.stringify(err)}`)
-					console.log(`GetJoyRuninginfo API请求失败，请检查网路重试`)
-				} else {
-					if (data) {
-						//console.log(data);
-						data = JSON.parse(data);
-						if (data.data.runningHomeInfo.prizeValue) {
-							$.JoyRunningAmount=data.data.runningHomeInfo.prizeValue * 1;
-						}
-					}
-				}
-			} catch (e) {
-				$.logErr(e, resp)
-			}
-			finally {
-				resolve(data)
-			}
-		})
-	})
+	// if (!EnableJoyRun)
+	//     return;
+	//
+	// const headers = {
+	//     "Accept": "application/json, text/plain, */*",
+	//     "Accept-Encoding": "gzip, deflate, br",
+	//     "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+	//     "Connection": "keep-alive",
+	//     "Content-Length": "376",
+	//     "Content-Type": "application/x-www-form-urlencoded",
+	//     "Cookie": cookie,
+	//     "Host": "api.m.jd.com",
+	//     "Origin": "https://h5platform.jd.com",
+	//     "Referer": "https://h5platform.jd.com/",
+	//     "User-Agent": `jdpingou;iPhone;4.13.0;14.4.2;${randomString(40)};network/wifi;model/iPhone10,2;appBuild/100609;ADID/00000000-0000-0000-0000-000000000000;supportApplePay/1;hasUPPay/0;pushNoticeIsOpen/1;hasOCPay/0;supportBestPay/0;session/${Math.random * 98 + 1};pap/JA2019_3111789;brand/apple;supportJDSHWK/1;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148`
+	// }
+	// var DateToday = new Date();
+	// const body = {
+	//     'linkId': 'L-sOanK_5RJCz7I314FpnQ',
+	//     'isFromJoyPark':true,
+	//     'joyLinkId':'LsQNxL7iWDlXUs6cFl-AAg'
+	// };
+	// const options = {
+	//     url: `https://api.m.jd.com/?functionId=runningPageHome&body=${encodeURIComponent(JSON.stringify(body))}&t=${DateToday.getTime()}&appid=activities_platform&client=ios&clientVersion=3.9.2`,
+	//     headers,
+	// }
+	// return new Promise(resolve => {
+	//     $.get(options, (err, resp, data) => {
+	//         try {
+	//             if (err) {
+	//                 console.log(`${JSON.stringify(err)}`)
+	//                 console.log(`GetJoyRuninginfo API请求失败，请检查网路重试`)
+	//             } else {
+	//                 if (data) {
+	//                     //console.log(data);
+	//                     data = JSON.parse(data);
+	//                     if (data.data.runningHomeInfo.prizeValue) {
+	//                         $.JoyRunningAmount=data.data.runningHomeInfo.prizeValue * 1;
+	//                     }
+	//                 }
+	//             }
+	//         } catch (e) {
+	//             $.logErr(e, resp)
+	//         }
+	//         finally {
+	//             resolve(data)
+	//         }
+	//     })
+	// })
 }
 
 function randomString(e) {

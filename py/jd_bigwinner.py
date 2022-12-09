@@ -105,11 +105,6 @@ class Userinfo :#line:40:class Userinfo:
                     O0OOO0O000OOO0O00.reward (invite_taskId)
                     O0OOO0O000OOO0O00.reward (invite_taskId)
                     O0OOO0O000OOO0O00.reward (invite_taskId)
-                    O0OOO0O000OOO0O00.reward (invite_taskId)
-                    O0OOO0O000OOO0O00.reward (invite_taskId)
-                    O0OOO0O000OOO0O00.reward (invite_taskId)
-                    O0OOO0O000OOO0O00.reward (invite_taskId)
-                    O0OOO0O000OOO0O00.reward (invite_taskId)
                     return O0OOO0O000OOO0O00 .exchange_query ()#line:110:return self.exchange_query()
                 Userinfo .index +=1 #line:111:Userinfo.index += 1
         else :#line:114:else:
@@ -168,11 +163,6 @@ class Userinfo :#line:40:class Userinfo:
                         O0O0O0OO0000O0OOO .need_help =True #line:171:self.need_help = True
                         logger .info (f"最高可邀请[{need_invite}]人,目前已邀请[{O0O0O0OO0000O0OOO.invite_success}]人,还需邀请[{int(need_invite) - int(O0O0O0OO0000O0OOO.invite_success)}]人")#line:173:f"最高可邀请[{need_invite}]人,目前已邀请[{self.invite_success}]人,还需邀请[{int(need_invite) - int(self.invite_success)}]人")
                     else :#line:174:else:
-                        O0O0O0OO0000O0OOO.reward (invite_taskId)
-                        O0O0O0OO0000O0OOO.reward (invite_taskId)
-                        O0O0O0OO0000O0OOO.reward (invite_taskId)
-                        O0O0O0OO0000O0OOO.reward (invite_taskId)
-                        O0O0O0OO0000O0OOO.reward (invite_taskId)
                         O0O0O0OO0000O0OOO.reward (invite_taskId)
                         O0O0O0OO0000O0OOO.reward (invite_taskId)
                         O0O0O0OO0000O0OOO.reward (invite_taskId)
