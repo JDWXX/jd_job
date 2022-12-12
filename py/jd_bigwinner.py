@@ -99,12 +99,9 @@ class Userinfo :#line:40:class Userinfo:
                     logger .info (f"工具人账户[{OOO0OO0000OOOOOO0.user_index}][{OOO0OO0000OOOOOO0.name}]：助力成功，当前助力成功{O0OOO0O000OOO0O00.invite_success}次")#line:106:logger.info(f"工具人账户[{cookie.user_index}][{cookie.name}]：助力成功，当前助力成功{self.invite_success}次")
                 if O0OOO0O000OOO0O00 .invite_success >=need_invite :#line:108:if self.invite_success >= need_invite:
                     logger .info (f"车头账户[{O0OOO0O000OOO0O00.name}]：助力已满")#line:109:logger.info(f"车头账户[{self.name}]：助力已满")
-                    O0OOO0O000OOO0O00.reward (invite_taskId)
-                    O0OOO0O000OOO0O00.reward (invite_taskId)
-                    O0OOO0O000OOO0O00.reward (invite_taskId)
-                    O0OOO0O000OOO0O00.reward (invite_taskId)
-                    O0OOO0O000OOO0O00.reward (invite_taskId)
-                    O0OOO0O000OOO0O00.reward (invite_taskId)
+                    for prop in range(20):
+                        O0OOO0O000OOO0O00.reward (invite_taskId)
+                        time.sleep(2)
                     return O0OOO0O000OOO0O00 .exchange_query ()#line:110:return self.exchange_query()
                 Userinfo .index +=1 #line:111:Userinfo.index += 1
         else :#line:114:else:
@@ -163,12 +160,9 @@ class Userinfo :#line:40:class Userinfo:
                         O0O0O0OO0000O0OOO .need_help =True #line:171:self.need_help = True
                         logger .info (f"最高可邀请[{need_invite}]人,目前已邀请[{O0O0O0OO0000O0OOO.invite_success}]人,还需邀请[{int(need_invite) - int(O0O0O0OO0000O0OOO.invite_success)}]人")#line:173:f"最高可邀请[{need_invite}]人,目前已邀请[{self.invite_success}]人,还需邀请[{int(need_invite) - int(self.invite_success)}]人")
                     else :#line:174:else:
-                        O0O0O0OO0000O0OOO.reward (invite_taskId)
-                        O0O0O0OO0000O0OOO.reward (invite_taskId)
-                        O0O0O0OO0000O0OOO.reward (invite_taskId)
-                        O0O0O0OO0000O0OOO.reward (invite_taskId)
-                        O0O0O0OO0000O0OOO.reward (invite_taskId)
-                        O0O0O0OO0000O0OOO.reward (invite_taskId)
+                        for prop in range(20):
+                            O0O0O0OO0000O0OOO.reward (invite_taskId)
+                            time.sleep(2)
                         logger .info (f"最高可邀请[{need_invite}]人,目前已邀请[{O0O0O0OO0000O0OOO.invite_success}]人,助力已满，换号")#line:175:logger.info(f"最高可邀请[{need_invite}]人,目前已邀请[{self.invite_success}]人,助力已满，换号")
                 O0O0O0OO0000O0OOO .task_list .append ({"status":O0OOOOO0OOO0OO00O ,"taskName":O000OO0OOO0O0OO00 ,"taskId":O0O0O000O0O0OO00O ,"configTargetTimes":O00OO00O0OOOO0O0O })#line:184:)
                 O0OO0O0O0OOO00O00 .append (f"{OO0000O00000O0000} : {O000OO0OOO0O0OO00} -- {OOOO0000000OO0OO0}个营业币 -- {O0OOOOO0OOO0OO00O.replace('1', '未完成').replace('2', '已完成')}")#line:186:f"{taskid} : {taskName} -- {reward}个营业币 -- {status.replace('1', '未完成').replace('2', '已完成')}")
@@ -219,10 +213,10 @@ def main ():#line:229:def main():
         sys .exit ()#line:243:sys.exit()
     [Userinfo (O00OOOO0O0O00OO0O )for O00OOOO0O0O00OO0O in OOO0O0000O0OO0O00 ]#line:244:[Userinfo(cookie) for cookie in cookies]
     O0OOO0000O0OOOOO0 =black_user ()#line:245:black = black_user()
-    if O0OOO0000O0OOOOO0 :#line:246:if black:
-        del O0OOO0000O0OOOOO0 [-1 ]#line:247:del black[-1]
-        for OOO00O0OO0OOO0O00 in O0OOO0000O0OOOOO0 :#line:248:for pin in black:
-            del_black (OOO00O0OO0OOO0O00 )#line:249:del_black(pin)
+    # if O0OOO0000O0OOOOO0 :#line:246:if black:
+    #     del O0OOO0000O0OOOOO0 [-1 ]#line:247:del black[-1]
+    #     for OOO00O0OO0OOO0O00 in O0OOO0000O0OOOOO0 :#line:248:for pin in black:
+    #         del_black (OOO00O0OO0OOO0O00 )#line:249:del_black(pin)
     logger .info (f"共去除{len(O0OOO0000O0OOOOO0)}个黑名单pin")#line:250:logger.info(f"共去除{len(black)}个黑名单pin")
     logger .info (f"当前剩余[{len(Userinfo.cookie_obj)}]个cookie可助力")#line:251:logger.info(f"当前剩余[{len(Userinfo.cookie_obj)}]个cookie可助力")
     OO00OO00OO0OOOO0O =([OOO000OOO0O000OO0 for OOO000OOO0O000OO0 in Userinfo .cookie_obj for OO0O0O0O000OOOO0O in OO00O00OOOO0000OO if OO0O0O0O000OOOO0O in OOO000OOO0O000OO0 .pt_pin ])#line:253:[cookie_obj for cookie_obj in Userinfo.cookie_obj for name in helpPin if name in cookie_obj.pt_pin])
