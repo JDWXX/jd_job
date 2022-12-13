@@ -1,8 +1,8 @@
 {
-  "version": 3.0,
-  "now_url": "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a31945b-22cb-4446-83cb-b078e22c7b51/e3461e7e-a09d-43a7-bdce-5bac6b9c7940.apk",
+  "version": 3.1,
+  "now_url": "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-4a31945b-22cb-4446-83cb-b078e22c7b51/fe99626d-0114-4d6c-9201-dd9ff0dd50ef.apk",
   "silent": 0,
   "force": 0,
   "net_check": 1,
-  "note": "修复登录失败"
+  "note": "新增口味王微信小程序"
 }
