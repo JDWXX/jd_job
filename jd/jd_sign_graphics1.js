@@ -1,13 +1,12 @@
 /* 
-cron 10 8 * * * jd_sign_graphics.js
+8 8,16 * * * jd_sign_graphics1.js
 只支持nodejs环境
-需要安装依赖
+需要安装依赖 
 npm i png-js 或者 npm i png-js -S
-
 */
 
-const Faker = require('./sign_graphics_validate.js')
-const $ = new Env('京东签到翻牌');
+const Faker = require('./function/sign_graphics_validate.js')
+const $ = new Env('京东美妆签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -29,9 +28,10 @@ let successNum = 0
 let errorNum = 0
 let JD_API_HOST = 'https://sendbeans.jd.com'
 const turnTableId = [
-  { "name": "翻牌", "id": 1082, "shopid": 1000004123, "url": "https://sendbeans.jd.com/jump/index/" },
-  { "name": "翻牌", "id": 1440, "shopid": 1000005670, "url": "https://sendbeans.jd.com/jump/index/" },
-  //{ "name": "翻牌", "id": 1419, "shopid": 1000007205, "url": "https://sendbeans.jd.com/jump/index/" },
+ //  { "name": "美妆-1", "id": 293, "shopid": 30284, "url": "https://sendbeans.jd.com/jump/index/" },
+   { "name": "小米", "id": 1082, "shopid": 1000004123, "url": "https://sendbeans.jd.com/jump/index/" },
+   //{ "name": "美妆-3", "id": 1082, "shopid": 1000004123, "url": "https://sendbeans.jd.com/jump/index/" },
+   //{ "name": "翻牌", "id": 1419, "shopid": 1000007205, "url": "https://sendbeans.jd.com/jump/index/" },
 ]
 
 !(async () => {
@@ -53,7 +53,6 @@ const turnTableId = [
       $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
       getUA()
       await signRun()
-      await $.wait(8000)
       const UTC8 = new Date().getTime() + new Date().getTimezoneOffset() * 60000 + 28800000;
       $.beanSignTime = new Date(UTC8).toLocaleString('zh', { hour12: false });
       let msg = `【京东账号${$.index}】${$.nickName || $.UserName}\n【签到时间】:  ${$.beanSignTime}\n【签到概览】:  成功${successNum}个, 失败${errorNum}个\n${beanNum > 0 && "【签到奖励】:  " + beanNum + "京豆" || ""}\n`
@@ -63,12 +62,12 @@ const turnTableId = [
   }
   // await showMsg();
 })()
-    .catch((e) => {
-      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-    })
-    .finally(() => {
-      $.done();
-    })
+  .catch((e) => {
+    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+  })
+  .finally(() => {
+    $.done();
+  })
 
 async function showMsg() {
   $.msg($.name, `【签到数量】:  ${turnTableId.length}个\n` + subTitle + message);
