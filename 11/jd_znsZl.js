@@ -1,30 +1,32 @@
 /*
-穿行寻宝_分享30次
+炸年兽_助力和自动组队
 by：JDWXX
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
 [task_local]
-#穿行寻宝_分享30次
-27 8,19 * * * https://github.com/JDWXX/jd_job.git, tag=穿行寻宝_分享30次, enabled=true
+#炸年兽_助力和自动组队
+27 8,15 * * * https://github.com/JDWXX/jd_job.git, tag=炸年兽_助力和自动组队, enabled=true
 
 ================Loon==============
 [Script]
-cron "27 8,19 * * *" script-path=https://github.com/JDWXX/jd_job.git,tag=穿行寻宝_分享30次
+cron "27 8,15 * * *" script-path=https://github.com/JDWXX/jd_job.git,tag=炸年兽_助力和自动组队
 
 ===============Surge=================
-穿行寻宝_分享30次 = type=cron,cronexp="27 8,19 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job.git
+炸年兽_助力和自动组队 = type=cron,cronexp="27 8,15 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job.git
 
 ============小火箭=========
-穿行寻宝_分享30次 = type=cron,script-path=https://github.com/JDWXX/jd_job.git, cronexpr="27 8,19 * * *", timeout=3600, enable=true
+炸年兽_助力和自动组队 = type=cron,script-path=https://github.com/JDWXX/jd_job.git, cronexpr="27 8,15 * * *", timeout=3600, enable=true
  */
 const CryptoJS = require("crypto-js");
-const $ = new Env('穿行寻宝_分享30次');
+const $ = new Env('炸年兽_助力和自动组队');
 const notify = $.isNode() ? require('./sendNotify') : '';
+//Node.js用户请在jdCookie.js处填写京东ck;
 let cookiesArr = [], cookie = '', message, helpCodeArr = [], helpPinArr = [], wxCookie = "";
 let wxCookieArr = process.env.WXCookie?.split("@") || []
+const teamLeaderArr = [], teamPlayerAutoTeam = {}
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let appid = '50074'
+let appid = '98450'
 var timestamp = Math.round(new Date().getTime()).toString();
 $.curlCmd = ""
 const h = (new Date()).getHours()
@@ -44,6 +46,9 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
+    const helpSysInfoArr = []
+    $.pkTeamNum = Math.round(cookiesArr.length/30)
+    $.pkTeamNum = $.pkTeamNum == 0 ? 1 : $.pkTeamNum
     for (let i = 0; i <cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -81,30 +86,68 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
             $.__jd_ref_cls = "Babel_dev_adv_selfReproduction"
             $.joyytoken = await getToken()
             $.blog_joyytoken = await getToken("50999", "4")
-            $.wcrwA = false
-            $.wcrwB = false
-            for (let j = 0; j < 20; j++) {
-                if(!$.wcrwA){
-                    const WelfareScore = await doApiA("getWelfareScore", { type: 1 })
-                    if(WelfareScore){
-                        console.log("获得分享金币" + WelfareScore.score)
-                        console.log("分享金币累计" + WelfareScore.acquiredScore)
-                        console.log("A任务-当前分享次数" + WelfareScore.times)
-                    }}
-                if(!$.wcrwB){
-                    const WelfareScore2 = await doApiB("getWelfareScore", { type: 2 })
-                    if(WelfareScore2){
-                        console.log("获得分享金币" + WelfareScore2.score)
-                        console.log("分享金币累计" + WelfareScore2.acquiredScore)
-                        console.log("B任务-当前分享次数" + WelfareScore2.times)
-                    }
+            await travel()//获取助力码
+            helpSysInfoArr.push({
+                cookie,
+                pin: $.UserName,
+                UA: $.UA,
+                joyytoken: $.joyytoken,
+                blog_joyytoken: $.blog_joyytoken,
+                secretp: $.secretp
+            })
+        }
+    }
+    //
+    $.subSceneid = "RAhomePageh5"
+    for (let i = 0; i < helpSysInfoArr.length; i++) {
+        const s = helpSysInfoArr[i]
+        cookie = s.cookie
+        $.UserName = s.pin
+        $.index = i + 1;
+        $.isLogin = true;
+        $.nickName = $.UserName;
+        await TotalBean();
+        console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+        if (!$.isLogin) continue
+        $.UA = s.UA
+        $.joyytoken = s.joyytoken
+        $.blog_joyytoken = s.blog_joyytoken
+        $.secretp = s.secretp
+        $.newHelpCodeArr = [...helpCodeArr]
+        for (let i = 0, codeLen = helpCodeArr.length; i < codeLen; i++) {
+            const helpCode = helpCodeArr[i]
+            const { pin, code } = helpCode
+            if (pin === $.UserName) continue
+            console.log(`去帮助用户：${pin}`)
+            const helpRes = await doApi("collectScore", null, { inviteId: code }, true, true)
+            if (helpRes?.result?.score) {
+                const { alreadyAssistTimes, maxAssistTimes, maxTimes, score, times } = helpRes.result
+                const c = maxAssistTimes - alreadyAssistTimes
+                console.log(`互助成功，获得${score}金币，他还需要${maxTimes - times}人完成助力，你还有${maxAssistTimes - alreadyAssistTimes}次助力机会`)
+                if (!c) break
+            } else {
+                if (helpRes && helpRes.bizCode && helpRes?.bizCode === -201) {
+                    $.newHelpCodeArr = $.newHelpCodeArr.filter(x => x.pin !== pin)
                 }
-                if($.wcrwA && $.wcrwB){
-                    console.log("当天已完成助力任务")
-                    break
-                }
-                await $.wait(3000)
+                console.log(`互助失败，原因：${helpRes?.bizMsg}（${helpRes?.bizCode}）`)
+                if (![0, -201, -202].includes(helpRes?.bizCode)) break
             }
+        }
+        helpCodeArr = [...$.newHelpCodeArr]
+        try {
+            if (teamPlayerAutoTeam.hasOwnProperty($.UserName)) {
+                const { groupJoinInviteId, groupNum, groupName } = teamLeaderArr[teamPlayerAutoTeam[$.UserName]]
+                console.log(`${groupName}人数：${groupNum}，正在去加入他的队伍...`)
+                console.log(groupJoinInviteId)
+                $.cg = false
+                await joinTeam(groupJoinInviteId)
+                if($.cg){
+                    teamLeaderArr[teamPlayerAutoTeam[$.UserName]].groupNum += 1
+                }
+                await $.wait(2000)
+            }
+        }catch (e){
+            $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
         }
     }
 })()
@@ -114,6 +157,305 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         $.done();
     })
 
+async function travel() {
+    try {
+        const homeData = await doApi("getHomeData")
+        if (homeData) {
+            const { homeMainInfo: { todaySignStatus, secretp } } = homeData
+            if (secretp) $.secretp = secretp
+            await doAppTask()
+            const pkHomeData = await doApi("pk_getHomeData")
+            const { groupJoinInviteId, groupName, groupNum } = pkHomeData?.groupInfo || {}
+            if (groupNum !== undefined && groupNum < 30 && $.index <= $.pkTeamNum) {
+                if (groupJoinInviteId) {
+                    teamLeaderArr.push({
+                        groupJoinInviteId,
+                        groupNum,
+                        groupName
+                    })
+                }
+            } else if (groupNum === 1) {
+                const n = ($.index - 1) % $.pkTeamNum
+                if (teamLeaderArr[n]) {
+                    teamPlayerAutoTeam[$.UserName] = n
+                }
+            }
+        }
+    } catch (e) {
+        console.log(e)
+    }
+
+}
+
+try {
+    //await raise(true)
+} catch (e) {
+    console.log(e)
+    //}
+}
+
+async function joinTeam(groupJoinInviteId) {
+    const inviteId = groupJoinInviteId
+    await doApi("pk_getHomeData", { inviteId })
+    const { bizCode, bizMsg } = await doApi("pk_joinGroup", { inviteId, confirmFlag: "1" }, null, true, true)
+    if (bizCode === 0) {
+        console.log("加入队伍成功！")
+        $.cg = true
+    } else {
+        formatErr("pk_joinGroup", `${bizMsg}（${bizCode}）`, $.curlCmd)
+    }
+}
+
+async function raise(isFirst = false) {
+    const homeData = await doApi("getHomeData")
+    // console.log(homeData)
+    if (!homeData) return
+    //const { homeMainInfo: { raiseInfo: { cityConfig: { clockNeedsCoins, points }, remainScore } } } = homeData
+    //if (remainScore >= clockNeedsCoins) {
+    if (isFirst) console.log(`\n开始解锁\n`)
+    // let curScore = remainScore
+    let flag = false
+    // for (const { status, pointName } of points) {
+    if (status === 1) {
+        const res = await doApi("raise", {}, {}, true)
+        if (res) {
+            if (!flag) flag = true
+            let arr = [`解锁'${pointName}'成功`]
+            const { levelUpAward: { awardCoins, canFirstShare, couponInfo, firstShareAwardCoins, redNum } } = res
+            arr.push(`获得${awardCoins}个金币`)
+            if (couponInfo) {
+                arr.push(`获得【${couponInfo.name}】优惠券：满${couponInfo.usageThreshold}减${couponInfo.quota}（${couponInfo.desc}）`)
+            }
+            if (redNum) {
+                arr.push(`获得${redNum}份分红`)
+            }
+            console.log(arr.join("，"))
+            if (canFirstShare) {
+                const WelfareScore = await doApi("getWelfareScore", { type: 1 })
+                if (WelfareScore?.score) formatMsg(WelfareScore?.score, "分享收益")
+            }
+            curScore -= clockNeedsCoins
+            if (curScore < clockNeedsCoins) return
+        } else {
+            return
+        }
+    }
+    await $.wait(2000)
+    // }
+    if (flag) await raise()
+    //}
+}
+
+async function doAppTask() {
+    const { inviteId, lotteryTaskVos, taskVos } = await doApi("getTaskDetail")
+    if (inviteId) {
+        console.log(`你的互助码：${inviteId}`)
+        if (!helpPinArr.includes($.UserName)) {
+            helpCodeArr.push({
+                pin: $.UserName,
+                code: inviteId
+            })
+            helpPinArr.push($.UserName)
+        }
+    }
+    for (const { times, badgeAwardVos } of lotteryTaskVos || []) {
+        for (const { awardToken, requireIndex, status } of badgeAwardVos) {
+            if (times >= requireIndex && status === 3) {
+                const res = await doApi("getBadgeAward", { awardToken })
+                if (res?.score) {
+                    formatMsg(res.score, "奖励宝箱收益")
+                } else {
+                    const myAwardVos = mohuReadJson(res, "Vos?$", 1)
+                    if (myAwardVos) {
+                        let flag = false
+                        for (let award of myAwardVos) {
+                            const awardInfo = mohuReadJson(award, "Vos?$", -1, "score")
+                            if (awardInfo?.score) {
+                                if (!flag) flag = true
+                                formatMsg(awardInfo.score, "奖励宝箱收益")
+                            }
+                        }
+                        if (!flag) console.log(res)
+                    }
+                }
+            }
+        }
+    }
+    const feedList = []
+    for (let feed of feedList) {
+        const { taskId: id, taskName: name } = feed
+        const res = await doApi("getFeedDetail", { taskId: id.toString() })
+        if (!res) continue
+        for (let mainTask of mohuReadJson(res, "Vos?$", 1, "taskId") || []) {
+            const { score, taskId, taskBeginTime, taskEndTime, taskName, times: timesTemp, maxTimes, waitDuration } = mainTask
+            const t = Date.now()
+            let times = timesTemp
+            if (t >= taskBeginTime && t <= taskEndTime) {
+                console.log(`当前正在做任务：${taskName}`)
+                for (let productInfo of mohuReadJson(mainTask, "Vo(s)?$", maxTimes, "taskToken") || []) {
+                    const { taskToken, status } = productInfo
+                    if (status !== 1) continue
+                    const res = await doApi("collectScore", { taskId, taskToken, actionType: 1 }, null, true)
+                    times = res?.times ?? (times + 1)
+                    await $.wait(waitDuration * 1000)
+                    if (times >= maxTimes) {
+                        formatMsg(score, "任务收益")
+                        break
+                    }
+                }
+            }/*  else {
+            console.log(`任务：${taskName}：未到做任务时间`)
+        } */
+        }
+    }
+}
+
+async function doWxTask() {
+    $.stopWxTask = false
+    const feedList = []
+    const { taskVos } = await doWxApi("getTaskDetail", { taskId: "", appSign: 2 })
+    for (let mainTask of taskVos) {
+        const { taskId, taskName, waitDuration, times: timesTemp, maxTimes, status } = mainTask
+        let times = timesTemp, flag = false
+        if (status === 2) continue
+        const other = mohuReadJson(mainTask, "Vos?$", -1, "taskToken")
+        if (other) {
+            const { taskToken } = other
+            if (!taskToken) continue
+            if (taskId === 1) {
+                continue
+            }
+            console.log(`当前正在做任务：${taskName}`)
+            const res = await doWxApi("collectScore", { taskId, taskToken, actionType: 1 }, null, true)
+            if ($.stopWxTask) return
+            res?.score && (formatMsg(res.score, "任务收益"), true)/*  || console.log(res) */
+            continue
+        }
+        $.stopCard = false
+        for (let activity of mohuReadJson(mainTask, "Vo(s)?$", maxTimes, "taskToken") || []) {
+            if (!flag) flag = true
+            const { shopName, title, taskToken, status } = activity
+            if (status !== 1) continue
+            console.log(`当前正在做任务：${shopName || title}`)
+            const res = await doWxApi("collectScore", { taskId, taskToken, actionType: 1 }, null, true)
+            if ($.stopCard || $.stopWxTask) break
+            if (waitDuration || res.taskToken) {
+                await $.wait(waitDuration * 1000)
+                const res = await doWxApi("collectScore", { taskId, taskToken, actionType: 0 }, null, true)
+                if ($.stopWxTask) return
+                res?.score && (formatMsg(res.score, "任务收益"), true)/*  || console.log(res) */
+            } else {
+                if ($.stopWxTask) return
+                res?.score && (formatMsg(res.score, "任务收益"), true)/*  || console.log(res) */
+            }
+            times++
+            if (times >= maxTimes) break
+        }
+        if (flag) continue
+        feedList.push({
+            taskId: taskId.toString(),
+            taskName
+        })
+    }
+    for (let feed of feedList) {
+        const { taskId: id, taskName: name } = feed
+        const res = await doWxApi("getFeedDetail", { taskId: id.toString() }, null, true)
+        if (!res) continue
+        for (let mainTask of mohuReadJson(res, "Vos?$", 1, "taskId") || []) {
+            const { score, taskId, taskBeginTime, taskEndTime, taskName, times: timesTemp, maxTimes, waitDuration } = mainTask
+            const t = Date.now()
+            let times = timesTemp
+            if (t >= taskBeginTime && t <= taskEndTime) {
+                console.log(`当前正在做任务：${taskName}`)
+                for (let productInfo of mohuReadJson(mainTask, "Vo(s)?$", maxTimes, "taskToken") || []) {
+                    const { taskToken, status } = productInfo
+                    if (status !== 1) continue
+                    const res = await doWxApi("collectScore", { taskId, taskToken, actionType: 1 }, null, true)
+                    if ($.stopWxTask) return
+                    times = res?.times ?? (times + 1)
+                    await $.wait(waitDuration * 1000)
+                    if (times >= maxTimes) {
+                        formatMsg(score, "任务收益")
+                        break
+                    }
+                }
+            }/*  else {
+            console.log(`任务：${taskName}：未到做任务时间`)
+        } */
+        }
+    }
+}
+
+async function doJrAppTask() {
+    $.isJr = true
+    $.JrUA = getJrUA()
+    const { trades, views } = await doJrPostApi("miMissions", null, null, true)
+    /* for (let task of trades || views || []) {
+        const { status, missionId, channel } = task
+        if (status !== 1 && status !== 3) continue
+        const { subTitle, title, url } = await doJrPostApi("miTakeMission", null, {
+            missionId,
+            validate: "",
+            channel,
+            babelChannel: "1111shouyefuceng"
+        }, true)
+        console.log(`当前正在做任务：${title}，${subTitle}`)
+        const { code, msg, data } = await doJrGetApi("queryPlayActiveHelper", { sourceUrl: url })
+        // const { code, msg, data } = await doJrGetApi("queryMissionReceiveAfterStatus", { missionId })
+        console.log(`做任务结果：${msg}（${code}）`)
+    } */
+    for (let task of views || []) {
+        const { status, missionId, channel, total, complete } = task
+        if (status !== 1 && status !== 3) continue
+        const { subTitle, title, url } = await doJrPostApi("miTakeMission", null, {
+            missionId,
+            validate: "",
+            channel,
+            babelChannel: "1111zhuhuichangfuceng"
+        }, true)
+        console.log(`当前正在做任务：${title}，${subTitle}`)
+        const readTime = url.getKeyVal("readTime")
+        const juid = url.getKeyVal("juid")
+        if (readTime) {
+            await doJrGetApi("queryMissionReceiveAfterStatus", { missionId })
+            await $.wait(+ readTime * 1000)
+            const { code, msg, data } = await doJrGetApi("finishReadMission", { missionId, readTime })
+            console.log(`做任务结果：${msg}`)
+        } else if (juid) {
+            const { code, msg, data } = await doJrGetApi("getJumpInfo", { juid })
+            console.log(`做任务结果：${msg}`)
+        } else {
+            console.log(`不知道这是啥：${url}`)
+        }
+    }
+    $.isJr = false
+}
+
+function mohuReadJson(json, key, len, keyName) {
+    if (!key) return null
+    for (let jsonKey in json) {
+        if (RegExp(key).test(jsonKey)) {
+            if (!len) return json[jsonKey]
+            if (len === -1) {
+                if (json[jsonKey][keyName]) return json[jsonKey]
+            } else if (json[jsonKey]?.length >= len) {
+                if (keyName) {
+                    if (json[jsonKey][0].hasOwnProperty(keyName)) {
+                        return json[jsonKey]
+                    } else {
+                        continue
+                    }
+                }
+                return json[jsonKey]
+            }
+        }
+    }
+    return null
+}
+
+function formatMsg(num, pre, ap) {
+    console.log(`${pre ? pre + "：" : ""}获得${num}个金币🪙${ap ? "，" + ap : ""}`)
+}
 
 function getSs(secretp) {
     $.random = 53554918
@@ -125,6 +467,28 @@ function getSs(secretp) {
         random: $.random
     }
 }
+
+function getSafeStr() {
+    $.random = 53554918
+    const log = getBody(53554918)
+    return {
+        random: $.random,
+        secreid: "HYJGJSh5",
+        log
+    }
+}
+
+function getWxSs(secretp) {
+    $.random = 53554918
+    $.secreid = "HYJhPagewx"
+    const extraData = getBody(53554918)
+    return {
+        extraData,
+        secretp,
+        random: $.random
+    }
+}
+
 async function doApi(functionId, prepend = {}, append = {}, needSs = false, getLast = false) {
     functionId = `promote_${functionId}`
     const url = JD_API_HOST + `?functionId=${functionId}`
@@ -164,18 +528,15 @@ async function doApi(functionId, prepend = {}, append = {}, needSs = false, getL
                 else {
                     if (safeGet(data)) {
                         data = JSON.parse(data)
-                        if(data?.data?.bizMsg.indexOf("这个任务做完啦") != -1){
-                            $.wcrw = true
-                        }
                         if (getLast) {
                             res = data?.data
                             if (data.data && data.data.bizCode && data.data.bizCode === -1002) {
-                                // console.log(formatErr(functionId, data, toCurl(option)))
+                                console.log(formatErr(functionId, data, toCurl(option)))
                             }
                         } else {
                             if (data.data && data.data.bizCode && data.data.bizCode !== 0) {
                                 if (/加入.*?会员.*?获得/.test(data?.data?.bizMsg)) {
-                                    // console.log(data?.data?.bizMsg + `（${data?.data?.bizCode}）`)
+                                    console.log(data?.data?.bizMsg + `（${data?.data?.bizCode}）`)
                                     $.stopCard = true
                                 } else console.log(formatErr(functionId, data?.data?.bizMsg + `（${data?.data?.bizCode}）`, toCurl(option)))
                             } else {
@@ -195,37 +556,32 @@ async function doApi(functionId, prepend = {}, append = {}, needSs = false, getL
     })
 }
 
-async function doApiA(functionId, prepend = {}, append = {}, needSs = false, getLast = false) {
-    functionId = `promote_${functionId}`
-    const url = JD_API_HOST + `?functionId=${functionId}`
-    const bodyMain = objToStr2({
-        functionId,
-        body: encodeURIComponent(JSON.stringify({
-            ...prepend,
-            ss: needSs ? JSON.stringify(getSs($.secretp || "E7CRMoDURcyS-_XDYYuo__Ai9oE")) : undefined,
-            ...append,
-        })),
-        client: "m",
-        clientVersion: "1.0.0",
-        appid :"signed_wh5"
-    })
+async function doJrPostApi(functionId, prepend = {}, append = {}, needEid = false) {
+    const url = "https://ms.jr.jd.com/gw/generic/uc/h5/m/" + functionId
+    const bodyMain = `reqData=${encodeURIComponent(JSON.stringify({
+        ...prepend,
+        ...needEid ? {
+            eid: $.eid || "",
+            sdkToken: $.sdkToken || "",
+        } : {},
+        ...append
+    }))}`
     const option = {
         url,
         body: bodyMain,
         headers: {
             'Cookie': cookie,
-            'Host': 'api.m.jd.com',
+            'Host': 'ms.jr.jd.com',
             'Origin': 'https://wbbny.m.jd.com',
-            'Referer': 'https://wbbny.m.jd.com/babelDiy/Zeus/2vVU4E7JLH9gKYfLQ5EVW6eN2P7B/index.html',
+            'Referer': 'https://wbbny.m.jd.com/babelDiy/Zeus/2vVU4E7JLH9gKYfLQ5EVW6eN2P7B/index.html?babelChannel=1111zhuhuichangfuceng&conf=jr',
             'Connection': 'keep-alive',
             'Content-Type': 'application/x-www-form-urlencoded',
-            "User-Agent": $.UA,
+            "User-Agent": $.JrUA,
             'Accept': 'application/json, text/plain, */*',
             'Accept-Language': 'zh-cn',
             'Accept-Encoding': 'gzip, deflate, br',
         }
     }
-    $.curlCmd = toCurl(option)
     return new Promise(resolve => {
         $.post(option, (err, resp, data) => {
             let res = null
@@ -234,31 +590,17 @@ async function doApiA(functionId, prepend = {}, append = {}, needSs = false, get
                 else {
                     if (safeGet(data)) {
                         data = JSON.parse(data)
-                        if(data?.data?.bizMsg.indexOf("这个任务做完啦") != -1){
-                            $.wcrwA = true
-                        }
-                        if (getLast) {
-                            res = data?.data
-                            if (data.data && data.data.bizCode && data.data.bizCode === -1002) {
-                                // console.log(formatErr(functionId, data, toCurl(option)))
-                            }
+                        if (data?.resultData?.code !== 0) {
+                            console.log(formatErr(functionId, data?.resultData?.msg + `（${data?.resultData?.code}）`, toCurl(option)))
                         } else {
-                            if (data.data && data.data.bizCode && data.data.bizCode !== 0) {
-                                if (/加入.*?会员.*?获得/.test(data?.data?.bizMsg)) {
-                                    // console.log(data?.data?.bizMsg + `（${data?.data?.bizCode}）`)
-                                    $.stopCard = true
-                                }
-                                // else console.log(formatErr(functionId, data?.data?.bizMsg + `（${data?.data?.bizCode}）`, toCurl(option)))
-                            } else {
-                                res = data?.data?.result || {}
-                            }
+                            res = data?.resultData?.data || {}
                         }
                     } else {
-                        // console.log(formatErr(functionId, data, toCurl(option)))
+                        console.log(formatErr(functionId, data, toCurl(option)))
                     }
                 }
             } catch (e) {
-                // console.log(formatErr(functionId, e.toString(), toCurl(option)))
+                console.log(formatErr(functionId, e.toString(), toCurl(option)))
             } finally {
                 resolve(res)
             }
@@ -266,37 +608,94 @@ async function doApiA(functionId, prepend = {}, append = {}, needSs = false, get
     })
 }
 
-async function doApiB(functionId, prepend = {}, append = {}, needSs = false, getLast = false) {
-    functionId = `promote_${functionId}`
-    const url = JD_API_HOST + `?functionId=${functionId}`
-    const bodyMain = objToStr2({
-        functionId,
-        body: encodeURIComponent(JSON.stringify({
-            ...prepend,
-            ss: needSs ? JSON.stringify(getSs($.secretp || "E7CRMoDURcyS-_XDYYuo__Ai9oE")) : undefined,
-            ...append,
-        })),
-        client: "m",
-        clientVersion: "1.0.0",
-        appid :"signed_wh5"
-    })
+async function doJrGetApi(functionId, prepend = {}, append = {}, needEid = false) {
+    const url = "https://ms.jr.jd.com/gw/generic/mission/h5/m/" + functionId
+    const bodyMain = `reqData=${encodeURIComponent(JSON.stringify({
+        ...prepend,
+        ...needEid ? {
+            eid: $.eid || "",
+            sdkToken: $.sdkToken || "",
+        } : {},
+        ...append
+    }))}`
     const option = {
-        url,
-        body: bodyMain,
+        url: `${url}?${bodyMain}`,
         headers: {
             'Cookie': cookie,
-            'Host': 'api.m.jd.com',
+            'Host': 'ms.jr.jd.com',
             'Origin': 'https://wbbny.m.jd.com',
-            'Referer': 'https://wbbny.m.jd.com/babelDiy/Zeus/2vVU4E7JLH9gKYfLQ5EVW6eN2P7B/index.html',
+            'Referer': 'https://wbbny.m.jd.com/babelDiy/Zeus/2vVU4E7JLH9gKYfLQ5EVW6eN2P7B/index.html?babelChannel=1111shouyefuceng&conf=jr',
             'Connection': 'keep-alive',
             'Content-Type': 'application/x-www-form-urlencoded',
-            "User-Agent": $.UA,
-            'Accept': 'application/json, text/plain, */*',
+            "User-Agent": $.JrUA,
+            'Accept': '*/*',
             'Accept-Language': 'zh-cn',
             'Accept-Encoding': 'gzip, deflate, br',
         }
     }
-    $.curlCmd = toCurl(option)
+    return new Promise(resolve => {
+        $.get(option, (err, resp, data) => {
+            let res = null
+            try {
+                if (err) console.log(formatErr(functionId, err, toCurl(option)))
+                else {
+                    if (safeGet(data)) {
+                        data = JSON.parse(data)
+                        res = data?.resultData || {}
+                    } else {
+                        console.log(formatErr(functionId, data, toCurl(option)))
+                    }
+                }
+            } catch (e) {
+                console.log(formatErr(functionId, e.toString(), toCurl(option)))
+            } finally {
+                resolve(res)
+            }
+        })
+    })
+}
+
+async function doWxApi(functionId, prepend = {}, append = {}, needSs = false) {
+    functionId = `promote_${functionId}`
+    const url = JD_API_HOST + `?dev=${functionId}&g_ty=ls&g_tk=`
+    const bodyMain = {
+        sceneval: "",
+        callback: functionId,
+        functionId,
+        appid: "signed_mp",
+        client: "xcx",
+        clientVersion: "–1",
+        uuid: -1,
+        body: encodeURIComponent(JSON.stringify({
+            ...prepend,
+            ss: needSs ? JSON.stringify(getWxSs($.WxSecretp)) : undefined,
+            ...append,
+        })),
+        loginType: 2,
+        loginWQBiz: "dacu"
+    }
+    const cookieA =
+        wxCookie
+            ?
+            ((bodyMain.loginType = 1), `jdpin=${$.pin};pin=${$.pin};pinStatus=0;wq_auth_token=${wxCookie};shshshfpb=${encodeURIComponent($.shshshfpb)};`)
+            :
+            cookie
+    const option = {
+        url,
+        body: objToStr2(bodyMain),
+        headers: {
+            'Cookie': cookieA,
+            'Host': 'api.m.jd.com',
+            'Referer': 'https://servicewechat.com/wx91d27dbf599dff74/570/page-frame.html',
+            'wxreferer': 'http://wq.jd.com/wxapp/pages/loveTravel/pages/index/index',
+            'Connection': 'keep-alive',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            "User-Agent": $.WxUA,
+            'Accept': '*/*',
+            'Accept-Language': 'zh-cn',
+            'Accept-Encoding': 'gzip, deflate, br',
+        }
+    }
     return new Promise(resolve => {
         $.post(option, (err, resp, data) => {
             let res = null
@@ -305,38 +704,26 @@ async function doApiB(functionId, prepend = {}, append = {}, needSs = false, get
                 else {
                     if (safeGet(data)) {
                         data = JSON.parse(data)
-                        if(data?.data?.bizMsg.indexOf("这个任务做完啦") != -1){
-                            $.wcrwB = true
-                        }
-                        if (getLast) {
-                            res = data?.data
-                            if (data.data && data.data.bizCode && data.data.bizCode === -1002) {
-                                // console.log(formatErr(functionId, data, toCurl(option)))
-                            }
+                        if (data?.data?.bizCode !== 0) {
+                            if (data?.data?.bizCode === -1002) $.stopWxTask = true
+                            console.log(formatErr(functionId, data?.data?.bizMsg ? (data?.data?.bizMsg + `（${data?.data?.bizCode}）`) : JSON.stringify(data), toCurl(option)))
                         } else {
-                            if (data.data && data.data.bizCode && data.data.bizCode !== 0) {
-                                if (/加入.*?会员.*?获得/.test(data?.data?.bizMsg)) {
-                                    // console.log(data?.data?.bizMsg + `（${data?.data?.bizCode}）`)
-                                    $.stopCard = true
-                                }
-                                // else
-                                // console.log(formatErr(functionId, data?.data?.bizMsg + `（${data?.data?.bizCode}）`, toCurl(option)))
-                            } else {
-                                res = data?.data?.result || {}
-                            }
+                            res = data.data.result
                         }
                     } else {
-                        // console.log(formatErr(functionId, data, toCurl(option)))
+                        console.log(formatErr(functionId, data, toCurl(option)))
                     }
                 }
             } catch (e) {
-                // console.log(formatErr(functionId, e.toString(), toCurl(option)))
+                console.log(formatErr(functionId, e.toString(), toCurl(option)))
             } finally {
                 resolve(res)
             }
         })
     })
 }
+
+
 function getToken(appname = appid, platform = "1") {
     return new Promise(resolve => {
         $.post({
@@ -412,6 +799,12 @@ function getUA() {
     return `jdapp;android;10.3.2`
 }
 
+function getWxUA() {
+    const osVersion = `${randomNum(12, 14)}.${randomNum(0, 6)}`
+    $.wxAppid = "wx91d27dbf599dff74"
+    return `Mozilla/5.0 (iPhone; CPU OS ${osVersion.replace(/\./g, "_")} like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.15(0x18000f28) NetType/WIFI Language/zh_CN`
+}
+
 function randomUUID(option = {
     formatData: `${"X".repeat(8)}-${"X".repeat(4)}-${"X".repeat(4)}-${"X".repeat(12)}`,
     charArr: [...Array(16).keys()].map(k => k.toString(16).toUpperCase()),
@@ -432,6 +825,23 @@ function randomUUID(option = {
         }
     }
     return res.join("")
+}
+
+function getJrUA() {
+    const randomMobile = {
+        type: `${randomNum(9, 13)},${randomNum(1, 3)}`,
+        screen: ["812", "375"]
+    }
+    const mobile = $.mobile ?? "iPhone " + randomMobile.type
+    const screen = randomMobile.screen.join('*')
+    const osV = $.osVersion ?? `${randomNum(13, 14)}.${randomNum(0, 6)}`
+    const appV = `6.2.40`
+    const deviceId = randomUUID({
+        formatData: 'x'.repeat(36) + '-' + 'x'.repeat(36),
+        charArr: [...Array(10).keys(), 'd'].map(x => x.toString())
+    })
+    const jdPaySdkV = `4.00.10.00`
+    return `Mozilla/5.0 (iPhone; CPU iPhone OS ${osV.replace(/\./g, "_")} AppleWebKit/60${randomNum(3, 5)}.1.15 (KHTML, like Gecko) Mobile/15E148/application=JDJR-App&deviceId=${deviceId}&eufv=1&clientType=ios&iosType=iphone&clientVersion=${appV}&HiClVersion=${appV}&isUpdate=0&osVersion=${osV}&osName=iOS&platform=${mobile}&screen=${screen}&src=App Store&netWork=1&netWorkType=1&CpayJS=UnionPay/1.0 JDJR&stockSDK=stocksdk-iphone_3.5.0&sPoint=&jdPay=(*#@jdPaySDK*#@jdPayChannel=jdfinance&jdPayChannelVersion=${osV}&jdPaySdkVersion=${jdPaySdkV}&jdPayClientName=iOS*#@jdPaySDK*#@)`
 }
 
 function toCurl(option = { url: "", body: "", headers: {} }) {
@@ -462,6 +872,26 @@ function objToStr2(jsonMap) {
         } else {
             res += `&${key}=${keyValue}`
         }
+    }
+    return res
+}
+
+function str2ToObj(keyMap) {
+    const keyArr = keyMap.split("&").filter(x => x)
+    const keyLen = keyArr.length
+    if (keyLen === 1 && !keyArr[0].includes("=")) {
+        return keyMap
+    }
+    const res = {}
+    for (let i = 0; i < keyLen; i++) {
+        const cur = keyArr[i].split('=').filter(x => x)
+        const curValue = cur[1]
+        if (/\d{1,16}|[.*?]|{}|{"\w+?":.*?(,"\w+?":.*?)*}|true|false/.test(curValue)) {
+            try {
+                cur[1] = eval(`(${curValue})`)
+            } catch (_) { }
+        }
+        res[cur[0]] = cur[1]
     }
     return res
 }
