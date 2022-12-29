@@ -9,17 +9,17 @@ rebatePin 填 分享码，可不填，默认助力前五 如果小于五个号 �
 ============Quantumultx===============
 [task_local]
 #京享红包
-0 0 0,12,19,20 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, tag=京享红包, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_bean_home.png, enabled=true
+0 0 0,12,19,20 * * * https://github.com/JDWXX/11/jd_red.js, tag=京享红包, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_bean_home.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "0 0 0,12,19,20 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, tag=京享红包
+cron "0 0 0,12,19,20 * * *" script-path=https://github.com/JDWXX/11/jd_red.js, tag=京享红包
 
 ===============Surge=================
-京享红包 = type=cron,cronexp="0 0 0,12,19,20 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js
+京享红包 = type=cron,cronexp="0 0 0,12,19,20 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/11/jd_red.js
 
 ============小火箭=========
-京享红包 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, cronexpr="0 0 0,12,19,20 * * *", timeout=3600, enable=true
+京享红包 = type=cron,script-path=https://github.com/JDWXX/11/jd_red.js, cronexpr="0 0 0,12,19,20 * * *", timeout=3600, enable=true
  */
 const $ = new Env('京享红包');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
