@@ -1,30 +1,30 @@
 /*
-双十一红包
+京享红包
 京粉可能会被封，用不用看自己
-京粉转链：https://u.jd.com/kKmbzrz
+京粉转链：https://u.jd.com/mtHUg1o
 rebatePin 填 分享码，可不填，默认助力前五 如果小于五个号 只助力第一个
 如需自己吃返利，rebateCodes 请填写该变量（https://u.jd.com/后面的英文）
 已支持IOS双京东账号, Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, 小火箭，JSBox, Node.js
 ============Quantumultx===============
 [task_local]
-#双十一红包
-0 0 0,12,19,20 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, tag=双十一红包, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_bean_home.png, enabled=true
+#京享红包
+0 0 0,12,19,20 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, tag=京享红包, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_bean_home.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "0 0 0,12,19,20 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, tag=双十一红包
+cron "0 0 0,12,19,20 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, tag=京享红包
 
 ===============Surge=================
-双十一红包 = type=cron,cronexp="0 0 0,12,19,20 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js
+京享红包 = type=cron,cronexp="0 0 0,12,19,20 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js
 
 ============小火箭=========
-双十一红包 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, cronexpr="0 0 0,12,19,20 * * *", timeout=3600, enable=true
+京享红包 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_618red.js, cronexpr="0 0 0,12,19,20 * * *", timeout=3600, enable=true
  */
-const $ = new Env('双十一红包');
+const $ = new Env('京享红包');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let rebateCodes = 'kKmbzrz'
-let rebatePin = '' //分享码 默认助力前五 如果小于五个号 只助力第一个
+let rebateCodes = 'mtHUg1o'
+let rebatePin = ''
 CryptoScripts()
 $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
 //IOS等用户直接用NobyDa的jd cookie
@@ -49,7 +49,7 @@ resMsg = ''
 $.endFlag = false
 let shareCodeArr = {}
 $.runArr = {}
-const activeEndTime = '2022/11/13 00:00:00+08:00';//活动结束时间
+const activeEndTime = '2023/1/30 00:00:00+08:00';//活动结束时间
 let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000;
 let timeH = $.time('H')
 !(async () => {
@@ -154,7 +154,7 @@ async function run(type = 0){
         let s = 0
         let t = 0
         do{
-            const flCodeArr = ["kKeBDtR","xCCe3r9","kLe6qxN"];//鸡蛋不要放在一个篮子里
+            const flCodeArr = ["mtHchCP","mCHAPUc","mMHcp2P","mtHjDUU","mtHE7aP"];
             for (let i = 0; i < 3; i++) {
                 flCodeArr.push(rebateCodes)
             }
@@ -168,7 +168,7 @@ async function run(type = 0){
                 break
             }
             await getUrl1()
-            $.actId = $.url2.match(/mall\/active\/([^/]+)\/index\.html/) && $.url2.match(/mall\/active\/([^/]+)\/index\.html/)[1] || `https://prodev.m.jd.com/mall/active/22Dzqz8Cvk1Cj7BdKE46ZKSVARFE/index.html?unionActId=31149&d=${rebateCode}`
+            $.actId = $.url2.match(/mall\/active\/([^/]+)\/index\.html/) && $.url2.match(/mall\/active\/([^/]+)\/index\.html/)[1] || `https://prodev.m.jd.com/mall/active/3re5ajBZWA71ygjVnAz9kbaU1tfw/index.html?unionActId=31155&d=${rebateCode}`
             // let arr = await getBody($.UA,$.url2)
             // await getEid(arr)
             if(!$.eid){
@@ -229,7 +229,7 @@ function getCoupons(shareId = '',type = 1) {
     return new Promise(async resolve => {
         await requestAlgo();
         let time = Date.now()
-        let body = {"platform": 2,"unionActId": "31149","actId": $.actId,"d": rebateCode,"unionShareId": shareId, "type": type,"eid": "-1"}
+        let body = {"platform": 2,"unionActId": "31155","actId": $.actId,"d": rebateCode,"unionShareId": shareId, "type": type,"eid": "-1"}
         let h5st = h5stSign(body) || 'undefined'
         let message = ''
         let opts = {
@@ -313,7 +313,7 @@ function showCoupon(shareId = '') {
     let msg = true
     return new Promise(resolve => {
         let opts = {
-            url: `https://api.m.jd.com/api?functionId=showCoupon&appid=u&_=${Date.now()}&loginType=2&body={%22actId%22:%22${$.actId}%22,%22unionActId%22:%2231149%22,%22unpl%22:%22%22,%22platform%22:4,%22unionShareId%22:%22%22,%22uiUpdateTime%22:1641456650000,%22d%22:%22${rebateCode}%22,%22eid%22:%22${$.eid}%22}&client=apple&clientVersion=8.3.6`,
+            url: `https://api.m.jd.com/api?functionId=showCoupon&appid=u&_=${Date.now()}&loginType=2&body={%22actId%22:%22${$.actId}%22,%22unionActId%22:%2231155%22,%22unpl%22:%22%22,%22platform%22:4,%22unionShareId%22:%22%22,%22uiUpdateTime%22:1641456650000,%22d%22:%22${rebateCode}%22,%22eid%22:%22${$.eid}%22}&client=apple&clientVersion=8.3.6`,
             headers: {
                 "Accept-Language": "zh-cn",
                 "Accept-Encoding": "gzip, deflate, br",
@@ -367,7 +367,7 @@ function shareUnionCoupon() {
     $.shareCodeArr[$.UserName] = ''
     return new Promise(resolve => {
         let opts = {
-            url: `https://api.m.jd.com/api?functionId=shareUnionCoupon&appid=u&_=${Date.now()}&loginType=2&body={%22unionActId%22:%2231149%22,%22actId%22:%22${$.actId}%22,%22platform%22:4,%22unionShareId%22:%22${$.shareCode}%22,%22d%22:%22${rebateCode}%22,%22supportPic%22:2,%22supportLuckyCode%22:0,%22eid%22:%22${$.eid}%22}&client=apple&clientVersion=8.3.6`,
+            url: `https://api.m.jd.com/api?functionId=shareUnionCoupon&appid=u&_=${Date.now()}&loginType=2&body={%22unionActId%22:%2231155%22,%22actId%22:%22${$.actId}%22,%22platform%22:4,%22unionShareId%22:%22${$.shareCode}%22,%22d%22:%22${rebateCode}%22,%22supportPic%22:2,%22supportLuckyCode%22:0,%22eid%22:%22${$.eid}%22}&client=apple&clientVersion=8.3.6`,
             headers: {
                 "Accept-Language": "zh-cn",
                 "Accept-Encoding": "gzip, deflate, br",
