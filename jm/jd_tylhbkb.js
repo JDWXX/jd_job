@@ -1,21 +1,21 @@
 /*
-团圆红包全自动
+团圆红包开红包
 入口：京东极速版》团圆红包
 不会用加群：212796668、681030097、743744614
 脚本兼容: QuantumultX, Surge,Loon, JSBox, Node.js
 =================================Quantumultx=========================
 [task_local]
-#团圆红包全自动
-0 40 0,5 * * * https://github.com/JDWXX/jd_job.git, tag=团圆红包全自动, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+#团圆红包开红包
+0 40 1,6 * * * https://github.com/JDWXX/jd_job.git, tag=团圆红包开红包, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 =================================Loon===================================
 [Script]
-cron "0 40 0,5 * * *" script-path=https://github.com/JDWXX/jd_job.git,tag=团圆红包全自动
+cron "0 40 1,6 * * *" script-path=https://github.com/JDWXX/jd_job.git,tag=团圆红包开红包
 ===================================Surge================================
-团圆红包全自动 = type=cron,cronexp="0 40 0,5 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job.git
+团圆红包开红包 = type=cron,cronexp="0 40 1,6 * * *",wake-system=1,timeout=3600,script-path=https://github.com/JDWXX/jd_job.git
 ====================================小火箭=============================
-团圆红包全自动 = type=cron,script-path=https://github.com/JDWXX/jd_job.git, cronexpr="0 40 0,5 * * *", timeout=3600, enable=true
+团圆红包开红包 = type=cron,script-path=https://github.com/JDWXX/jd_job.git, cronexpr="0 40 1,6 * * *", timeout=3600, enable=true
  */
-const $ = new Env("团圆红包全自动");
+const $ = new Env("团圆红包开红包");
 var __encode = 'jsjiami.com',
     _a = {},
     _0xb483 = ["_decode", "http://www.sojson.com/javascriptobfuscator.html"];
@@ -63,32 +63,32 @@ if ($[__Oxf3d21[0x0]]()) {
     let qs = parseInt(cookiesArr[__Oxf3d21[0x24]] / 10)
     qs = qs > 1 ? qs : 1;
     console.log("-------------读取前【" + qs + "】位账号助力码----------------\n")
-    if (shareCodesArr[__Oxf3d21[0x24]] == 0) {
-        for (let _0xc929xe = 0; _0xc929xe < qs; _0xc929xe++) {
-            if (cookiesArr[_0xc929xe]) {
-                cookie = cookiesArr[_0xc929xe];
-                $[__Oxf3d21[0x27]] = decodeURIComponent(cookie[__Oxf3d21[0x28]](/pt_pin=([^; ]+)(?=;?)/) && cookie[__Oxf3d21[0x28]](/pt_pin=([^; ]+)(?=;?)/)[0x1]);
-                $[__Oxf3d21[0x29]] = _0xc929xe + 1;
-                $[__Oxf3d21[0x2a]] = true;
-                $[__Oxf3d21[0x2b]] = __Oxf3d21[0x2];
-                message = __Oxf3d21[0x2];
-                UA = `${__Oxf3d21[0x2c]}${randomString(40)}${__Oxf3d21[0x2d]}${Math[__Oxf3d21[0x2e]]* 98+ 1}${__Oxf3d21[0x2f]}`;
-                UAInfo[$[__Oxf3d21[0x27]]] = UA;
-                console[__Oxf3d21[0xc]](__Oxf3d21[0x30] + $[__Oxf3d21[0x29]] + __Oxf3d21[0x31] + ($[__Oxf3d21[0x2b]] || $[__Oxf3d21[0x27]]) + __Oxf3d21[0x32]);
-                if (!$[__Oxf3d21[0x2a]]) {
-                    $[__Oxf3d21[0x1e]]($[__Oxf3d21[0x18]], `${__Oxf3d21[0x33]}`, `${__Oxf3d21[0x34]}${$[__Oxf3d21[0x29]]}${__Oxf3d21[0x35]}${$[__Oxf3d21[0x2b]]|| $[__Oxf3d21[0x27]]}${__Oxf3d21[0x36]}`, {
-                        "open-url": __Oxf3d21[0x1d]
-                    });
-                    if ($[__Oxf3d21[0x0]]()) {
-                        await notify[__Oxf3d21[0x39]](`${__Oxf3d21[0x2]}${$[__Oxf3d21[0x18]]}${__Oxf3d21[0x37]}${$[__Oxf3d21[0x27]]}${__Oxf3d21[0x2]}`, `${__Oxf3d21[0x34]}${$[__Oxf3d21[0x29]]}${__Oxf3d21[0x35]}${$[__Oxf3d21[0x27]]}${__Oxf3d21[0x38]}`)
-                    };
-                    continue
-                };
-                await TaskSub();
-                await $[__Oxf3d21[0x3a]](200)
-            }
-        }
-    }
+    // if (shareCodesArr[__Oxf3d21[0x24]] == 0) {
+    //     for (let _0xc929xe = 0; _0xc929xe < qs; _0xc929xe++) {
+    //         if (cookiesArr[_0xc929xe]) {
+    //             cookie = cookiesArr[_0xc929xe];
+    //             $[__Oxf3d21[0x27]] = decodeURIComponent(cookie[__Oxf3d21[0x28]](/pt_pin=([^; ]+)(?=;?)/) && cookie[__Oxf3d21[0x28]](/pt_pin=([^; ]+)(?=;?)/)[0x1]);
+    //             $[__Oxf3d21[0x29]] = _0xc929xe + 1;
+    //             $[__Oxf3d21[0x2a]] = true;
+    //             $[__Oxf3d21[0x2b]] = __Oxf3d21[0x2];
+    //             message = __Oxf3d21[0x2];
+    //             UA = `${__Oxf3d21[0x2c]}${randomString(40)}${__Oxf3d21[0x2d]}${Math[__Oxf3d21[0x2e]]* 98+ 1}${__Oxf3d21[0x2f]}`;
+    //             UAInfo[$[__Oxf3d21[0x27]]] = UA;
+    //             console[__Oxf3d21[0xc]](__Oxf3d21[0x30] + $[__Oxf3d21[0x29]] + __Oxf3d21[0x31] + ($[__Oxf3d21[0x2b]] || $[__Oxf3d21[0x27]]) + __Oxf3d21[0x32]);
+    //             if (!$[__Oxf3d21[0x2a]]) {
+    //                 $[__Oxf3d21[0x1e]]($[__Oxf3d21[0x18]], `${__Oxf3d21[0x33]}`, `${__Oxf3d21[0x34]}${$[__Oxf3d21[0x29]]}${__Oxf3d21[0x35]}${$[__Oxf3d21[0x2b]]|| $[__Oxf3d21[0x27]]}${__Oxf3d21[0x36]}`, {
+    //                     "open-url": __Oxf3d21[0x1d]
+    //                 });
+    //                 if ($[__Oxf3d21[0x0]]()) {
+    //                     await notify[__Oxf3d21[0x39]](`${__Oxf3d21[0x2]}${$[__Oxf3d21[0x18]]}${__Oxf3d21[0x37]}${$[__Oxf3d21[0x27]]}${__Oxf3d21[0x2]}`, `${__Oxf3d21[0x34]}${$[__Oxf3d21[0x29]]}${__Oxf3d21[0x35]}${$[__Oxf3d21[0x27]]}${__Oxf3d21[0x38]}`)
+    //                 };
+    //                 continue
+    //             };
+    //             await TaskSub();
+    //             await $[__Oxf3d21[0x3a]](200)
+    //         }
+    //     }
+    // }
     // if(shareCodesArr.length > 0){
     //     console.log("\n-------------开始助力----------------\n")
     //     for (let _0xc929xe = 0; _0xc929xe < cookiesArr[__Oxf3d21[0x24]]; _0xc929xe++) {
