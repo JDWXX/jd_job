@@ -1,23 +1,18 @@
 
 /*
-京东特价APP首页-赚钱大赢家
-进APP看看，能不能进去，基本都黑的！！！
-有的能进去，助力确是黑的！！
-默认定时不跑！助力和领取任务奖励
-运行流程：设置助力码--过滤黑号--助力--领取任务奖励！！！
-助理吗变量：多个用&号隔开
-DYJSHAREID = 'xxx&xxx&xxx'
-10 10 10 10 * https://raw.githubusercontent.com/6dylan6/jdpro/main/jd_makemoneyshop.js
-By: https://github.com/6dylan6/jdpro
-updatetime: 2022/11/3 自动领取邀请奖励，其他优化
+入口：领券中心
+15 8,12,21 * * * https://raw.githubusercontent.com/6dylan6/jdpro/main/jd_couponspace.js
+updatetime: 2022/10/27 
  */
 
-const $ = new Env('特价版大赢家');
+const $ = new Env('卷民空间站分红包');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+let jdNotify = true;
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], cookie = '';
-let shareId = [];
+let cookiesArr = [], cookie = '', message = '';
+let groId = [];
+let mssion = false;
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -26,21 +21,11 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-if (process.env.DYJSHAREID) {
-    if (process.env.DYJSHAREID.indexOf('&') > -1) {
-        shareId = process.env.DYJSHAREID.split('&');
-    } else {
-        shareId = [process.env.DYJSHAREID];
-    }
-}
-let helpinfo = {};
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    console.log('\n运行一遍可以看到助力码，然后设置需要助力的！')
-    console.log('\n运行流程：设置助力码--过滤黑号--助力--领取任务奖励！！！\n')
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -48,10 +33,7 @@ let helpinfo = {};
             $.index = i + 1;
             $.isLogin = true;
             $.nickName = '';
-            $.canUseCoinAmount = 0;
-            helpinfo[$.UserName] = {};
-            UA = require('./USER_AGENTS').UARAM();
-            helpinfo[$.UserName].ua = UA;
+            $.end = false;
             await TotalBean();
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             if (!$.isLogin) {
@@ -62,56 +44,68 @@ let helpinfo = {};
                 continue
             }
 
-            await getinfo(1);
-            await $.wait(1000);
-        }
-    }
-    if (shareId.length > 0) {
-        console.log('\n\n开始助力...')
-        for (let j = 0; j < shareId.length; j++) {
-            console.log('\n去助力--> ' + shareId[j]);
-            for (let i = 0; i < cookiesArr.length; i++) {
-                if (cookiesArr[i]) {
-                    cookie = cookiesArr[i];
-                    $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
-                    $.index = i + 1;
-                    UA = helpinfo[$.UserName].ua;
-                    console.log(`\n开始【账号${$.index}】${$.nickName || $.UserName}`);
-                    if (helpinfo[$.UserName].nohelp) { console.log('已无助力次数了'); continue };
-                    if (helpinfo[$.UserName].hot) { console.log('可能黑了，跳过！'); continue };
-                    await help(shareId[j]);
-                    console.log('随机等待2-5秒');
-                    await $.wait(parseInt(Math.random() * 3000 + 2000, 10))
-                }
-            }
-        }
-    } else {
-        console.log('无助立马请设置！！\n')
-    }
-
-    console.log('开始领取任务奖励...')
-
-    for (let i = 0; i < cookiesArr.length; i++) {
-        if (cookiesArr[i]) {
-            cookie = cookiesArr[i];
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-            $.index = i + 1;
-            UA = helpinfo[$.UserName].ua;
-            console.log(`\n开始【账号${$.index}】${$.UserName}`);
-            if (helpinfo[$.UserName].hot) continue;
-            await gettask();
+            //await getExploreStatus();
+            //console.log('本期活动已结束！') ; break;
+            await homepage();
+            if ($.end) break;
             await $.wait(500);
-            for (let item of $.tasklist) {
-                if (item.completedTimes < item.realCompletedTimes) {
-                    console.log(`去领取${item.taskName}奖励`);
-                    await Award(item.taskId);
-                    await $.wait(500);
+            console.log('当前已有卡片：' + $.collectedCardsNum);
+            if ($.cardlist[0].isOpen) {
+                let time = new Date($.exploreEndTime).toLocaleString();
+                console.log('已合成，等待开奖！' + time);
+                if (Date.now() >= $.exploreEndTime) {
+                    console.log('已到开奖时间，去开奖')
+                    await explorePlanet_divideReward();
                 }
+                continue;
             }
-            await $.wait(1000);
+            if ($.collectedCardsNum === 5) {
+                console.log('已集齐卡片，开始合成');
+                await explorePlanet_compositeCard();
+                continue;
+            }
+            console.log('开始任务...')
+            for (let i of Array(5)) {
+                await explorePlanet_taskList();
+                await $.wait(500);
+                for (let item of $.tasklist) {
+                    if (item.completedItemCount === item.groupItemCount) continue;
+                    mssion = true;
+                    await explorePlanet_taskReport(item.encryptTaskId, item.itemId, 0);
+                    await $.wait(1000);
+                }
+                for (let item of $.specialComponentTaskInfo) {
+                    if (item.completedItemCount === item.groupItemCount || item.waitDuration !== 0) continue;
+                    mssion = true;
+                    await explorePlanet_taskReport(item.encryptTaskId, item.itemId, 1);
+                    await $.wait(1000);
+                }
+                if (!mssion) break;
+                //await $.wait(1000);
+            }
+            await homepage();
+            await $.wait(500);
+            console.log($.drawCardChance + '次抽卡机会');
+            for (let i = 0; i < $.drawCardChance; i++) {
+                await explorePlanet_explore();
+                await $.wait(500);
+            }
+
+            await homepage();
+            await $.wait(500);
+            if ($.collectedCardsNum === 5) {
+                console.log('已集齐卡片，开始合成');
+                await explorePlanet_compositeCard();
+                continue;
+            }
+            await $.wait(500);
+            await explorePlanet_openGroup();
         }
+        await $.wait(2000)
     }
 
+    console.log('\n\n开始内部互助...')
+    await help();
 })()
     .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -120,27 +114,66 @@ let helpinfo = {};
         $.done();
     })
 
-function getinfo(xc) {
+async function help() {
+    for (let i = 0; i < cookiesArr.length; i++) {
+        $.nohelp = false;
+        for (let j of groId) {
+            console.log('去助力-->' + j);
+            if (!$.nohelp) {
+                cookie = cookiesArr[i];
+                await explorePlanet_assist(j);
+                await $.wait(500);
+            }
+        }
+    }
+}
+async function homepage() {
     return new Promise(async (resolve) => {
-        $.get(taskUrl('makemoneyshop/home', 'activeId=63526d8f5fe613a6adb48f03&_stk=activeId&_ste=1'), async (err, resp, data) => {
+        $.post(taskUrl('explorePlanet_homePage', 'body={ "channel": "1" }'), async (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(` API请求失败，请检查网路重试`)
                 } else {
-                    let tostr = data.match(/\((\{.*?\})\)/)[1];
-                    data = eval('(' + tostr + ')');
-                    if (data.code == 0) {
-                        if (xc) {
-                            let sId = data.data.shareId;
-                            helpinfo[$.UserName].sId = `${sId}`;
-                            console.log('助力码：' + sId);
-                            console.log('当前营业金：' + data.data.canUseCoinAmount);
-                        }
+                    data = JSON.parse(data)
+                    if (data.data.biz_code === 0) {
+                        $.activityid = data.data.result.activityId;
+                        $.collectedCardsNum = data.data.result.collectedCardsNum;
+                        $.drawCardChance = data.data.result.drawCardChance || 0;
+                        $.cardlist = data.data.result.cards;
+                        $.exploreEndTime = data.data.result.exploreEndTime;
+                    } else if (data.data.biz_msg.indexOf('结束') > -1) {
+                        $.end = true;
+                        console.log('本期活动结束！');
                     } else {
-                        console.log(data.msg);
-                        $.hotflag = true;
-                        helpinfo[$.UserName].hot = 1;
+                        console.log(data.data.biz_msg);
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data)
+            }
+        })
+    })
+}
+async function explorePlanet_taskList() {
+    return new Promise(async (resolve) => {
+        $.post(taskUrl('explorePlanet_taskList', `body={"activityId":${$.activityid}}`), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(` API请求失败，请检查网路重试`)
+                } else {
+                    data = JSON.parse(data)
+                    if (data.data.biz_code === 0) {
+                        $.tasklist = data.data.result.componentTaskInfo;
+                        $.collectedCardsNum = data.data.result.collectedCardsNum;
+                        $.specialComponentTaskInfo = data.data.result.specialComponentTaskInfo;
+                        $.componentTaskPid = data.data.result.componentTaskPid;
+                        $.specialComponentTaskPid = data.data.result.specialComponentTaskPid;
+                    } else {
+                        console.log(data.data.biz_msg)
                     }
                 }
             } catch (e) {
@@ -152,20 +185,20 @@ function getinfo(xc) {
     })
 }
 
-function gettask() {
+async function explorePlanet_taskReport(encryptTaskId, itemId, flag) {
+    if (flag === 1) $.componentTaskPid = $.specialComponentTaskPid;
     return new Promise(async (resolve) => {
-        $.get(taskUrl('newtasksys/newtasksys_front/GetUserTaskStatusList', `__t=${Date.now}&source=makemoneyshop&bizCode=makemoneyshop`), async (err, resp, data) => {
+        $.post(taskUrl('explorePlanet_taskReport', `body={"activityId":${$.activityid},"encryptTaskId":"${encryptTaskId}","encryptProjectId":"${$.componentTaskPid}","itemId":"${itemId}"}`), async (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(` API请求失败，请检查网路重试`)
                 } else {
-                    let tostr = data.match(/\((\{.*?\})\n\)/)[1];
-                    data = eval('(' + tostr + ')');
-                    if (data.ret == 0) {
-                        $.tasklist = data.data.userTaskStatusList;
+                    data = JSON.parse(data)
+                    if (data.data.biz_code === 0) {
+                        $.log('任务完成！')
                     } else {
-                        console.log(data.msg);
+                        console.log(data.data.biz_msg)
                     }
                 }
             } catch (e) {
@@ -176,20 +209,43 @@ function gettask() {
         })
     })
 }
-function Award(id) {
+async function explorePlanet_explore() {
     return new Promise(async (resolve) => {
-        $.get(taskUrl('newtasksys/newtasksys_front/Award', `__t=${Date.now()}&source=makemoneyshop&taskId=${id}&bizCode=makemoneyshop`), async (err, resp, data) => {
+        $.post(taskUrl('explorePlanet_explore', `body={"activityId":${$.activityid}}`), async (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(` API请求失败，请检查网路重试`)
                 } else {
-                    let tostr = data.match(/\((\{.*?\})\n\)/)[1];
-                    data = eval('(' + tostr + ')');
-                    if (data.ret == 0) {
-                        console.log('获得营业金：' + (data.data.prizeInfo / 100) + '元');
+                    data = JSON.parse(data)
+                    if (data.data.biz_code === 0) {
+                        $.log('抽卡成功！');
                     } else {
-                        console.log(data.msg);
+                        console.log(data.data.biz_msg)
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data)
+            }
+        })
+    })
+}
+async function explorePlanet_compositeCard() {
+    return new Promise(async (resolve) => {
+        $.post(taskUrl('explorePlanet_compositeCard', `body={"activityId":${$.activityid}}`), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(` API请求失败，请检查网路重试`)
+                } else {
+                    data = JSON.parse(data)
+                    if (data.data.biz_code === 0) {
+                        console.log('合成成功 ' + data.data.result.cardInfo.cardName || '');
+                        console.log('等待 ' + new Date($.exploreEndTime).toLocaleString() + ' 开奖');
+                    } else {
+                        console.log(data.data.biz_msg)
                     }
                 }
             } catch (e) {
@@ -201,29 +257,21 @@ function Award(id) {
     })
 }
 
-
-function help(shareid) {
+async function explorePlanet_assist(gId) {
     return new Promise(async (resolve) => {
-        $.get(taskUrl('makemoneyshop/guesthelp', `activeId=63526d8f5fe613a6adb48f03&shareId=${shareid}&_stk=activeId,shareId&_ste=1`), async (err, resp, data) => {
+        $.post(taskUrl('explorePlanet_assist', `body={"activityId":${$.activityid},"groupId":${gId},"eu":"","fv":""}`), async (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(` API请求失败，请检查网路重试`)
                 } else {
-                    let tostr = data.match(/\((\{.*?\})\)/)[1];
-                    data = eval('(' + tostr + ')');
-                    if (data.code == 0) {
-                        console.log('助力成功！');
-                        helpinfo[$.UserName].nohelp = 1;
-                    } else if (data.msg === '已助力') {
-                        console.log('你已助力过TA！')
-                        helpinfo[$.UserName].nohelp = 1;
-                    } else if (data.code === 1006) {
-                        console.log('不能助力自己！');
-                    } else if (data.code === 1008) {
-                        console.log('今日无助力次数了！');
+                    data = JSON.parse(data)
+                    if (data.data.biz_code === 0) {
+                        console.log('助力成功 ' + gId);
+                    } else if (data.data.biz_code === 1006) {
+                        $.nohelp = true;
                     } else {
-                        console.log(data.msg);
+                        console.log(data.data.biz_msg)
                     }
                 }
             } catch (e) {
@@ -234,14 +282,97 @@ function help(shareid) {
         })
     })
 }
+async function explorePlanet_openGroup() {
+    return new Promise(async (resolve) => {
+        $.post(taskUrl('explorePlanet_openGroup', `body={"activityId":${$.activityid}}`), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(` API请求失败，请检查网路重试`)
+                } else {
+                    data = JSON.parse(data)
+                    if (data.data.biz_code !== 1004) {
+                        console.log('互助码：' + data.data.result.groupId)
+                        groId.push(data.data.result.groupId);
+                    } else {
+                        console.log(data.data.biz_msg)
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data)
+            }
+        })
+    })
+}
+async function explorePlanet_divideReward() {
+    return new Promise(async (resolve) => {
+        $.post(taskUrl('explorePlanet_divideReward', `body={"activityId":${$.activityid}}`), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(` API请求失败，请检查网路重试`)
+                } else {
+                    data = JSON.parse(data)
+                    if (data.data.biz_code === 0) {
+                        console.log('获得红包：' + data.data.result.discount);
+                    } else {
+                        console.log(data.data.biz_msg);
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data)
+            }
+        })
+    })
+}
+function getExploreStatus() {
+    let opt = {
+        url: `https://api.m.jd.com/client.action?appid=coupon-activity&functionId=marketingVenue_getExploreStatus&client=wh5&t=1666227109524&body=%7B%22channel%22:1%7D&area=2_2813_61130_0&geo=%7B%22lng%22:121.423656,%22lat%22:31.138373%7D&eu=6626534636836656&fv=1656634673334346`,
+        //body: JSON.stringify(body),
+        headers: {
+            //'Host': 'api.m.jd.com',
+            'Origin': 'https://prodev.m.jd.com',
+            'Referer': 'https://prodev.m.jd.com/',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            'Cookie': cookie
+        }
+    }
+    return new Promise(async (resolve) => {
+        $.post(opt, async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(` API请求失败，请检查网路重试`)
+                } else {
+                    data = JSON.parse(data)
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data)
+            }
+        })
+    })
+}
+
 
 function taskUrl(fn, body) {
     return {
-        url: `https://wq.jd.com/${fn}?g_ty=h5&g_tk=&appCode=msc588d6d5&${body}&h5st=&sceneval=2&callback=__jsonp1667344808184`,
+        url: `https://api.m.jd.com/api?functionId=${fn}&appid=coupon-space&client=wh5&t=${Date.now()}`,
+        //body: 'body='+JSON.stringify(body),
+        body: body,
         headers: {
-            'Origin': 'https://wq.jd.com',
-            'Referer': 'https://wqs.jd.com/sns/202210/20/make-money-shop/index.html?activeId=63526d8f5fe613a6adb48f03',
-            'User-Agent': UA,
+            'Host': 'api.m.jd.com',
+            'accept': 'application/json, text/plain, */*',
+            'Origin': 'https://h5.m.jd.com',
+            'Referer': 'https://h5.m.jd.com/',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
             'Cookie': cookie
         }
     }
@@ -254,7 +385,7 @@ function TotalBean() {
             headers: {
                 "Cookie": cookie,
                 "referer": "https://h5.m.jd.com/",
-                "User-Agent": UA,
+                "User-Agent": $.UA,
             },
             timeout: 10000
         }
@@ -276,7 +407,27 @@ function TotalBean() {
         });
     });
 }
-
+function showMsg() {
+    return new Promise(resolve => {
+        if (!jdNotify) {
+            $.msg($.name, '', `${message}`);
+        } else {
+            $.log(`京东账号${$.index}${$.nickName}\n${message}`);
+        }
+        resolve()
+    })
+}
+function safeGet(data) {
+    try {
+        if (typeof JSON.parse(data) == "object") {
+            return true;
+        }
+    } catch (e) {
+        console.log(e);
+        console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
+        return false;
+    }
+}
 function jsonParse(str) {
     if (typeof str == "string") {
         try {
